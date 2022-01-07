@@ -4,7 +4,7 @@ import './global.css';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useEffect } from 'react';
-import { lightTheme } from '../theme';
+import { theme } from '../theme';
 
 export default function Crowdfunding({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
       <Head>
         <title>Welcome to ew-crowdfunding!</title>
       </Head>
-      <ThemeProvider theme={lightTheme}>
+      <ThemeProvider theme={theme}>
         <CssBaseline />
         <main className='app'>
           <Component {...pageProps} />
