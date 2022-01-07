@@ -1,18 +1,31 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import './styles.css';
+import './global.css';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { useEffect } from 'react';
+import { lightTheme } from '../theme';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+export default function Crowdfunding({ Component, pageProps }: AppProps) {
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement?.removeChild(jssStyles);
+    }
+  }, []);
+
   return (
     <>
       <Head>
         <title>Welcome to ew-crowdfunding!</title>
       </Head>
-      <main className="app">
-        <Component {...pageProps} />
-      </main>
+      <ThemeProvider theme={lightTheme}>
+        <CssBaseline />
+        <main className='app'>
+          <Component {...pageProps} />
+        </main>
+      </ThemeProvider>
     </>
   );
 }
-
-export default CustomApp;
