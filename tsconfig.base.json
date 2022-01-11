@@ -15,8 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@engie-solar-crowdfunding/smart-contracts": [
-        "libs/smart-contracts/src/index.ts"
+      "@engie-solar-crowdfunding/ew-crowdfunding-contracts": [
+        "libs/ew-crowdfunding-contracts/src/index.ts"
       ]
     }
   },

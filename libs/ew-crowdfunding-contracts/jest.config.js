@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'smart-contracts',
+  displayName: 'ew-crowdfunding-contracts',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -10,5 +10,5 @@ module.exports = {
     '^.+\\.[tj]sx?$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/smart-contracts',
+  coverageDirectory: '../../coverage/libs/ew-crowdfunding-contracts',
 };
