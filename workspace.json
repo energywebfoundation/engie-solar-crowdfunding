@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "ew-crowdfunding": "apps/ew-crowdfunding",
-    "ew-crowdfunding-e2e": "apps/ew-crowdfunding-e2e"
+    "ew-crowdfunding-e2e": "apps/ew-crowdfunding-e2e",
+    "smart-contracts": "libs/smart-contracts"
   }
 }

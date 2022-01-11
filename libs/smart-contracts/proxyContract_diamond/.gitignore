@@ -1,5 +1,19 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+coverage
+coverage.json
+typechain
+/build/
+/reports/
+/@rerun.txt
+/usage.txt
+/ethers
+/*.tgz
 .env
+
+#Hardhat files
+cache
+artifacts
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
 # compiled output
 /dist
 /tmp
