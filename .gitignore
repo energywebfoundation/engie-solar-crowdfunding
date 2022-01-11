@@ -25,6 +25,9 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
+#IDE - Remix
+.deps/remix-tests
+
 # misc
 /.sass-cache
 /connect.lock
