@@ -1,7 +1,13 @@
 import styles from './index.module.scss';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+import { useContext } from 'react';
+import { Web3Context } from '../web3';
+// import { ProviderType } from "iam-client-lib";
 
 export function Index() {
+  // const { provider, web3Provider, address, chainId, connect, disconnect } = useContext(Web3Context);
+  // console.log('address: ', address);
+  // const { login, logout } = useContext(Web3Context);
   /*
    * Replace the elements below with your own.
    *
@@ -13,6 +19,18 @@ export function Index() {
         <Typography variant='h2' align='center' color='primary'>
           Hello from Material UI
         </Typography>
+        {/* <Button variant='contained' onClick={() => login({providerType: ProviderType.MetaMask})}>
+          Connect
+        </Button> */}
+        {/* {address ? (
+          <Button variant='outlined' onClick={disconnect}>
+            Disconnect
+          </Button>
+        ) : (
+          <Button variant='contained' onClick={connect}>
+            Connect
+          </Button>
+        )} */}
       </Box>
       <div className='wrapper'>
         <div className='container'>
