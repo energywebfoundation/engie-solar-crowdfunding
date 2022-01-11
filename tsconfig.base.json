@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@engie-solar-crowdfunding/ew-crowdfunding-contracts": [
+        "libs/ew-crowdfunding-contracts/src/index.ts"
+      ]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
