@@ -1,9 +1,16 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 .env
+*/**/node_modules
+/reports/
+/@rerun.txt
+/usage.txt
+/ethers
+/*.tgz
 # compiled output
 /dist
 /tmp
 /out-tsc
+/build/
 
 # dependencies
 /node_modules
@@ -17,6 +24,9 @@
 *.launch
 .settings/
 *.sublime-workspace
+# Hardhat files
+cache
+artifacts
 
 # IDE - VSCode
 .vscode/*
@@ -33,10 +43,12 @@
 /connect.lock
 /coverage
 /libpeerconnection.log
+coverage.json
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
+typechain
 
 # System Files
 .DS_Store

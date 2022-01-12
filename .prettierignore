@@ -1,4 +1,9 @@
 # Add files here to ignore them from prettier formatting
 
+node_modules
+cache
+ethers
 /dist
 /coverage
+artifacts
+gasReporterOutput.json
