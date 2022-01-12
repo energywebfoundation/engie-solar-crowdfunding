@@ -1,7 +1,6 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Web3ActionsEnum } from '../state/actions';
 import { UpdateWeb3Values, useWeb3State } from '../state';
-import { useProviderEvents } from './useProviderEvents';
 import { IWeb3Context } from './types';
 import { getIamService, LoginOptions } from '../iam';
 import { getLocalStorage } from './getLocalStorage';
@@ -37,10 +36,9 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
 
   const handleListeners = (config) => {
     console.log('Handle listeners: ', config);
+    // Dispatch a modal with this information
     handleClose();
   };
-
-  const { handleEvents } = useProviderEvents(provider, providerType, handleUpdate, handleClose);
 
   const login = async (loginOptions: LoginOptions) => {
     setIsLoading(true);
@@ -48,7 +46,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
       if (!window.ethereum) console.error('No Ethereum Provider found on window.ethereum');
       const { signerService } = await getIamService(loginOptions);
 
-      if (signerService.address) {
+      if (signerService?.signer && signerService.address) {
         setListeners(signerService, (config) => handleListeners(config));
         handleUpdate({
           address: signerService?.address,
@@ -85,17 +83,9 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     isLoading,
   };
 
-  // useEffect(() => {
-  //   handleOnInit();
-  // });
-
   useEffect(() => {
-    console.log('This is called !!: ', address);
     handleOnInit();
-    if (address) {
-      handleEvents();
-    }
-  }, [address]);
+  }, []);
 
   return <Web3Context.Provider value={context}>{children}</Web3Context.Provider>;
 };

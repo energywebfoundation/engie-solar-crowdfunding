@@ -45,4 +45,8 @@ export const setListeners = (signerService: SignerService, callback: (config) =>
   signerService.on(ProviderEvent.Disconnected, () => {
     displayAccountAndNetworkChanges(ProviderEvent.Disconnected, callback);
   });
+
+  signerService.on(ProviderEvent.NetworkChanged, () => {
+    displayAccountAndNetworkChanges(ProviderEvent.NetworkChanged, callback);
+  });
 };

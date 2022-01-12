@@ -4,8 +4,6 @@ import { Methods } from '@ew-did-registry/did';
 import { chainConfigs } from '../config/chain.config';
 import { ProviderType, ProviderEvent, AccountInfo } from './signer.types';
 
-// const { arrayify, keccak256, recoverPublicKey, computeAddress, computePublicKey, getAddress, hashMessage } = utils;
-
 export type ServiceInitializer = () => Promise<void>;
 export class SignerService {
   private _address!: string;
@@ -22,7 +20,11 @@ export class SignerService {
   constructor(private _signer: Required<Signer>, private _providerType: ProviderType) {}
 
   async init() {
-    this._address = await this.signer.getAddress();
+    try {
+      this._address = await this.signer.getAddress();
+    } catch (error) {
+      console.log('Signer unavailable. Please log in again!');
+    }
     this._chainId = (await this._signer.provider.getNetwork()).chainId;
     this._chainDisplayName = chainConfigs()[this._chainId].chainDisplayName;
     this._chainName = chainConfigs()[this._chainId].chainName;
