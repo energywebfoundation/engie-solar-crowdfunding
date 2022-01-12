@@ -1,4 +1,4 @@
-import { ProviderType } from "iam-client-lib";
+import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 
 export interface LoginOptions {
   providerType?: ProviderType;

@@ -1,4 +1,8 @@
-import { initWithEKC, initWithMetamask, initWithWalletConnect, ProviderType } from 'iam-client-lib';
+import {
+  initWithMetamask,
+  initWithWalletConnect,
+  ProviderType,
+} from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 
 export const getSignerService = (providerType: ProviderType) => {
   switch (providerType) {
@@ -6,7 +10,5 @@ export const getSignerService = (providerType: ProviderType) => {
       return initWithMetamask();
     case ProviderType.WalletConnect:
       return initWithWalletConnect();
-    case ProviderType.EKC:
-      return initWithEKC();
   }
 };

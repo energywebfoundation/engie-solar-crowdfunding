@@ -1,15 +1,18 @@
-import { Web3Provider } from '@ethersproject/providers';
 import { Dispatch } from 'react';
 import { Web3ActionsEnum } from './actions';
+import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { Signer } from 'ethers';
 
 export interface IWeb3State {
   provider?: any;
-  web3Provider?: Web3Provider;
+  providerType?: ProviderType;
   address?: string;
   chainId?: number;
+  signer?: Signer;
+  did?: string;
 }
 
-export type UpdateWeb3Values = Pick<IWeb3State, 'address' | 'chainId' | 'provider'>;
+export type UpdateWeb3Values = Pick<IWeb3State, 'address' | 'chainId' | 'provider' | 'providerType' | 'signer' | 'did'>;
 
 export type Web3Action =
   | {

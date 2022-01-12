@@ -4,9 +4,11 @@ import type { IWeb3State, UseWeb3State, Web3Action } from './types';
 
 const initialState: IWeb3State = {
   provider: null,
-  web3Provider: null,
+  providerType: null,
   address: null,
   chainId: null,
+  signer: null,
+  did: null,
 };
 
 const reducer = (state: IWeb3State, action: Web3Action): IWeb3State => {
@@ -21,11 +23,10 @@ const reducer = (state: IWeb3State, action: Web3Action): IWeb3State => {
 };
 
 export const useWeb3State: UseWeb3State = () => {
-    const [state, dispatch] = useReducer(reducer, initialState);
-  
-    return {
-      ...state,
-      dispatch,
-    };
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  return {
+    ...state,
+    dispatch,
   };
-  
+};
