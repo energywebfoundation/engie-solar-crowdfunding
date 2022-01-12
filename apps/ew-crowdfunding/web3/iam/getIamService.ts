@@ -4,12 +4,12 @@ import { getSignerService } from './getSignerService';
 
 export const getIamService = async ({ providerType, initCacheServer = true, createDocument = true }: LoginOptions) => {
   // // Set Cache Server
-  setCacheConfig(73799, {
-    url: 'https://volta-identitycache.energyweb.org/',
+  setCacheConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
+    url: process.env.NEXT_PUBLIC_CACHE_SERVER,
   });
   // Set RPC
-  setChainConfig(73799, {
-    rpcUrl: 'https://volta-rpc.energyweb.org',
+  setChainConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
+    rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
   });
 
   try {
