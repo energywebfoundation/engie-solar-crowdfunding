@@ -1,10 +1,10 @@
 import { Dispatch } from 'react';
 import { Web3ActionsEnum } from './actions';
 import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
-import { ethers, Signer } from 'ethers';
+import { Signer } from 'ethers';
 
 export interface IWeb3State {
-  provider?: ethers.providers.Provider;
+  provider?: any;
   providerType?: ProviderType;
   address?: string;
   chainId?: number;
