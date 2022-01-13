@@ -14,7 +14,7 @@ dotenv.config();
 const deployer_privateKey = process.env.DEPLOYER_PRIV_KEY || defaultAccounts[0].secretKey;
 
 const deployScript = async (networkName : String, hre : HardhatRuntimeEnvironment) => {
-  console.log(`Deploting contract to ${networkName}`);
+  console.log('Deploying contract to', networkName, ' network.');
   //TODO wwrite the deploying script
 
 }
