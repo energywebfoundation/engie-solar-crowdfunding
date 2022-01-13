@@ -60,7 +60,6 @@ export const lightTheme: ThemeOptions = {
       styleOverrides: {
         root: {
           borderRadius: '8px',
-          boxShadow: '0px 6px 28px #00000072',
           padding: '8px 25px',
         },
       },
