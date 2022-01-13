@@ -16,6 +16,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install nx
         run: npm install -g nx
+      - name: Install NX Linux
+        run: npm i @next/swc-linux-x64-gnu --no-save
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -49,6 +51,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install nx
         run: npm install -g nx
+      - name: Install NX Linux
+        run: npm i @next/swc-linux-x64-gnu --no-save
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -77,6 +81,8 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Install nx
         run: npm install -g nx
+      - name: Install NX Linux
+        run: npm i @next/swc-linux-x64-gnu --no-save
       - name: Cache node modules
         uses: actions/cache@v2
         env:
