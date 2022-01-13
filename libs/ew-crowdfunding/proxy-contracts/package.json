@@ -4,7 +4,6 @@
   "description": "Template for contract projects.",
   "main": "index.js",
   "scripts": {
-    "prepare": "cp .env.example .env",
     "test": "npx hardhat test"
   },
   "repository": {
