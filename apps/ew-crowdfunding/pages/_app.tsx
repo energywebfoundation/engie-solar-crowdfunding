@@ -5,6 +5,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useEffect } from 'react';
 import { theme } from '../theme';
+import { Web3ContextProvider } from '../web3';
 
 export default function Crowdfunding({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -22,9 +23,9 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <main className='app'>
+        <Web3ContextProvider>
           <Component {...pageProps} />
-        </main>
+        </Web3ContextProvider>
       </ThemeProvider>
     </>
   );
