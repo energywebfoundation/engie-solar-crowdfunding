@@ -1,0 +1,23 @@
+{
+  "root": "libs/ew-crowdfunding/smart-contracts",
+  "sourceRoot": "libs/ew-crowdfunding/smart-contracts/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/ew-crowdfunding/smart-contracts/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/ew-crowdfunding/smart-contracts"],
+      "options": {
+        "jestConfig": "libs/ew-crowdfunding/smart-contracts/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
