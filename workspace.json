@@ -3,6 +3,7 @@
   "projects": {
     "ew-crowdfunding": "apps/ew-crowdfunding",
     "ew-crowdfunding-e2e": "apps/ew-crowdfunding-e2e",
-    "ew-crowdfunding-proxy-contracts": "libs/ew-crowdfunding/proxy-contracts"
+    "ew-crowdfunding-proxy-contracts": "libs/ew-crowdfunding/proxy-contracts",
+    "ew-crowdfunding-smart-contracts": "libs/ew-crowdfunding/smart-contracts"
   }
 }

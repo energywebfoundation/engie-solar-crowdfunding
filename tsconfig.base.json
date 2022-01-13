@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@engie-solar-crowdfunding/ew-crowdfunding/proxy-contracts": ["libs/ew-crowdfunding/proxy-contracts/src/index.ts"]
+      "@engie-solar-crowdfunding/ew-crowdfunding/proxy-contracts": [
+        "libs/ew-crowdfunding/proxy-contracts/src/index.ts"
+      ],
+      "@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts": ["libs/ew-crowdfunding/smart-contracts/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
