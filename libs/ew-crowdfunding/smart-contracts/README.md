@@ -1,3 +1,29 @@
+
+This library was generated with [Nx](https://nx.dev).
+
+## Project setup
+1 - Install dependencies
+
+```javascript
+npm install
+```
+
+2 - Copy the `.env.example` file to a `.env` file
+
+```shell
+cp .env.example .env
+```
+
+3 - Edit the created `.env` file to fill in the required details (ex: edit in `DEPLOYER_PRIV_KEY` the private key of the account which will send the deployment transaction.).
+
+## Running unit tests
+
+```javascript
+npm run test
+```
+
+Run `nx test ew-crowdfunding-proxy-contracts` to execute the unit tests via [Jest](https://jestjs.io).
+
 # Advanced Sample Hardhat Project
 
 This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
@@ -44,3 +70,4 @@ npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
 # Performance optimizations
 
 For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+
