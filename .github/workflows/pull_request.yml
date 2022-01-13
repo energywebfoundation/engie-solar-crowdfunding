@@ -3,35 +3,7 @@ on:
   pull_request:
 
 jobs:
-#  install_packages:
-#    name: Warm-up packages
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#        with:
-#          fetch-depth: 0
-#      - uses: actions/setup-node@v2-beta
-#        with:
-#          node-version: 14.x
-#          registry-url: https://registry.npmjs.org/
-#      - name: Install nx
-#        run: npm install -g nx
-#      - name: Set NX to nocloud
-#        run: npx nx build your-project --outputPath=. --runner=no-cloud
-#      - name: Install NX Linux
-#        run: npm i @next/swc-linux-x64-gnu --no-save
-#      - name: Cache node modules
-#        uses: actions/cache@v2
-#        env:
-#          cache-name: fe-node-modules
-#        with:
-#          path: ~/.npm
-#          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-build-${{ env.cache-name }}-
   sol_tests:
-#    needs:
-#      - install_packages
     name: Sol tests
     runs-on: ubuntu-latest
     steps:
@@ -39,8 +11,6 @@ jobs:
         with:
           fetch-depth: 0
   fe_e2e_tests:
-#    needs:
-#      - install_packages
     name: Frontend E2E tests
     runs-on: ubuntu-latest
     steps:
@@ -51,28 +21,26 @@ jobs:
         with:
           node-version: 14.x
           registry-url: https://registry.npmjs.org/
+      - name: Update NPM
+        run: npm i -g npm@latest
       - name: Install nx
         run: npm install -g nx
-#      - name: Set NX to nocloud
-#        run: npx nx build ew-crowdfunding-e2e --outputPath=. --runner=no-cloud
-#      - name: Install NX Linux
-#        run: npm i @next/swc-linux-x64-gnu --no-save
-#      - name: Cache node modules
-#        uses: actions/cache@v2
-#        env:
-#          cache-name: fe-node-modules
-#        with:
-#          path: ~/.npm
-#          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-build-${{ env.cache-name }}-
+      - name: Install Linux SWC
+        run: npm i @next/swc-linux-x64-gnu --no-save
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: fe-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install dependencies
         run: npm install
       - name: Run tests
         run: npm run ci:e2e:fe
   fe_tests:
-#    needs:
-#      - install_packages
     name: Frontend tests
     runs-on: ubuntu-latest
     steps:
@@ -87,17 +55,17 @@ jobs:
         run: npm i -g npm@latest
       - name: Install nx
         run: npm install -g nx
-#      - name: Install NX Linux
+#      - name: Install Linux SWC
 #        run: npm i @next/swc-linux-x64-gnu --no-save
-#      - name: Cache node modules
-#        uses: actions/cache@v2
-#        env:
-#          cache-name: fe-node-modules
-#        with:
-#          path: ~/.npm
-#          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-#          restore-keys: |
-#            ${{ runner.os }}-build-${{ env.cache-name }}-
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: fe-node-modules
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
       - name: Install dependencies
         run: npm ci
       - name: Lint
