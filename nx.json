@@ -19,6 +19,10 @@
       "options": {
         "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
+    },
+    "no-cloud": {
+      "runner": "@nrwl/workspace/src/tasks-runner/default-tasks-runner",
+      "options": {}
     }
   },
   "targetDependencies": {
