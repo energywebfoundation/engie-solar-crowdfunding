@@ -34,7 +34,7 @@
     "@ew-did-registry/did": "^0.6.3-alpha.367.0",
     "@ew-did-registry/did-ethr-resolver": "^0.6.3-alpha.367.0",
     "@metamask/detect-provider": "^1.2.0",
-    "@mui/material": "^5.2.7",
+    "@mui/material": "^5.2.8",
     "@mui/styles": "^5.2.3",
     "@nrwl/next": "13.4.3",
     "@walletconnect/ethereum-provider": "^1.7.1",

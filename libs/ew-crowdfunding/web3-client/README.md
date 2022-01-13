@@ -1,6 +1,10 @@
 # ew-crowdfunding-web3-client
 
-This library was generated with [Nx](https://nx.dev).
+TypeScript library to be used within decentralized applications for authentication and authorization using DIDs (Decentralized Identifiers) and VCs (Verifiable Credentials)
+
+## Documentation
+
+[Read the Docs](https://energy-web-foundation-iam-client-lib.readthedocs-hosted.com/_/sharing/ojw5kxd0al7k1llbcp78i6oiv)
 
 ## Running unit tests
 

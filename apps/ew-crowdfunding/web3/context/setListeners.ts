@@ -18,12 +18,12 @@ const getConfigInfo = (type: ProviderEvent) => {
     case ProviderEvent.AccountChanged:
       return {
         title: 'Account Changed',
-        message: 'Account is changed.',
+        message: 'Account has changed.',
       };
     case ProviderEvent.NetworkChanged:
       return {
         title: 'Network Changed',
-        message: 'Network is changed.',
+        message: 'Network has changed.',
       };
     case ProviderEvent.Disconnected:
       return {

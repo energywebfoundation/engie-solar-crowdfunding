@@ -24,9 +24,7 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Web3ContextProvider>
-          <main className='app'>
-            <Component {...pageProps} />
-          </main>
+          <Component {...pageProps} />
         </Web3ContextProvider>
       </ThemeProvider>
     </>

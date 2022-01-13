@@ -1,10 +1,10 @@
 import { LoginOptions } from '../iam';
 import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
-import { Signer } from 'ethers';
+import { ethers, Signer } from 'ethers';
 import { IWeb3State } from '../state/types';
 
 export interface IWeb3Context {
-  provider?: any;
+  provider?: ethers.providers.Provider;
   providerType?: ProviderType;
   address?: string;
   chainId?: number;

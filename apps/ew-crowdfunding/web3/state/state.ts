@@ -16,7 +16,7 @@ const reducer = (state: IWeb3State, action: Web3Action): IWeb3State => {
     case Web3ActionsEnum.UPDATE_STATE:
       return { ...state, ...action.payload };
     case Web3ActionsEnum.RESET_STATE:
-      return {};
+      return {...initialState};
     default:
       return state;
   }

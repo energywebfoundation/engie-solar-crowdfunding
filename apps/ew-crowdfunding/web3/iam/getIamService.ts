@@ -13,30 +13,30 @@ export const getIamService = async ({ providerType, initCacheServer = true, crea
   });
 
   try {
-    if (!window.ethereum) {
+    if (window.ethereum) {
       console.log('No ethereum object!');
+      const { signerService } = await getSignerService(providerType);
+      // let didRegistryProvider: DidRegistry;
+
+      // if (initCacheServer) {
+      //   const { domainsService, stakingPoolService, assetsService, connectToDidRegistry, cacheClient } =
+      //     await connectToCacheServer();
+      //   assetsProvider = assetsService;
+      //   cacheClientProvider = cacheClient;
+      //   if (createDocument) {
+      //     const { didRegistry, claimsService } = await connectToDidRegistry();
+      //     didRegistryProvider = didRegistry;
+      //     claimsProvider = claimsService;
+      //   }
+      // }
+
+      return {
+        signerService,
+        // cacheClient: cacheClientProvider || null,
+        // didRegistry: didRegistryProvider || null,
+        // claimsService: claimsProvider || null,
+      };
     }
-    const { signerService } = await getSignerService(providerType);
-    // let didRegistryProvider: DidRegistry;
-
-    // if (initCacheServer) {
-    //   const { domainsService, stakingPoolService, assetsService, connectToDidRegistry, cacheClient } =
-    //     await connectToCacheServer();
-    //   assetsProvider = assetsService;
-    //   cacheClientProvider = cacheClient;
-    //   if (createDocument) {
-    //     const { didRegistry, claimsService } = await connectToDidRegistry();
-    //     didRegistryProvider = didRegistry;
-    //     claimsProvider = claimsService;
-    //   }
-    // }
-
-    return {
-      signerService,
-      // cacheClient: cacheClientProvider || null,
-      // didRegistry: didRegistryProvider || null,
-      // claimsService: claimsProvider || null,
-    };
   } catch (error) {
     console.log(error);
     // toast.error("No ethereum object");
