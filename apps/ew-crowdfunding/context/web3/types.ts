@@ -1,7 +1,7 @@
-import { LoginOptions } from '../iam';
+import { LoginOptions } from './iam';
 import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 import { Signer } from 'ethers';
-import { IWeb3State } from '../state/types';
+import { IWeb3State } from './state/types';
 
 export interface IWeb3Context {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
