@@ -1,5 +1,5 @@
 import { FC, useContext } from 'react';
-import { Web3Context } from '../../web3';
+import { Web3Context } from '../../context/web3';
 import { Container, Box, Button, Typography } from '@mui/material';
 import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 import Image from 'next/image';

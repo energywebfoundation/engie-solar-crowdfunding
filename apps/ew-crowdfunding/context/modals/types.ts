@@ -1,4 +1,4 @@
-import { Web3ModalConfig } from '../web3/context/types';
+import { Web3ModalConfig } from '../web3/types';
 import { DSLAModalsActionsEnum } from './reducer';
 
 export type TWeb3Notification = {

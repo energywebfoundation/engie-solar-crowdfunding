@@ -1,35 +1,7 @@
 import { createTheme, Theme, ThemeOptions } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
-declare module '@mui/styles/defaultTheme' {
-  interface DefaultTheme extends Theme {
-    palette: {
-      primary: {
-        main: string;
-        dark: string;
-        contrastText: string;
-      };
-      secondary: {
-        main: string;
-        dark: string;
-        contrastText: string;
-      };
-      info: {
-        main: string;
-        contrastText: string;
-      };
-      error: {
-        main: string;
-      };
-      background: {
-        default: string;
-        paper: string;
-      };
-    };
-  }
-}
-
-const getThemeConfig = (): ThemeOptions => ({
+const lightTheme: ThemeOptions = {
   palette: {
     mode: 'light',
     primary: {
@@ -91,6 +63,6 @@ const getThemeConfig = (): ThemeOptions => ({
       },
     },
   },
-});
+};
 
-export const theme : Theme = createTheme(getThemeConfig())
+export const theme: Theme = createTheme(lightTheme)

@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './global.css';
-import CssBaseline from '@mui/material/CssBaseline';
-import { Web3ContextProvider } from '../web3';
-import { DSLAThemeProvider } from '../theme';
-import { DSLAModalsProvider } from '../modals';
+import { Web3ContextProvider } from '../context';
+import { DSLAModalsProvider } from '../context';
 import { DSLAModalsCenter } from '../containers';
+import { DSLAThemeProvider } from '../dsla-theme';
+import { CssBaseline } from '@mui/material';
 
 export default function Crowdfunding({ Component, pageProps }: AppProps) {
   useEffect(() => {

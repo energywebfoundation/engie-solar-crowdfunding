@@ -1,12 +1,12 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
-import { Web3ActionsEnum } from '../state/actions';
-import { UpdateWeb3Values, useWeb3State } from '../state';
+import { Web3ActionsEnum } from './state/actions';
+import { UpdateWeb3Values, useWeb3State } from './state';
 import { IWeb3Context, Web3ModalConfig } from './types';
-import { getIamService, LoginOptions } from '../iam';
+import { getIamService, LoginOptions } from './iam';
 import { getLocalStorage } from './getLocalStorage';
 import { setListeners } from './setListeners';
 import { isMetamaskExtensionPresent } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
-import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../modals';
+import { useDSLAModalsDispatch, DSLAModalsActionsEnum } from '../modals';
 
 export const Web3Context = createContext<IWeb3Context>({
   isLoading: false,

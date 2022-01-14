@@ -1,7 +1,7 @@
 import React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@mui/styles';
-import { theme } from '../theme';
+import { theme } from '../dsla-theme';
 
 export default class MyDocument extends Document {
   render() {
@@ -13,7 +13,6 @@ export default class MyDocument extends Document {
           <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap' />
           <link rel='preconnect' href='https://fonts.googleapis.com' />
           <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='true' />
-          <link href='https://fonts.googleapis.com/css2?family=Birthstone+Bounce&display=swap' rel='stylesheet'></link>
         </Head>
         <body>
           <Main />

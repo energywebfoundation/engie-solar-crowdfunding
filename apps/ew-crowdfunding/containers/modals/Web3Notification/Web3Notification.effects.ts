@@ -1,4 +1,4 @@
-import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from '../../../modals';
+import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from '../../../context';
 
 export const useWeb3NotificationEffects = () => {
   const {
