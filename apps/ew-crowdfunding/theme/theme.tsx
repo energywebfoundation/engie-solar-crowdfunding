@@ -1,6 +1,5 @@
-import { createTheme } from '@mui/material';
+import { createTheme, Theme, ThemeOptions } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
-import { Theme, ThemeOptions } from '@mui/material/styles';
 
 declare module '@mui/styles/defaultTheme' {
   interface DefaultTheme extends Theme {
@@ -30,7 +29,7 @@ declare module '@mui/styles/defaultTheme' {
   }
 }
 
-export const lightTheme: ThemeOptions = {
+const getThemeConfig = (): ThemeOptions => ({
   palette: {
     mode: 'light',
     primary: {
@@ -72,7 +71,6 @@ export const lightTheme: ThemeOptions = {
         h1: {
           fontWeight: 500,
           fontSize: '4.5rem',
-          //   fontFamily: 'Roboto',
         },
         h2: {
           fontWeight: 400,
@@ -86,9 +84,13 @@ export const lightTheme: ThemeOptions = {
           fontWeight: 400,
           fontSize: '1.2rem',
         },
+        h5: {
+          fontWeight: 400,
+          fontSize: '1rem',
+        },
       },
     },
   },
-};
+});
 
-export const theme = createTheme(lightTheme);
+export const theme : Theme = createTheme(getThemeConfig())

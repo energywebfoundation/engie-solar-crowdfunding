@@ -1,24 +1,39 @@
 import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Web3ActionsEnum } from '../state/actions';
 import { UpdateWeb3Values, useWeb3State } from '../state';
-import { IWeb3Context } from './types';
+import { IWeb3Context, Web3ModalConfig } from './types';
 import { getIamService, LoginOptions } from '../iam';
 import { getLocalStorage } from './getLocalStorage';
 import { setListeners } from './setListeners';
+import { isMetamaskExtensionPresent } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../modals';
 
-export const Web3Context = createContext<IWeb3Context>({ isLoading: false });
+export const Web3Context = createContext<IWeb3Context>({
+  isLoading: false,
+  isConnectedToRightNetwork: false,
+  isNotificationModalOpen: false,
+});
 
 export const Web3ContextProvider = ({ children }: { children: React.ReactNode }) => {
   const { provider, providerType, address, chainId, signer, did, dispatch } = useWeb3State();
   const [isLoading, setIsLoading] = useState(true);
+  const [isConnectedToRightNetwork, setIsConnectedToRightNetwork] = useState(false);
+  const [isMetamaskPresent, setIsMetamaskPresent] = useState(false);
+  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
   const { getLocalStorageAccount, setLocalStorageAccount, removeLocalStorageAccount } = getLocalStorage();
+  const dispatchModals = useDSLAModalsDispatch();
 
-  const handleOnInit = () => {
+  const handleOnInit = async () => {
     const initialStateValues: UpdateWeb3Values = getLocalStorageAccount();
     dispatch({
       type: Web3ActionsEnum.UPDATE_STATE,
       payload: initialStateValues,
     });
+    const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
+    const isConnectedChainId =
+      process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
+    setIsConnectedToRightNetwork(isConnectedChainId);
+    setIsMetamaskPresent(isMetamaskPresent);
   };
 
   const handleUpdate = useCallback((payload: UpdateWeb3Values) => {
@@ -34,9 +49,14 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     dispatch({ type: Web3ActionsEnum.RESET_STATE });
   }, []);
 
-  const handleListeners = (config) => {
-    console.log('Handle listeners: ', config);
-    // Dispatch a modal with this information
+  const handleListeners = (config: Web3ModalConfig) => {
+    dispatchModals({
+      type: DSLAModalsActionsEnum.SHOW_NOTIFICATION,
+      payload: {
+        open: true,
+        config,
+      },
+    });
     handleClose();
   };
 
@@ -81,6 +101,10 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     login,
     logout,
     isLoading,
+    isConnectedToRightNetwork,
+    isMetamaskPresent,
+    isNotificationModalOpen,
+    setIsNotificationModalOpen,
   };
 
   useEffect(() => {

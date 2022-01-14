@@ -4,6 +4,7 @@ import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-cli
 import { Signer } from 'ethers';
 
 export interface IWeb3State {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   provider?: any;
   providerType?: ProviderType;
   address?: string;
