@@ -30,10 +30,20 @@ contract stakingBase {
         pointer.totalStaked += _amount;
     }
 
-    function canStake(address _user) internal view returns(bool){
-        LibStaking.StakingStorage storage pointer = LibStaking.stakingStorage();
+    function canStake(address _user) internal view returns(bool isAllowed){
+        LibStaking.StakingStorage storage stakingPool = LibStaking.stakingStorage();
+        require(
+            stakingPool.isStaker[_user] == false && stakingPool.stakes[_user].deposit == 0,
+            'Already staking'
+        );
+        //accepting contributions 2 weeks before start date
+        uint256 contributionDate = stakingPool.startDate - 2 weeks;
+        require(block.timestamp >= contributionDate, "Contributions not yet allowed");
 
-        return (pointer.isStaker[_user] == false && pointer.stakes[_user].deposit == 0);
+        require(block.timestamp < stakingPool.startDate, "Staking contributions are no longer accepted");
+        //To-Do: Check if ther user has the appropriate role in ClaimManager
+
+        isAllowed = true;
     }
 
     function getDeposit(address _staker) internal view returns(uint256 _deposit){
@@ -57,9 +67,27 @@ contract stakingBase {
 }
 
 contract StakingFacet is stakingBase {
+
+    modifier onlyOwner(){
+        LibDiamond.DiamondStorage storage ds = LibDiamond.diamondStorage();
+        LibDiamond.enforceIsContractOwner();
+        _;
+    }
+
+    function init(uint256 _startDate) external onlyOwner {
+		//Users have two weeks to contribute EWT before the site stops accepting contributions
+        require(_startDate >= block.timestamp + 2 weeks, "Start date should be at least 2 weeks ahead");
+		uint256 endDate = _startDate + 54 weeks;
+        LibStaking.StakingStorage storage pointer = getStoragePointer();
+		pointer.startDate = _startDate;
+		pointer.endDate = endDate;
+
+		emit LibStaking.StakingPoolInitialized(block.timestamp, _startDate, endDate);
+	}
+
     function stake() payable external {
         require(msg.value > 0, 'No EWT provided');
-        require(canStake(msg.sender), 'Already staking');
+        require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
         recordStaker(msg.sender);
         updateTotal(msg.value);
