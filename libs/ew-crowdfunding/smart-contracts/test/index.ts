@@ -40,7 +40,7 @@ describe("Staking", function () {
     return fixture(start, wallets, provider);
   }
   it("fails when non owner tries to initialize",  async () => {
-    const { start, owner, asPatron } = await loadFixture(
+    const { start, asPatron } = await loadFixture(
       defaultFixture,
     );
 
