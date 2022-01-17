@@ -63,6 +63,9 @@ contract stakingBase {
     }
 
     function withdraw(uint256 _deposit, address payable _recipient) internal {
+        LibStaking.StakingStorage storage pointer = getStoragePointer();
+
+        require(pointer.stakes[_recipient].deposit != 0, 'Nothing to withdraw');
         _recipient.transfer(_deposit);
         removeStaker(_recipient);
     }
