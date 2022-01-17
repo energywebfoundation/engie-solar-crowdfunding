@@ -1,11 +1,19 @@
-import { BigNumber, providers, Wallet, ethers, Signer } from 'ethers';
+import { BigNumber, providers, Wallet, ethers, utils, Signer } from 'ethers';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { Methods } from '@ew-did-registry/did';
 import { chainConfigs } from '../config/chain.config';
-import { ProviderType, ProviderEvent, AccountInfo } from './signer.types';
+import { ProviderType, ProviderEvent, AccountInfo, IPubKeyAndIdentityToken, PUBLIC_KEY } from './signer.types';
+import base64url from 'base64url';
+import { computeAddress } from 'ethers/lib/utils';
+import { ExecutionEnvironment, executionEnvironment } from '../utils';
+import { ERROR_MESSAGES } from '../errors';
 
+const { arrayify, keccak256, recoverPublicKey, getAddress, hashMessage } = utils;
 export type ServiceInitializer = () => Promise<void>;
 export class SignerService {
+  private _publicKey!: string;
+  private _isEthSigner!: boolean;
+  private _identityToken!: string;
   private _address!: string;
   private _account!: string;
 
@@ -20,6 +28,9 @@ export class SignerService {
   constructor(private _signer: Required<Signer>, private _providerType: ProviderType) {}
 
   async init() {
+    if (executionEnvironment() === ExecutionEnvironment.BROWSER) {
+      this._publicKey = localStorage.getItem(PUBLIC_KEY) as string;
+    }
     try {
       this._address = await this.signer.getAddress();
       this._chainId = (await this._signer.provider.getNetwork()).chainId;
@@ -152,5 +163,53 @@ export class SignerService {
 
   chainName() {
     return this._chainName;
+  }
+
+  async publicKeyAndIdentityToken(): Promise<IPubKeyAndIdentityToken> {
+    if (!this._publicKey || !this._identityToken) {
+      await this._calculatePubKeyAndIdentityToken();
+    }
+    return {
+      publicKey: this._publicKey,
+      identityToken: this._identityToken,
+    };
+  }
+
+  private async _calculatePubKeyAndIdentityToken() {
+    const header = {
+      alg: 'ES256',
+      typ: 'JWT',
+    };
+    const encodedHeader = base64url(JSON.stringify(header));
+    const address = this._address;
+    const payload = {
+      iss: `did:${Methods.Erc1056}:${this.chainName()}:${address}`,
+      claimData: {
+        blockNumber: await this._signer.provider.getBlockNumber(),
+      },
+    };
+
+    const encodedPayload = base64url(JSON.stringify(payload));
+    const token = `0x${Buffer.from(`${encodedHeader}.${encodedPayload}`).toString('hex')}`;
+    // arrayification is necessary for WalletConnect signatures to work. eth_sign expects message in bytes: https://docs.walletconnect.org/json-rpc-api-methods/ethereum#eth_sign
+    // keccak256 hash is applied for Metamask to display a coherent hex value when signing
+    const message = arrayify(keccak256(token));
+    // Computation of the digest in order to recover the public key under the assumption
+    // that signature was performed as per the eth_sign spec (https://eth.wiki/json-rpc/API#eth_sign)
+    const digest = arrayify(hashMessage(message));
+    const sig = await this._signer.signMessage(message);
+    const keyFromMessage = recoverPublicKey(message, sig);
+    const keyFromDigest = recoverPublicKey(digest, sig);
+    if (getAddress(this._address) === computeAddress(keyFromMessage)) {
+      this._publicKey = keyFromMessage;
+      this._isEthSigner = false;
+    } else if (getAddress(this._address) === computeAddress(keyFromDigest)) {
+      this._publicKey = keyFromDigest;
+      this._isEthSigner = true;
+    } else {
+      throw new Error(ERROR_MESSAGES.NON_ETH_SIGN_SIGNATURE);
+    }
+
+    this._identityToken = `${encodedHeader}.${encodedPayload}.${base64url(sig)}`;
   }
 }

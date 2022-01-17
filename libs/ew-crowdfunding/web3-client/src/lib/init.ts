@@ -1,3 +1,4 @@
+import { CacheClient } from './cacheClient';
 import { fromMetaMask, fromWalletConnectMetamask, SignerService } from './signer';
 import { defaultBridgeUrl } from './utils';
 
@@ -10,7 +11,16 @@ export async function initWithWalletConnect(bridge = defaultBridgeUrl) {
 }
 
 export async function init(signerService: SignerService) {
+  async function connectToCacheServer() {
+    const cacheClient = new CacheClient(signerService);
+    await cacheClient.init();
+    await cacheClient.login();
+
+    return { cacheClient };
+  }
+
   return {
     signerService,
+    connectToCacheServer,
   };
 }

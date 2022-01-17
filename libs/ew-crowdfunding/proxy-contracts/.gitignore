@@ -1,0 +1,54 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+.env
+/reports/
+/@rerun.txt
+/usage.txt
+/ethers
+/*.tgz
+# compiled output
+/dist
+/tmp
+/out-tsc
+/build/
+
+# dependencies
+/node_modules
+./node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+# Hardhat files
+cache
+artifacts
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+#IDE - Remix
+.deps/remix-tests
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+coverage.json
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+typechain
+
+# System Files
+.DS_Store
+Thumbs.db
