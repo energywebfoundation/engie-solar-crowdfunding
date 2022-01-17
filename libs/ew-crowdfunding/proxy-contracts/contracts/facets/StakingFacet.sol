@@ -55,7 +55,8 @@ contract stakingBase {
 
     function removeStaker(address _staker) internal {
         LibStaking.StakingStorage storage pointer = getStoragePointer();
-
+        require(pointer.isStaker[_staker], 'No deposit at stake');
+        
         pointer.isStaker[_staker] = false;
         pointer.stakes[_staker].deposit = 0;
 
