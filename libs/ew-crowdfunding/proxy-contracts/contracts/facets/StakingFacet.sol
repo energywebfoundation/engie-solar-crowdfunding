@@ -48,7 +48,8 @@ contract stakingBase {
 
     function getDeposit(address _staker) internal view returns(uint256 _deposit){
         LibStaking.StakingStorage storage pointer = getStoragePointer();
-
+        
+        require(pointer.isStaker[_staker], 'No deposit at stake');
         _deposit = pointer.stakes[_staker].deposit;
     }
 
