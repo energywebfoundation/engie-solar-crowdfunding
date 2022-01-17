@@ -35,7 +35,7 @@ contract Staking is StakingBase {
     }
     function init(uint256 _startDate) external onlyOwner {
         require(_startDate >= block.timestamp + 2 weeks, "Start date should be at least 2 weeks ahead");
-        uint256 _endDate = _startDate + 54 weeks;
+        uint256 _endDate = _startDate + 53 weeks;
 		startDate = _startDate;
 		endDate = _endDate;
 

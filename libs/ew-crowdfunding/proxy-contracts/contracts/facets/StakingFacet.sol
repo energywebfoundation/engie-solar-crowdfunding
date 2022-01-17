@@ -82,7 +82,7 @@ contract StakingFacet is stakingBase {
     function init(uint256 _startDate) external onlyOwner {
 		//Users have two weeks to contribute EWT before the site stops accepting contributions
         require(_startDate >= block.timestamp + 2 weeks, "Start date should be at least 2 weeks ahead");
-		uint256 endDate = _startDate + 54 weeks;
+		uint256 endDate = _startDate + 53 weeks;
         LibStaking.StakingStorage storage pointer = getStoragePointer();
 		pointer.startDate = _startDate;
 		pointer.endDate = endDate;
