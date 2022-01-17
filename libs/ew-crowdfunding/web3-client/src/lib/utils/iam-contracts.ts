@@ -20,15 +20,10 @@ export interface IRoleDefinition extends IRoleDefinitionText {
     conditions: string[];
   }[];
 }
-export interface IRoleDefinitionV2 extends IRoleDefinitionText {
-  version: number;
-  issuer: IIssuerDefinition;
+export interface IRoleDefinitionV2 extends IRoleDefinition {
   revoker: IRevokerDefinition;
-  enrolmentPreconditions: {
-    type: PreconditionType;
-    conditions: string[];
-  }[];
 }
+
 export declare enum PreconditionType {
   Role = 'role',
 }
