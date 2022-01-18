@@ -86,7 +86,7 @@ contract StakingFacet is stakingBase {
 		pointer.startDate = _startDate;
 		pointer.endDate = _endDate;
 
-		emit LibStaking.StakingPoolInitialized(block.timestamp, _startDate, endDate);
+		emit LibStaking.StakingPoolInitialized(block.timestamp, _startDate, _endDate);
 	}
 
     function stake() payable external {
