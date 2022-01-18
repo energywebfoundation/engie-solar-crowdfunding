@@ -1,11 +1,12 @@
+import { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './global.css';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { useEffect } from 'react';
-import { theme } from '../theme';
-import { Web3ContextProvider } from '../web3';
+import { Web3ContextProvider } from '../context';
+import { DSLAModalsProvider } from '../context';
+import { DSLAModalsCenter } from '../containers';
+import { DSLAThemeProvider } from '../dsla-theme';
+import { CssBaseline } from '@mui/material';
 
 export default function Crowdfunding({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -19,14 +20,18 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to ew-crowdfunding!</title>
+        <title>Solar Crowdfunding</title>
+        <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width' />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Web3ContextProvider>
-          <Component {...pageProps} />
-        </Web3ContextProvider>
-      </ThemeProvider>
+      <DSLAModalsProvider>
+        <DSLAThemeProvider>
+          <CssBaseline />
+          <Web3ContextProvider>
+            <Component {...pageProps} />
+          </Web3ContextProvider>
+          <DSLAModalsCenter />
+        </DSLAThemeProvider>
+      </DSLAModalsProvider>
     </>
   );
 }

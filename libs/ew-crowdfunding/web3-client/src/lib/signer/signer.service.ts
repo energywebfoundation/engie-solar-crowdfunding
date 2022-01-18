@@ -33,10 +33,10 @@ export class SignerService {
     }
     try {
       this._address = await this.signer.getAddress();
+      this._chainId = (await this._signer.provider.getNetwork()).chainId;
     } catch (error) {
-      console.log('Signer unavailable. Please log in again!');
+      console.log('error: ', error);
     }
-    this._chainId = (await this._signer.provider.getNetwork()).chainId;
     this._chainDisplayName = chainConfigs()[this._chainId].chainDisplayName;
     this._chainName = chainConfigs()[this._chainId].chainName;
     if (this._signer instanceof providers.JsonRpcSigner) {

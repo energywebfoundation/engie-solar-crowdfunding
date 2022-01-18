@@ -4,7 +4,7 @@ export const CURRENT_CHAIN_ID = 'CURRENT_CHAIN_ID';
 export const CURRENT_DID = 'CURRENT_DID';
 
 import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
-import { IWeb3State } from '../state/types';
+import { IWeb3State } from './state/types';
 import { TSetAccount, TGetAccount, TRemoveAccount } from './types';
 
 export const getLocalStorage = () => {
