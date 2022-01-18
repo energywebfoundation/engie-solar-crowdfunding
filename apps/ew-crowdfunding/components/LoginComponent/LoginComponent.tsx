@@ -2,8 +2,8 @@ import { FC, useContext } from 'react';
 import { Web3Context } from '../../context/web3';
 import { Container, Box, Button, Typography } from '@mui/material';
 import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
-import Image from 'next/image';
 import { useStyles } from './LoginComponent.styles';
+/* eslint-disable @next/next/no-img-element */
 
 export const LoginComponent: FC = () => {
   const classes = useStyles();
@@ -39,7 +39,7 @@ export const LoginComponent: FC = () => {
             variant='outlined'
             color='primary'
             onClick={() => login({ providerType: ProviderType.MetaMask })}
-            startIcon={<Image width={40} height={40} src='/metamask-logo.svg' alt='Metamask logo' />}
+            startIcon={<img width={40} height={40} src='/metamask-logo.svg' alt='Metamask logo' />}
           >
             <Box style={{ width: '100%' }}>Use Metamask</Box>
           </Button>
@@ -49,7 +49,7 @@ export const LoginComponent: FC = () => {
             variant='outlined'
             color='primary'
             onClick={() => login({ providerType: ProviderType.WalletConnect })}
-            startIcon={<Image width={40} height={40} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
+            startIcon={<img width={40} height={40} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
           >
             <Box style={{ width: '100%' }}>Use Wallet Connect</Box>
           </Button>
