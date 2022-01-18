@@ -5,7 +5,6 @@ import { Wallet } from "ethers";
 import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { DateHandler } from '../scripts/utils/dateUtils';
-import { ST } from "next/dist/shared/lib/utils";
 
 use(solidity);
 
