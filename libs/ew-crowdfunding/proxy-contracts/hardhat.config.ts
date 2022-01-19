@@ -11,7 +11,7 @@ import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { defaultAccounts } from "@ethereum-waffle/provider";
 dotenv.config();
 
-const deployer_privateKey = process.env.DEPLOYER_PRIV_KEY || defaultAccounts[0].secretKey;
+const deployer_privateKey = defaultAccounts[0].secretKey ||  process.env.DEPLOYER_PRIV_KEY ;
 
 const deployScript = async (networkName : String, hre : HardhatRuntimeEnvironment) => {
   console.log('Deploying contract to', networkName, ' network.');
@@ -58,25 +58,20 @@ const config: HardhatUserConfig = {
       }
     },
   },
-  defaultNetwork: 'ganache',
+  defaultNetwork: 'hardhat',
   networks: {
     volta: {
       url: process.env.VOLTA_URL,
       chainId: getChainId('volta'),
-      accounts: [deployer_privateKey],
+      accounts: [deployer_privateKey as string],
       gasPrice: 1000000000,
     },
     ewc: {
       url: process.env.EWC_URL,
       chainId: getChainId('ewc'),
-      accounts: [deployer_privateKey],
+      accounts: [deployer_privateKey as string],
       gasPrice: 1000000000,
     },
-    ganache: {
-      url: 'http://127.0.0.1:8544',
-      chainId: 1337,
-      accounts: [deployer_privateKey],
-    }
   },
   mocha: {
     timeout: 420000
