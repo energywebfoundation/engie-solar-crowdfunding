@@ -7,8 +7,14 @@ contract Staking is StakingBase {
     uint256 startDate;
     uint256 totalStaked;
     address private owner;
+    bool isContractInitialized;
 
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
+
+    modifier initialized(){
+        require(isContractInitialized, 'Not initialized');
+        _;
+    }
 
     constructor(){
         owner = msg.sender;
@@ -37,11 +43,11 @@ contract Staking is StakingBase {
         require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
 		startDate = _startDate;
 		endDate = _endDate;
-
+        isContractInitialized = true;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function stake() payable external {
+    function stake() payable initialized external {
         require(msg.value > 0, 'No EWT provided');
         require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
