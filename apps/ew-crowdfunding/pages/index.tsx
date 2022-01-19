@@ -2,13 +2,11 @@ import type { NextPage } from 'next';
 import { Box, Container } from '@mui/material';
 import { ConnectCard } from '../components';
 import { Footer, InfoContainer, InfoPane, Welcome } from '../containers';
-import { useStyles } from './index.styles';
+import { theme } from '../dsla-theme';
 
 const Home: NextPage = () => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.backgroundImage}>
+    <div className='backgroundImage'>
       <Container
         maxWidth='lg'
         sx={{
@@ -20,7 +18,18 @@ const Home: NextPage = () => {
           gap: '40px',
         }}
       >
-        <Box className={classes.wrapper}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+            [theme.breakpoints.down('md')]: {
+              flexDirection: 'column',
+            },
+            gap: '40px'
+          }}
+        >
           <Welcome />
           <ConnectCard />
         </Box>
