@@ -9,10 +9,10 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'center',
       alignItems: 'start',
       flex: '1 1 auto',
-      gap: 40,
+      gap: '20px',
     },
     imageContainer: {
-        width: '100%',
-    }
+      width: '100%',
+    },
   };
 });

@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { useStyles } from './InfoPane.styles';
 
 export const InfoPane: FC = () => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.wrapper} id="lendingApp">
+    <Box className={classes.wrapper} id='lendingApp'>
       <Typography variant='h2' color='common.black'>
         How Solar Crowdfunding Works
       </Typography>
@@ -20,6 +20,15 @@ export const InfoPane: FC = () => {
         reclaim your EWT plus a bonus equal to up to 10% of the EWT you lent. The program is expected to last 1-year
         from initiation.
       </Typography>
+      <Link href='#' target='_blank' color='primary' underline='hover'>
+        Announcements
+      </Link>
+      <Link href='#' target='_blank' color='primary' underline='hover'>
+        Risks
+      </Link>
+      <Link href='#' target='_blank' color='primary' underline='hover'>
+        Progress Reporting
+      </Link>
     </Box>
   );
 };
