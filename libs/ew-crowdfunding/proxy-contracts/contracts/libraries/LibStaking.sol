@@ -28,8 +28,6 @@ library LibStaking {
         mapping(address => bool) isStaker;
     }
 
-    event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
-
     function stakingStorage() internal pure returns (StakingStorage storage stakingPointer){
         bytes32 position = STAKING_STORAGE_POSITION;
         assembly {

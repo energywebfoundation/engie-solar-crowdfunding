@@ -37,8 +37,8 @@ contract stakingBase {
             'Already staking'
         );
         //accepting contributions 2 weeks before start date
-        uint256 contributionDate = stakingPool.startDate - 2 weeks;
-        require(block.timestamp >= contributionDate, "Contributions not yet allowed");
+        uint256 signUpPeriod = stakingPool.startDate - 2 weeks;
+        require(block.timestamp + 10 seconds >= signUpPeriod, "Contributions not yet allowed");
 
         require(block.timestamp < stakingPool.startDate, "Staking contributions are no longer accepted");
         //To-Do: Check if ther user has the appropriate role in ClaimManager
@@ -78,6 +78,8 @@ contract StakingFacet is stakingBase {
         LibDiamond.enforceIsContractOwner();
         _;
     }
+    event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
+
 
     function init(uint256 _startDate, uint256 _endDate) external onlyOwner {
 		//Users have two weeks to contribute EWT before the site stops accepting contributions
@@ -86,7 +88,7 @@ contract StakingFacet is stakingBase {
 		pointer.startDate = _startDate;
 		pointer.endDate = _endDate;
 
-		emit LibStaking.StakingPoolInitialized(block.timestamp, _startDate, _endDate);
+		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
 	}
 
     function stake() payable external {
@@ -101,11 +103,5 @@ contract StakingFacet is stakingBase {
         require(!canStake(msg.sender), 'No Ewt at stake');
         uint256 deposit = getDeposit(msg.sender);
         withdraw(deposit, payable(msg.sender));
-    }
-
-    function getStake() external view returns(LibStaking.Stake memory _stake){
-        LibStaking.StakingStorage storage pointer = getStoragePointer();
-
-        _stake = pointer.stakes[msg.sender];
     }
 }
