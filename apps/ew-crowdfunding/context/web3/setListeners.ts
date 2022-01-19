@@ -1,14 +1,12 @@
 import { ProviderEvent, SignerService } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { Web3ModalConfig } from './types';
 
 const displayAccountAndNetworkChanges = (changeType: ProviderEvent, callback: (config) => void) => {
   const { message, title } = getConfigInfo(changeType);
 
-  const config = {
+  const config: Web3ModalConfig = {
     title,
     text: `${message} Please login again.`,
-    icon: 'warning',
-    button: 'Proceed',
-    closeOnClickOutside: false,
   };
   callback(config);
 };
