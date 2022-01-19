@@ -65,7 +65,11 @@ describe("StakingFacet", function () {
     it("fails if start time is not 2 weeks ahead initialization",  async () => {
         const wrongStart = await DateHandler().now();
         await expect(asOwner.init(wrongStart, end)).to.be.revertedWith('Start date should be at least 2 weeks ahead');
-      });
+    });
+
+    it('fails when staking on non initialized contract', async () => {
+        await expect(asPatron.stake({value: 10000})).to.be.revertedWith('Not initialized');
+    });
 
     it("Can set start time 2 weeks ahead initialization date",  async () => {
    
