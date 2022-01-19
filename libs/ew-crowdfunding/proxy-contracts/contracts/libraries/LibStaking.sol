@@ -18,6 +18,7 @@ library LibStaking {
         uint256 totalStaked;
         uint256 futureRewards;
         uint256 contributionLimit;
+        bool isContractInitialized;
 
         bytes32[] patronRoles;
         
