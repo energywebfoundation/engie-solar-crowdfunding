@@ -6,7 +6,7 @@ export const InfoPane: FC = () => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.wrapper}>
+    <Box className={classes.wrapper} id="lendingApp">
       <Typography variant='h2' color='common.black'>
         How Solar Crowdfunding Works
       </Typography>

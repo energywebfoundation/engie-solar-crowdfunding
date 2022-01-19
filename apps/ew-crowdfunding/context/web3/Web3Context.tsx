@@ -52,7 +52,6 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
   };
 
   const handleListeners = (config: Web3ModalConfig) => {
-    console.log('Listeners: ', config);
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_NOTIFICATION,
       payload: {
@@ -115,6 +114,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     handleOnInit();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <Web3Context.Provider value={context}>{children}</Web3Context.Provider>;

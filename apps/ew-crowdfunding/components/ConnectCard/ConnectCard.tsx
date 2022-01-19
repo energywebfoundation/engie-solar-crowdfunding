@@ -1,8 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { Container, Paper, Box, Typography, Button, Divider } from '@mui/material';
+import { Paper, Box, Typography, Button, Divider } from '@mui/material';
 import { FC } from 'react';
 import { useConnectCardEffects } from './ConnectCard.effects';
 import { useStyles } from './ConnectCard.styles';
+import Link from 'next/link';
 
 export const ConnectCard: FC = () => {
   const classes = useStyles();
@@ -37,9 +38,25 @@ export const ConnectCard: FC = () => {
           <Box className={classes.message}>
             <img width={100} height={100} src='/Rewards.svg' alt='Lock'></img>
             <Typography>Swap tokens and claim rewards!</Typography>
-            <Button onClick={logout} variant='outlined'>
-              Disconnect from wallet
-            </Button>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                gap: '10px',
+              }}
+            >
+              <Button onClick={logout} variant='outlined'>
+                Disconnect from wallet
+              </Button>
+              <Link href='/#lendingApp'>
+                <a>
+                  <Button style={{ width: '100%' }} variant='contained'>
+                    Lending App
+                  </Button>
+                </a>
+              </Link>
+            </Box>
           </Box>
         </Paper>
       )}
