@@ -7,6 +7,7 @@ import { getLocalStorage } from './getLocalStorage';
 import { setListeners } from './setListeners';
 import { isMetamaskExtensionPresent } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 import { useDSLAModalsDispatch, DSLAModalsActionsEnum } from '../modals';
+import WalletConnectProvider from '@walletconnect/ethereum-provider';
 
 export const Web3Context = createContext<IWeb3Context>({
   isLoading: false,
@@ -36,20 +37,22 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     setIsMetamaskPresent(isMetamaskPresent);
   };
 
-  const handleUpdate = useCallback((payload: UpdateWeb3Values) => {
+  const handleUpdate = (payload: UpdateWeb3Values) => {
     setLocalStorageAccount(payload);
     dispatch({
       type: Web3ActionsEnum.UPDATE_STATE,
       payload,
     });
-  }, []);
+  };
 
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     removeLocalStorageAccount();
     dispatch({ type: Web3ActionsEnum.RESET_STATE });
-  }, []);
+    window.location.reload();
+  };
 
   const handleListeners = (config: Web3ModalConfig) => {
+    console.log('Listeners: ', config);
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_NOTIFICATION,
       payload: {
@@ -87,6 +90,9 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
   const logout = async () => {
     if (provider?.disconnect && typeof provider.disconnect === 'function') {
       await provider.disconnect();
+    }
+    if (signer instanceof WalletConnectProvider) {
+      await signer.disconnect();
     }
     handleClose();
   };

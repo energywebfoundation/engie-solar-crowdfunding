@@ -23,7 +23,7 @@ const lightTheme: ThemeOptions = {
     },
     background: {
       default: '#FFFFFF',
-      paper: '#FFFFFF', // #3D365C
+      paper: '#FFFFFF', // #081016
     },
   },
   components: {

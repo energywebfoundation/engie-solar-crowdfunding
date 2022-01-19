@@ -8,12 +8,14 @@ import { useStyles } from './LoginComponent.styles';
 export const LoginComponent: FC = () => {
   const classes = useStyles();
   const { address, isConnectedToRightNetwork, isMetamaskPresent, login, logout } = useContext(Web3Context);
+
   return (
     <Container
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 0,
       }}
     >
       {address ? (

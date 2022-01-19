@@ -1,10 +1,14 @@
 import type { NextPage } from 'next';
-import { Container, Typography } from '@mui/material';
-import { LoginComponent } from '../components';
+import { Box, Container } from '@mui/material';
+import { ConnectCard } from '../components';
+import { Footer, InfoContainer, InfoPane, Welcome } from '../containers';
+import { useStyles } from './index.styles';
 
 const Home: NextPage = () => {
+  const classes = useStyles();
+
   return (
-    <div>
+    <div className={classes.backgroundImage}>
       <Container
         maxWidth='lg'
         sx={{
@@ -12,15 +16,18 @@ const Home: NextPage = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 20,
-          marginTop: 10
+          padding: '80px',
+          gap: '40px',
         }}
       >
-        <Typography variant='h2' align='center' color='primary'>
-          Welcome ew-crowdfunding 👋
-        </Typography>
-        <LoginComponent />
+        <Box className={classes.wrapper}>
+          <Welcome />
+          <ConnectCard />
+        </Box>
+        <InfoContainer />
+        <InfoPane />
       </Container>
+      <Footer />
     </div>
   );
 };
