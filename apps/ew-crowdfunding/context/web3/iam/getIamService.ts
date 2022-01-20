@@ -15,12 +15,12 @@ export const getIamService = async ({ providerType }: LoginOptions) => {
   try {
     if (window.ethereum) {
       console.log('No ethereum object!');
-      const { signerService, connectToCacheServer } = await getSignerService(providerType);
-      const { cacheClient } = await connectToCacheServer();
+      const { signerService } = await getSignerService(providerType);
+      // const { cacheClient } = await connectToCacheServer();
 
       return {
         signerService,
-        cacheClient,
+        // cacheClient,
       };
     }
   } catch (error) {

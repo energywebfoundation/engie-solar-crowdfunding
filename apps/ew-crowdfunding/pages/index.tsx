@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
-import { Container, Typography } from '@mui/material';
-import { LoginComponent } from '../components';
+import { Box, Container } from '@mui/material';
+import { ConnectCard } from '../components';
+import { Footer, InfoContainer, InfoPane, Welcome } from '../containers';
+import { theme } from '../dsla-theme';
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <div className='backgroundImage'>
       <Container
         maxWidth='lg'
         sx={{
@@ -12,15 +14,29 @@ const Home: NextPage = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 20,
-          marginTop: 10
+          padding: '80px',
+          gap: '40px',
         }}
       >
-        <Typography variant='h2' align='center' color='primary'>
-          Welcome ew-crowdfunding 👋
-        </Typography>
-        <LoginComponent />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'start',
+            [theme.breakpoints.down('md')]: {
+              flexDirection: 'column',
+            },
+            gap: '40px'
+          }}
+        >
+          <Welcome />
+          <ConnectCard />
+        </Box>
+        <InfoContainer />
+        <InfoPane />
       </Container>
+      <Footer />
     </div>
   );
 };
