@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import { Box, Container } from '@mui/material';
 import { ConnectCard } from '../components';
-import { Footer, InfoContainer, InfoPane, Welcome } from '../containers';
+import { Footer, InfoContainer, InfoPane, Welcome, LendingDetails } from '../containers';
 import { theme } from '../dsla-theme';
 
 const Home: NextPage = () => {
@@ -15,6 +15,9 @@ const Home: NextPage = () => {
           justifyContent: 'center',
           alignItems: 'center',
           padding: '80px',
+          [theme.breakpoints.down('md')]: {
+            padding: '20px',
+          },
           gap: '40px',
         }}
       >
@@ -27,7 +30,7 @@ const Home: NextPage = () => {
             [theme.breakpoints.down('md')]: {
               flexDirection: 'column',
             },
-            gap: '40px'
+            gap: '40px',
           }}
         >
           <Welcome />
@@ -35,6 +38,7 @@ const Home: NextPage = () => {
         </Box>
         <InfoContainer />
         <InfoPane />
+        <LendingDetails />
       </Container>
       <Footer />
     </div>
