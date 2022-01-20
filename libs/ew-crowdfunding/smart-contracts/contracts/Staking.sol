@@ -3,10 +3,12 @@ pragma solidity ^0.8.0;
 import './StakingBase.sol';
 
 contract Staking is StakingBase {
+    uint256 hardCap;
     uint256 endDate;
     uint256 startDate;
     uint256 totalStaked;
     address private owner;
+    uint256 contributionLimit;
     bool isContractInitialized;
 
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
@@ -25,6 +27,11 @@ contract Staking is StakingBase {
         _;
     }
 
+    modifier belowLimit(){
+        require(msg.value <= contributionLimit, 'Stake greater than contribution limit');
+        _;
+    }
+
     function canStake(address _user) internal view returns(bool isAllowed){
         require(
             isStaker[_user] == false && stakes[_user].deposit == 0,
@@ -39,15 +46,24 @@ contract Staking is StakingBase {
 
         isAllowed = true;
     }
-    function init(uint256 _startDate, uint256 _endDate) external onlyOwner {
+    function init(
+        uint256 _startDate,
+        uint256 _endDate,
+        uint256 _hardCap,
+        uint256 _contributionLimit
+    ) external onlyOwner {
+
+        require(_hardCap >= _contributionLimit, 'hardCap exceeded');
         require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
-		startDate = _startDate;
 		endDate = _endDate;
+        hardCap = _hardCap;
+		startDate = _startDate;
         isContractInitialized = true;
+        contributionLimit = _contributionLimit;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function stake() payable initialized external {
+    function stake() payable initialized belowLimit external {
         require(msg.value > 0, 'No EWT provided');
         require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
