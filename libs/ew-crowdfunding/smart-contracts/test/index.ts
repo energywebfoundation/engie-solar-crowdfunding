@@ -3,11 +3,21 @@ import { Staking } from "../ethers";
 import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { DateHandler } from '../scripts/utils/dateUtils';
-import { Wallet } from "ethers";
+import { Wallet, utils, BigNumber } from "ethers";
 
 use(solidity);
 
+let end : number;
+let start : number;
+let asOwner : Staking;
+let asPatron : Staking;
+let hardCap : BigNumber;
+let provider : MockProvider;
+let stakingContract : Staking;
+let contributionLimit : BigNumber;
+
 describe("Staking", function () {
+  const oneEWT = utils.parseUnits("1", "ether");
 
   async function fixture(
     start: number,
@@ -16,19 +26,22 @@ describe("Staking", function () {
   ) {
     //set endDate 1 year ahead
     const end = Number(DateHandler().add(1, 'years', new Date(start * 1000)));
-
+    const hardCap = oneEWT.mul(1000000);
+    const contributionLimit = oneEWT.mul(10);
     const stakingContract = (await deployContract(owner, StakingContract)) as Staking;
 
 
     return {
-      stakingContract,
-      patron,
-      owner,
-      asPatron: stakingContract.connect(patron),
-      asOwner: stakingContract.connect(owner),
-      provider,
-      start,
       end,
+      start,
+      owner,
+      patron,
+      provider,
+      hardCap,
+      stakingContract,
+      contributionLimit,
+      asOwner: stakingContract.connect(owner),
+      asPatron: stakingContract.connect(patron)
     };
   }
 
@@ -40,41 +53,108 @@ describe("Staking", function () {
     return fixture(start, wallets, provider);
   }
 
-  it("fails when non owner tries to initialize",  async () => {
-    const { start, end, asPatron } = await loadFixture(
-      defaultFixture,
-    );
+  before(async () => {
+    const params = await loadFixture(defaultFixture);
+        end = params.end;
+        start = params.start;
+        hardCap = params.hardCap;
+        asOwner = params.asOwner;
+        asPatron = params.asPatron;
+        contributionLimit = params.contributionLimit;
+  })
 
-    await expect(asPatron.init(start, end)).to.be.revertedWith('Must be the admin');
+  it("fails when non owner tries to initialize",  async () => {
+
+    await expect(asPatron.init(
+      start,
+      end,
+      hardCap,
+      contributionLimit
+    )).to.be.revertedWith('Must be the admin');
   });
 
   it("fails if start time is not 2 weeks ahead initialization",  async () => {
-    const { asOwner, end } = await loadFixture(
-      defaultFixture,
-    );
-    const start = await DateHandler().now();
+  
+    const wrongStart = await DateHandler().now();
 
-    await expect(asOwner.init(start, end)).to.be.revertedWith('Start date should be at least 2 weeks ahead');
+    await expect(asOwner.init(
+      wrongStart,
+      end,
+      hardCap,
+      contributionLimit
+    )).to.be.revertedWith('Start date should be at least 2 weeks ahead');
   });
 
   it('fails when staking on non initialized contract', async () => {
-    const { asPatron } = await loadFixture(
-      defaultFixture,
-    );
-    await expect(asPatron.stake({value: 10000})).to.be.revertedWith('Not initialized');
-});
+    await expect(asPatron.stake(
+      {value: 10000}
+    )).to.be.revertedWith('Not initialized');
+  });
+
+  it('fails when contract is initialized with contributionLimit higher than hardCap', async () => {
+    const wrongHardCap = oneEWT.mul(200);
+    const wrongContributionLimit = oneEWT.mul(100000);
+  
+    await expect(asOwner.init(
+      start,
+      end,
+      wrongHardCap,
+      wrongContributionLimit
+      )).to.be.revertedWith('hardCap exceeded');
+  })
 
   it("Can set start time 2 weeks ahead initialization date",  async () => {
-    const { asOwner, start, end, stakingContract, provider } = await loadFixture(
+    const {
+      end,
+      start,
+      asOwner,
+      hardCap,
+      provider,
+      stakingContract,
+      contributionLimit
+    } = await loadFixture(
       defaultFixture,
     );
     console.log("Start Date :: ", start)
     console.log("End Date :: ", end)
 
-    const tx = await asOwner.init(start, end);
+    const tx = await asOwner.init(
+      start,
+      end,
+      hardCap,
+      contributionLimit
+    );
     const { blockNumber } = await tx.wait();
         const { timestamp } = await provider.getBlock(blockNumber);
 
     await expect(tx).to.emit(stakingContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
   });
+
+  it('fails when staking more than limit', async () => {
+    await asOwner.init(
+      start,
+      end,
+      hardCap,
+      contributionLimit
+    );
+   
+    await expect(asPatron.stake({
+            value: contributionLimit.add(BigNumber.from(42))
+        }),
+    ).to.be.revertedWith('Stake greater than contribution limit');
+  });
+
+  it("Can stake on initialized contract",  async () => {
+    await asOwner.init(
+      start,
+      end,
+      hardCap,
+      contributionLimit
+    );
+    await expect(
+        await asPatron.stake({
+            value: 1
+        }),
+    ).changeEtherBalance(asPatron, 1);
+})
 });
