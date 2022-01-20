@@ -1,5 +1,15 @@
 name: Deploy to bucket
 
+env:
+    MODE: CI
+    NEXT_PUBLIC_WEB3: https://volta-rpc.energyweb.org
+    NEXT_PUBLIC_UI_BASE_URL: https://esc-dev.energyweb.org
+    NEXT_PUBLIC_CHAIN_ID: 73799
+    NEXT_PUBLIC_NETWORK_NAME: Volta Chain
+    NEXT_PUBLIC_RPC_URL: https://volta-rpc.energyweb.org
+    NEXT_PUBLIC_CACHE_SERVER: https://volta-identitycache.energyweb.org
+    NEXT_PUBLIC_ORG_NAMESPACE: iam.ewc
+
 on:
   push:
     branches: ['develop', 'master', 'release', 'ci/deployments']
