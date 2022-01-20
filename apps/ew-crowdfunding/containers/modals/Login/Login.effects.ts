@@ -1,25 +1,28 @@
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from '../../../context';
 
-export const useWeb3NotificationEffects = () => {
+export const useLoginEffects = () => {
   const {
-    notification: { open, config },
+    login: { open, isConnectedToRightNetwork, isMetamaskPresent, login },
   } = useDSLAModalsStore();
   const dispatchModals = useDSLAModalsDispatch();
 
   const closeModal = () => {
     dispatchModals({
-      type: DSLAModalsActionsEnum.SHOW_NOTIFICATION,
+      type: DSLAModalsActionsEnum.SHOW_LOGIN,
       payload: {
         open: false,
-        config: null,
+        isConnectedToRightNetwork,
+        isMetamaskPresent,
+        login,
       },
     });
-    window.location.reload();
   };
 
   return {
     open,
-    config,
     closeModal,
+    isConnectedToRightNetwork,
+    isMetamaskPresent,
+    login,
   };
 };
