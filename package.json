@@ -10,7 +10,7 @@
     "prepare": "husky install",
     "test:fe": "nx run ew-crowdfunding:test",
     "lint:fe": "nx run ew-crowdfunding:lint",
-    "build:fe": "nx run ew-crowdfunding:build --runner=no-cloud",
+    "build:fe": "nx run ew-crowdfunding:build --runner=no-cloud && nx run ew-crowdfunding:export --runner=no-cloud",
     "ci:e2e:fe": "nx e2e ew-crowdfunding-e2e --headless"
   },
   "private": true,
