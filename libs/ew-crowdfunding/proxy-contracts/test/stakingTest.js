@@ -87,7 +87,7 @@ describe("StakingFacet", function () {
         await expect(asPatron.stake({value: 10000})).to.be.revertedWith('Not initialized');
     });
 
-    it('fails when initialize with contributionLimit higher than hardCap', async () => {
+    it('fails when contract is initialized with contributionLimit higher than hardCap', async () => {
         const wrongContributionLimit = oneEWT.mul(100000);
         const wrongHardCap = oneEWT.mul(200);
 
@@ -120,7 +120,7 @@ describe("StakingFacet", function () {
        await expect(asPatron.unstake()).to.be.revertedWith('No Ewt at stake');
     });
 
-    it('fails when staking more thant limit', async () => {
+    it('fails when staking more than limit', async () => {
         await expect(asPatron.stake({
                 value: contributionLimit + 42
             }),
