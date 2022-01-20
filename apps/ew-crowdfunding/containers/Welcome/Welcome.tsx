@@ -10,7 +10,7 @@ export const Welcome: FC = () => {
     <Box className={classes.wrapper}>
       <img className={classes.imageContainer} src='/PeopleInAfrica.svg' alt='Children in Africa' />
       <Typography variant='h2' color='common.black'>
-        Stake your Energy Web Token to provide Energy Access
+        Stake your Energy Web Tokens to provide Energy Access
       </Typography>
       <Typography variant='h5' color='common.black'>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Viverra duis mi risus habitasse fusce purus. Lectus
