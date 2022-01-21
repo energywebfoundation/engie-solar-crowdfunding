@@ -68,7 +68,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     try {
       if (!window.ethereum) console.error('No Ethereum Provider found on window.ethereum');
       const { signerService, role } = await getIamService(loginOptions);
-
+      const publicKey = await signerService.publicKey();
       if (signerService?.signer && signerService.address) {
         setListeners(signerService, (config) => handleListeners(config));
         handleUpdate({
@@ -79,9 +79,11 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
           signer: signerService?.signer,
           did: signerService?.did,
           authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
-          publicKey: localStorage.getItem(PUBLIC_KEY),
+          publicKey,
           role,
         });
+        console.log('ROLE: ', role);
+        console.log('publicKey: ', publicKey);
       }
     } catch (error) {
       console.error(error);

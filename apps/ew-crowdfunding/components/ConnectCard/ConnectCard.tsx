@@ -7,7 +7,7 @@ import Link from 'next/link';
 
 export const ConnectCard: FC = () => {
   const classes = useStyles();
-  const { onConnect, authenticated, logout } = useConnectCardEffects();
+  const { onConnect, authenticated, logout, isLoading } = useConnectCardEffects();
 
   return (
     <Box className={classes.wrapper}>
@@ -21,9 +21,15 @@ export const ConnectCard: FC = () => {
             <Box className={classes.message}>
               <img width={100} height={100} src='/ConnectToWallet.svg' alt='Lock'></img>
               <Typography variant='h5'>You need to be connected to your wallet to see your current balance.</Typography>
-              <Button onClick={onConnect} variant='contained'>
-                Connect to wallet
-              </Button>
+              {isLoading ? (
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Button onClick={onConnect} variant='contained'>
+                  Connect to wallet
+                </Button>
+              )}
             </Box>
           </Paper>
         ) : (

@@ -8,11 +8,12 @@ import { IWeb3State } from './state/types';
 import { TSetAccount, TGetAccount, TRemoveAccount } from './types';
 
 export const getLocalStorage = () => {
-  const setLocalStorageAccount: TSetAccount = ({ address, chainId, providerType, did }: Partial<IWeb3State>) => {
+  const setLocalStorageAccount: TSetAccount = ({ address, chainId, providerType, did, publicKey }: Partial<IWeb3State>) => {
     localStorage.setItem(CURRENT_ADDRESS, address);
     localStorage.setItem(PROVIDER_TYPE, providerType);
     localStorage.setItem(CURRENT_CHAIN_ID, chainId.toString());
     localStorage.setItem(CURRENT_DID, did);
+    localStorage.setItem(PUBLIC_KEY, publicKey);
   };
 
   const getLocalStorageAccount: TGetAccount = () => {
