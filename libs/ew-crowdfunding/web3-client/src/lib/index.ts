@@ -7,5 +7,3 @@ export * from "./config";
 export * from "./utils";
 
 export { PubKeyType, DIDAttribute } from "@ew-did-registry/did-resolver-interface";
-
-export { PreconditionType, IRoleDefinition } from "./utils";
