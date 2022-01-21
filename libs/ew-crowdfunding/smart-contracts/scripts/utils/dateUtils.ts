@@ -1,3 +1,5 @@
+import { throws } from "assert";
+
 const date = require('date-and-time');
 
 export const DateHandler = () => {
@@ -67,9 +69,14 @@ export const DateHandler = () => {
 
         return (Date.parse(currentDate) / 1000);
     }
+
+    const getNextDay = (baseDate: Date) => {
+        return Number(add(1, 'days', baseDate));
+    }
     return {
         add,
         sub,
-        now
+        now,
+        getNextDay
     }
 }
