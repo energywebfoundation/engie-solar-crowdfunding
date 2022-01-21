@@ -3,7 +3,7 @@ import { Staking } from "../ethers";
 import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { DateHandler } from '../scripts/utils/dateUtils';
-import { Wallet, utils, BigNumber } from "ethers";
+import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
 
 use(solidity);
 
@@ -11,17 +11,39 @@ let end : number;
 let start : number;
 let asOwner : Staking;
 let asPatron : Staking;
+let asPatron2: Staking;
 let hardCap : BigNumber;
 let provider : MockProvider;
-let stakingContract : Staking;
 let contributionLimit : BigNumber;
+
+const timeTravel = async (provider: MockProvider, seconds: number) => {
+  await provider.send("evm_increaseTime", [seconds]);
+  await provider.send("evm_mine", []);
+};
+
+const initializeContract = async (
+    contract : Staking,
+    start : number,
+    end : number,
+    hardCap : BigNumber,
+    contributionLimit : BigNumber
+  ) : Promise<ContractTransaction> => {
+   const transaction =  await contract.init(
+      start,
+      end,
+      hardCap,
+      contributionLimit
+    );
+
+    return transaction;
+}
 
 describe("Staking", function () {
   const oneEWT = utils.parseUnits("1", "ether");
 
   async function fixture(
     start: number,
-    [owner, patron]: Wallet[],
+    [owner, patron, patron2]: Wallet[],
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
@@ -41,7 +63,8 @@ describe("Staking", function () {
       stakingContract,
       contributionLimit,
       asOwner: stakingContract.connect(owner),
-      asPatron: stakingContract.connect(patron)
+      asPatron: stakingContract.connect(patron),
+      asPatron2: stakingContract.connect(patron2)
     };
   }
 
@@ -60,6 +83,8 @@ describe("Staking", function () {
         hardCap = params.hardCap;
         asOwner = params.asOwner;
         asPatron = params.asPatron;
+        provider = params.provider;
+        asPatron2 = params.asPatron2;
         contributionLimit = params.contributionLimit;
   })
 
@@ -144,17 +169,32 @@ describe("Staking", function () {
     ).to.be.revertedWith('Stake greater than contribution limit');
   });
 
-  it("Can stake on initialized contract",  async () => {
-    await asOwner.init(
-      start,
-      end,
-      hardCap,
-      contributionLimit
-    );
+  it("Can stake before startDate on initialized contract",  async () => {
+    await initializeContract(asOwner, start, end, hardCap, contributionLimit);
+
     await expect(
         await asPatron.stake({
             value: 1
         }),
     ).changeEtherBalance(asPatron, 1);
-})
+  });
+
+  it("fails if patron stakes more than once", async () => {
+    await expect(asPatron.stake({value: 1})).to.be.revertedWith('Already staking');
+  });
+
+  it('fails when trying to stake after startDate', async () => {
+    const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit);
+
+    const { blockNumber } = await tx.wait();
+    const { timestamp } = await provider.getBlock(blockNumber);
+    const afterStart = start - timestamp + 42000;
+    await timeTravel(provider, afterStart);
+
+    await expect(asPatron2.stake(
+      {
+        value: 1
+      }),
+    ).to.be.revertedWith('Staking contributions are no longer accepted');
+  });
 });
