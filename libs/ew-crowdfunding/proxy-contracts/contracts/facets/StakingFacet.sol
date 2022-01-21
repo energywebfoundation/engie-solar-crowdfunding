@@ -123,7 +123,9 @@ contract StakingFacet is stakingBase {
     }
 
     function unstake() external {
-        require(!canStake(msg.sender), 'No Ewt at stake');
+        LibStaking.StakingStorage storage pointer = getStoragePointer();
+
+        require(pointer.stakes[msg.sender].deposit != 0, 'No Ewt at stake');
         uint256 deposit = getDeposit(msg.sender);
         withdraw(deposit, payable(msg.sender));
     }
