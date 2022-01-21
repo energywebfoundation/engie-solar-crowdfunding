@@ -47,6 +47,8 @@ contract Staking is StakingBase {
         isAllowed = true;
     }
     function init(
+        uint256 _signupStart,
+        uint256 _signupEnd,
         uint256 _startDate,
         uint256 _endDate,
         uint256 _hardCap,
@@ -54,7 +56,9 @@ contract Staking is StakingBase {
     ) external onlyOwner {
 
         require(_hardCap >= _contributionLimit, 'hardCap exceeded');
-        require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
+        require(_signupStart < _signupEnd, 'Wrong signup config');
+        require(_startDate > _signupEnd, "Start febore signup period");
+        // require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
 		endDate = _endDate;
         hardCap = _hardCap;
 		startDate = _startDate;
