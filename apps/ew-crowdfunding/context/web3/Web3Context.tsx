@@ -5,9 +5,14 @@ import { IWeb3Context, Web3ModalConfig } from './types';
 import { getIamService, LoginOptions } from './iam';
 import { getLocalStorage } from './getLocalStorage';
 import { setListeners } from './setListeners';
-import { isMetamaskExtensionPresent, PUBLIC_KEY } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import {
+  isMetamaskExtensionPresent,
+  PUBLIC_KEY,
+  ProviderType,
+} from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 import { useDSLAModalsDispatch, DSLAModalsActionsEnum } from '../modals';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
+import { PROVIDER_TYPE } from '.';
 
 export const Web3Context = createContext<IWeb3Context>({
   isLoading: false,
@@ -31,6 +36,12 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
       type: Web3ActionsEnum.UPDATE_STATE,
       payload: initialStateValues,
     });
+    if (localStorage.getItem(PROVIDER_TYPE)) {
+      const { signerService } = await getIamService({
+        providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
+      });
+      setListeners(signerService, (config) => handleListeners(config));
+    }
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
     const isConnectedChainId =
       process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
@@ -82,8 +93,6 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
           publicKey,
           role,
         });
-        console.log('ROLE: ', role);
-        console.log('publicKey: ', publicKey);
       }
     } catch (error) {
       console.error(error);
