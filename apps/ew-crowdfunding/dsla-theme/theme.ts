@@ -35,6 +35,13 @@ const lightTheme: ThemeOptions = {
         },
       },
     },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          padding: '60px',
+        },
+      },
+    },
     MuiTypography: {
       styleOverrides: {
         root: {

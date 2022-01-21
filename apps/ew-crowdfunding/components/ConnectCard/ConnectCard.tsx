@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Paper, Box, Typography, Button, Divider } from '@mui/material';
+import { Paper, Box, Typography, Button, Divider, CircularProgress } from '@mui/material';
 import { FC } from 'react';
 import { useConnectCardEffects } from './ConnectCard.effects';
 import { useStyles } from './ConnectCard.styles';
@@ -7,17 +7,15 @@ import Link from 'next/link';
 
 export const ConnectCard: FC = () => {
   const classes = useStyles();
-  const { onConnect, address, logout } = useConnectCardEffects();
+  const { onConnect, authenticated, logout } = useConnectCardEffects();
 
   return (
     <Box className={classes.wrapper}>
-      {!address ? (
-        <div>
+      <div style={{ width: '100%' }}>
+        {!authenticated ? (
           <Paper className={classes.paper}>
             <Box className={classes.title}>
-              <Typography variant='h5'>
-                My balance
-              </Typography>
+              <Typography variant='h5'>My balance</Typography>
             </Box>
             <Divider />
             <Box className={classes.message}>
@@ -28,15 +26,10 @@ export const ConnectCard: FC = () => {
               </Button>
             </Box>
           </Paper>
-          <div className={classes.border}></div>
-        </div>
-      ) : (
-        <div>
+        ) : (
           <Paper className={classes.paper}>
             <Box className={classes.title}>
-              <Typography variant='h5'>
-                My reward
-              </Typography>
+              <Typography variant='h5'>My reward</Typography>
             </Box>
             <Divider />
             <Box className={classes.message}>
@@ -63,10 +56,9 @@ export const ConnectCard: FC = () => {
               </Box>
             </Box>
           </Paper>
-          <div className={classes.border}></div>
-        </div>
-      )}
-      <div className={classes.border}></div>
+        )}
+        <div className={classes.border}></div>
+      </div>
     </Box>
   );
 };

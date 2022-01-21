@@ -14,9 +14,14 @@ const Home: NextPage = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '80px',
+          [theme.breakpoints.up('md')]: {
+            padding: '50px',
+          },
           [theme.breakpoints.down('md')]: {
-            padding: '20px',
+            padding: '50px',
+          },
+          [theme.breakpoints.down('sm')]: {
+            padding: '25px',
           },
           gap: '40px',
         }}
