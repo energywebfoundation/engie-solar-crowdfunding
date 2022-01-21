@@ -12,7 +12,9 @@ let start : number;
 let asOwner : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
+let signupEnd : number;
 let hardCap : BigNumber;
+let signupStart : number;
 let provider : MockProvider;
 let contributionLimit : BigNumber;
 
@@ -26,17 +28,23 @@ const initializeContract = async (
     start : number,
     end : number,
     hardCap : BigNumber,
-    contributionLimit : BigNumber
+    contributionLimit : BigNumber,
+    signupStart : number,
+    signupEnd : number
   ) : Promise<ContractTransaction> => {
    const transaction =  await contract.init(
-      start,
-      end,
-      hardCap,
-      contributionLimit
+    signupStart,
+    signupEnd,
+    start,
+    end,
+    hardCap,
+    contributionLimit
     );
 
     return transaction;
 }
+
+const dateHandler = DateHandler();
 
 describe("Staking", function () {
   const oneEWT = utils.parseUnits("1", "ether");
@@ -47,10 +55,12 @@ describe("Staking", function () {
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
-    const end = Number(DateHandler().add(1, 'years', new Date(start * 1000)));
+    const end = Number(dateHandler.add(1, 'years', new Date(start * 1000)));
     const hardCap = oneEWT.mul(1000000);
     const contributionLimit = oneEWT.mul(10);
     const stakingContract = (await deployContract(owner, StakingContract)) as Staking;
+    signupStart = await dateHandler.now();
+    signupEnd = Number(dateHandler.sub(1, 'days', new Date(start * 1000))); //Signup ends 1 day before startDate
 
 
     return {
@@ -60,6 +70,8 @@ describe("Staking", function () {
       patron,
       provider,
       hardCap,
+      signupEnd,
+      signupStart,
       stakingContract,
       contributionLimit,
       asOwner: stakingContract.connect(owner),
@@ -69,7 +81,7 @@ describe("Staking", function () {
   }
 
   async function defaultFixture(wallets: Wallet[], provider: MockProvider) {
-    const dateHandler = DateHandler();
+    // const dateHandler = DateHandler();
 
     const start = (dateHandler.add(14, 'days')) as number
 
@@ -85,29 +97,65 @@ describe("Staking", function () {
         asPatron = params.asPatron;
         provider = params.provider;
         asPatron2 = params.asPatron2;
+        signupEnd = params.signupEnd;
+        signupStart = params.signupStart;
         contributionLimit = params.contributionLimit;
   })
 
   it("fails when non owner tries to initialize",  async () => {
 
-    await expect(asPatron.init(
+     
+    await expect(initializeContract(
+      asPatron,
       start,
       end,
       hardCap,
-      contributionLimit
-    )).to.be.revertedWith('Must be the admin');
+      contributionLimit,
+      signupStart,
+      signupEnd
+      )
+    ).to.be.revertedWith('Must be the admin');
   });
 
-  it("fails if start time is not 2 weeks ahead initialization",  async () => {
+  it("fails if startDate is set before signup period",  async () => {
   
-    const wrongStart = await DateHandler().now();
+    let wrongStart = signupStart;
 
-    await expect(asOwner.init(
-      wrongStart,
+    //Checking initialization failure on each day during signup period
+    while (wrongStart <= signupEnd){
+      await expect(initializeContract(
+        asOwner,
+        wrongStart,
+        end,
+        hardCap,
+        contributionLimit,
+        signupStart,
+        signupEnd
+      )).to.be.revertedWith('Start febore signup period');
+      wrongStart = dateHandler.getNextDay(new Date(wrongStart * 1000))
+    }
+  });
+
+  it('fails if signup period has wrong configuration', async () => {
+    await expect(initializeContract(
+      asOwner,
+      start,
       end,
       hardCap,
-      contributionLimit
-    )).to.be.revertedWith('Start date should be at least 2 weeks ahead');
+      contributionLimit,
+      signupEnd, // Inversion of signup End and signup start (end < start)
+      signupStart,
+    )).to.be.revertedWith('Wrong signup config');
+
+    await expect(initializeContract(
+      asOwner,
+      start,
+      end,
+      hardCap,
+      contributionLimit,
+      signupStart,
+      signupStart, // Setting the same date on signup End and signup start
+    )).to.be.revertedWith('Wrong signup config');
   });
 
   it('fails when staking on non initialized contract', async () => {
@@ -120,12 +168,15 @@ describe("Staking", function () {
     const wrongHardCap = oneEWT.mul(200);
     const wrongContributionLimit = oneEWT.mul(100000);
   
-    await expect(asOwner.init(
+    await expect(initializeContract(
+      asOwner,
       start,
       end,
       wrongHardCap,
-      wrongContributionLimit
-      )).to.be.revertedWith('hardCap exceeded');
+      wrongContributionLimit,
+      signupStart,
+      signupEnd
+    )).to.be.revertedWith('hardCap exceeded');
   })
 
   it("Can set start time 2 weeks ahead initialization date",  async () => {
@@ -143,12 +194,7 @@ describe("Staking", function () {
     console.log("Start Date :: ", start)
     console.log("End Date :: ", end)
 
-    const tx = await asOwner.init(
-      start,
-      end,
-      hardCap,
-      contributionLimit
-    );
+    const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     const { blockNumber } = await tx.wait();
         const { timestamp } = await provider.getBlock(blockNumber);
 
@@ -156,12 +202,7 @@ describe("Staking", function () {
   });
 
   it('fails when staking more than limit', async () => {
-    await asOwner.init(
-      start,
-      end,
-      hardCap,
-      contributionLimit
-    );
+    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
    
     await expect(asPatron.stake({
             value: contributionLimit.add(BigNumber.from(42))
@@ -170,7 +211,7 @@ describe("Staking", function () {
   });
 
   it("Can stake before startDate on initialized contract",  async () => {
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit);
+    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
 
     await expect(
         await asPatron.stake({
@@ -184,7 +225,7 @@ describe("Staking", function () {
   });
 
   it('fails when trying to stake after startDate', async () => {
-    const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit);
+    const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
 
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
