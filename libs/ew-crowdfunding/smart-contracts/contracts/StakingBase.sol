@@ -31,10 +31,4 @@ contract StakingBase {
         stakes[_staker].deposit = 0;
 
     }
-
-    function withdraw(uint256 _deposit, address payable _recipient) internal {
-        require(stakes[_recipient].deposit != 0, 'Nothing to withdraw');
-        _recipient.transfer(_deposit);
-        removeStaker(_recipient);
-    }
 }
