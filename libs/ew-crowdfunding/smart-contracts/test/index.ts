@@ -180,7 +180,7 @@ describe("Staking", () => {
     )).to.be.revertedWith('hardCap exceeded');
   })
 
-  it("Can set start time 2 weeks ahead initialization date",  async () => {
+  it("Can initialize Contract",  async () => {
     const {
       end,
       start,
@@ -240,15 +240,15 @@ describe("Staking", () => {
     ).to.be.revertedWith('Staking contributions are no longer accepted');
   });
 
-  it('fails when trying to unstake without deposit', async () => {
+  it('fails when trying to unstake all funds without deposit', async () => {
     await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-    await expect(asPatron2.unstake()).to.be.revertedWith('No deposit at stake');
+    await expect(asPatron2.unstakeAll()).to.be.revertedWith('No deposit at stake');
   });
 
-  it('Can withdraw before start date', async () => {
+  it('Can withdraw all funds before start date', async () => {
     let tx;
     await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-    expect(tx = await asPatron.unstake()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
+    expect(tx = await asPatron.unstakeAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
