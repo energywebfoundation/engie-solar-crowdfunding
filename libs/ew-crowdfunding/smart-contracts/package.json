@@ -2,6 +2,7 @@
   "name": "hardhat-project",
   "scripts": {
     "test": "npx hardhat test",
+    "compile": "npx hardhat compile",
     "test:volta": "npx hardhat test --network volta"
   },
   "devDependencies": {

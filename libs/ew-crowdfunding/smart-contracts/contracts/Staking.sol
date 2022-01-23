@@ -11,6 +11,8 @@ contract Staking is StakingBase {
     uint256 contributionLimit;
     bool isContractInitialized;
 
+    event Funded(address _user, uint256 _amout, uint256 _timestamp);
+    event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
     modifier initialized(){
@@ -58,7 +60,6 @@ contract Staking is StakingBase {
         require(_hardCap >= _contributionLimit, 'hardCap exceeded');
         require(_signupStart < _signupEnd, 'Wrong signup config');
         require(_startDate > _signupEnd, "Start febore signup period");
-        // require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
 		endDate = _endDate;
         hardCap = _hardCap;
 		startDate = _startDate;
@@ -75,4 +76,10 @@ contract Staking is StakingBase {
         totalStaked += msg.value;
     }
 
+    function unstake() external {
+        uint256 _deposit = getDeposit((msg.sender));
+        payable(msg.sender).transfer(_deposit);
+        removeStaker((msg.sender));
+        emit Withdrawn(msg.sender, _deposit, block.timestamp);
+    }
 }

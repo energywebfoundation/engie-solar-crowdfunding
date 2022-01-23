@@ -9,6 +9,7 @@ use(solidity);
 
 let end : number;
 let start : number;
+let patron: Wallet;
 let asOwner : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
@@ -16,6 +17,7 @@ let signupEnd : number;
 let hardCap : BigNumber;
 let signupStart : number;
 let provider : MockProvider;
+let stakingContract: Staking;
 let contributionLimit : BigNumber;
 
 const timeTravel = async (provider: MockProvider, seconds: number) => {
@@ -46,7 +48,7 @@ const initializeContract = async (
 
 const dateHandler = DateHandler();
 
-describe("Staking", function () {
+describe("Staking", () => {
   const oneEWT = utils.parseUnits("1", "ether");
 
   async function fixture(
@@ -81,8 +83,6 @@ describe("Staking", function () {
   }
 
   async function defaultFixture(wallets: Wallet[], provider: MockProvider) {
-    // const dateHandler = DateHandler();
-
     const start = (dateHandler.add(14, 'days')) as number
 
     return fixture(start, wallets, provider);
@@ -90,21 +90,22 @@ describe("Staking", function () {
 
   before(async () => {
     const params = await loadFixture(defaultFixture);
-        end = params.end;
-        start = params.start;
-        hardCap = params.hardCap;
-        asOwner = params.asOwner;
-        asPatron = params.asPatron;
-        provider = params.provider;
-        asPatron2 = params.asPatron2;
-        signupEnd = params.signupEnd;
-        signupStart = params.signupStart;
-        contributionLimit = params.contributionLimit;
+    end = params.end;
+    start = params.start;
+    hardCap = params.hardCap;
+    patron = params.patron;
+    asOwner = params.asOwner;
+    asPatron = params.asPatron;
+    provider = params.provider;
+    asPatron2 = params.asPatron2;
+    signupEnd = params.signupEnd;
+    signupStart = params.signupStart;
+    stakingContract = params.stakingContract;
+    contributionLimit = params.contributionLimit;
   })
 
   it("fails when non owner tries to initialize",  async () => {
 
-     
     await expect(initializeContract(
       asPatron,
       start,
@@ -196,7 +197,7 @@ describe("Staking", function () {
 
     const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     const { blockNumber } = await tx.wait();
-        const { timestamp } = await provider.getBlock(blockNumber);
+    const { timestamp } = await provider.getBlock(blockNumber);
 
     await expect(tx).to.emit(stakingContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
   });
@@ -238,4 +239,19 @@ describe("Staking", function () {
       }),
     ).to.be.revertedWith('Staking contributions are no longer accepted');
   });
-});
+
+  it('fails when trying to unstake without deposit', async () => {
+    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+    await expect(asPatron2.unstake()).to.be.revertedWith('No deposit at stake');
+  });
+
+  it('Can withdraw before start date', async () => {
+    let tx;
+    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+    
+    expect(tx = await asPatron.unstake()).changeEtherBalance(asPatron, -1);
+    const { blockNumber } = await tx.wait();
+    const { timestamp } = await provider.getBlock(blockNumber);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, 1, timestamp);
+  })
+})
