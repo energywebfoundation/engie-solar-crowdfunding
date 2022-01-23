@@ -39,10 +39,6 @@ contract Staking is StakingBase {
             isStaker[_user] == false && stakes[_user].deposit == 0,
             'Already staking'
         );
-        //accepting contributions 2 weeks before start date
-        uint256 contributionDate = startDate - 2 weeks;
-        require(block.timestamp + 10 seconds >= contributionDate, "Contributions not yet allowed");
-
         require(block.timestamp < startDate, "Staking contributions are no longer accepted");
         //To-Do: Check if ther user has the appropriate role in ClaimManager
 
@@ -82,4 +78,5 @@ contract Staking is StakingBase {
         removeStaker((msg.sender));
         emit Withdrawn(msg.sender, _deposit, block.timestamp);
     }
+    // require(block.timestamp < startDate || block.timestamp >= endDate, 'Already Started');
 }
