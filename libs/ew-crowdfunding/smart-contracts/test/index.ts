@@ -216,9 +216,9 @@ describe("Staking", () => {
 
     await expect(
         await asPatron.stake({
-            value: 1
+            value: oneEWT.mul(3)
         }),
-    ).changeEtherBalance(asPatron, 1);
+    ).changeEtherBalance(asPatron, oneEWT.mul(3));
   });
 
   it("fails if patron stakes more than once", async () => {
@@ -248,10 +248,9 @@ describe("Staking", () => {
   it('Can withdraw before start date', async () => {
     let tx;
     await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-    
-    expect(tx = await asPatron.unstake()).changeEtherBalance(asPatron, -1);
+    expect(tx = await asPatron.unstake()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
-    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, 1, timestamp);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
   })
 })
