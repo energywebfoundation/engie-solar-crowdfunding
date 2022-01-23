@@ -5,6 +5,7 @@ import './StakingBase.sol';
 contract Staking is StakingBase {
     uint256 hardCap;
     uint256 endDate;
+    uint256 signupEnd;
     uint256 startDate;
     uint256 totalStaked;
     address private owner;
@@ -39,7 +40,7 @@ contract Staking is StakingBase {
             isStaker[_user] == false && stakes[_user].deposit == 0,
             'Already staking'
         );
-        require(block.timestamp < startDate, "Staking contributions are no longer accepted");
+        require(block.timestamp < signupEnd, "Staking contributions are no longer accepted");
         //To-Do: Check if ther user has the appropriate role in ClaimManager
 
         isAllowed = true;
@@ -59,6 +60,7 @@ contract Staking is StakingBase {
 		endDate = _endDate;
         hardCap = _hardCap;
 		startDate = _startDate;
+        signupEnd = _signupEnd;
         isContractInitialized = true;
         contributionLimit = _contributionLimit;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
