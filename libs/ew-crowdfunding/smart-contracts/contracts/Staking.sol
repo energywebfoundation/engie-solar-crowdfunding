@@ -102,5 +102,4 @@ contract Staking is StakingBase {
         payable(msg.sender).transfer(_amount);
         emit Withdrawn(msg.sender, _amount, block.timestamp);
     }
-    // require(block.timestamp < startDate || block.timestamp >= endDate, 'Already Started');
 }
