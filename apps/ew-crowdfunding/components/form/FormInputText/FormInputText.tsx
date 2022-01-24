@@ -13,6 +13,7 @@ export interface FormInputTextProps {
   valueChanged?: () => void;
   defaultValue?: string | number;
   hint?: string;
+  errorMessage?: string;
 }
 
 const checkMethod = (method: (() => void) | undefined): boolean | null => {
@@ -32,6 +33,7 @@ export const FormInputText: FC<FormInputTextProps> = ({
   valueChanged,
   defaultValue,
   hint,
+  errorMessage,
 }) => {
   return (
     <Controller
@@ -52,7 +54,7 @@ export const FormInputText: FC<FormInputTextProps> = ({
             checkMethod(valueChanged);
           }}
           error={!!error}
-          helperText={error ? error.message : hint}
+          helperText={error ? errorMessage || error.message : hint}
         />
       )}
     />

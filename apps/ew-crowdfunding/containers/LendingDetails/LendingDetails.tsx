@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { Box, Button, LinearProgress, Link, Typography } from '@mui/material';
 import { FC } from 'react';
-import { ContributionItem, FormInputText } from '../../components';
+import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
 import { useStyles } from './LendingDetails.styles';
 
@@ -27,6 +27,7 @@ export const LendingDetails: FC = () => {
               label='EWT Loan Amount'
               type='number'
               hint='Max. 200 EWT per user'
+              errorMessage='EWT Loan Amount is required and must be between 0 and 200 EWT'
             />
             <Box mt={2} className={classes.details}>
               <Typography variant='body2'>Expected simple interest rate</Typography>
@@ -53,10 +54,12 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.disclaimer}>
-              <Typography variant='body2'>By clicking &quot;LEND&quot;, you acknowledge</Typography>
-              <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
-                this disclaimer
-              </Link>
+              <Typography variant='body2'>
+                By clicking &quot;LEND&quot;, you acknowledge{' '}
+                <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
+                  this disclaimer
+                </Link>
+              </Typography>
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
               <Button variant='contained' type='submit' color='primary' style={{ minWidth: '200px' }}>
@@ -79,17 +82,7 @@ export const LendingDetails: FC = () => {
           </Button>
         </Box>
       </Box>
-      <Box className={classes.progress}>
-        <LinearProgress
-          style={{ height: 10, borderRadius: 5 }}
-          value={(tokensRedeemed / tokenLimit) * 100}
-          variant='determinate'
-          color='primary'
-        />
-        <Typography variant='h5'>
-          {(tokensRedeemed / tokenLimit) * 100}% of {tokenLimit} EWT Personal Limit
-        </Typography>
-      </Box>
+      <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
     </Box>
   );
 };
