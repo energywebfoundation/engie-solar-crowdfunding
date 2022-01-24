@@ -41,6 +41,11 @@ contract Staking is StakingBase {
         _;
     }
 
+    modifier withdrawsAllowed(){
+        require(block.timestamp < startDate || block.timestamp > endDate, 'Withdraws not allowed');
+        _;
+    }
+
     function canStake(address _user) internal view returns(bool isAllowed){
         require(
             isStaker[_user] == false && stakes[_user].deposit == 0,
@@ -80,21 +85,22 @@ contract Staking is StakingBase {
         totalStaked += msg.value;
     }
 
-    function unstakeAll() external {
+    function unstakeAll() withdrawsAllowed external {
         uint256 _deposit = getDeposit((msg.sender));
         payable(msg.sender).transfer(_deposit);
         removeStaker((msg.sender));
         emit Withdrawn(msg.sender, _deposit, block.timestamp);
     }
 
-    function withdraw(uint256 _amount) sufficientBalance(_amount) external {
+    function withdraw(uint256 _amount)  withdrawsAllowed sufficientBalance(_amount) external {
         uint256 _deposit = getDeposit((msg.sender));
-        if (stakes[msg.sender].deposit == _amount){
+        if (_deposit == _amount){
             removeStaker(msg.sender);
         } else {
-            stakes[msg.sender].deposit -= _deposit - _amount; 
+            stakes[msg.sender].deposit -= _amount; 
         }
-
+        payable(msg.sender).transfer(_amount);
+        emit Withdrawn(msg.sender, _amount, block.timestamp);
     }
     // require(block.timestamp < startDate || block.timestamp >= endDate, 'Already Started');
 }
