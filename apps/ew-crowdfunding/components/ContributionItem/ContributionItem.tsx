@@ -1,5 +1,4 @@
-import { Typography } from '@mui/material';
-import { Box } from '@mui/material/node_modules/@mui/system';
+import { Box, Typography } from '@mui/material';
 import { FC } from 'react';
 import { theme } from '../../dsla-theme';
 import { useStyles } from './ContributionItem.styles';

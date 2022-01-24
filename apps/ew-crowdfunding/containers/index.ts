@@ -4,3 +4,7 @@ export * from './Welcome';
 export * from './InfoContainer';
 export * from './InfoPane';
 export * from './LendingDetails';
+export * from './EmailVerification';
+export * from './Lending';
+export * from './LendingStats';
+export * from './LendingTerms';
