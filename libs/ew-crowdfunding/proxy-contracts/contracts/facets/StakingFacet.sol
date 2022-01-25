@@ -85,20 +85,38 @@ contract StakingFacet is stakingBase {
         _;
     }
 
+    modifier belowLimit(){
+        LibStaking.StakingStorage storage stakingPool = getStoragePointer();
+        
+        require(msg.value <= stakingPool.contributionLimit, 'Stake greater than contribution limit');
+        _;
+    }
+
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
 
-    function init(uint256 _startDate, uint256 _endDate) external onlyOwner {
+    function init(
+        uint256 _startDate,
+        uint256 _endDate,
+        uint256 _hardCap,
+        uint256 _contributionLimit
+    ) external onlyOwner {
+
+    require(_hardCap >= _contributionLimit, 'hardCap exceeded');
+
 		//Users have two weeks to contribute EWT before the site stops accepting contributions
         require(_startDate >= block.timestamp + 2 weeks, "Start date should be at least 2 weeks ahead");
         LibStaking.StakingStorage storage pointer = getStoragePointer();
 		pointer.startDate = _startDate;
 		pointer.endDate = _endDate;
+
+    pointer.hardCap = _hardCap;
+    pointer.contributionLimit = _contributionLimit;
     pointer.isContractInitialized = true;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
 	}
 
-    function stake() payable initialized external {
+    function stake() payable initialized belowLimit external {
         require(msg.value > 0, 'No EWT provided');
         require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
