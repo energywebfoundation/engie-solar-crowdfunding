@@ -91,14 +91,12 @@ contract Staking is StakingBase, ERC20Burnable {
         _mint(msg.sender, msg.value);
     }
 
-    function unstakeAll() withdrawsAllowed external {
+    function withdrawAll() withdrawsAllowed external {
         uint256 _deposit = stakes[msg.sender].deposit;
-        stakes[msg.sender].deposit = 0;
-        payable(msg.sender).transfer(_deposit);
-        emit Withdrawn(msg.sender, _deposit, block.timestamp);
+        withdraw(_deposit);
     }
 
-    function withdraw(uint256 _amount)  withdrawsAllowed sufficientBalance(_amount) external {
+    function withdraw(uint256 _amount)  withdrawsAllowed sufficientBalance(_amount) public {
         stakes[msg.sender].deposit -= _amount;
         payable(msg.sender).transfer(_amount);
         emit Withdrawn(msg.sender, _amount, block.timestamp);
