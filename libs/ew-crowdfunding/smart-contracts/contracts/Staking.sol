@@ -37,6 +37,7 @@ contract Staking is StakingBase {
 
     modifier sufficientBalance(uint256 amountToWithdraw){
         require(amountToWithdraw > 0, 'error: withdraw 0 EWT');
+        require(stakes[msg.sender].deposit != 0, 'No deposit at stake');
         require(stakes[msg.sender].deposit >= amountToWithdraw, 'Not enough EWT at stake');
         _;
     }
