@@ -249,6 +249,12 @@ describe("Staking", () => {
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(5), timestamp);
+  });
+
+  it('fails when trying to withdraw more funds than staked', async () => {
+    await expect(
+      asPatron2.withdraw(oneEWT.mul(15))
+    ).to.be.revertedWith('Not enough EWT at stake');
   })
 
   it('Can withdraw all funds before start date', async () => {
