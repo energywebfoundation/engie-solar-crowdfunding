@@ -1,8 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 import './StakingBase.sol';
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract Staking is StakingBase {
+contract Staking is StakingBase, ERC20Burnable {
     uint256 hardCap;
     uint256 endDate;
     uint256 signupEnd;
@@ -21,7 +23,8 @@ contract Staking is StakingBase {
         _;
     }
 
-    constructor(){
+    constructor() ERC20("SolarToken", "SLT") {
+        
         owner = msg.sender;
     }
 
@@ -65,7 +68,7 @@ contract Staking is StakingBase {
         uint256 _endDate,
         uint256 _hardCap,
         uint256 _contributionLimit
-    ) external onlyOwner {
+    ) external onlyOwner {//To-Do: prevent resetting by owner
 
         require(_hardCap >= _contributionLimit, 'hardCap exceeded');
         require(_signupStart < _signupEnd, 'Wrong signup config');
@@ -85,6 +88,7 @@ contract Staking is StakingBase {
         saveDeposit(msg.value, msg.sender, block.timestamp);
         isStaker[msg.sender] = true;
         totalStaked += msg.value;
+        _mint(msg.sender, msg.value);
     }
 
     function unstakeAll() withdrawsAllowed external {
