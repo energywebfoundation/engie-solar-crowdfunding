@@ -285,5 +285,24 @@ describe("Staking", () => {
     await expect(
       asPatron.unstakeAll()
     ).to.be.revertedWith('Withdraws not allowed');
-  })
+  });
+
+  it('Can partially withdraw funds after end date', async () => {
+    //Moving to endDate
+    await timeTravel(provider, end);
+
+    let tx;
+    expect(tx = await asPatron2.withdraw(oneEWT)).changeEtherBalance(asPatron2, (oneEWT.mul(-1)));
+    const { blockNumber } = await tx.wait();
+    const { timestamp } = await provider.getBlock(blockNumber);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(1), timestamp);
+  });
+
+  it('Can withdraw all funds after end date', async () => {
+    let tx;
+    expect(tx = await asPatron2.unstakeAll()).changeEtherBalance(asPatron2, (oneEWT.mul(-1)));
+    const { blockNumber } = await tx.wait();
+    const { timestamp } = await provider.getBlock(blockNumber);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(1), timestamp);
+  });
 })
