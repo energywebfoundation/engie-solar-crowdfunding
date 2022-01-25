@@ -263,7 +263,7 @@ describe("Staking", () => {
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
-  })
+  });
 
   it('fails when trying to stake after startDate', async () => {
     const { blockNumber } = await tx.wait();
@@ -274,4 +274,16 @@ describe("Staking", () => {
       asPatron.stake({value: 1})
     ).to.be.revertedWith('Staking contributions are no longer accepted');
   });
+
+  it('fails when trying to withdraw partially after startDate and before end', async () => {
+    await expect(
+      asPatron.withdraw(oneEWT.mul(1))
+    ).to.be.revertedWith('Withdraws not allowed');
+  });
+
+  it('fails when trying to unstake all funds after startDate and before end', async () => {
+    await expect(
+      asPatron.unstakeAll()
+    ).to.be.revertedWith('Withdraws not allowed');
+  })
 })
