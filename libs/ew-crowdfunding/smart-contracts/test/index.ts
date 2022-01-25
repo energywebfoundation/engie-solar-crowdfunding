@@ -92,6 +92,7 @@ describe("Staking", () => {
 
   before(async () => {
     const params = await loadFixture(defaultFixture);
+    
     end = params.end;
     start = params.start;
     hardCap = params.hardCap;

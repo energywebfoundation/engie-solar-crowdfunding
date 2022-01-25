@@ -3,7 +3,8 @@ import { DSLAModalsActionsEnum, useDSLAModalsDispatch, Web3Context } from '../..
 
 export const useConnectCardEffects = () => {
   const dispatchModals = useDSLAModalsDispatch();
-  const { isConnectedToRightNetwork, address, isMetamaskPresent, login, logout } = useContext(Web3Context);
+  const { isConnectedToRightNetwork, authenticated, isMetamaskPresent, login, logout, isLoading } =
+    useContext(Web3Context);
 
   const onConnect = () => {
     dispatchModals({
@@ -17,5 +18,5 @@ export const useConnectCardEffects = () => {
     });
   };
 
-  return { onConnect, address, logout };
+  return { onConnect, authenticated, logout, isLoading };
 };

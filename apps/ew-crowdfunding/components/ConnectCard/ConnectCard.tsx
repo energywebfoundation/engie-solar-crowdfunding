@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Paper, Box, Typography, Button, Divider } from '@mui/material';
+import { Paper, Box, Typography, Button, Divider, CircularProgress } from '@mui/material';
 import { FC } from 'react';
 import { useConnectCardEffects } from './ConnectCard.effects';
 import { useStyles } from './ConnectCard.styles';
@@ -7,36 +7,35 @@ import Link from 'next/link';
 
 export const ConnectCard: FC = () => {
   const classes = useStyles();
-  const { onConnect, address, logout } = useConnectCardEffects();
+  const { onConnect, authenticated, logout, isLoading } = useConnectCardEffects();
 
   return (
     <Box className={classes.wrapper}>
-      {!address ? (
-        <div>
+      <div style={{ width: '100%' }}>
+        {!authenticated ? (
           <Paper className={classes.paper}>
             <Box className={classes.title}>
-              <Typography variant='h5'>
-                My balance
-              </Typography>
+              <Typography variant='h5'>My balance</Typography>
             </Box>
             <Divider />
             <Box className={classes.message}>
               <img width={100} height={100} src='/ConnectToWallet.svg' alt='Lock'></img>
               <Typography variant='h5'>You need to be connected to your wallet to see your current balance.</Typography>
-              <Button onClick={onConnect} variant='contained'>
-                Connect to wallet
-              </Button>
+              {isLoading ? (
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Button onClick={onConnect} variant='contained'>
+                  Connect to wallet
+                </Button>
+              )}
             </Box>
           </Paper>
-          <div className={classes.border}></div>
-        </div>
-      ) : (
-        <div>
+        ) : (
           <Paper className={classes.paper}>
             <Box className={classes.title}>
-              <Typography variant='h5'>
-                My reward
-              </Typography>
+              <Typography variant='h5'>My reward</Typography>
             </Box>
             <Divider />
             <Box className={classes.message}>
@@ -63,10 +62,9 @@ export const ConnectCard: FC = () => {
               </Box>
             </Box>
           </Paper>
-          <div className={classes.border}></div>
-        </div>
-      )}
-      <div className={classes.border}></div>
+        )}
+        <div className={classes.border}></div>
+      </div>
     </Box>
   );
 };
