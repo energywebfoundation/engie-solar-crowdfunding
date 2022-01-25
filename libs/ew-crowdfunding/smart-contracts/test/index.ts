@@ -2,8 +2,8 @@ import { expect, use } from "chai";
 import { Staking } from "../ethers";
 import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
-import { DateHandler } from '../scripts/utils/dateUtils';
 import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
+import { DateTime } from "luxon";
 
 use(solidity);
 
@@ -47,8 +47,6 @@ const initializeContract = async (
     return transaction;
 }
 
-const dateHandler = DateHandler();
-
 describe("Staking", () => {
   const oneEWT = utils.parseUnits("1", "ether");
 
@@ -58,13 +56,14 @@ describe("Staking", () => {
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
-    const end = Number(dateHandler.add(1, 'years', new Date(start * 1000)));
+    const end = Number(DateTime.fromSeconds(start).plus({year: 1}).toSeconds().toFixed(0));
     const hardCap = oneEWT.mul(1000000);
     const contributionLimit = oneEWT.mul(10);
     const stakingContract = (await deployContract(owner, StakingContract)) as Staking;
-    signupStart = await dateHandler.now();
-    signupEnd = Number(dateHandler.sub(1, 'days', new Date(start * 1000))); //Signup ends 1 day before startDate
 
+    signupStart = Number(DateTime.now().toSeconds().toFixed(0))
+    //Signup period ends 1 day before startDay
+    signupEnd = Number(DateTime.fromSeconds(start).minus({day: 1}).toSeconds().toFixed(0));
 
     return {
       end,
@@ -85,7 +84,7 @@ describe("Staking", () => {
   }
 
   async function defaultFixture(wallets: Wallet[], provider: MockProvider) {
-    const start = (dateHandler.add(14, 'days')) as number
+    const start = Number(DateTime.now().plus({days: 14}).toSeconds().toFixed(0));
 
     return fixture(start, wallets, provider);
   }
@@ -136,7 +135,8 @@ describe("Staking", () => {
         signupStart,
         signupEnd
       )).to.be.revertedWith('Start febore signup period');
-      wrongStart = dateHandler.getNextDay(new Date(wrongStart * 1000))
+      //increment wrongStart to the next day
+      wrongStart = Number(DateTime.fromSeconds(wrongStart).plus({day: 1}).toSeconds().toFixed(0));
     }
   });
 
@@ -195,8 +195,6 @@ describe("Staking", () => {
     } = await loadFixture(
       defaultFixture,
     );
-    console.log("Start Date :: ", start)
-    console.log("End Date :: ", end)
 
     const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     const { blockNumber } = await tx.wait();
