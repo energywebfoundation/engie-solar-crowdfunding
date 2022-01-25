@@ -14,6 +14,7 @@ export const useWeb3NotificationEffects = () => {
         config: null,
       },
     });
+    window.location.reload();
   };
 
   return {

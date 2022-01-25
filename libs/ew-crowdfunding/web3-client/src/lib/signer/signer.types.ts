@@ -1,6 +1,7 @@
 export enum ProviderType {
     WalletConnect = "WalletConnect",
     MetaMask = "MetaMask",
+    PrivateKey = "PrivateKey",
 }
 
 export enum ProviderEvent {
@@ -31,3 +32,4 @@ export type AccountInfo = {
 };
 
 export const PUBLIC_KEY = "PublicKey";
+export const IS_ETH_SIGNER = "isEthSigner";

@@ -16,11 +16,11 @@ import { SearchType } from '.';
 
 export class CacheClient implements ICacheClient {
   public pubKeyAndIdentityToken: IPubKeyAndIdentityToken | undefined;
-  private httpClient!: AxiosInstance;
+  private httpClient: AxiosInstance;
   private isAuthenticating = false;
   private failedRequests: Array<() => void> = [];
-  private authEnabled!: boolean;
-  private isBrowser!: boolean;
+  private authEnabled: boolean;
+  private isBrowser: boolean;
   private refresh_token: string | undefined;
 
   constructor(private _signerService: SignerService) {
@@ -59,7 +59,7 @@ export class CacheClient implements ICacheClient {
         return;
       }
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
 
     const pubKeyAndIdentityToken = await this._signerService.publicKeyAndIdentityToken();

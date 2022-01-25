@@ -10,7 +10,7 @@
     "prepare": "husky install",
     "test:fe": "nx run ew-crowdfunding:test",
     "lint:fe": "nx run ew-crowdfunding:lint",
-    "build:fe": "nx run ew-crowdfunding:build --runner=no-cloud",
+    "build:fe": "nx run ew-crowdfunding:build --runner=no-cloud && nx run ew-crowdfunding:export --runner=no-cloud",
     "ci:e2e:fe": "nx e2e ew-crowdfunding-e2e --headless"
   },
   "private": true,
@@ -33,6 +33,7 @@
     "@emotion/styled": "^11.6.0",
     "@ew-did-registry/did": "^0.6.3-alpha.367.0",
     "@ew-did-registry/did-ethr-resolver": "^0.6.3-alpha.367.0",
+    "@hookform/resolvers": "^2.8.8",
     "@metamask/detect-provider": "^1.2.0",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.8",
@@ -47,8 +48,11 @@
     "next": "12.0.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-hook-form": "^7.24.2",
+    "react-toastify": "^8.1.0",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.0.0"
+    "tslib": "^2.0.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@nrwl/cli": "13.4.3",

@@ -2,24 +2,31 @@ import { BigNumber, providers, Wallet, ethers, utils, Signer } from 'ethers';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { Methods } from '@ew-did-registry/did';
 import { chainConfigs } from '../config/chain.config';
-import { ProviderType, ProviderEvent, AccountInfo, IPubKeyAndIdentityToken, PUBLIC_KEY } from './signer.types';
+import {
+  ProviderType,
+  ProviderEvent,
+  AccountInfo,
+  IPubKeyAndIdentityToken,
+  PUBLIC_KEY,
+  IS_ETH_SIGNER,
+} from './signer.types';
 import base64url from 'base64url';
-import { computeAddress } from 'ethers/lib/utils';
+import { computeAddress, verifyMessage } from 'ethers/lib/utils';
 import { ExecutionEnvironment, executionEnvironment } from '../utils';
 import { ERROR_MESSAGES } from '../errors';
 
 const { arrayify, keccak256, recoverPublicKey, getAddress, hashMessage } = utils;
 export type ServiceInitializer = () => Promise<void>;
 export class SignerService {
-  private _publicKey!: string;
-  private _isEthSigner!: boolean;
-  private _identityToken!: string;
-  private _address!: string;
-  private _account!: string;
+  private _publicKey: string;
+  private _isEthSigner: boolean;
+  private _identityToken: string;
+  private _address: string;
+  private _account: string;
 
-  private _chainId!: number;
-  private _chainName!: string;
-  private _chainDisplayName!: string;
+  private _chainId: number;
+  private _chainName: string;
+  private _chainDisplayName: string;
 
   private _servicesInitializers: ServiceInitializer[] = [];
 
@@ -43,6 +50,13 @@ export class SignerService {
       this._account = (await this._signer.provider.listAccounts())[0];
     } else if (this._signer instanceof Wallet) {
       this._account = this._address;
+    }
+    // web app is responsible for clearing of isEthSigner on logout
+    if (executionEnvironment() === ExecutionEnvironment.BROWSER) {
+      const isEthSigner = localStorage.getItem(IS_ETH_SIGNER);
+      if (isEthSigner) {
+        this._isEthSigner = Boolean(isEthSigner);
+      }
     }
     /**
      * @todo provide general way to initialize with previously saved key
@@ -97,6 +111,10 @@ export class SignerService {
     return this._signer;
   }
 
+  get isEthSigner() {
+    return this._isEthSigner;
+  }
+
   get address() {
     return this._address;
   }
@@ -145,7 +163,15 @@ export class SignerService {
   }
 
   async signMessage(message: Uint8Array) {
-    return this.signer.signMessage(message);
+    if (this._isEthSigner === undefined) {
+      throw new Error(ERROR_MESSAGES.IS_ETH_SIGNER_NOT_SET);
+    }
+    const messageHash = this._isEthSigner ? message : arrayify(hashMessage(message));
+    const sig = await this.signer.signMessage(messageHash);
+    if (getAddress(this._address) !== getAddress(verifyMessage(message, sig))) {
+      throw new Error(ERROR_MESSAGES.NON_ETH_SIGN_SIGNATURE);
+    }
+    return sig;
   }
 
   async connect(signer: Required<ethers.Signer>, providerType: ProviderType) {
@@ -159,6 +185,16 @@ export class SignerService {
       await this._signer.disconnect();
     }
     return true;
+  }
+
+  async publicKey() {
+    if (this._publicKey) return this._publicKey;
+    else if (this._signer instanceof Wallet) {
+      this._publicKey = this._signer.publicKey;
+    } else {
+      this._publicKey = (await this.publicKeyAndIdentityToken()).publicKey;
+    }
+    return this._publicKey;
   }
 
   chainName() {

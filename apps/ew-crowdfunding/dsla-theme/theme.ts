@@ -6,11 +6,11 @@ const lightTheme: ThemeOptions = {
     mode: 'light',
     primary: {
       main: '#00AAFF',
-      dark: '#5740DB',
+      dark: '#A566FF',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '##142938',
+      main: '#142938',
       dark: '#EE6C4D',
       contrastText: '#FFFFFF',
     },
@@ -23,15 +23,22 @@ const lightTheme: ThemeOptions = {
     },
     background: {
       default: '#FFFFFF',
-      paper: '#FFFFFF', // #3D365C
+      paper: '#FFFFFF', // #081016
     },
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '8px',
+          borderRadius: '4px',
           padding: '8px 25px',
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          padding: '60px',
         },
       },
     },

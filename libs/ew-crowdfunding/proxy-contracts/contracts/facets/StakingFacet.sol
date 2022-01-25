@@ -84,6 +84,7 @@ contract StakingFacet is stakingBase {
         require(stakingPool.isContractInitialized, 'Not initialized');
         _;
     }
+
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
 
@@ -93,7 +94,7 @@ contract StakingFacet is stakingBase {
         LibStaking.StakingStorage storage pointer = getStoragePointer();
 		pointer.startDate = _startDate;
 		pointer.endDate = _endDate;
-        pointer.isContractInitialized = true;
+    pointer.isContractInitialized = true;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
 	}
 

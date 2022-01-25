@@ -43,7 +43,8 @@ contract Staking is StakingBase {
         require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
 		startDate = _startDate;
 		endDate = _endDate;
-        isContractInitialized = true;
+
+    isContractInitialized = true;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
