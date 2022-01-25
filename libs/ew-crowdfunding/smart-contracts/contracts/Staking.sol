@@ -5,12 +5,15 @@ import './StakingBase.sol';
 contract Staking is StakingBase {
     uint256 hardCap;
     uint256 endDate;
+    uint256 signupEnd;
     uint256 startDate;
     uint256 totalStaked;
     address private owner;
     uint256 contributionLimit;
     bool isContractInitialized;
-
+    
+    event Funded(address _user, uint256 _amout, uint256 _timestamp);
+    event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
     modifier initialized(){
@@ -32,15 +35,24 @@ contract Staking is StakingBase {
         _;
     }
 
+    modifier sufficientBalance(uint256 amountToWithdraw){
+        require(amountToWithdraw > 0, 'error: withdraw 0 EWT');
+        require(stakes[msg.sender].deposit != 0, 'No deposit at stake');
+        require(stakes[msg.sender].deposit >= amountToWithdraw, 'Not enough EWT at stake');
+        _;
+    }
+
+    modifier withdrawsAllowed(){
+        require(block.timestamp < startDate || block.timestamp > endDate, 'Withdraws not allowed');
+        _;
+    }
+
     function canStake(address _user) internal view returns(bool isAllowed){
         require(
             isStaker[_user] == false && stakes[_user].deposit == 0,
             'Already staking'
         );
-        //accepting contributions 2 weeks before start date
-        uint256 contributionDate = startDate - 2 weeks;
-        require(block.timestamp + 10 seconds >= contributionDate, "Contributions not yet allowed");
-        require(block.timestamp < startDate, "Staking contributions are no longer accepted");
+        require(block.timestamp < signupEnd, "Staking contributions are no longer accepted");
         //To-Do: Check if ther user has the appropriate role in ClaimManager
 
         isAllowed = true;
@@ -57,10 +69,10 @@ contract Staking is StakingBase {
         require(_hardCap >= _contributionLimit, 'hardCap exceeded');
         require(_signupStart < _signupEnd, 'Wrong signup config');
         require(_startDate > _signupEnd, "Start febore signup period");
-        // require(_startDate >= (block.timestamp + 2 weeks), "Start date should be at least 2 weeks ahead");
 		endDate = _endDate;
         hardCap = _hardCap;
 		startDate = _startDate;
+        signupEnd = _signupEnd;
         isContractInitialized = true;
         contributionLimit = _contributionLimit;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
@@ -74,4 +86,21 @@ contract Staking is StakingBase {
         totalStaked += msg.value;
     }
 
+    function unstakeAll() withdrawsAllowed external {
+        uint256 _deposit = getDeposit((msg.sender));
+        payable(msg.sender).transfer(_deposit);
+        removeStaker((msg.sender));
+        emit Withdrawn(msg.sender, _deposit, block.timestamp);
+    }
+
+    function withdraw(uint256 _amount)  withdrawsAllowed sufficientBalance(_amount) external {
+        uint256 _deposit = getDeposit((msg.sender));
+        if (_deposit == _amount){
+            removeStaker(msg.sender);
+        } else {
+            stakes[msg.sender].deposit -= _amount; 
+        }
+        payable(msg.sender).transfer(_amount);
+        emit Withdrawn(msg.sender, _amount, block.timestamp);
+    }
 }

@@ -2,6 +2,7 @@
   "name": "hardhat-project",
   "scripts": {
     "test": "npx hardhat test",
+    "compile": "npx hardhat compile",
     "test:volta": "npx hardhat test --network volta"
   },
   "devDependencies": {
@@ -11,6 +12,7 @@
     "@typechain/ethers-v5": "^7.2.0",
     "@typechain/hardhat": "^2.3.1",
     "@types/chai": "^4.3.0",
+    "@types/luxon": "^2.0.9",
     "@types/mocha": "^9.0.0",
     "@types/node": "^12.20.41",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
@@ -28,6 +30,7 @@
     "ethers": "^5.5.3",
     "hardhat": "^2.8.2",
     "hardhat-gas-reporter": "^1.0.7",
+    "luxon": "^2.3.0",
     "prettier": "^2.5.1",
     "prettier-plugin-solidity": "^1.0.0-beta.13",
     "solhint": "^3.3.6",
