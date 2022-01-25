@@ -6,6 +6,8 @@ const { deployDiamond } = require('../scripts/deploy.js')
 const { FacetCutAction } = require('../scripts/libraries/diamond.js')
 
 const { assert } = require('chai')
+const { MockProvider } = require('ethereum-waffle');
+
 
 // The diamond example comes with 8 function selectors
 // [cut, loupe, loupe, loupe, loupe, erc165, transferOwnership, owner]

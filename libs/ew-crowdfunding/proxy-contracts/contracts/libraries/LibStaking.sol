@@ -11,6 +11,7 @@ library LibStaking {
     }
 
     struct StakingStorage {
+        uint256 hardCap;
         uint256 endDate;
         uint256 startDate;
         uint256 stakerCount;
@@ -22,9 +23,9 @@ library LibStaking {
         
         //Addresses
         address claimManager;
-
-       mapping(address => Stake) stakes;
-       mapping(address => bool) isStaker;
+        
+        mapping(address => Stake) stakes;
+        mapping(address => bool) isStaker;
     }
 
     function stakingStorage() internal pure returns (StakingStorage storage stakingPointer){
@@ -33,4 +34,9 @@ library LibStaking {
             stakingPointer.slot :=  position
         }
     }
+
+    // function hasRole(address user, bytes32 roleName) internal returns (bool){
+    //     //TO-DO: implement role verification using ClaimManager
+    //     return true;
+    // }
 }
