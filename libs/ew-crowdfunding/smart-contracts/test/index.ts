@@ -1,10 +1,10 @@
-import { ethers } from "hardhat";
+
 import { expect, use } from "chai";
 import { Staking } from "../ethers";
-import { Wallet } from "ethers";
 import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { DateHandler } from '../scripts/utils/dateUtils';
+import { Wallet } from "ethers";
 
 use(solidity);
 
@@ -57,6 +57,13 @@ describe("Staking", function () {
 
     await expect(asOwner.init(start, end)).to.be.revertedWith('Start date should be at least 2 weeks ahead');
   });
+
+  it('fails when staking on non initialized contract', async () => {
+    const { asPatron } = await loadFixture(
+      defaultFixture,
+    );
+    await expect(asPatron.stake({value: 10000})).to.be.revertedWith('Not initialized');
+});
 
   it("Can set start time 2 weeks ahead initialization date",  async () => {
     const { asOwner, start, end, stakingContract, provider } = await loadFixture(

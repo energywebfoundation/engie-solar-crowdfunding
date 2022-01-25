@@ -1,6 +1,4 @@
 const dotenv = require('dotenv');
-const StakingContract = require("../artifacts/contracts/facets/StakingFacet.sol/StakingFacet.json");
-
 
 const { solidity, loadFixture } = require('ethereum-waffle');
 
@@ -21,8 +19,6 @@ describe("StakingFacet", function () {
       ) {
         //set endDate 1 year ahead
         const end = Number(DateHandler().add(1, 'years', new Date(start * 1000)));
-
-        console.log('Diamond Address >> ', diamondAddress)
     
         return {
             end,
@@ -48,11 +44,13 @@ describe("StakingFacet", function () {
         
         diamondAddress = await deployDiamond();
         params = await loadFixture(defaultFixture);
+        diamond = await ethers.getContractAt('Diamond', diamondAddress);
         diamondCutFacet = await ethers.getContractAt('DiamondCutFacet', diamondAddress);
         stakingFacet = await ethers.getContractAt('StakingFacet', diamondAddress);
 
         end = params.end;
         start = params.start;
+        patron = params.patron;
         provider = params.provider;
         asOwner = stakingFacet.connect(params.owner);
         asPatron = stakingFacet.connect(params.patron);
@@ -65,7 +63,11 @@ describe("StakingFacet", function () {
     it("fails if start time is not 2 weeks ahead initialization",  async () => {
         const wrongStart = await DateHandler().now();
         await expect(asOwner.init(wrongStart, end)).to.be.revertedWith('Start date should be at least 2 weeks ahead');
-      });
+    });
+
+    it('fails when staking on non initialized contract', async () => {
+        await expect(asPatron.stake({value: 10000})).to.be.revertedWith('Not initialized');
+    });
 
     it("Can set start time 2 weeks ahead initialization date",  async () => {
    
@@ -78,15 +80,18 @@ describe("StakingFacet", function () {
 
     await expect(tx).to.emit(stakingFacet, 'StakingPoolInitialized').withArgs(timestamp, start, end);
     });
-
+  
     it("User can't withdraw without stakes",  async () => {
        await expect(asPatron.unstake()).to.be.revertedWith('No Ewt at stake');
     });
 
-    // it("User can stake",  async () => {
-    //     await stakingFacet.functions.stake({from: accounts[0].address, value: '3000000000000000000'});
-    //     //TO-Do: check all staking parameters updates
-    // })
+    it("Can stake on initialized contract",  async () => {
+        await expect(
+            await asPatron.stake({
+                value: 10000
+            }),
+        ).changeEtherBalance(diamond, 10000);
+    })
 
     // it("User can't stake several times",  async () => {
     //     expect(

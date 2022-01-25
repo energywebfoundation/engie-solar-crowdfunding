@@ -78,6 +78,13 @@ contract StakingFacet is stakingBase {
         LibDiamond.enforceIsContractOwner();
         _;
     }
+
+    modifier initialized(){
+        LibStaking.StakingStorage storage stakingPool = getStoragePointer();
+        require(stakingPool.isContractInitialized, 'Not initialized');
+        _;
+    }
+
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
 
@@ -87,11 +94,11 @@ contract StakingFacet is stakingBase {
         LibStaking.StakingStorage storage pointer = getStoragePointer();
 		pointer.startDate = _startDate;
 		pointer.endDate = _endDate;
-
+    pointer.isContractInitialized = true;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
 	}
 
-    function stake() payable external {
+    function stake() payable initialized external {
         require(msg.value > 0, 'No EWT provided');
         require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
