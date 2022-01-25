@@ -20,15 +20,8 @@ contract StakingBase {
         stakerCount = id;
     }
 
-    function getDeposit(address _staker) internal view returns(uint256 _deposit){
-        require(isStaker[_staker], 'No deposit at stake');
-        _deposit = stakes[_staker].deposit;
-    }
-
     function removeStaker(address _staker) internal {
-        require(isStaker[_staker], 'No deposit at stake');
-        isStaker[_staker] = false;
+        require(stakes[_staker].deposit != 0, 'No deposit at stake');
         stakes[_staker].deposit = 0;
-
     }
 }
