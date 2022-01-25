@@ -18,6 +18,7 @@ let signupEnd : number;
 let hardCap : BigNumber;
 let signupStart : number;
 let provider : MockProvider;
+let tx: ContractTransaction;
 let stakingContract: Staking;
 let contributionLimit : BigNumber;
 
@@ -196,7 +197,7 @@ describe("Staking", () => {
       defaultFixture,
     );
 
-    const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+    tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
 
@@ -204,7 +205,7 @@ describe("Staking", () => {
   });
 
   it('fails when staking more than limit', async () => {
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+    // await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
    
     await expect(asPatron.stake({
             value: contributionLimit.add(BigNumber.from(42))
@@ -213,8 +214,6 @@ describe("Staking", () => {
   });
 
   it("Can stake before startDate on initialized contract",  async () => {
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-
     await expect(
         await asPatron.stake({
             value: oneEWT.mul(3)
@@ -227,19 +226,19 @@ describe("Staking", () => {
   });
 
   it('fails when trying to unstake all funds without deposit', async () => {
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     await expect(asPatron2.unstakeAll()).to.be.revertedWith('No deposit at stake');
   });
 
+  it('fails when trying to partially unstake funds without deposit', async () => {
+    await expect(asPatron2.withdraw(2)).to.be.revertedWith('No deposit at stake');
+  });
+
   it('fails when trying to withdraw zero EWT before start', async () => {
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     await expect(asPatron.withdraw(0)).to.be.revertedWith('error: withdraw 0 EWT');
   });
 
   it('Can withdraw partial funds before start date', async () => {
     let tx;
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-
     await expect(
       await asPatron2.stake({
           value: oneEWT.mul(7)
@@ -254,7 +253,6 @@ describe("Staking", () => {
 
   it('Can withdraw all funds before start date', async () => {
     let tx;
-    await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
     expect(tx = await asPatron.unstakeAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
@@ -262,17 +260,12 @@ describe("Staking", () => {
   })
 
   it('fails when trying to stake after startDate', async () => {
-    const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     const afterStart = start - timestamp + 42000;
     await timeTravel(provider, afterStart);
-
-    await expect(asPatron.stake(
-      {
-        value: 1
-      }),
+    await expect(
+      asPatron.stake({value: 1})
     ).to.be.revertedWith('Staking contributions are no longer accepted');
   });
 })
