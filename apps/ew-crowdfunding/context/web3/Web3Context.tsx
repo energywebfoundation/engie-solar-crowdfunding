@@ -1,13 +1,18 @@
-import React, { createContext, useCallback, useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { Web3ActionsEnum } from './state/actions';
 import { UpdateWeb3Values, useWeb3State } from './state';
 import { IWeb3Context, Web3ModalConfig } from './types';
 import { getIamService, LoginOptions } from './iam';
 import { getLocalStorage } from './getLocalStorage';
 import { setListeners } from './setListeners';
-import { isMetamaskExtensionPresent } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import {
+  isMetamaskExtensionPresent,
+  PUBLIC_KEY,
+  ProviderType,
+} from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
 import { useDSLAModalsDispatch, DSLAModalsActionsEnum } from '../modals';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
+import { PROVIDER_TYPE } from '.';
 
 export const Web3Context = createContext<IWeb3Context>({
   isLoading: false,
@@ -16,8 +21,9 @@ export const Web3Context = createContext<IWeb3Context>({
 });
 
 export const Web3ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { provider, providerType, address, chainId, signer, did, dispatch } = useWeb3State();
-  const [isLoading, setIsLoading] = useState(true);
+  const { provider, providerType, address, chainId, signer, did, dispatch, publicKey, authenticated, role } =
+    useWeb3State();
+  const [isLoading, setIsLoading] = useState(false);
   const [isConnectedToRightNetwork, setIsConnectedToRightNetwork] = useState(false);
   const [isMetamaskPresent, setIsMetamaskPresent] = useState(false);
   const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
@@ -30,6 +36,12 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
       type: Web3ActionsEnum.UPDATE_STATE,
       payload: initialStateValues,
     });
+    if (localStorage.getItem(PROVIDER_TYPE)) {
+      const { signerService } = await getIamService({
+        providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
+      });
+      setListeners(signerService, (config) => handleListeners(config));
+    }
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
     const isConnectedChainId =
       process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
@@ -66,8 +78,8 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     setIsLoading(true);
     try {
       if (!window.ethereum) console.error('No Ethereum Provider found on window.ethereum');
-      const { signerService } = await getIamService(loginOptions);
-
+      const { signerService, role } = await getIamService(loginOptions);
+      const publicKey = await signerService.publicKey();
       if (signerService?.signer && signerService.address) {
         setListeners(signerService, (config) => handleListeners(config));
         handleUpdate({
@@ -77,12 +89,14 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
           provider: signerService?.provider,
           signer: signerService?.signer,
           did: signerService?.did,
+          authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
+          publicKey,
+          role,
         });
       }
     } catch (error) {
       console.error(error);
     }
-
     setIsLoading(false);
   };
 
@@ -103,6 +117,9 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     chainId,
     signer,
     did,
+    publicKey,
+    authenticated,
+    role,
     login,
     logout,
     isLoading,
@@ -114,7 +131,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
 
   useEffect(() => {
     handleOnInit();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <Web3Context.Provider value={context}>{children}</Web3Context.Provider>;

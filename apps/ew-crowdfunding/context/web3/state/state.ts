@@ -9,6 +9,9 @@ const initialState: IWeb3State = {
   chainId: null,
   signer: null,
   did: null,
+  publicKey: null,
+  authenticated: false,
+  role: null,
 };
 
 const reducer = (state: IWeb3State, action: Web3Action): IWeb3State => {

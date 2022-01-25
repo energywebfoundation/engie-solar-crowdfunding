@@ -11,10 +11,13 @@ export interface IWeb3Context {
   chainId?: number;
   signer?: Signer;
   did?: string;
+  publicKey?: string;
+  authenticated?: boolean;
+  role?: RoleEnrollmentStatus;
   login?: (loginOptions: LoginOptions) => void;
   logout?: () => void;
   isLoading: boolean;
-  isConnectedToRightNetwork: boolean,
+  isConnectedToRightNetwork: boolean;
   isMetamaskPresent?: boolean;
   isNotificationModalOpen: boolean;
   setIsNotificationModalOpen?: (open: boolean) => void;
@@ -27,4 +30,12 @@ export type TRemoveAccount = () => void;
 export type Web3ModalConfig = {
   title: string;
   text: string;
+};
+
+export enum RoleEnrollmentStatus {
+  NOT_ENROLLED = 'Not Enrolled',
+  ENROLLED_NOT_APPROVED = 'Not Approved',
+  ENROLLED_APPROVED = 'Enrolled Approved But Not Synced',
+  ENROLLED_SYNCED = 'Enrolled And Synced',
+  REJECTED = 'Enrolment rejected',
 }
