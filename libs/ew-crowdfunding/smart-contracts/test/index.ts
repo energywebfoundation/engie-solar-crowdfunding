@@ -263,7 +263,7 @@ describe("Staking", () => {
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
-  })
+  });
 
   it('fails when trying to stake after startDate', async () => {
     const { blockNumber } = await tx.wait();
@@ -273,5 +273,36 @@ describe("Staking", () => {
     await expect(
       asPatron.stake({value: 1})
     ).to.be.revertedWith('Staking contributions are no longer accepted');
+  });
+
+  it('fails when trying to withdraw partially after startDate and before end', async () => {
+    await expect(
+      asPatron.withdraw(oneEWT.mul(1))
+    ).to.be.revertedWith('Withdraws not allowed');
+  });
+
+  it('fails when trying to unstake all funds after startDate and before end', async () => {
+    await expect(
+      asPatron.unstakeAll()
+    ).to.be.revertedWith('Withdraws not allowed');
+  });
+
+  it('Can partially withdraw funds after end date', async () => {
+    //Moving to endDate
+    await timeTravel(provider, end);
+
+    let tx;
+    expect(tx = await asPatron2.withdraw(oneEWT)).changeEtherBalance(asPatron2, (oneEWT.mul(-1)));
+    const { blockNumber } = await tx.wait();
+    const { timestamp } = await provider.getBlock(blockNumber);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(1), timestamp);
+  });
+
+  it('Can withdraw all funds after end date', async () => {
+    let tx;
+    expect(tx = await asPatron2.unstakeAll()).changeEtherBalance(asPatron2, (oneEWT.mul(-1)));
+    const { blockNumber } = await tx.wait();
+    const { timestamp } = await provider.getBlock(blockNumber);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(1), timestamp);
   });
 })
