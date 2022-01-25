@@ -46,6 +46,34 @@ describe("StakingFacet", function () {
         return fixtureObject;
     }
 
+    async function fixture(
+        start,
+        [owner, patron],
+        provider
+      ) {
+        //set endDate 1 year ahead
+        const end = Number(DateHandler().add(1, 'years', new Date(start * 1000)));
+    
+        return {
+            end,
+            owner,
+            start,
+            patron,
+            provider,
+        };
+    }
+
+    async function defaultFixture(wallets, provider) {
+        const dateHandler = DateHandler();
+        const accounts = await ethers.getSigners()
+        const EthersProvider = await ethers.provider;
+    
+        const start = dateHandler.add(14, 'days');
+        const fixtureObject = await fixture(start, accounts, EthersProvider);
+    
+        return fixtureObject;
+    }
+
     before(async function () {
         
         diamondAddress = await deployDiamond();

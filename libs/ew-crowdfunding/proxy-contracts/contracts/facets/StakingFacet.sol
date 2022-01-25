@@ -102,15 +102,17 @@ contract StakingFacet is stakingBase {
         uint256 _contributionLimit
     ) external onlyOwner {
 
-        require(_hardCap >= _contributionLimit, 'hardCap exceeded');
+    require(_hardCap >= _contributionLimit, 'hardCap exceeded');
+
 		//Users have two weeks to contribute EWT before the site stops accepting contributions
         require(_startDate >= block.timestamp + 2 weeks, "Start date should be at least 2 weeks ahead");
         LibStaking.StakingStorage storage pointer = getStoragePointer();
 		pointer.startDate = _startDate;
 		pointer.endDate = _endDate;
-        pointer.hardCap = _hardCap;
-        pointer.contributionLimit = _contributionLimit;
-        pointer.isContractInitialized = true;
+
+    pointer.hardCap = _hardCap;
+    pointer.contributionLimit = _contributionLimit;
+    pointer.isContractInitialized = true;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
 	}
 

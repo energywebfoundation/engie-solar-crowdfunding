@@ -1,13 +1,20 @@
 import { makeStyles } from '@mui/styles';
+import { theme } from '../../dsla-theme';
 
 export const useStyles = makeStyles(() => {
   return {
     paper: {
       padding: '24px',
-      maxWidth: '350px',
+      maxWidth: '400px',
       width: 'auto',
       height: '173px',
       borderRadius: 0,
+      [theme.breakpoints.down('md')]: {
+        maxWidth: '350px',
+      },
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '100%',
+      },
     },
     title: {
       display: 'flex',

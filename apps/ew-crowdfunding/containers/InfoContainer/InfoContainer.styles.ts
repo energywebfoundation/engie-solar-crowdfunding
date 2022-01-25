@@ -4,7 +4,7 @@ export const useStyles = makeStyles(() => {
   return {
     wrapper: {
         display: 'flex',
-        justifyContent: 'space-evenly',
+        justifyContent: 'start',
         alignItems: 'center',
         flexDirection: 'row',
         flexWrap: 'wrap',

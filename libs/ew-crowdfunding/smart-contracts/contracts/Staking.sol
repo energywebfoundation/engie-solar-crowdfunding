@@ -40,12 +40,12 @@ contract Staking is StakingBase {
         //accepting contributions 2 weeks before start date
         uint256 contributionDate = startDate - 2 weeks;
         require(block.timestamp + 10 seconds >= contributionDate, "Contributions not yet allowed");
-
         require(block.timestamp < startDate, "Staking contributions are no longer accepted");
         //To-Do: Check if ther user has the appropriate role in ClaimManager
 
         isAllowed = true;
     }
+
     function init(
         uint256 _startDate,
         uint256 _endDate,

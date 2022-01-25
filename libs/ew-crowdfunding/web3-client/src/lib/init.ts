@@ -1,6 +1,11 @@
 import { CacheClient } from './cacheClient';
-import { fromMetaMask, fromWalletConnectMetamask, SignerService } from './signer';
+import { fromMetaMask, fromPrivateKey, fromWalletConnectMetamask, SignerService } from './signer';
 import { defaultBridgeUrl } from './utils';
+
+export async function initWithPrivateKeySigner(privateKey: string, rpcUrl: string) {
+  const signerService = await fromPrivateKey(privateKey, rpcUrl);
+  return init(signerService);
+}
 
 export async function initWithMetamask() {
   return init(await fromMetaMask());
