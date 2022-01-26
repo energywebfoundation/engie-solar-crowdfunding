@@ -35,6 +35,9 @@ export const useEmailVerificationEffects = () => {
   }, [isSubmitSuccessful, reset]);
 
   const onSubmit = async (data: { email: number }) => {
+    if (errorMessage) {
+      return;
+    }
     console.log('Email: ', data);
   };
 

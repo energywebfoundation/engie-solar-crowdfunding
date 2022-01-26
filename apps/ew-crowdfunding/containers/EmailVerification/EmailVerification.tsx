@@ -44,7 +44,13 @@ export const EmailVerification: FC = () => {
           </Typography>
         </Box>
         <Box className={classes.buttonWrapper} mt={2}>
-          <Button variant='contained' type='submit' color='primary' style={{ minWidth: '200px' }}>
+          <Button
+            variant='contained'
+            type='submit'
+            color='primary'
+            style={{ minWidth: '200px' }}
+            disabled={!!errorMessage}
+          >
             Submit
           </Button>
         </Box>
