@@ -22,7 +22,7 @@ contract Staking is StakingBase, ERC20Burnable {
         _;
     }
 
-    constructor() ERC20("SolarToken", "SLT") {
+    constructor() ERC20("SOLAR TOKEN", "SLT") {
         
         owner = msg.sender;
     }
@@ -51,10 +51,7 @@ contract Staking is StakingBase, ERC20Burnable {
     }
 
     function canStake(address _user) internal view returns(bool isAllowed){
-        require(
-            stakes[_user].deposit == 0,
-            'Already staking'
-        );
+        require(stakes[_user].deposit == 0, 'Already staking');
         require(block.timestamp < signupEnd, "Staking contributions are no longer accepted");
         //To-Do: Check if ther user has the appropriate role in ClaimManager
 

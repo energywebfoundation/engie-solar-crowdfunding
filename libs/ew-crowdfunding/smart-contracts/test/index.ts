@@ -286,7 +286,6 @@ describe("Staking", () => {
 
   it('Can withdraw all funds before start date', async () => {
     let tx;
-    // console.log("before withdraw: SLT of address ",patron.address,  await ().toString(), await asPatron.symbol());
 
     expect(tx = await asPatron.withdrawAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
     const { blockNumber } = await tx.wait();
