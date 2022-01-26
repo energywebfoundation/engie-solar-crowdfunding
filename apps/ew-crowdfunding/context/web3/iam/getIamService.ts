@@ -31,7 +31,6 @@ export const getIamService = async ({ providerType }: LoginOptions) => {
         namespace: process.env.NEXT_PUBLIC_PATRON_ROLE.split('.roles.').pop(),
       });
       const role = getEnrollmentStatus(claims);
-    
       return {
         signerService,
         cacheClient,

@@ -37,10 +37,19 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
       payload: initialStateValues,
     });
     if (localStorage.getItem(PROVIDER_TYPE)) {
-      const { signerService } = await getIamService({
+      const { signerService, role } = await getIamService({
         providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
       });
+      dispatch({
+        type: Web3ActionsEnum.UPDATE_STATE,
+        payload: { ...initialStateValues, role },
+      });
       setListeners(signerService, (config) => handleListeners(config));
+    } else {
+      dispatch({
+        type: Web3ActionsEnum.UPDATE_STATE,
+        payload: initialStateValues,
+      });
     }
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
     const isConnectedChainId =

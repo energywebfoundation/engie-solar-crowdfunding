@@ -89,13 +89,24 @@ input[type='number']::-webkit-outer-spin-button {
   padding: 1px;
   background: linear-gradient(
     314.24deg,
-    #00AAFF 1.72%,
+    #00aaff 1.72%,
     rgba(83, 134, 245, 0.16) 33.86%,
     rgba(98, 104, 249, 0.16) 62.17%,
-    #A566FF 97.07%
+    #a566ff 97.07%
   );
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   -webkit-mask-composite: destination-out;
+}
+
+.warningBorder {
+  position: relative;
+  border-radius: 4px;
+  background: linear-gradient(276.95deg, rgba(253, 139, 24, 0.2) -198.51%, rgba(13, 10, 25, 0) 157.75%);
+  background-clip: padding-box;
+  border: 1px solid #fd8b18;
+  padding: 1px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 }
