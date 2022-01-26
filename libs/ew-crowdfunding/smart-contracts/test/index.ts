@@ -6,7 +6,6 @@ import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
 import { DateTime } from "luxon";
 
 use(solidity);
-
 let end : number;
 let start : number;
 let patron: Wallet;
@@ -16,11 +15,15 @@ let asPatron : Staking;
 let asPatron2: Staking;
 let signupEnd : number;
 let hardCap : BigNumber;
+let tokenSymbol: string;
 let signupStart : number;
+let contractAddress: string;
 let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
 let contributionLimit : BigNumber;
+
+const nullAddress = '0x0000000000000000000000000000000000000000';
 
 const timeTravel = async (provider: MockProvider, seconds: number) => {
   await provider.send("evm_increaseTime", [seconds]);
@@ -79,6 +82,7 @@ describe("Staking", () => {
       stakingContract,
       contributionLimit,
       asOwner: stakingContract.connect(owner),
+      contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
       asPatron2: stakingContract.connect(patron2)
     };
@@ -92,7 +96,6 @@ describe("Staking", () => {
 
   before(async () => {
     const params = await loadFixture(defaultFixture);
-    
     end = params.end;
     start = params.start;
     hardCap = params.hardCap;
@@ -104,6 +107,7 @@ describe("Staking", () => {
     asPatron2 = params.asPatron2;
     signupEnd = params.signupEnd;
     signupStart = params.signupStart;
+    contractAddress = params.contractAddress;
     stakingContract = params.stakingContract;
     contributionLimit = params.contributionLimit;
   })
@@ -206,25 +210,38 @@ describe("Staking", () => {
   });
 
   it('fails when staking more than limit', async () => {
-    // await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
-   
     await expect(asPatron.stake({
             value: contributionLimit.add(BigNumber.from(42))
         }),
     ).to.be.revertedWith('Stake greater than contribution limit');
   });
 
-  it("Can stake before startDate on initialized contract",  async () => {
-    console.log("Before stake: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+  it('Can retrieve token symbol from contract', async () => {
+    tokenSymbol = await asPatron.symbol();
+    expect(tokenSymbol).equals('SLT');
+  });
 
+  it('Checks null balance of SLT before staking', async () => {
+    expect(await asPatron.balanceOf(patron.address)).equals(BigNumber.from(0));
+    console.log(`[ Before stake ] balance of address ${patron.address} -> ${ (await asPatron.balanceOf(patron.address)).toString()} ${tokenSymbol}`);
+  });
+
+  it("Can stake before startDate on initialized contract",  async () => {
+    let _tx;
     await expect(
-        await asPatron.stake({
+       _tx = await asPatron.stake({
             value: oneEWT.mul(3)
         }),
     ).changeEtherBalance(asPatron, oneEWT.mul(3));
-    console.log("After stake: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+    await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
 
   });
+
+  it('Checks SLT Token mining on staking', async () => {
+    expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(3));
+    console.log(`[ After stake ] balance of address ${patron.address} -> ${ (await asPatron.balanceOf(patron.address)).toString()} ${tokenSymbol}`);
+  });
+
 
   it("fails if patron stakes more than once", async () => {
     await expect(asPatron.stake({value: 1})).to.be.revertedWith('Already staking');
@@ -256,15 +273,20 @@ describe("Staking", () => {
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(5), timestamp);
   });
 
+  it('Checks SLT Token burning on withdraw', async () => {
+    expect(await asPatron.balanceOf(patron2.address)).equals(oneEWT.mul(2));
+    console.log(`[ After stake ] balance of address ${patron.address} -> ${ (await asPatron.balanceOf(patron.address)).toString()} ${tokenSymbol}`);
+  });
+
   it('fails when trying to withdraw more funds than staked', async () => {
     await expect(
       asPatron2.withdraw(oneEWT.mul(15))
     ).to.be.revertedWith('Not enough EWT at stake');
-  })
+  });
 
   it('Can withdraw all funds before start date', async () => {
     let tx;
-    console.log("before withdraw: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+    // console.log("before withdraw: SLT of address ",patron.address,  await ().toString(), await asPatron.symbol());
 
     expect(tx = await asPatron.withdrawAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
     const { blockNumber } = await tx.wait();
