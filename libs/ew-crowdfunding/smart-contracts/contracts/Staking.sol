@@ -83,7 +83,6 @@ contract Staking is StakingBase {
         require(msg.value > 0, 'No EWT provided');
         require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
-        isStaker[msg.sender] = true;
         totalStaked += msg.value;
     }
 
