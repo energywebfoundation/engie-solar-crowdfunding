@@ -98,6 +98,7 @@ contract Staking is StakingBase, ERC20Burnable {
 
     function withdraw(uint256 _amount)  withdrawsAllowed sufficientBalance(_amount) public {
         stakes[msg.sender].deposit -= _amount;
+        burn(_amount);
         payable(msg.sender).transfer(_amount);
         emit Withdrawn(msg.sender, _amount, block.timestamp);
     }

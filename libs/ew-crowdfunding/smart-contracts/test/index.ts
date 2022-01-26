@@ -215,11 +215,15 @@ describe("Staking", () => {
   });
 
   it("Can stake before startDate on initialized contract",  async () => {
+    console.log("Before stake: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+
     await expect(
         await asPatron.stake({
             value: oneEWT.mul(3)
         }),
     ).changeEtherBalance(asPatron, oneEWT.mul(3));
+    console.log("After stake: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+
   });
 
   it("fails if patron stakes more than once", async () => {
@@ -260,9 +264,13 @@ describe("Staking", () => {
 
   it('Can withdraw all funds before start date', async () => {
     let tx;
+    console.log("before withdraw: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+
     expect(tx = await asPatron.withdrawAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
+    console.log("After withdraw: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
+
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
   });
 
