@@ -9,15 +9,9 @@ contract StakingBase {
     }
 
     mapping(address => Stake) stakes;
-    mapping(address => bool) isStaker;
 
     function saveDeposit(uint256 _deposit, address _user, uint256 _timeStamp) internal {
         Stake memory userStake = Stake(_timeStamp, _deposit);
         stakes[_user] = userStake;
-    }
-
-    function removeStaker(address _staker) internal {
-        require(stakes[_staker].deposit != 0, 'No deposit at stake');
-        stakes[_staker].deposit = 0;
     }
 }

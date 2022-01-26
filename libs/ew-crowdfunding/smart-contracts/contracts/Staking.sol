@@ -86,7 +86,6 @@ contract Staking is StakingBase, ERC20Burnable {
         require(msg.value > 0, 'No EWT provided');
         require(canStake(msg.sender));
         saveDeposit(msg.value, msg.sender, block.timestamp);
-        isStaker[msg.sender] = true;
         totalStaked += msg.value;
         _mint(msg.sender, msg.value);
     }
