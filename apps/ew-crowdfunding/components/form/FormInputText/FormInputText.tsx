@@ -53,8 +53,8 @@ export const FormInputText: FC<FormInputTextProps> = ({
             onChange(e);
             checkMethod(valueChanged);
           }}
-          error={!!error}
-          helperText={error ? errorMessage || error.message : hint}
+          error={!!error || !!errorMessage}
+          helperText={error || errorMessage ? errorMessage || error.message : hint}
         />
       )}
     />

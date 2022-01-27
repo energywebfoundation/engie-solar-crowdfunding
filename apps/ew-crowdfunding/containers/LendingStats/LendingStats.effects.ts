@@ -1,8 +1,8 @@
 export const useLendingStatsEffects = () => {
   const lendedAmount = 200;
-  const lendedLimit = 1000.0;
+  const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
   return {
     lendedAmount,
-    lendedLimit,
+    globalTokenLimit,
   };
 };

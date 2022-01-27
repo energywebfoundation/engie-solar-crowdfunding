@@ -1,12 +1,46 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { DateTime } from 'luxon';
 
 export const useLendingDetailsEffects = () => {
+  /* API variables */
+  const accountBalance = 50.5;
+  const userContribution = 100;
+  const solarLoanTokenBalance = 400;
+  const redeemableReward = 0;
+
+  const tokensRedeemed = 137;
+  /* End of API variables */
+
+  /* MAIN LIMITS */
+  const tokenLimit = Number(process.env.NEXT_PUBLIC_TOKEN_LIMIT);
+  const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
+  const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
+  const contributionDeadline = process.env.NEXT_PUBLIC_CONTRIBUTION_DEADLINE;
+  const solarLoansDistributed = process.env.NEXT_PUBLIC_SOLAR_LOANS_DISTRIBUTED;
+  const solarLoansMature = process.env.NEXT_PUBLIC_SOLAR_LOANS_MATURE;
+  /* End of limits */
+
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const formatDate = (date: string) => {
+    if (!date) {
+      return;
+    }
+    return DateTime.fromJSDate(new Date(date)).toFormat('dd LLL yy');
+  };
+
   const validationSchema = yup
     .object({
-      loan: yup.number().min(0).max(200).required('EWT Loan Amount is required').label('EWT Loan Amount'),
+      loan: yup
+        .number()
+        .typeError('EWT Loan Amount is required')
+        .min(0)
+        .max(200)
+        .required('EWT Loan Amount is required')
+        .label('EWT Loan Amount'),
     })
     .required('EWT Loan Amount is required');
 
@@ -14,6 +48,7 @@ export const useLendingDetailsEffects = () => {
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { isSubmitSuccessful, errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
@@ -26,34 +61,64 @@ export const useLendingDetailsEffects = () => {
   }, [isSubmitSuccessful, reset]);
 
   const onSubmit = async (data: { loan: number }) => {
+    if (errorMessage) {
+      return;
+    }
     console.log('Loan amount: ', data);
   };
 
   const onRedeemSlt = () => {
-    console.log('On redeeem');
+    console.log('On redeem');
   };
 
-  const accountBalance = 0.1;
-
-  const contributionList = {
-    contribution: 100.0,
-    tokenBalance: 100.0,
-    redeemableReward: 0.0,
+  const onLoanChange = () => {
+    const loan = Number(getValues('loan'));
+    setErrorMessage(getErrorMessage(loan));
   };
 
-  const tokensRedeemed = 1370;
-  const tokenLimit = 2000;
+  const getErrorMessage = (loanValue: number) => {
+    /* EWT Loan Amount” box greater than */
+    console.log(
+      'Get error message here: ',
+      typeof loanValue,
+      typeof solarLoanTokenBalance,
+      typeof (loanValue + solarLoanTokenBalance),
+      loanValue + solarLoanTokenBalance > globalTokenLimit,
+    );
 
+    if (loanValue > accountBalance) {
+      /* their account balance */
+      return 'Amount exceeds account balance';
+    } else if (loanValue > tokenLimit) {
+      /* their personal limit of 200 EWT */
+      return 'Amount exceeds personal limit';
+    } else if (loanValue + solarLoanTokenBalance > globalTokenLimit) {
+      /* an amount that makes the total contribution exceed the global limit (10,000 EWT) */ // This needs to be checked
+      return 'Amount exceeds global limit';
+    } else {
+      return;
+    }
+  };
 
   return {
+    globalTokenLimit,
+    interestRate,
+    contributionDeadline,
+    solarLoansDistributed,
+    solarLoansMature,
+    userContribution,
+    solarLoanTokenBalance,
+    redeemableReward,
+    formatDate,
     control,
     handleSubmit,
     onSubmit,
     errors,
     onRedeemSlt,
     accountBalance,
-    contributionList,
     tokensRedeemed,
-    tokenLimit
+    tokenLimit,
+    onLoanChange,
+    errorMessage,
   };
 };
