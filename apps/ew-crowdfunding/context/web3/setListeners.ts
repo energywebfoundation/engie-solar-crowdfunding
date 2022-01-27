@@ -1,4 +1,4 @@
-import { ProviderEvent, SignerService } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { ProviderEvent, SignerService } from 'iam-client-lib';
 import { Web3ModalConfig } from './types';
 
 const displayAccountAndNetworkChanges = (changeType: ProviderEvent, callback: (config) => void) => {

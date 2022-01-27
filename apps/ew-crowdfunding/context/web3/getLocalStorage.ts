@@ -3,7 +3,7 @@ export const CURRENT_CHAIN_ID = 'CURRENT_CHAIN_ID';
 export const CURRENT_DID = 'CURRENT_DID';
 export const PROVIDER_TYPE = 'ProviderType';
 
-import { ProviderType, PUBLIC_KEY } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { ProviderType, PUBLIC_KEY } from 'iam-client-lib';
 import { IWeb3State } from './state/types';
 import { TSetAccount, TGetAccount, TRemoveAccount } from './types';
 

@@ -1,7 +1,8 @@
 import { LoginOptions } from './iam';
-import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { ProviderType } from 'iam-client-lib';
 import { Signer } from 'ethers';
-import { IWeb3State } from './state/types';
+import { IWeb3State, Web3Action } from './state/types';
+import { Dispatch } from 'react';
 
 export interface IWeb3Context {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,6 +22,7 @@ export interface IWeb3Context {
   isMetamaskPresent?: boolean;
   isNotificationModalOpen: boolean;
   setIsNotificationModalOpen?: (open: boolean) => void;
+  dispatch?: Dispatch<Web3Action>
 }
 
 export type TSetAccount = (data: Partial<IWeb3State>) => void;
