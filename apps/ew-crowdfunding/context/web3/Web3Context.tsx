@@ -38,7 +38,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
       });
       dispatch({
         type: Web3ActionsEnum.UPDATE_STATE,
-        payload: { ...initialStateValues, role },
+        payload: { ...initialStateValues, role, isEthSigner: signerService?.isEthSigner?.toString() },
       });
       setListeners(signerService, (config) => handleListeners(config));
     } else {
@@ -82,7 +82,8 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
   const login = async (loginOptions: LoginOptions) => {
     setIsLoading(true);
     try {
-      if (!window.ethereum) console.error('No Ethereum Provider found on window.ethereum');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      if (!(window as any).ethereum) console.error('No Ethereum Provider found on window.ethereum');
       const { signerService, role } = await getIamService(loginOptions);
       const publicKey = await signerService.publicKey();
       if (signerService?.signer && signerService.address) {
@@ -97,6 +98,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
           authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
           publicKey,
           role,
+          isEthSigner: signerService?.isEthSigner?.toString(),
         });
       }
     } catch (error) {
