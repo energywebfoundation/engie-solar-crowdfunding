@@ -5,12 +5,17 @@ import { useContext, useEffect, useState } from 'react';
 import { Web3Context } from '../../context';
 import { RoleEnrollmentStatus } from '../../context/web3/types';
 import domains from 'disposable-email-domains';
+import { getIamService } from '../../context/web3/iam';
+import { RegistrationTypes } from 'iam-client-lib';
+import { Web3ActionsEnum } from '../../context/web3/state/actions';
 
 export const useEmailVerificationEffects = () => {
-  const { address, role } = useContext(Web3Context);
+  const { address, role, providerType, dispatch } = useContext(Web3Context);
   const notEnrolled = Boolean(role === RoleEnrollmentStatus.NOT_ENROLLED || !role);
   const EMAIL_DOMAINS_WHITELIST = 'yopmail.com;yopmail.fr';
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const PATRON_ROLE_VERSION = 1;
 
   const validationSchema = yup
     .object({
@@ -39,6 +44,33 @@ export const useEmailVerificationEffects = () => {
       return;
     }
     console.log('Email: ', data);
+
+    const { claimsService } = await getIamService({
+      providerType,
+    });
+    try {
+      await claimsService.createClaimRequest({
+        registrationTypes: [RegistrationTypes.OnChain],
+        claim: {
+          fields: [
+            {
+              key: 'email',
+              value: data.email,
+            },
+          ],
+          claimType: process.env.NEXT_PUBLIC_PATRON_ROLE,
+          claimTypeVersion: PATRON_ROLE_VERSION,
+        },
+      });
+      dispatch({
+        type: Web3ActionsEnum.UPDATE_STATE,
+        payload: {
+          role: RoleEnrollmentStatus.ENROLLED_NOT_APPROVED,
+        },
+      });
+    } catch (error) {
+      console.log('Error creating claim request: ', error);
+    }
   };
 
   const onEmailChange = () => {

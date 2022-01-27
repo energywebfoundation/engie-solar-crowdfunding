@@ -54,7 +54,8 @@
     "react-toastify": "^8.1.0",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.0.0",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "iam-client-lib": "^4.0.0-alpha.12"
   },
   "devDependencies": {
     "@nrwl/cli": "13.4.3",

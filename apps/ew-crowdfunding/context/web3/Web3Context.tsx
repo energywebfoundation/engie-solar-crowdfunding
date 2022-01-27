@@ -5,11 +5,7 @@ import { IWeb3Context, Web3ModalConfig } from './types';
 import { getIamService, LoginOptions } from './iam';
 import { getLocalStorage } from './getLocalStorage';
 import { setListeners } from './setListeners';
-import {
-  isMetamaskExtensionPresent,
-  PUBLIC_KEY,
-  ProviderType,
-} from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
 import { useDSLAModalsDispatch, DSLAModalsActionsEnum } from '../modals';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { PROVIDER_TYPE } from '.';
@@ -136,6 +132,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     isMetamaskPresent,
     isNotificationModalOpen,
     setIsNotificationModalOpen,
+    dispatch,
   };
 
   useEffect(() => {

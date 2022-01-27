@@ -2,7 +2,7 @@ import {
   initWithMetamask,
   initWithWalletConnect,
   ProviderType,
-} from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+} from 'iam-client-lib';
 
 export const getSignerService = (providerType: ProviderType) => {
   switch (providerType) {
