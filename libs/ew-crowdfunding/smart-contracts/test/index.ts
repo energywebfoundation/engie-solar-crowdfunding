@@ -1,9 +1,10 @@
 import { expect, use } from "chai";
 import { Staking } from "../ethers";
-import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
+import { MockProvider, solidity, deployContract, loadFixture, deployMockContract } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
 import { DateTime } from "luxon";
+import { abi } from '../artifacts/contracts/libs/IClaimManager.sol/IClaimManager.json';
 
 use(solidity);
 let end : number;
@@ -22,13 +23,21 @@ let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
 let contributionLimit : BigNumber;
+let mockContract; 
 
 const nullAddress = '0x0000000000000000000000000000000000000000';
+const defaultRoleVersion = 1;
+const claimManagerAddress = ""; //Find ClaimManager or Mock
+const serviceProviderRole = utils.namehash('service.Role');
+
+
 
 const timeTravel = async (provider: MockProvider, seconds: number) => {
   await provider.send("evm_increaseTime", [seconds]);
   await provider.send("evm_mine", []);
 };
+
+console.log("ABI: ", abi)
 
 const initializeContract = async (
     contract : Staking,
@@ -52,6 +61,7 @@ const initializeContract = async (
 }
 
 describe("Staking", () => {
+  const claimManagerABI = abi;
   const oneEWT = utils.parseUnits("1", "ether");
 
   async function fixture(
@@ -63,11 +73,28 @@ describe("Staking", () => {
     const end = Number(DateTime.fromSeconds(start).plus({year: 1}).toSeconds().toFixed(0));
     const hardCap = oneEWT.mul(1000000);
     const contributionLimit = oneEWT.mul(10);
-    const stakingContract = (await deployContract(owner, StakingContract)) as Staking;
+    const claimManagerMocked = await deployMockContract(owner, claimManagerABI);
 
+    const stakingContract = (await deployContract(owner, StakingContract, [
+      claimManagerMocked.address,
+      serviceProviderRole
+    ])) as Staking; //
+    
     signupStart = Number(DateTime.now().toSeconds().toFixed(0))
     //Signup period ends 1 day before startDay
     signupEnd = Number(DateTime.fromSeconds(start).minus({day: 1}).toSeconds().toFixed(0));
+
+    await claimManagerMocked.mock.hasRole
+          .withArgs(owner.address, serviceProviderRole, defaultRoleVersion)
+          .returns(true);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron.address, serviceProviderRole, defaultRoleVersion)
+    .returns(false);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron2.address, serviceProviderRole, defaultRoleVersion)
+    .returns(false);
 
     return {
       end,
@@ -81,6 +108,7 @@ describe("Staking", () => {
       signupStart,
       stakingContract,
       contributionLimit,
+      claimManagerMocked,
       asOwner: stakingContract.connect(owner),
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
@@ -95,6 +123,9 @@ describe("Staking", () => {
   }
 
   before(async () => {
+    // mockContract = await deployMockContract(patron, claimManagerABI);
+    // console.log('MockContract Checking >> ', mockContract);
+    console.log("Checking service Role >> ", serviceProviderRole);
     const params = await loadFixture(defaultFixture);
     end = params.end;
     start = params.start;
@@ -110,6 +141,7 @@ describe("Staking", () => {
     contractAddress = params.contractAddress;
     stakingContract = params.stakingContract;
     contributionLimit = params.contributionLimit;
+    let claimManager = params.claimManagerMocked;
   })
 
   it("fails when non owner tries to initialize",  async () => {
