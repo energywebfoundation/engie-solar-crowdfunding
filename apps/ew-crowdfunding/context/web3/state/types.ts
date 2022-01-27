@@ -14,11 +14,21 @@ export interface IWeb3State {
   publicKey?: string;
   authenticated?: boolean;
   role?: RoleEnrollmentStatus;
+  isEthSigner?: string;
 }
 
 export type UpdateWeb3Values = Pick<
   IWeb3State,
-  'address' | 'chainId' | 'provider' | 'providerType' | 'signer' | 'did' | 'publicKey' | 'authenticated' | 'role'
+  | 'address'
+  | 'chainId'
+  | 'provider'
+  | 'providerType'
+  | 'signer'
+  | 'did'
+  | 'publicKey'
+  | 'authenticated'
+  | 'role'
+  | 'isEthSigner'
 >;
 
 export type Web3Action =

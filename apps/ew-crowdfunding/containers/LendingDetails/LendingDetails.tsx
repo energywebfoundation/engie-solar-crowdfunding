@@ -25,6 +25,7 @@ export const LendingDetails: FC = () => {
     tokenLimit,
     onLoanChange,
     errorMessage,
+    isRedeemDisabled,
   } = useLendingDetailsEffects();
 
   return (
@@ -101,7 +102,13 @@ export const LendingDetails: FC = () => {
           <ContributionItem title='Redeemable reward' value={redeemableReward} type='EWT' />
         </Box>
         <Box>
-          <Button variant='contained' color='primary' style={{ minWidth: '200px' }} onClick={onRedeemSlt}>
+          <Button
+            disabled={isRedeemDisabled}
+            variant='contained'
+            color='primary'
+            style={{ minWidth: '200px' }}
+            onClick={onRedeemSlt}
+          >
             Redeem SLT
           </Button>
         </Box>

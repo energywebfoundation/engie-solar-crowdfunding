@@ -23,6 +23,8 @@ export const useLendingDetailsEffects = () => {
   const solarLoansMature = process.env.NEXT_PUBLIC_SOLAR_LOANS_MATURE;
   /* End of limits */
 
+  const isRedeemDisabled = new Date() >= new Date(contributionDeadline);
+
   const [errorMessage, setErrorMessage] = useState(null);
 
   const formatDate = (date: string) => {
@@ -120,5 +122,6 @@ export const useLendingDetailsEffects = () => {
     tokenLimit,
     onLoanChange,
     errorMessage,
+    isRedeemDisabled,
   };
 };
