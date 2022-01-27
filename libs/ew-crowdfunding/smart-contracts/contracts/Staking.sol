@@ -6,9 +6,12 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 contract Staking is StakingBase, ERC20Burnable {
     uint256 hardCap;
     uint256 endDate;
+    uint256 rewards;
     uint256 signupEnd;
     uint256 startDate;
     uint256 totalStaked;
+    bytes32 serviceRole;
+    address claimManager;
     address private owner;
     uint256 contributionLimit;
     bool isContractInitialized;
@@ -22,9 +25,16 @@ contract Staking is StakingBase, ERC20Burnable {
         _;
     }
 
-    constructor() ERC20("SOLAR TOKEN", "SLT") {
-        
+    modifier activated(){
+        require(block.timestamp > startDate && block.timestamp < endDate, 'Contract not activated');
+        _;
+    }
+   
+
+    constructor(address _claimManager, bytes32 _serviceRole) ERC20("SOLAR TOKEN", "SLT") {
         owner = msg.sender;
+        claimManager = _claimManager;
+        serviceRole = _serviceRole;
     }
 
     modifier onlyOwner() {
@@ -48,6 +58,13 @@ contract Staking is StakingBase, ERC20Burnable {
         require(block.timestamp < startDate || block.timestamp > endDate, 'Withdraws not allowed');
         require(stakes[msg.sender].deposit != 0, 'No deposit at stake');
         _;
+    }
+
+    function sendRewards() payable external  activated {
+        require(msg.value > 0, 'Not rewards provided');
+        require(isServiceProvider(msg.sender, claimManager, serviceRole), 'Not enrolled as service provider');
+        //send reward
+        rewards = msg.value;
     }
 
     function canStake(address _user) internal view returns(bool isAllowed){
