@@ -13,7 +13,7 @@ export interface IWeb3State {
   did?: string;
   publicKey?: string;
   authenticated?: boolean;
-  role?: RoleEnrollmentStatus;
+  roleEnrolmentStatus?: RoleEnrollmentStatus;
   isEthSigner?: string;
 }
 
@@ -27,7 +27,7 @@ export type UpdateWeb3Values = Pick<
   | 'did'
   | 'publicKey'
   | 'authenticated'
-  | 'role'
+  | 'roleEnrolmentStatus'
   | 'isEthSigner'
 >;
 

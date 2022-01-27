@@ -14,7 +14,7 @@ export interface IWeb3Context {
   did?: string;
   publicKey?: string;
   authenticated?: boolean;
-  role?: RoleEnrollmentStatus;
+  roleEnrolmentStatus?: RoleEnrollmentStatus;
   login?: (loginOptions: LoginOptions) => void;
   logout?: () => void;
   isLoading: boolean;

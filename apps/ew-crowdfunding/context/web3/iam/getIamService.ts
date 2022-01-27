@@ -32,13 +32,14 @@ export const getIamService = async ({ providerType }: LoginOptions) => {
       const claims: Claim[] = await cacheClient.getClaimsByRequester(signerService?.did, {
         namespace: process.env.NEXT_PUBLIC_PATRON_ROLE.split('.roles.').pop(),
       });
-      const role = getEnrollmentStatus(claims);
+      const roleEnrolmentStatus = getEnrollmentStatus(claims);
+      console.log('roleEnrolmentStatus: ', roleEnrolmentStatus);
 
       return {
         signerService,
         cacheClient,
         claims,
-        role,
+        roleEnrolmentStatus,
         claimsService,
       };
     }
