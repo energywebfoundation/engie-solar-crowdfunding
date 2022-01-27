@@ -10,8 +10,8 @@ import { RegistrationTypes } from 'iam-client-lib';
 import { Web3ActionsEnum } from '../../context/web3/state/actions';
 
 export const useEmailVerificationEffects = () => {
-  const { address, role, providerType, dispatch } = useContext(Web3Context);
-  const notEnrolled = Boolean(role === RoleEnrollmentStatus.NOT_ENROLLED || !role);
+  const { address, roleEnrolmentStatus, providerType, dispatch } = useContext(Web3Context);
+  const notEnrolled = Boolean(roleEnrolmentStatus === RoleEnrollmentStatus.NOT_ENROLLED || !roleEnrolmentStatus);
   const EMAIL_DOMAINS_WHITELIST = 'yopmail.com;yopmail.fr';
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -65,7 +65,7 @@ export const useEmailVerificationEffects = () => {
       dispatch({
         type: Web3ActionsEnum.UPDATE_STATE,
         payload: {
-          role: RoleEnrollmentStatus.ENROLLED_NOT_APPROVED,
+          roleEnrolmentStatus: RoleEnrollmentStatus.ENROLLED_NOT_APPROVED,
         },
       });
     } catch (error) {

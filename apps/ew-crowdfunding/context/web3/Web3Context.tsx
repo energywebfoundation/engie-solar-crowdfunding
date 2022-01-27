@@ -17,7 +17,7 @@ export const Web3Context = createContext<IWeb3Context>({
 });
 
 export const Web3ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { provider, providerType, address, chainId, signer, did, dispatch, publicKey, authenticated, role } =
+  const { provider, providerType, address, chainId, signer, did, dispatch, publicKey, authenticated, roleEnrolmentStatus } =
     useWeb3State();
   const [isLoading, setIsLoading] = useState(false);
   const [isConnectedToRightNetwork, setIsConnectedToRightNetwork] = useState(false);
@@ -33,12 +33,12 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
       payload: initialStateValues,
     });
     if (localStorage.getItem(PROVIDER_TYPE)) {
-      const { signerService, role } = await getIamService({
+      const { signerService, roleEnrolmentStatus } = await getIamService({
         providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
       });
       dispatch({
         type: Web3ActionsEnum.UPDATE_STATE,
-        payload: { ...initialStateValues, role, isEthSigner: signerService?.isEthSigner?.toString() },
+        payload: { ...initialStateValues, roleEnrolmentStatus, isEthSigner: signerService?.isEthSigner?.toString() },
       });
       setListeners(signerService, (config) => handleListeners(config));
     } else {
@@ -84,7 +84,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(window as any).ethereum) console.error('No Ethereum Provider found on window.ethereum');
-      const { signerService, role } = await getIamService(loginOptions);
+      const { signerService, roleEnrolmentStatus } = await getIamService(loginOptions);
       const publicKey = await signerService.publicKey();
       if (signerService?.signer && signerService.address) {
         setListeners(signerService, (config) => handleListeners(config));
@@ -97,7 +97,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
           did: signerService?.did,
           authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
           publicKey,
-          role,
+          roleEnrolmentStatus,
           isEthSigner: signerService?.isEthSigner?.toString(),
         });
       }
@@ -126,7 +126,7 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     did,
     publicKey,
     authenticated,
-    role,
+    roleEnrolmentStatus,
     login,
     logout,
     isLoading,
