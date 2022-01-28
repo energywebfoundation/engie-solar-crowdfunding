@@ -25,6 +25,7 @@ contract Staking is ERC20Burnable {
     mapping(address => Stake) stakes;
     
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
+    event RewardSent(address provider, uint256 amount, uint256 time);
     event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
@@ -71,7 +72,8 @@ contract Staking is ERC20Burnable {
         require(msg.value > 0, 'Not rewards provided');
         require(isServiceProvider(msg.sender, serviceRole), 'Not enrolled as service provider');
         //send reward
-        rewards = msg.value;
+        rewards += msg.value;
+        emit RewardSent(msg.sender, msg.value, block.timestamp);
     }
 
     function init(
