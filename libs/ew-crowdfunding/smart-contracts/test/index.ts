@@ -345,7 +345,7 @@ describe("Staking", () => {
     await timeTravel(provider, afterStart);
     await expect(
       asPatron.stake({value: 1})
-    ).to.be.revertedWith('Staking contributions are no longer accepted');
+    ).to.be.revertedWith('Signup Ended');
   });
 
   it('can add rewards when contract is activated', async () => {

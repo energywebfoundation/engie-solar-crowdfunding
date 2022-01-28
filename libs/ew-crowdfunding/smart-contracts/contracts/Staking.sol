@@ -1,28 +1,29 @@
 // SPDX-License-Identifier: MIT
+
 pragma solidity ^0.8.0;
-import './libs/IClaimManager.sol';
+import "./libs/IClaimManager.sol";
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 contract Staking is ERC20Burnable {
-    uint256 hardCap;
-    uint256 endDate;
-    uint256 rewards;
-    uint256 signupEnd;
-    uint256 startDate;
-    uint256 totalStaked;
-    bytes32 serviceRole;
+    uint256 public hardCap;
+    uint256 public endDate;
+    uint256 public rewards;
+    uint256 public signupEnd;
+    uint256 public startDate;
+    uint256 public totalStaked;
+    bytes32 public serviceRole;
     address private owner;
-    uint256 contributionLimit;
-    bool isContractInitialized;
-    address claimManagerAddress;
+    uint256 public contributionLimit;
+    bool private isContractInitialized;
+    address public claimManagerAddress;
 
     struct Stake {
         uint256 time;
         uint256 deposit;
     }
 
-    mapping(address => Stake) stakes;
+    mapping(address => Stake) private stakes;
     
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
@@ -30,12 +31,12 @@ contract Staking is ERC20Burnable {
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
     modifier initialized(){
-        require(isContractInitialized, 'Not initialized');
+        require(isContractInitialized, "Not initialized");
         _;
     }
 
     modifier activated(){
-        require(block.timestamp > startDate && block.timestamp < endDate, 'Contract not activated');
+        require(block.timestamp > startDate && block.timestamp < endDate, "Contract not activated");
         _;
     }
    
@@ -51,26 +52,26 @@ contract Staking is ERC20Burnable {
     }
 
     modifier belowLimit(){
-        require(msg.value + stakes[msg.sender].deposit <= contributionLimit, 'Contribution limit exceeded');
+        require(msg.value + stakes[msg.sender].deposit <= contributionLimit, "Contribution limit exceeded");
         _;
     }
 
     modifier sufficientBalance(uint256 amountToWithdraw){
-        require(amountToWithdraw > 0, 'error: withdraw 0 EWT');
-        require(stakes[msg.sender].deposit != 0, 'No deposit at stake');
-        require(stakes[msg.sender].deposit >= amountToWithdraw, 'Not enough EWT at stake');
+        require(amountToWithdraw > 0, "error: withdraw 0 EWT");
+        require(stakes[msg.sender].deposit != 0, "No deposit at stake");
+        require(stakes[msg.sender].deposit >= amountToWithdraw, "Not enough EWT at stake");
         _;
     }
 
     modifier withdrawsAllowed(){
-        require(block.timestamp < startDate || block.timestamp > endDate, 'Withdraws not allowed');
-        require(stakes[msg.sender].deposit != 0, 'No deposit at stake');
+        require(block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
+        require(stakes[msg.sender].deposit != 0, "No deposit at stake");
         _;
     }
 
-    function sendRewards() payable external activated {
-        require(msg.value > 0, 'Not rewards provided');
-        require(isServiceProvider(msg.sender, serviceRole), 'Not enrolled as service provider');
+    function sendRewards() external payable activated {
+        require(msg.value > 0, "Not rewards provided");
+        require(isServiceProvider(msg.sender, serviceRole), "Not enrolled as service provider");
         //send reward
         rewards += msg.value;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
@@ -85,8 +86,8 @@ contract Staking is ERC20Burnable {
         uint256 _contributionLimit
     ) external onlyOwner {//To-Do: prevent resetting by owner
 
-        require(_hardCap >= _contributionLimit, 'hardCap exceeded');
-        require(_signupStart < _signupEnd, 'Wrong signup config');
+        require(_hardCap >= _contributionLimit, "hardCap exceeded");
+        require(_signupStart < _signupEnd, "Wrong signup config");
         require(_startDate > _signupEnd, "Start febore signup period");
 		endDate = _endDate;
         hardCap = _hardCap;
@@ -97,9 +98,9 @@ contract Staking is ERC20Burnable {
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function stake() payable initialized belowLimit external {
-        require(msg.value > 0, 'No EWT provided');
-        require(block.timestamp < signupEnd, "Staking contributions are no longer accepted");
+    function stake() external payable initialized belowLimit {
+        require(msg.value > 0, "No EWT provided");
+        require(block.timestamp < signupEnd, "Signup Ended");
         //Create or update deposit
         if (stakes[msg.sender].time == 0){
             stakes[msg.sender] = Stake(block.timestamp, msg.value);
@@ -112,12 +113,12 @@ contract Staking is ERC20Burnable {
         _mint(msg.sender, msg.value);
     }
 
-    function withdrawAll() withdrawsAllowed external {
+    function withdrawAll() external withdrawsAllowed {
         uint256 _deposit = stakes[msg.sender].deposit;
         withdraw(_deposit);
     }
 
-    function withdraw(uint256 _amount)  withdrawsAllowed sufficientBalance(_amount) public {
+    function withdraw(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
         stakes[msg.sender].deposit -= _amount;
         burn(_amount);
         payable(msg.sender).transfer(_amount);
