@@ -364,6 +364,14 @@ describe("Staking", () => {
     await expect(asPatron.sendRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
   });
 
+  it('Checks rewards of users', async () => {
+    const userReward = (await asPatron2.getRewards());
+  });
+
+  it('fails if user checks rewards without shares', async () => {
+    (await expect(asPatron.getRewards())).to.be.revertedWith('No shares in pool');
+  });
+
   it('fails when trying to withdraw partially after startDate and before end', async () => {
     await expect(
       asPatron.withdraw(oneEWT.mul(1))

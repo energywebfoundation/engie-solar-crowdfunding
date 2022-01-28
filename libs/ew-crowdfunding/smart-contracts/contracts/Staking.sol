@@ -125,8 +125,15 @@ contract Staking is ERC20Burnable {
         emit Withdrawn(msg.sender, _amount, block.timestamp);
     }
 
-    function isServiceProvider(address _provider, bytes32 _role) internal  view returns (bool){
+    function isServiceProvider(address _provider, bytes32 _role) internal view returns (bool){
 		IClaimManager claimManager = IClaimManager(claimManagerAddress); // Contract deployed and maintained by EnergyWeb Fondation
         return (claimManager.hasRole(_provider, _role, 1));
+    }
+
+    function getRewards() external view returns(uint256 reward){
+        require(balanceOf(msg.sender) != 0, 'No shares in pool');
+        // R=balanceOf(SLT)+(balanceOf(SLT) * REWARDS / HARCAP)
+        uint256 interests = balanceOf(msg.sender) * (rewards / hardCap);
+        reward = balanceOf(msg.sender) + interests; 
     }
 }
