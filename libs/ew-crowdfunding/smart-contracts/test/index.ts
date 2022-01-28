@@ -243,8 +243,15 @@ describe("Staking", () => {
   });
 
 
-  it("fails if patron stakes more than once", async () => {
-    await expect(asPatron.stake({value: 1})).to.be.revertedWith('Already staking');
+  it("Can stake several times before startDate", async () => {
+    let _tx;
+    await expect(
+       _tx = await asPatron.stake({
+            value: oneEWT.mul(4)
+        }),
+    ).changeEtherBalance(asPatron, oneEWT.mul(4));
+
+    await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
   });
 
   it('fails when trying to unstake all funds without deposit', async () => {
@@ -287,12 +294,12 @@ describe("Staking", () => {
   it('Can withdraw all funds before start date', async () => {
     let tx;
 
-    expect(tx = await asPatron.withdrawAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
+    expect(tx = await asPatron.withdrawAll()).changeEtherBalance(asPatron, (oneEWT.mul(-7)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     console.log("After withdraw: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
 
-    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(7), timestamp);
   });
 
   it('fails when trying to stake after startDate', async () => {
