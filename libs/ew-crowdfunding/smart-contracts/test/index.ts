@@ -23,11 +23,9 @@ let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
 let contributionLimit : BigNumber;
-let mockContract; 
 
 const nullAddress = '0x0000000000000000000000000000000000000000';
 const defaultRoleVersion = 1;
-const claimManagerAddress = ""; //Find ClaimManager or Mock
 const serviceProviderRole = utils.namehash('service.Role');
 
 
@@ -36,8 +34,6 @@ const timeTravel = async (provider: MockProvider, seconds: number) => {
   await provider.send("evm_increaseTime", [seconds]);
   await provider.send("evm_mine", []);
 };
-
-console.log("ABI: ", abi)
 
 const initializeContract = async (
     contract : Staking,
@@ -78,7 +74,7 @@ describe("Staking", () => {
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
       serviceProviderRole
-    ])) as Staking; //
+    ])) as Staking;
 
     signupStart = Number(DateTime.now().toSeconds().toFixed(0))
     //Signup period ends 1 day before startDay
@@ -123,9 +119,6 @@ describe("Staking", () => {
   }
 
   before(async () => {
-    // mockContract = await deployMockContract(patron, claimManagerABI);
-    // console.log('MockContract Checking >> ', mockContract);
-    console.log("Checking service Role >> ", serviceProviderRole);
     const params = await loadFixture(defaultFixture);
     end = params.end;
     start = params.start;
