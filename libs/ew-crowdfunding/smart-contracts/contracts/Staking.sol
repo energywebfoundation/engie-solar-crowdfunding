@@ -1,9 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
-import './StakingBase.sol';
+import './libs/IClaimManager.sol';
+
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
-contract Staking is StakingBase, ERC20Burnable {
+contract Staking is ERC20Burnable {
     uint256 hardCap;
     uint256 endDate;
     uint256 rewards;
@@ -11,10 +12,17 @@ contract Staking is StakingBase, ERC20Burnable {
     uint256 startDate;
     uint256 totalStaked;
     bytes32 serviceRole;
-    address claimManager;
     address private owner;
     uint256 contributionLimit;
     bool isContractInitialized;
+    address claimManagerAddress;
+
+    struct Stake {
+        uint256 time;
+        uint256 deposit;
+    }
+
+    mapping(address => Stake) stakes;
     
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
     event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
@@ -33,7 +41,7 @@ contract Staking is StakingBase, ERC20Burnable {
 
     constructor(address _claimManager, bytes32 _serviceRole) ERC20("SOLAR TOKEN", "SLT") {
         owner = msg.sender;
-        claimManager = _claimManager;
+        claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;
     }
 
@@ -43,7 +51,7 @@ contract Staking is StakingBase, ERC20Burnable {
     }
 
     modifier belowLimit(){
-        require(msg.value <= contributionLimit, 'Stake greater than contribution limit');
+        require(msg.value + stakes[msg.sender].deposit <= contributionLimit, 'Contribution limit exceeded');
         _;
     }
 
@@ -62,18 +70,11 @@ contract Staking is StakingBase, ERC20Burnable {
 
     function sendRewards() payable external  activated {
         require(msg.value > 0, 'Not rewards provided');
-        require(isServiceProvider(msg.sender, claimManager, serviceRole), 'Not enrolled as service provider');
+        require(isServiceProvider(msg.sender, serviceRole), 'Not enrolled as service provider');
         //send reward
         rewards = msg.value;
     }
 
-    function canStake(address _user) internal view returns(bool isAllowed){
-        require(stakes[_user].deposit == 0, 'Already staking');
-        require(block.timestamp < signupEnd, "Staking contributions are no longer accepted");
-        //To-Do: Check if ther user has the appropriate role in ClaimManager
-
-        isAllowed = true;
-    }
     function init(
         uint256 _signupStart,
         uint256 _signupEnd,
@@ -97,8 +98,15 @@ contract Staking is StakingBase, ERC20Burnable {
 
     function stake() payable initialized belowLimit external {
         require(msg.value > 0, 'No EWT provided');
-        require(canStake(msg.sender));
-        saveDeposit(msg.value, msg.sender, block.timestamp);
+        require(block.timestamp < signupEnd, "Staking contributions are no longer accepted");
+        //Create or update deposit
+        if (stakes[msg.sender].time == 0){
+            stakes[msg.sender] = Stake(block.timestamp, msg.value);
+        }
+        else {
+            stakes[msg.sender].time = block.timestamp;
+            stakes[msg.sender].deposit += msg.value;
+        }
         totalStaked += msg.value;
         _mint(msg.sender, msg.value);
     }
@@ -113,5 +121,10 @@ contract Staking is StakingBase, ERC20Burnable {
         burn(_amount);
         payable(msg.sender).transfer(_amount);
         emit Withdrawn(msg.sender, _amount, block.timestamp);
+    }
+
+    function isServiceProvider(address _provider, bytes32 _role) internal  view returns (bool){
+		IClaimManager claimManager = IClaimManager(claimManagerAddress); // Contract deployed and maintained by EnergyWeb Fondation
+        return (claimManager.hasRole(_provider, _role, 1));
     }
 }
