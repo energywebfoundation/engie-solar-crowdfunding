@@ -38,7 +38,6 @@ contract Staking is ERC20Burnable {
         _;
     }
    
-
     constructor(address _claimManager, bytes32 _serviceRole) ERC20("SOLAR TOKEN", "SLT") {
         owner = msg.sender;
         claimManagerAddress = _claimManager;
@@ -68,7 +67,7 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function sendRewards() payable external  activated {
+    function sendRewards() payable external activated {
         require(msg.value > 0, 'Not rewards provided');
         require(isServiceProvider(msg.sender, serviceRole), 'Not enrolled as service provider');
         //send reward
