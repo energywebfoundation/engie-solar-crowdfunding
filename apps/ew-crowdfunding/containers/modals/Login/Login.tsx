@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Box, Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
-import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { ProviderType } from 'iam-client-lib';
 import { useLoginEffects } from './Login.effects';
 import { useStyles } from './Login.styles';
 import { BootstrapDialogTitle } from '../../../components';

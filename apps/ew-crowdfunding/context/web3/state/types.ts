@@ -1,25 +1,34 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch } from 'react';
 import { Web3ActionsEnum } from './actions';
-import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
-import { Signer } from 'ethers';
+import { ProviderType } from 'iam-client-lib';
 import { RoleEnrollmentStatus } from '../types';
 
 export interface IWeb3State {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   provider?: any;
   providerType?: ProviderType;
   address?: string;
   chainId?: number;
-  signer?: Signer;
+  signer?: any;
   did?: string;
   publicKey?: string;
   authenticated?: boolean;
-  role?: RoleEnrollmentStatus;
+  roleEnrolmentStatus?: RoleEnrollmentStatus;
+  isEthSigner?: string;
 }
 
 export type UpdateWeb3Values = Pick<
   IWeb3State,
-  'address' | 'chainId' | 'provider' | 'providerType' | 'signer' | 'did' | 'publicKey' | 'authenticated' | 'role'
+  | 'address'
+  | 'chainId'
+  | 'provider'
+  | 'providerType'
+  | 'signer'
+  | 'did'
+  | 'publicKey'
+  | 'authenticated'
+  | 'roleEnrolmentStatus'
+  | 'isEthSigner'
 >;
 
 export type Web3Action =

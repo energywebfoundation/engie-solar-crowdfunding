@@ -1,7 +1,7 @@
 import { FC, useContext } from 'react';
 import { Web3Context } from '../../context/web3';
 import { Container, Box, Button, Typography } from '@mui/material';
-import { ProviderType } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { ProviderType } from 'iam-client-lib';
 import { useStyles } from './LoginComponent.styles';
 /* eslint-disable @next/next/no-img-element */
 

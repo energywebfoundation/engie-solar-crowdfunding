@@ -1,4 +1,4 @@
-import { setChainConfig, setCacheConfig, Claim } from '@engie-solar-crowdfunding/ew-crowdfunding/web3-client';
+import { setChainConfig, setCacheConfig, Claim } from 'iam-client-lib';
 import { LoginOptions } from './types';
 import { getSignerService } from './getSignerService';
 import { RoleEnrollmentStatus } from '../types';
@@ -24,17 +24,23 @@ export const getIamService = async ({ providerType }: LoginOptions) => {
   };
 
   try {
-    if (window.ethereum) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if ((window as any).ethereum) {
       const { signerService, connectToCacheServer } = await getSignerService(providerType);
-      const { cacheClient } = await connectToCacheServer();
+      const { connectToDidRegistry, cacheClient } = await connectToCacheServer();
+      const { claimsService } = await connectToDidRegistry();
       const claims: Claim[] = await cacheClient.getClaimsByRequester(signerService?.did, {
         namespace: process.env.NEXT_PUBLIC_PATRON_ROLE.split('.roles.').pop(),
       });
-      const role = getEnrollmentStatus(claims);
+      const role = claims.filter(item => !item.isRejected)[0];
+      const roleEnrolmentStatus = getEnrollmentStatus(claims);
+
       return {
         signerService,
         cacheClient,
         claims,
+        roleEnrolmentStatus,
+        claimsService,
         role,
       };
     }

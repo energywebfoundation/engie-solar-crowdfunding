@@ -7,4 +7,6 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/ew-crowdfunding',
+  testEnvironment: 'jsdom',
+
 };

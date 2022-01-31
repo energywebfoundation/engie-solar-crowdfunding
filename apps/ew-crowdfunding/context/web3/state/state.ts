@@ -11,7 +11,7 @@ const initialState: IWeb3State = {
   did: null,
   publicKey: null,
   authenticated: false,
-  role: null,
+  roleEnrolmentStatus: null,
 };
 
 const reducer = (state: IWeb3State, action: Web3Action): IWeb3State => {
