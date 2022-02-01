@@ -65,7 +65,6 @@ contract Staking is ERC20Burnable {
 
     modifier withdrawsAllowed(){
         require(block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
-        require(balanceOf(msg.sender) != 0, "No deposit at stake");
         _;
     }
 
@@ -101,14 +100,8 @@ contract Staking is ERC20Burnable {
     function stake() external payable initialized belowLimit {
         require(msg.value > 0, "No EWT provided");
         require(block.timestamp < signupEnd, "Signup Ended");
-        //Create or update deposit
-        if (stakes[msg.sender].time == 0){
-            stakes[msg.sender] = Stake(block.timestamp, msg.value);
-        }
-        else {
-            stakes[msg.sender].time = block.timestamp;
-            stakes[msg.sender].deposit += msg.value;
-        }
+        stakes[msg.sender].time = block.timestamp;
+        stakes[msg.sender].deposit += msg.value;
         totalStaked += msg.value;
         _mint(msg.sender, msg.value);
     }
@@ -130,7 +123,6 @@ contract Staking is ERC20Burnable {
     }
 
     function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
-        // R=balanceOf(SLT)+(balanceOf(SLT) * REWARDS / HARCAP)
         uint256 interests = _amount * (rewards / hardCap);
         reward = _amount + interests; 
     }
