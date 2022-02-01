@@ -369,7 +369,7 @@ describe("Staking", () => {
   });
 
   it('fails if user checks rewards without shares', async () => {
-    (await expect(asPatron.getRewards())).to.be.revertedWith('No shares in pool');
+    (await expect(asPatron.getRewards())).to.be.revertedWith('error: withdraw 0 EWT');
   });
 
   it('fails when trying to withdraw partially after startDate and before end', async () => {
