@@ -56,9 +56,9 @@ export const useLoginEffects = () => {
   };
 
   const handleInstall = () => {
-    window.location.replace("https://metamask.io/");
+    window.open('https://metamask.io/', '_blank').focus();
   };
-  
+
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setNoMetamaskInstalled(!((window as any).web3 || (window as any).ethereum));
