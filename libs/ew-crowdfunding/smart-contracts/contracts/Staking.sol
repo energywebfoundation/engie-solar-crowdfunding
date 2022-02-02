@@ -68,7 +68,7 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function sendRewards() external payable activated {
+    function depositRewards() external payable activated {
         require(msg.value > 0, "Not rewards provided");
         require(isServiceProvider(msg.sender, serviceRole), "Not enrolled as service provider");
         //send reward
@@ -106,11 +106,11 @@ contract Staking is ERC20Burnable {
         _mint(msg.sender, msg.value);
     }
 
-    function withdrawAll() external withdrawsAllowed {
-        withdraw(balanceOf(msg.sender));
+    function redeemAll() external withdrawsAllowed {
+        redeem(balanceOf(msg.sender));
     }
 
-    function withdraw(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
+    function redeem(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
         uint256 toWithdraw = _getRewards(_amount); 
         burn(_amount);
         payable(msg.sender).transfer(toWithdraw);
