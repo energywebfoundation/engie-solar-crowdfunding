@@ -58,14 +58,13 @@ contract Staking is ERC20Burnable {
 
     modifier sufficientBalance(uint256 amountToWithdraw){
         require(amountToWithdraw > 0, "error: withdraw 0 EWT");
-        require(stakes[msg.sender].deposit != 0, "No deposit at stake");
-        require(stakes[msg.sender].deposit >= amountToWithdraw, "Not enough EWT at stake");
+        require(balanceOf(msg.sender) != 0, "No deposit at stake");
+        require(balanceOf(msg.sender) >= amountToWithdraw, "Not enough EWT at stake");
         _;
     }
 
     modifier withdrawsAllowed(){
         require(block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
-        require(stakes[msg.sender].deposit != 0, "No deposit at stake");
         _;
     }
 
@@ -101,28 +100,21 @@ contract Staking is ERC20Burnable {
     function stake() external payable initialized belowLimit {
         require(msg.value > 0, "No EWT provided");
         require(block.timestamp < signupEnd, "Signup Ended");
-        //Create or update deposit
-        if (stakes[msg.sender].time == 0){
-            stakes[msg.sender] = Stake(block.timestamp, msg.value);
-        }
-        else {
-            stakes[msg.sender].time = block.timestamp;
-            stakes[msg.sender].deposit += msg.value;
-        }
+        stakes[msg.sender].time = block.timestamp;
+        stakes[msg.sender].deposit += msg.value;
         totalStaked += msg.value;
         _mint(msg.sender, msg.value);
     }
 
     function withdrawAll() external withdrawsAllowed {
-        uint256 _deposit = stakes[msg.sender].deposit;
-        withdraw(_deposit);
+        withdraw(balanceOf(msg.sender));
     }
 
     function withdraw(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
-        stakes[msg.sender].deposit -= _amount;
+        uint256 toWithdraw = _getRewards(_amount); 
         burn(_amount);
-        payable(msg.sender).transfer(_amount);
-        emit Withdrawn(msg.sender, _amount, block.timestamp);
+        payable(msg.sender).transfer(toWithdraw);
+        emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
     }
 
     function isServiceProvider(address _provider, bytes32 _role) internal view returns (bool){
@@ -130,10 +122,12 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function getRewards() external view returns(uint256 reward){
-        require(balanceOf(msg.sender) != 0, 'No shares in pool');
-        // R=balanceOf(SLT)+(balanceOf(SLT) * REWARDS / HARCAP)
-        uint256 interests = balanceOf(msg.sender) * (rewards / hardCap);
-        reward = balanceOf(msg.sender) + interests; 
+    function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
+        uint256 interests = _amount * (rewards / hardCap);
+        reward = _amount + interests; 
+    }
+
+    function getRewards() external view returns (uint256){
+        return _getRewards(balanceOf(msg.sender));
     }
 }
