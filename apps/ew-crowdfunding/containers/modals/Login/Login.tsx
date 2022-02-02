@@ -66,7 +66,7 @@ export const Login = () => {
           >
             <Box style={{ width: '100%' }}>Use Wallet Connect</Box>
           </Button>
-          {!isConnectedToRightNetwork && (
+          {!isConnectedToRightNetwork && !noMetamaskInstalled && (
             <Box sx={{ display: 'flex', flexDirection: 'column' }} mt={2}>
               <Typography variant='h5' color='textSecondary'>
                 You are not connected to {process.env.NEXT_PUBLIC_NETWORK_NAME}
