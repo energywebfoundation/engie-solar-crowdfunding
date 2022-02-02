@@ -12,9 +12,11 @@ let start : number;
 let patron: Wallet;
 let owner : Wallet;
 let patron2: Wallet;
+let patron3: Wallet;
 let asOwner : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
+let asPatron3: Staking;
 let signupEnd : number;
 let signupStart : number;
 let contractAddress: string;
@@ -68,7 +70,7 @@ describe("Staking", () => {
 
   async function fixture(
     start: number,
-    [owner, patron, patron2]: Wallet[],
+    [owner, patron, patron2, patron3]: Wallet[],
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
@@ -104,6 +106,7 @@ describe("Staking", () => {
       owner,
       patron,
       patron2,
+      patron3,
       provider,
       hardCap,
       signupEnd,
@@ -114,7 +117,8 @@ describe("Staking", () => {
       asOwner: stakingContract.connect(owner),
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
-      asPatron2: stakingContract.connect(patron2)
+      asPatron2: stakingContract.connect(patron2),
+      asPatron3: stakingContract.connect(patron3)
     };
   }
 
@@ -131,10 +135,12 @@ describe("Staking", () => {
     owner = params.owner;
     patron = params.patron;
     patron2 = params.patron2;
+    patron3 = params.patron3;
     asOwner = params.asOwner;
     asPatron = params.asPatron;
     provider = params.provider;
     asPatron2 = params.asPatron2;
+    asPatron3 = params.asPatron3;
     signupEnd = params.signupEnd;
     signupStart = params.signupStart;
     contractAddress = params.contractAddress;
@@ -239,11 +245,22 @@ describe("Staking", () => {
     await expect(tx).to.emit(stakingContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
   });
 
-  it('fails when staking more than limit', async () => {
-    await expect(asPatron.stake({
-            value: contributionLimit.add(BigNumber.from(42))
+  it('Refunds when added stake exceeds contributionlimit', async () => {
+    const beforeStake = await asPatron3.balanceOf(patron3.address);
+    // overflow = amountSent - (contributionLimit - amountStaked);
+    const overflow = contributionLimit.add(oneEWT.mul(42)).sub(contributionLimit.sub(beforeStake));
+    await expect(asPatron3.stake({
+            value: contributionLimit.add(oneEWT.mul(42))
         }),
-    ).to.be.revertedWith('Contribution limit exceeded');
+    ).to.emit(asPatron3, 'refundExceeded').withArgs(patron3.address, contributionLimit.add(oneEWT.mul(42)), overflow);
+    expect(await asPatron3.balanceOf(patron3.address)).equals(contributionLimit);
+  });
+
+  it('fails when staking more than limit', async () => {
+    await expect(asPatron3.stake({
+            value: oneEWT
+        }),
+    ).to.be.revertedWith('Contribution limit reached');
   });
 
   it('Can retrieve token symbol from contract', async () => {
@@ -282,12 +299,6 @@ describe("Staking", () => {
     ).changeEtherBalance(asPatron, oneEWT.mul(4));
 
     await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
-  });
-
-  it('fails when added stake exceeds Contribution Limite', async () => {
-    await expect(asPatron.stake({
-      value: oneEWT.mul(201)
-    })).to.be.revertedWith('Contribution limit exceeded');
   });
 
   it('fails when trying to unstake all funds without deposit', async () => {

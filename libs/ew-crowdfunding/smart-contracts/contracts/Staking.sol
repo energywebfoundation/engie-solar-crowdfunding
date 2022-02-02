@@ -11,7 +11,6 @@ contract Staking is ERC20Burnable {
     uint256 public rewards;
     uint256 public signupEnd;
     uint256 public startDate;
-    uint256 public totalStaked;
     bytes32 public serviceRole;
     address private owner;
     uint256 public contributionLimit;
@@ -28,6 +27,7 @@ contract Staking is ERC20Burnable {
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
     event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
+    event refundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
     modifier initialized(){
@@ -52,7 +52,9 @@ contract Staking is ERC20Burnable {
     }
 
     modifier belowLimit(){
-        require(msg.value + stakes[msg.sender].deposit <= contributionLimit, "Contribution limit exceeded");
+        require(msg.value > 0, "No EWT provided");
+        require(block.timestamp < signupEnd, "Signup Ended");
+        require(stakes[msg.sender].deposit < contributionLimit, "Contribution limit reached"); //prevent reentrency
         _;
     }
 
@@ -97,13 +99,18 @@ contract Staking is ERC20Burnable {
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function stake() external payable initialized belowLimit {
-        require(msg.value > 0, "No EWT provided");
-        require(block.timestamp < signupEnd, "Signup Ended");
+    function stake() external payable initialized belowLimit{
+        if (stakes[msg.sender].deposit + msg.value > contributionLimit){
+            uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender].deposit);
+            stakes[msg.sender].deposit = contributionLimit;
+            _mint(msg.sender, msg.value - overflow); // mint the effective amount deposited
+            payable(msg.sender).transfer(overflow);
+            emit refundExceeded(msg.sender, msg.value, overflow);
+        } else {
+            stakes[msg.sender].deposit += msg.value;
+            _mint(msg.sender, msg.value);
+        }
         stakes[msg.sender].time = block.timestamp;
-        stakes[msg.sender].deposit += msg.value;
-        totalStaked += msg.value;
-        _mint(msg.sender, msg.value);
     }
 
     function redeemAll() external withdrawsAllowed {
