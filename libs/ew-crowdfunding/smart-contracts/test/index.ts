@@ -306,6 +306,7 @@ describe("Staking", () => {
           value: oneEWT.mul(7)
       }),
     ).changeEtherBalance(asPatron2, oneEWT.mul(7));
+
     expect(tx = await asPatron2.redeem(oneEWT.mul(5))).changeEtherBalance(asPatron2, (oneEWT.mul(-5)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
@@ -348,7 +349,7 @@ describe("Staking", () => {
     ).to.be.revertedWith('Signup Ended');
   });
 
-  it('can add rewards when contract is activated', async () => {
+  it('can deposit rewards when contract is activated', async () => {
     const getTimestamp = async (transaction : ContractTransaction) => {
       const { blockNumber } = await transaction.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
@@ -392,7 +393,6 @@ describe("Staking", () => {
   it('Can partially withdraw funds after end date', async () => {
     //Moving to endDate
     await timeTravel(provider, end);
-
     let tx;
     const expectedReward = getReward(oneEWT);
     expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
