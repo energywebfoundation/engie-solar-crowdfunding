@@ -69,7 +69,7 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function sendRewards() external payable activated {
+    function depositRewards() external payable activated {
         require(msg.value > 0, "Not rewards provided");
         require(isServiceProvider(msg.sender, serviceRole), "Not enrolled as service provider");
         //send reward

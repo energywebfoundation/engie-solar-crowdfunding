@@ -335,7 +335,7 @@ describe("Staking", () => {
   });
 
   it('fails when service provider sends reward before startDate', async () => {
-    await expect(asOwner.sendRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
+    await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
   });
 
   it('fails when trying to stake after startDate', async () => {
@@ -348,20 +348,20 @@ describe("Staking", () => {
     ).to.be.revertedWith('Signup Ended');
   });
 
-  it('can add rewards when contract is activated', async () => {
+  it('can deposit rewards when contract is activated', async () => {
     const getTimestamp = async (transaction : ContractTransaction) => {
       const { blockNumber } = await transaction.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
       return timestamp;
     }
-    expect(tx = await asOwner.sendRewards({
+    expect(tx = await asOwner.depositRewards({
       value: oneEWT.mul(10)
     })).to.emit(stakingContract, 'RewardSent').withArgs(owner.address, oneEWT.mul(10), await getTimestamp(tx));
     await expect(tx).changeEtherBalance(asOwner, oneEWT.mul(10));
   });
 
   it('fails when non service provider sends reward on inactive contract', async () => {
-    await expect(asPatron.sendRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
+    await expect(asPatron.depositRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
   });
 
   it('fails when trying to withdraw partially after startDate and before end', async () => {
@@ -396,6 +396,6 @@ describe("Staking", () => {
   });
 
   it('fails when service provider sends reward after endDate', async () => {
-    await expect(asOwner.sendRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
+    await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
   });
 })
