@@ -113,12 +113,12 @@ contract Staking is ERC20Burnable {
         _mint(msg.sender, msg.value);
     }
 
-    function withdrawAll() external withdrawsAllowed {
+    function redeemAll() external withdrawsAllowed {
         uint256 _deposit = stakes[msg.sender].deposit;
-        withdraw(_deposit);
+        redeem(_deposit);
     }
 
-    function withdraw(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
+    function redeem(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
         stakes[msg.sender].deposit -= _amount;
         burn(_amount);
         payable(msg.sender).transfer(_amount);
