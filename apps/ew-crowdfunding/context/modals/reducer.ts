@@ -3,6 +3,7 @@ import { IDSLAModalsStore, TDSLAModalsAction } from './types';
 export enum DSLAModalsActionsEnum {
   SHOW_NOTIFICATION = 'SHOW_NOTIFICATION',
   SHOW_LOGIN = 'SHOW_LOGIN',
+  SHOW_REDEEM = 'SHOW_REDEEM',
 }
 
 export const dslaModalsInitialState: IDSLAModalsStore = {
@@ -21,6 +22,10 @@ export const dslaModalsInitialState: IDSLAModalsStore = {
       return;
     },
   },
+  redeem: {
+    open: false,
+    tokenBalance: null,
+  },
 };
 
 export const dslaModalsReducer = (state = dslaModalsInitialState, action: TDSLAModalsAction): IDSLAModalsStore => {
@@ -29,5 +34,7 @@ export const dslaModalsReducer = (state = dslaModalsInitialState, action: TDSLAM
       return { ...state, notification: action.payload };
     case DSLAModalsActionsEnum.SHOW_LOGIN:
       return { ...state, login: action.payload };
+    case DSLAModalsActionsEnum.SHOW_REDEEM:
+      return { ...state, redeem: action.payload };
   }
 };
