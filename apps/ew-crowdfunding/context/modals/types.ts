@@ -14,9 +14,15 @@ export type ILogin = {
   login: (loginOptions: LoginOptions) => void;
 };
 
+export type IRedeem = {
+  open: boolean;
+  tokenBalance: number;
+};
+
 export interface IDSLAModalsStore {
   notification: TWeb3Notification;
   login: ILogin;
+  redeem: IRedeem;
 }
 
 interface IWeb3NotificationAction {
@@ -29,4 +35,9 @@ interface ILoginAction {
   payload: ILogin;
 }
 
-export type TDSLAModalsAction = IWeb3NotificationAction | ILoginAction;
+interface IRedeemAction {
+  type: DSLAModalsActionsEnum.SHOW_REDEEM;
+  payload: IRedeem;
+}
+
+export type TDSLAModalsAction = IWeb3NotificationAction | ILoginAction | IRedeemAction;

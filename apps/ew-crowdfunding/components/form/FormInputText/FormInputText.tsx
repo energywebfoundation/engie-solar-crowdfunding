@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { FC } from 'react';
 import { Control, Controller } from 'react-hook-form';
-import { TextField } from '@mui/material';
+import { InputProps, TextField } from '@mui/material';
 
 export interface FormInputTextProps {
   name: string;
@@ -14,6 +14,8 @@ export interface FormInputTextProps {
   defaultValue?: string | number;
   hint?: string;
   errorMessage?: string;
+  inputProps?: InputProps;
+  disabled?: boolean;
 }
 
 const checkMethod = (method: (() => void) | undefined): boolean | null => {
@@ -34,6 +36,8 @@ export const FormInputText: FC<FormInputTextProps> = ({
   defaultValue,
   hint,
   errorMessage,
+  inputProps,
+  disabled = false,
 }) => {
   return (
     <Controller
@@ -43,6 +47,7 @@ export const FormInputText: FC<FormInputTextProps> = ({
       render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
         <TextField
           fullWidth
+          disabled={disabled}
           label={label}
           value={value}
           type={type}
@@ -55,6 +60,7 @@ export const FormInputText: FC<FormInputTextProps> = ({
           }}
           error={!!error || !!errorMessage}
           helperText={error || errorMessage ? errorMessage || error.message : hint}
+          InputProps={inputProps}
         />
       )}
     />
