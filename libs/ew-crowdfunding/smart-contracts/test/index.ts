@@ -16,14 +16,15 @@ let asOwner : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
 let signupEnd : number;
-let tokenSymbol: string;
 let signupStart : number;
 let contractAddress: string;
 let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
 
+const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
+const tokenName = "SOLAR TOKEN";
 const serviceProviderRole = utils.namehash('service.Role');
 const nullAddress = '0x0000000000000000000000000000000000000000';
 
@@ -76,7 +77,9 @@ describe("Staking", () => {
 
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
-      serviceProviderRole
+      serviceProviderRole,
+      tokenName,
+      tokenSymbol
     ])) as Staking;
 
     signupStart = Number(DateTime.now().toSeconds().toFixed(0))
@@ -244,8 +247,8 @@ describe("Staking", () => {
   });
 
   it('Can retrieve token symbol from contract', async () => {
-    tokenSymbol = await asPatron.symbol();
-    expect(tokenSymbol).equals('SLT');
+    const expctedSymbol = await asPatron.symbol();
+    expect(expctedSymbol).equals(tokenSymbol);
   });
 
   it('Checks null balance of SLT before staking', async () => {

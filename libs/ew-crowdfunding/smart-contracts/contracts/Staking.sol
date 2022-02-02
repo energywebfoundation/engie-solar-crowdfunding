@@ -40,7 +40,7 @@ contract Staking is ERC20Burnable {
         _;
     }
    
-    constructor(address _claimManager, bytes32 _serviceRole) ERC20("SOLAR TOKEN", "SLT") {
+    constructor(address _claimManager, bytes32 _serviceRole, string memory tokenName, string memory tokenSymbol) ERC20(tokenName, tokenSymbol) {
         owner = msg.sender;
         claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;
