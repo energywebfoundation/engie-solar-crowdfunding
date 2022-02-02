@@ -1,28 +1,30 @@
 import { expect, use } from "chai";
 import { Staking } from "../ethers";
-import { MockProvider, solidity, deployContract, loadFixture } from "ethereum-waffle";
+import { MockProvider, solidity, deployContract, loadFixture, deployMockContract } from "ethereum-waffle";
 import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
 import { DateTime } from "luxon";
+import { abi } from '../artifacts/contracts/libs/IClaimManager.sol/IClaimManager.json';
 
 use(solidity);
 let end : number;
 let start : number;
 let patron: Wallet;
+let owner : Wallet;
 let patron2: Wallet;
 let asOwner : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
 let signupEnd : number;
-let hardCap : BigNumber;
 let tokenSymbol: string;
 let signupStart : number;
 let contractAddress: string;
 let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
-let contributionLimit : BigNumber;
 
+const defaultRoleVersion = 1;
+const serviceProviderRole = utils.namehash('service.Role');
 const nullAddress = '0x0000000000000000000000000000000000000000';
 
 const timeTravel = async (provider: MockProvider, seconds: number) => {
@@ -52,7 +54,16 @@ const initializeContract = async (
 }
 
 describe("Staking", () => {
+  const claimManagerABI = abi;
   const oneEWT = utils.parseUnits("1", "ether");
+  const hardCap = oneEWT.mul(10000);
+  const rewards = oneEWT.mul(1000000);
+  const contributionLimit = oneEWT.mul(200);
+  
+  const getReward = (amount : BigNumber) => {
+    const interests = amount.mul((rewards.div(hardCap)));
+    return amount.add(interests);
+  }
 
   async function fixture(
     start: number,
@@ -61,13 +72,28 @@ describe("Staking", () => {
   ) {
     //set endDate 1 year ahead
     const end = Number(DateTime.fromSeconds(start).plus({year: 1}).toSeconds().toFixed(0));
-    const hardCap = oneEWT.mul(1000000);
-    const contributionLimit = oneEWT.mul(10);
-    const stakingContract = (await deployContract(owner, StakingContract)) as Staking;
+    const claimManagerMocked = await deployMockContract(owner, claimManagerABI);
+
+    const stakingContract = (await deployContract(owner, StakingContract, [
+      claimManagerMocked.address,
+      serviceProviderRole
+    ])) as Staking;
 
     signupStart = Number(DateTime.now().toSeconds().toFixed(0))
     //Signup period ends 1 day before startDay
     signupEnd = Number(DateTime.fromSeconds(start).minus({day: 1}).toSeconds().toFixed(0));
+
+    await claimManagerMocked.mock.hasRole
+          .withArgs(owner.address, serviceProviderRole, defaultRoleVersion)
+          .returns(true);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron.address, serviceProviderRole, defaultRoleVersion)
+    .returns(false);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron2.address, serviceProviderRole, defaultRoleVersion)
+    .returns(false);
 
     return {
       end,
@@ -81,6 +107,7 @@ describe("Staking", () => {
       signupStart,
       stakingContract,
       contributionLimit,
+      claimManagerMocked,
       asOwner: stakingContract.connect(owner),
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
@@ -98,7 +125,7 @@ describe("Staking", () => {
     const params = await loadFixture(defaultFixture);
     end = params.end;
     start = params.start;
-    hardCap = params.hardCap;
+    owner = params.owner;
     patron = params.patron;
     patron2 = params.patron2;
     asOwner = params.asOwner;
@@ -109,7 +136,7 @@ describe("Staking", () => {
     signupStart = params.signupStart;
     contractAddress = params.contractAddress;
     stakingContract = params.stakingContract;
-    contributionLimit = params.contributionLimit;
+    let claimManager = params.claimManagerMocked;
   })
 
   it("fails when non owner tries to initialize",  async () => {
@@ -213,7 +240,7 @@ describe("Staking", () => {
     await expect(asPatron.stake({
             value: contributionLimit.add(BigNumber.from(42))
         }),
-    ).to.be.revertedWith('Stake greater than contribution limit');
+    ).to.be.revertedWith('Contribution limit exceeded');
   });
 
   it('Can retrieve token symbol from contract', async () => {
@@ -238,10 +265,10 @@ describe("Staking", () => {
   });
 
   it('Checks SLT Token mining on staking', async () => {
+    console.log(`Staking 3 EWT ..`);
     expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(3));
-    console.log(`[ After stake ] balance of address ${patron.address} -> ${ (await asPatron.balanceOf(patron.address)).toString()} ${tokenSymbol}`);
+    console.log(`[ After stake ] balance of address ${patron.address} -> ${ (utils.formatEther(await asPatron.balanceOf(patron.address)).toString())} ${tokenSymbol}`);
   });
-
 
   it("Can stake several times before startDate", async () => {
     let _tx;
@@ -254,16 +281,22 @@ describe("Staking", () => {
     await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
   });
 
+  it('fails when added stake exceeds Contribution Limite', async () => {
+    await expect(asPatron.stake({
+      value: oneEWT.mul(201)
+    })).to.be.revertedWith('Contribution limit exceeded');
+  });
+
   it('fails when trying to unstake all funds without deposit', async () => {
-    await expect(asPatron2.withdrawAll()).to.be.revertedWith('No deposit at stake');
+    await expect(asPatron2.redeemAll()).to.be.revertedWith('error: withdraw 0 EWT');
   });
 
   it('fails when trying to partially unstake funds without deposit', async () => {
-    await expect(asPatron2.withdraw(2)).to.be.revertedWith('No deposit at stake');
+    await expect(asPatron2.redeem(2)).to.be.revertedWith('No deposit at stake');
   });
 
   it('fails when trying to withdraw zero EWT before start', async () => {
-    await expect(asPatron.withdraw(0)).to.be.revertedWith('error: withdraw 0 EWT');
+    await expect(asPatron.redeem(0)).to.be.revertedWith('error: withdraw 0 EWT');
   });
 
   it('Can withdraw partial funds before start date', async () => {
@@ -274,7 +307,7 @@ describe("Staking", () => {
       }),
     ).changeEtherBalance(asPatron2, oneEWT.mul(7));
 
-    expect(tx = await asPatron2.withdraw(oneEWT.mul(5))).changeEtherBalance(asPatron2, (oneEWT.mul(-5)));
+    expect(tx = await asPatron2.redeem(oneEWT.mul(5))).changeEtherBalance(asPatron2, (oneEWT.mul(-5)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(5), timestamp);
@@ -282,24 +315,28 @@ describe("Staking", () => {
 
   it('Checks SLT Token burning on withdraw', async () => {
     expect(await asPatron.balanceOf(patron2.address)).equals(oneEWT.mul(2));
-    console.log(`[ After stake ] balance of address ${patron.address} -> ${ (await asPatron.balanceOf(patron.address)).toString()} ${tokenSymbol}`);
+    console.log(`[ After stake ] balance of address ${patron.address} -> ${ utils.formatEther((await asPatron.balanceOf(patron.address)).toString())} ${tokenSymbol}`);
   });
 
   it('fails when trying to withdraw more funds than staked', async () => {
     await expect(
-      asPatron2.withdraw(oneEWT.mul(15))
+      asPatron2.redeem(oneEWT.mul(15))
     ).to.be.revertedWith('Not enough EWT at stake');
   });
 
   it('Can withdraw all funds before start date', async () => {
     let tx;
 
-    expect(tx = await asPatron.withdrawAll()).changeEtherBalance(asPatron, (oneEWT.mul(-7)));
+    expect(tx = await asPatron.redeemAll()).changeEtherBalance(asPatron, (oneEWT.mul(-7)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
     console.log("After withdraw: SLT of address ",patron.address,  await (await asPatron.balanceOf(patron.address)).toString(), await asPatron.symbol());
 
     await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(7), timestamp);
+  });
+
+  it('fails when service provider sends reward before startDate', async () => {
+    await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
   });
 
   it('fails when trying to stake after startDate', async () => {
@@ -309,37 +346,72 @@ describe("Staking", () => {
     await timeTravel(provider, afterStart);
     await expect(
       asPatron.stake({value: 1})
-    ).to.be.revertedWith('Staking contributions are no longer accepted');
+    ).to.be.revertedWith('Signup Ended');
+  });
+
+  it('can deposit rewards when contract is activated', async () => {
+    const getTimestamp = async (transaction : ContractTransaction) => {
+      const { blockNumber } = await transaction.wait();
+      const { timestamp } = await provider.getBlock(blockNumber);
+      return timestamp;
+    }
+    expect(tx = await asOwner.depositRewards({
+      value: rewards
+    })).to.emit(stakingContract, 'RewardSent').withArgs(owner.address, rewards, await getTimestamp(tx));
+    await expect(tx).changeEtherBalance(asOwner, rewards);
+  });
+
+  it('fails when non service provider sends reward on inactive contract', async () => {
+    await expect(asPatron.depositRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
+  });
+
+  it('Checks rewards of users', async () => {
+    const balance = await asPatron2.balanceOf(patron2.address);
+    console.log("SLT balance of patron2: ", utils.formatEther(balance.toString()), "SLT");
+    const expectedReward = getReward(balance);
+    const patronReward = await asPatron2.getRewards();
+    console.log('userReward of patron2: ', utils.formatEther(patronReward.toString()), 'EWT');
+    expect(patronReward).to.equal(expectedReward);
+  });
+
+  it('fails if user checks rewards without shares', async () => {
+    expect(asPatron.getRewards()).to.be.revertedWith('error: withdraw 0 EWT');
   });
 
   it('fails when trying to withdraw partially after startDate and before end', async () => {
     await expect(
-      asPatron.withdraw(oneEWT.mul(1))
+      asPatron.redeem(oneEWT.mul(1))
     ).to.be.revertedWith('Withdraws not allowed');
   });
 
   it('fails when trying to unstake all funds after startDate and before end', async () => {
     await expect(
-      asPatron.withdrawAll()
+      asPatron.redeemAll()
     ).to.be.revertedWith('Withdraws not allowed');
   });
 
   it('Can partially withdraw funds after end date', async () => {
     //Moving to endDate
     await timeTravel(provider, end);
-
     let tx;
-    expect(tx = await asPatron2.withdraw(oneEWT)).changeEtherBalance(asPatron2, (oneEWT.mul(-1)));
+    const expectedReward = getReward(oneEWT);
+    expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
-    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(1), timestamp);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
   });
 
   it('Can withdraw all funds after end date', async () => {
     let tx;
-    expect(tx = await asPatron2.withdrawAll()).changeEtherBalance(asPatron2, (oneEWT.mul(-1)));
+    const patronBalance = await asPatron2.balanceOf(patron2.address);
+    const expectedReward = getReward(patronBalance);
+    expect(tx = await asPatron2.redeemAll()).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
     const { blockNumber } = await tx.wait();
     const { timestamp } = await provider.getBlock(blockNumber);
-    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(1), timestamp);
+    await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
+  });
+
+  it('fails when service provider sends reward after endDate', async () => {
+    await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
   });
 })
