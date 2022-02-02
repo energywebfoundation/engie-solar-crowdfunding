@@ -13,7 +13,7 @@ export const InfoCard: FC<InfoCardProps> = ({ title, type, text }: InfoCardProps
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.wrapper}>
       <Paper className={classes.paper}>
         <Box className={classes.title}>
           <Typography variant='h3' fontWeight={'bold'} color='common.black'>
