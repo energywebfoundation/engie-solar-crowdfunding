@@ -28,14 +28,14 @@ export const Redeem = () => {
             name='amount'
             disabled={redeemAll}
             control={control}
-            label='SLT Reward Amount'
+            label='Claim Amount'
             type='number'
             hint={`Max. ${tokenBalance} SLT`}
             inputProps={{
               endAdornment: <InputAdornment position='end'>SLT</InputAdornment>,
             }}
           />
-          <FormControlLabel control={<Checkbox checked={redeemAll} onChange={handleRedeemAll} />} label='Max value' />
+          <FormControlLabel control={<Checkbox checked={redeemAll} onChange={handleRedeemAll} />} label='Redeem all' />
         </DialogContent>
         <DialogActions>
           <Button type='reset' autoFocus onClick={onReset} style={{ minWidth: '200px' }}>
