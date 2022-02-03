@@ -12,6 +12,7 @@ contract Staking is ERC20Burnable {
     uint256 public signupEnd;
     uint256 public startDate;
     bytes32 public serviceRole;
+    bytes32 public patronRole;
     address private owner;
     uint256 public contributionLimit;
     bool private isContractInitialized;
@@ -40,10 +41,11 @@ contract Staking is ERC20Burnable {
         _;
     }
    
-    constructor(address _claimManager, bytes32 _serviceRole, string memory tokenName, string memory tokenSymbol) ERC20(tokenName, tokenSymbol) {
+    constructor(address _claimManager, bytes32 _serviceRole, bytes32 _patronRole, string memory tokenName, string memory tokenSymbol) ERC20(tokenName, tokenSymbol) {
         owner = msg.sender;
         claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;
+        patronRole = _patronRole;
     }
 
     modifier onlyOwner() {
@@ -72,7 +74,7 @@ contract Staking is ERC20Burnable {
 
     function depositRewards() external payable activated {
         require(msg.value > 0, "Not rewards provided");
-        require(isServiceProvider(msg.sender, serviceRole), "Not enrolled as service provider");
+        require(hasRole(msg.sender, serviceRole), "Not enrolled as service provider");
         //send reward
         rewards += msg.value;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
@@ -100,6 +102,7 @@ contract Staking is ERC20Burnable {
     }
 
     function stake() external payable initialized belowLimit{
+        require(hasRole(msg.sender, patronRole), "No patron role");
         if (stakes[msg.sender].deposit + msg.value > contributionLimit){
             uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender].deposit);
             stakes[msg.sender].deposit = contributionLimit;
@@ -124,7 +127,7 @@ contract Staking is ERC20Burnable {
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
     }
 
-    function isServiceProvider(address _provider, bytes32 _role) internal view returns (bool){
+    function hasRole(address _provider, bytes32 _role) internal view returns (bool){
 		IClaimManager claimManager = IClaimManager(claimManagerAddress); // Contract deployed and maintained by EnergyWeb Fondation
         return (claimManager.hasRole(_provider, _role, 1));
     }

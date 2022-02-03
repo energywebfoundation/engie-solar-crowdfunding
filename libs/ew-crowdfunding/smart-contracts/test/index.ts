@@ -18,7 +18,9 @@ let asPatron : Staking;
 let asPatron2: Staking;
 let asPatron3: Staking;
 let signupEnd : number;
+let notEnrolled: Wallet;
 let signupStart : number;
+let asNotEnrolled: Staking;
 let contractAddress: string;
 let provider : MockProvider;
 let tx: ContractTransaction;
@@ -27,6 +29,7 @@ let stakingContract: Staking;
 const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
 const tokenName = "SOLAR TOKEN";
+const patronRole = utils.namehash('patron.Role');
 const serviceProviderRole = utils.namehash('service.Role');
 const nullAddress = '0x0000000000000000000000000000000000000000';
 
@@ -70,7 +73,7 @@ describe("Staking", () => {
 
   async function fixture(
     start: number,
-    [owner, patron, patron2, patron3]: Wallet[],
+    [owner, patron, patron2, patron3, notEnrolled]: Wallet[],
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
@@ -80,6 +83,7 @@ describe("Staking", () => {
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
       serviceProviderRole,
+      patronRole,
       tokenName,
       tokenSymbol
     ])) as Staking;
@@ -100,6 +104,22 @@ describe("Staking", () => {
     .withArgs(patron2.address, serviceProviderRole, defaultRoleVersion)
     .returns(false);
 
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron.address, patronRole, defaultRoleVersion)
+    .returns(true);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron2.address, patronRole, defaultRoleVersion)
+    .returns(true);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron3.address, patronRole, defaultRoleVersion)
+    .returns(true);
+
+    await claimManagerMocked.mock.hasRole
+    .withArgs(notEnrolled.address, patronRole, defaultRoleVersion)
+    .returns(false);
+
     return {
       end,
       start,
@@ -111,6 +131,7 @@ describe("Staking", () => {
       hardCap,
       signupEnd,
       signupStart,
+      notEnrolled,
       stakingContract,
       contributionLimit,
       claimManagerMocked,
@@ -118,7 +139,8 @@ describe("Staking", () => {
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
       asPatron2: stakingContract.connect(patron2),
-      asPatron3: stakingContract.connect(patron3)
+      asPatron3: stakingContract.connect(patron3),
+      asNotEnrolled: stakingContract.connect(notEnrolled),
     };
   }
 
@@ -143,6 +165,8 @@ describe("Staking", () => {
     asPatron3 = params.asPatron3;
     signupEnd = params.signupEnd;
     signupStart = params.signupStart;
+    notEnrolled = params.notEnrolled;
+    asNotEnrolled = params.asNotEnrolled;
     contractAddress = params.contractAddress;
     stakingContract = params.stakingContract;
     let claimManager = params.claimManagerMocked;
@@ -282,6 +306,13 @@ describe("Staking", () => {
     ).changeEtherBalance(asPatron, oneEWT.mul(3));
     await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
 
+  });
+
+  it('fails when staking more than limit', async () => {
+    await expect(asNotEnrolled.stake({
+            value: oneEWT
+        }),
+    ).to.be.revertedWith('No patron role');
   });
 
   it('Checks SLT Token mining on staking', async () => {
