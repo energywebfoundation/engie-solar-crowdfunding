@@ -24,7 +24,7 @@ export const EmailVerification: FC = () => {
       )}
       <Box className={classes.info}>
         <InfoIcon color={`${notEnrolled ? 'warning' : 'primary'}`} />
-        <Typography variant='body2'>You myst verify your email to lend</Typography>
+        <Typography variant='body2'>You must verify your email to lend</Typography>
       </Box>
       <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
         <FormInputText
