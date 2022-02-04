@@ -3,13 +3,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
+import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
 
 export const useLendingDetailsEffects = () => {
   /* API variables */
   const accountBalance = 50.5;
   const userContribution = 100;
   const solarLoanTokenBalance = 400;
-  const redeemableReward = 0;
+  const redeemableReward = 50;
 
   const tokensRedeemed = 137;
   /* End of API variables */
@@ -26,6 +27,8 @@ export const useLendingDetailsEffects = () => {
   const isRedeemDisabled = new Date() >= new Date(contributionDeadline);
 
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const dispatchModals = useDSLAModalsDispatch();
 
   const formatDate = (date: string) => {
     if (!date) {
@@ -71,6 +74,13 @@ export const useLendingDetailsEffects = () => {
 
   const onRedeemSlt = () => {
     console.log('On redeem');
+    dispatchModals({
+      type: DSLAModalsActionsEnum.SHOW_REDEEM,
+      payload: {
+        open: true,
+        tokenBalance: solarLoanTokenBalance,
+      },
+    });
   };
 
   const onLoanChange = () => {

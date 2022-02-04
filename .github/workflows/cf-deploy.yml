@@ -25,7 +25,7 @@ jobs:
         NEXT_PUBLIC_NETWORK_NAME: EWC
         NEXT_PUBLIC_CURRENCY_NAME: EWT
         NEXT_PUBLIC_CURRENCY_SYMBOL: EWT
-        NEXT_PUBLIC_PATRON_ROLE: email.roles.verification.apps.energyweb.auth.ewc
+        NEXT_PUBLIC_PATRON_ROLE: email.roles.eea.apps.florin.engietestvolta.iam.ewc
         NEXT_PUBLIC_TOKEN_LIMIT: 200
         NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT: 10000
         NEXT_PUBLIC_INTEREST_RATE: 10%
