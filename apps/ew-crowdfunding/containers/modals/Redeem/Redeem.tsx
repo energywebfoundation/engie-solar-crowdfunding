@@ -20,7 +20,7 @@ export const Redeem = () => {
   return (
     <Dialog className={classes.dialog} aria-labelledby='login-dialog-title' open={open}>
       <BootstrapDialogTitle id='login-dialog-title' onClose={closeModal}>
-        Redeem your reward
+        Redeem your SLT tokens
       </BootstrapDialogTitle>
       <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
         <DialogContent dividers>
