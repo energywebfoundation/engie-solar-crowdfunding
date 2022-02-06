@@ -14,7 +14,9 @@ contract Staking is ERC20Burnable {
     bytes32 public serviceRole;
     bytes32 public patronRole;
     address private owner;
+    address private rewardProvider;
     uint256 public contributionLimit;
+    bool private isContractPaused;
     bool private isContractInitialized;
     address public claimManagerAddress;
 
@@ -28,6 +30,7 @@ contract Staking is ERC20Burnable {
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
     event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
+    event TokenBurnt(address _user, uint256 _amout, uint256 _timestamp);
     event refundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
@@ -53,6 +56,16 @@ contract Staking is ERC20Burnable {
         _;
     }
 
+     modifier paused(){
+        require(isContractPaused, "Contract not Paused");
+        _;
+    }
+
+    modifier notPaused(){
+        require(!isContractPaused, "Contract is frozen");
+        _;
+    }
+
     modifier belowLimit(){
         require(msg.value > 0, "No EWT provided");
         require(block.timestamp < signupEnd, "Signup Ended");
@@ -72,11 +85,11 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function depositRewards() external payable activated {
+    function depositRewards() external payable activated notPaused {
         require(msg.value > 0, "Not rewards provided");
         require(hasRole(msg.sender, serviceRole), "Not enrolled as service provider");
-        //send reward
         rewards += msg.value;
+        rewardProvider = msg.sender;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
     }
 
@@ -88,7 +101,7 @@ contract Staking is ERC20Burnable {
         uint256 _hardCap,
         uint256 _contributionLimit
     ) external onlyOwner {//To-Do: prevent resetting by owner
-
+        require(_contributionLimit > 0, "wrong contribution limit");
         require(_hardCap >= _contributionLimit, "hardCap exceeded");
         require(_signupStart < _signupEnd, "Wrong signup config");
         require(_startDate > _signupEnd, "Start febore signup period");
@@ -101,7 +114,39 @@ contract Staking is ERC20Burnable {
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function stake() external payable initialized belowLimit{
+    function pause() external onlyOwner notPaused {
+        isContractPaused = true;
+    }
+
+     function unPause() public onlyOwner paused {
+        isContractPaused = false;
+    }
+
+    function deleteParameters() internal {
+		delete owner;
+		delete endDate;
+		delete hardCap;
+        delete startDate;
+        delete signupEnd;
+		delete patronRole;
+        delete isContractPaused;
+		delete contributionLimit;
+        delete claimManagerAddress;
+        delete isContractInitialized;
+    }
+
+    function terminate() external activated onlyOwner paused {
+		uint256 payout = rewards;
+        require(payout != 0, "No rewards to refund");
+		payable(rewardProvider).transfer(payout);
+
+        deleteParameters();
+
+        //unPause to allow tokens redemption
+        unPause();
+    }
+
+    function stake() external payable initialized belowLimit notPaused {
         require(hasRole(msg.sender, patronRole), "No patron role");
         if (stakes[msg.sender].deposit + msg.value > contributionLimit){
             uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender].deposit);
@@ -116,15 +161,16 @@ contract Staking is ERC20Burnable {
         stakes[msg.sender].time = block.timestamp;
     }
 
-    function redeemAll() external withdrawsAllowed {
+    function redeemAll() external notPaused {
         redeem(balanceOf(msg.sender));
     }
-
-    function redeem(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) {
-        uint256 toWithdraw = _getRewards(_amount); 
+    
+    function redeem(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) notPaused {
+        uint256 toWithdraw = _getRewards(_amount);
         burn(_amount);
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
+        emit TokenBurnt(msg.sender, _amount, block.timestamp);
     }
 
     function hasRole(address _provider, bytes32 _role) internal view returns (bool){
@@ -134,10 +180,10 @@ contract Staking is ERC20Burnable {
 
     function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
         uint256 interests = _amount * (rewards / hardCap);
-        reward = _amount + interests; 
+        reward = _amount + interests;
     }
 
-    function getRewards() external view returns (uint256){
+    function getRewards() external initialized notPaused view returns (uint256){
         return _getRewards(balanceOf(msg.sender));
     }
 }
