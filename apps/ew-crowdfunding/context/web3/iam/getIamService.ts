@@ -1,9 +1,8 @@
-import { setChainConfig, setCacheConfig, Claim } from 'iam-client-lib';
-import { LoginOptions } from './types';
+import { setChainConfig, setCacheConfig, Claim, ProviderType } from 'iam-client-lib';
 import { getSignerService } from './getSignerService';
 import { RoleEnrollmentStatus } from '../types';
 
-export const getIamService = async ({ providerType }: LoginOptions) => {
+export const getIamService = async (providerType : ProviderType) => {
   // // Set Cache Server
   setCacheConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
     url: process.env.NEXT_PUBLIC_CACHE_SERVER,
@@ -24,28 +23,28 @@ export const getIamService = async ({ providerType }: LoginOptions) => {
   };
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    if ((window as any).ethereum) {
-      const { signerService, connectToCacheServer } = await getSignerService(providerType);
-      const { connectToDidRegistry, cacheClient } = await connectToCacheServer();
-      const { claimsService } = await connectToDidRegistry();
-      const claims: Claim[] = await cacheClient.getClaimsByRequester(signerService?.did, {
-        namespace: process.env.NEXT_PUBLIC_PATRON_ROLE.split('.roles.').pop(),
-      });
-      const role = claims.filter(item => !item.isRejected)[0];
-      const roleEnrolmentStatus = getEnrollmentStatus(claims);
-
-      return {
-        signerService,
-        cacheClient,
-        claims,
-        roleEnrolmentStatus,
-        claimsService,
-        role,
-      };
+    if (!window?.ethereum) {
+      return;
     }
+    const { signerService, connectToCacheServer } = await getSignerService(providerType);
+    const { connectToDidRegistry, cacheClient } = await connectToCacheServer();
+    const { claimsService } = await connectToDidRegistry();
+    const claims: Claim[] = await cacheClient.getClaimsByRequester(signerService?.did, {
+      namespace: process.env.NEXT_PUBLIC_PATRON_ROLE.split('.roles.').pop(),
+    });
+    const role = claims.filter((item) => !item.isRejected)[0];
+    const roleEnrolmentStatus = getEnrollmentStatus(claims);
+
+    return {
+      signerService,
+      cacheClient,
+      claims,
+      roleEnrolmentStatus,
+      claimsService,
+      role,
+    };
   } catch (error) {
-    // console.log(error);
-    throw new Error('No ethereum object');
+    // throw new Error('No ethereum object');
+    console.log('No ethereum object! Please connect your wallet!')
   }
 };

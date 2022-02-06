@@ -3,8 +3,19 @@ import { Box, Container } from '@mui/material';
 import { ConnectCard } from '../components';
 import { Footer, InfoContainer, InfoPane, Welcome, Lending } from '../containers';
 import { theme } from '../dsla-theme';
+import { useDispatch } from 'react-redux';
+import { getWeb3 } from '../redux-store';
+import { useEffect } from 'react';
+import { useDSLAModalsDispatch } from '../context';
 
 const Home: NextPage = () => {
+  const dispatch = useDispatch();
+  const dispatchModals = useDSLAModalsDispatch();
+
+  useEffect(() => {
+    dispatch(getWeb3(dispatchModals));
+  })
+
   return (
     <div className='backgroundImage'>
       <Container

@@ -2,11 +2,12 @@ import { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './global.css';
-import { Web3ContextProvider } from '../context';
 import { DSLAModalsProvider } from '../context';
 import { DSLAModalsCenter } from '../containers';
 import { DSLAThemeProvider } from '../dsla-theme';
 import { CssBaseline } from '@mui/material';
+import { Provider } from 'react-redux';
+import { store } from '../redux-store';
 
 export default function Crowdfunding({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -30,9 +31,9 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
       <DSLAModalsProvider>
         <DSLAThemeProvider>
           <CssBaseline />
-          <Web3ContextProvider>
+          <Provider store={store}>
             <Component {...pageProps} />
-          </Web3ContextProvider>
+          </Provider>
           <DSLAModalsCenter />
         </DSLAThemeProvider>
       </DSLAModalsProvider>

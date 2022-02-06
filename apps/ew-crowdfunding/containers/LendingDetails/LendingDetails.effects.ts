@@ -4,10 +4,27 @@ import * as yup from 'yup';
 import { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAccountBalance, selectAccountBalance } from '../../redux-store';
 
 export const useLendingDetailsEffects = () => {
+  const dispatch = useDispatch();
+  const [isReady, setIsReady] = useState<boolean>(undefined);
+
+  useEffect(() => {
+    dispatch(getAccountBalance());
+  });
+
+  const accountBalance = useSelector(selectAccountBalance);
+
+  useEffect(() => {
+    if (accountBalance) {
+      setIsReady(true);
+    }
+  }, [accountBalance]);
+
   /* API variables */
-  const accountBalance = 50.5;
+  console.log('FROM STORE: ', accountBalance);
   const userContribution = 100;
   const solarLoanTokenBalance = 400;
   const redeemableReward = 50;
@@ -133,5 +150,6 @@ export const useLendingDetailsEffects = () => {
     onLoanChange,
     errorMessage,
     isRedeemDisabled,
+    isReady,
   };
 };
