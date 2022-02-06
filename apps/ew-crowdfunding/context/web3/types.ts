@@ -1,4 +1,3 @@
-import { LoginOptions } from './iam';
 import { ProviderType } from 'iam-client-lib';
 import { Signer } from 'ethers';
 import { IWeb3State, Web3Action } from './state/types';
@@ -15,13 +14,11 @@ export interface IWeb3Context {
   publicKey?: string;
   authenticated?: boolean;
   roleEnrolmentStatus?: RoleEnrollmentStatus;
-  login?: (loginOptions: LoginOptions) => void;
+  login?: (providerType: ProviderType) => void;
   logout?: () => void;
   isLoading: boolean;
   isConnectedToRightNetwork: boolean;
   isMetamaskPresent?: boolean;
-  isNotificationModalOpen: boolean;
-  setIsNotificationModalOpen?: (open: boolean) => void;
   dispatch?: Dispatch<Web3Action>
 }
 

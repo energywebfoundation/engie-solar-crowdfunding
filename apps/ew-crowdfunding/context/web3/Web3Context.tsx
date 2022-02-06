@@ -3,39 +3,49 @@ import { Web3ActionsEnum } from './state/actions';
 import { UpdateWeb3Values, useWeb3State } from './state';
 import { IWeb3Context, Web3ModalConfig } from './types';
 import { getIamService, LoginOptions } from './iam';
-import { getLocalStorage } from './getLocalStorage';
+import { getLocalStorageAccount, removeLocalStorageAccount, setLocalStorageAccount } from './localStorage';
 import { setListeners } from './setListeners';
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
 import { useDSLAModalsDispatch, DSLAModalsActionsEnum } from '../modals';
 import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { PROVIDER_TYPE } from '.';
 
+// declare global {
+//   interface Window {
+//     /* eslint-disable @typescript-eslint/no-explicit-any */
+//     ethereum: any;
+//     web3: any;
+//     /* eslint-enable */
+//   }
+// }
+
 export const Web3Context = createContext<IWeb3Context>({
   isLoading: false,
   isConnectedToRightNetwork: false,
-  isNotificationModalOpen: false,
 });
 
 export const Web3ContextProvider = ({ children }: { children: React.ReactNode }) => {
-  const { provider, providerType, address, chainId, signer, did, dispatch, publicKey, authenticated, roleEnrolmentStatus } =
-    useWeb3State();
+  const {
+    provider,
+    providerType,
+    address,
+    chainId,
+    signer,
+    did,
+    dispatch,
+    publicKey,
+    authenticated,
+    roleEnrolmentStatus,
+  } = useWeb3State();
   const [isLoading, setIsLoading] = useState(false);
   const [isConnectedToRightNetwork, setIsConnectedToRightNetwork] = useState(false);
   const [isMetamaskPresent, setIsMetamaskPresent] = useState(false);
-  const [isNotificationModalOpen, setIsNotificationModalOpen] = useState(false);
-  const { getLocalStorageAccount, setLocalStorageAccount, removeLocalStorageAccount } = getLocalStorage();
   const dispatchModals = useDSLAModalsDispatch();
 
   const handleOnInit = async () => {
     const initialStateValues: UpdateWeb3Values = getLocalStorageAccount();
-    dispatch({
-      type: Web3ActionsEnum.UPDATE_STATE,
-      payload: initialStateValues,
-    });
     if (localStorage.getItem(PROVIDER_TYPE)) {
-      const { signerService, roleEnrolmentStatus } = await getIamService({
-        providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
-      });
+      const { signerService, roleEnrolmentStatus } = await getIamService(localStorage.getItem(PROVIDER_TYPE) as ProviderType);
       dispatch({
         type: Web3ActionsEnum.UPDATE_STATE,
         payload: { ...initialStateValues, roleEnrolmentStatus, isEthSigner: signerService?.isEthSigner?.toString() },
@@ -79,12 +89,12 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     handleClose();
   };
 
-  const login = async (loginOptions: LoginOptions) => {
+  const login = async (providerType: ProviderType) => {
     setIsLoading(true);
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (!(window as any).ethereum) console.error('No Ethereum Provider found on window.ethereum');
-      const { signerService, roleEnrolmentStatus } = await getIamService(loginOptions);
+      if (!window?.ethereum) console.error('No Ethereum Provider found on window.ethereum');
+      const { signerService, roleEnrolmentStatus } = await getIamService(providerType);
       const publicKey = await signerService.publicKey();
       if (signerService?.signer && signerService.address) {
         setListeners(signerService, (config) => handleListeners(config));
@@ -132,8 +142,6 @@ export const Web3ContextProvider = ({ children }: { children: React.ReactNode })
     isLoading,
     isConnectedToRightNetwork,
     isMetamaskPresent,
-    isNotificationModalOpen,
-    setIsNotificationModalOpen,
     dispatch,
   };
 

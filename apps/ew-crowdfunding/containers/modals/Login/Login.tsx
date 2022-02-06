@@ -45,7 +45,7 @@ export const Login = () => {
               variant='outlined'
               color='primary'
               onClick={() => {
-                login({ providerType: ProviderType.MetaMask });
+                login(ProviderType.MetaMask);
                 closeModal();
               }}
               startIcon={<img width={40} height={40} src='/metamask-logo.svg' alt='Metamask logo' />}
@@ -59,7 +59,7 @@ export const Login = () => {
             variant='outlined'
             color='primary'
             onClick={() => {
-              login({ providerType: ProviderType.WalletConnect });
+              login(ProviderType.WalletConnect);
               closeModal();
             }}
             startIcon={<img width={40} height={40} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}

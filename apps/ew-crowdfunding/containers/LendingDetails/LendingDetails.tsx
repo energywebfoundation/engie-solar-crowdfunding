@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Link, Typography } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
@@ -26,9 +26,10 @@ export const LendingDetails: FC = () => {
     onLoanChange,
     errorMessage,
     isRedeemDisabled,
+    isReady,
   } = useLendingDetailsEffects();
 
-  return (
+  return !isReady ? <CircularProgress /> : (
     <Box className={`${classes.wrapper} gradientBorder`}>
       <Box className={classes.lendingDetails}>
         <Box className={classes.box}>

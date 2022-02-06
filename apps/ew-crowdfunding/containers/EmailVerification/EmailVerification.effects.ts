@@ -45,9 +45,7 @@ export const useEmailVerificationEffects = () => {
     }
     console.log('Email: ', data);
 
-    const { claimsService } = await getIamService({
-      providerType,
-    });
+    const { claimsService } = await getIamService(providerType);
     try {
       await claimsService.createClaimRequest({
         registrationTypes: [RegistrationTypes.OnChain],
