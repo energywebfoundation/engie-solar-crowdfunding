@@ -4,8 +4,7 @@ export const CURRENT_DID = 'CURRENT_DID';
 export const PROVIDER_TYPE = 'ProviderType';
 
 import { ProviderType, PUBLIC_KEY, IS_ETH_SIGNER } from 'iam-client-lib';
-import { IWeb3State } from './state/types';
-import { TSetAccount, TGetAccount, TRemoveAccount } from './types';
+import { TSetAccount, TGetAccount, TRemoveAccount, UpdateWeb3Payload } from './web3/types';
 
 export const setLocalStorageAccount: TSetAccount = ({
   address,
@@ -14,7 +13,7 @@ export const setLocalStorageAccount: TSetAccount = ({
   did,
   publicKey,
   isEthSigner,
-}: Partial<IWeb3State>) => {
+}: Partial<UpdateWeb3Payload>) => {
   localStorage.setItem(CURRENT_ADDRESS, address);
   localStorage.setItem(PROVIDER_TYPE, providerType);
   localStorage.setItem(CURRENT_CHAIN_ID, chainId.toString());
@@ -25,7 +24,7 @@ export const setLocalStorageAccount: TSetAccount = ({
 
 export const getLocalStorageAccount: TGetAccount = () => {
   if (window?.localStorage) {
-    const initialState: IWeb3State = {
+    const initialState: UpdateWeb3Payload = {
       address: localStorage.getItem(CURRENT_ADDRESS),
       chainId: +localStorage.getItem(CURRENT_CHAIN_ID),
       providerType: localStorage.getItem(PROVIDER_TYPE) as ProviderType,
