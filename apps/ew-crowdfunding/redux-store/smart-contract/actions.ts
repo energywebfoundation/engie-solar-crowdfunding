@@ -1,8 +1,8 @@
 import { ethers } from 'ethers';
 import { ProviderType } from 'iam-client-lib';
-import { CURRENT_ADDRESS, getFromStorage, PROVIDER_TYPE } from '../../context';
-import { getIamService } from '../../context/web3/iam';
+import { getIamService } from '../../context/iam';
 import { AppThunk } from '../store';
+import { CURRENT_ADDRESS, getFromStorage, PROVIDER_TYPE } from '../localStorage';
 import { SmartContractActionTypes } from './types';
 
 export const setAccountBalance = (accountBalance: string) => ({
@@ -34,13 +34,18 @@ export const getAccountBalance =
     let accountBalance = '0';
     const providerType = await getFromStorage(PROVIDER_TYPE);
     const currentAddress = await getFromStorage(CURRENT_ADDRESS);
-
-    if (currentAddress && providerType) {
-      const { signerService } = await getIamService(providerType as ProviderType);
-      if (signerService) {
-        const currentBalance = await signerService.provider.getBalance(currentAddress);
-        accountBalance = ethers.utils.formatEther(currentBalance);
+    console.log('currentAddress: ', currentAddress)
+    console.log('providerType: ', providerType)
+    try {
+      if (currentAddress && providerType) {
+        const { signerService } = await getIamService(providerType as ProviderType);
+        if (signerService) {
+          const currentBalance = await signerService.provider.getBalance(currentAddress);
+          accountBalance = ethers.utils.formatEther(currentBalance);
+        }
       }
+    } catch (error) {
+      console.log('Some error here: ', error)
     }
     dispatch({
       type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,

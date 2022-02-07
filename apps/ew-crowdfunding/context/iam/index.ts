@@ -1,2 +1,2 @@
 export * from './getIamService';
-export * from './types';
+export * from './setListeners';

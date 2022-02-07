@@ -32,6 +32,11 @@ const web3Reducer: Reducer<Web3ReducerState> = (state: Web3ReducerState = initia
       return {
         ...initialState,
       };
+    case Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS:
+      return {
+        ...state,
+        roleEnrolmentStatus: payload
+      };
     default:
       return state;
   }

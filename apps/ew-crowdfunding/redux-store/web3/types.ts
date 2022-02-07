@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ProviderType } from 'iam-client-lib';
-import { RoleEnrollmentStatus } from '../../context/web3/types';
-
 export interface Web3ReducerState {
   isLoading: boolean;
   isConnectedToRightNetwork: boolean;
@@ -22,6 +20,7 @@ export const Web3ActionTypes = {
   SET_WEB3: 'SET_WEB3',
   RESET_WEB3: 'RESET_WEB3',
   SET_METAMASK_PRESENT: 'SET_METAMASK_PRESENT',
+  UPDATE_ROLE_ENROLLMENT_STATUS: 'UPDATE_ROLE_ENROLLMENT_STATUS',
   SET_IS_LOADING: 'SET_IS_LOADING',
 };
 
@@ -38,3 +37,15 @@ export type UpdateWeb3Payload = Pick<
   | 'roleEnrolmentStatus'
   | 'isEthSigner'
 >;
+
+export type TSetAccount = (data: Partial<UpdateWeb3Payload>) => void;
+export type TGetAccount = () => UpdateWeb3Payload;
+export type TRemoveAccount = () => void;
+
+export enum RoleEnrollmentStatus {
+  NOT_ENROLLED = 'Not Enrolled',
+  ENROLLED_NOT_APPROVED = 'Not Approved',
+  ENROLLED_APPROVED = 'Enrolled Approved But Not Synced',
+  ENROLLED_SYNCED = 'Enrolled And Synced',
+  REJECTED = 'Enrolment rejected',
+}

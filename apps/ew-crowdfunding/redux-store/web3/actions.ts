@@ -1,18 +1,17 @@
 import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
+import { DSLAModalsActionsEnum } from '../../context';
+import { TDSLAModalsAction, Web3ModalConfig } from '../../context/modals/types';
+import { getIamService } from '../../context/iam';
+import { setListeners } from '../../context/iam/setListeners';
+import { AppThunk } from '../store';
 import {
-  DSLAModalsActionsEnum,
   getFromStorage,
   getLocalStorageAccount,
   PROVIDER_TYPE,
   removeLocalStorageAccount,
   setLocalStorageAccount,
-} from '../../context';
-import { TDSLAModalsAction } from '../../context/modals/types';
-import { getIamService } from '../../context/web3/iam';
-import { setListeners } from '../../context/web3/setListeners';
-import { Web3ModalConfig } from '../../context/web3/types';
-import { AppThunk } from '../store';
-import { UpdateWeb3Payload, Web3ActionTypes } from './types';
+} from '../localStorage';
+import { RoleEnrollmentStatus, UpdateWeb3Payload, Web3ActionTypes } from './types';
 
 export const setIsLoading = (payload: boolean) => ({
   type: Web3ActionTypes.SET_IS_LOADING,
@@ -26,6 +25,11 @@ export const setState = (payload: UpdateWeb3Payload) => ({
 
 export const resetState = () => ({
   type: Web3ActionTypes.RESET_WEB3,
+});
+
+export const updateRoleEnrollmentStatus = (payload: RoleEnrollmentStatus) => ({
+  type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
+  payload,
 });
 
 export const requestLogout =
@@ -49,7 +53,6 @@ export const handleWeb3Listeners =
       });
       removeLocalStorageAccount();
       dispatch({ type: Web3ActionTypes.RESET_WEB3 });
-      window.location.reload();
     };
     setListeners(signerService, (config) => handleListeners(config));
   };
@@ -68,26 +71,33 @@ export const getWeb3 =
       process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
 
     if (providerType) {
-      const { signerService, roleEnrolmentStatus } = await getIamService(providerType as ProviderType);
-      dispatch(handleWeb3Listeners(signerService, dispatchModals));
-      dispatch({
-        type: Web3ActionTypes.SET_WEB3,
-        payload: {
-          ...initialStorageValues,
-          isLoading: false,
-          address: signerService?.address,
-          providerType: signerService?.providerType,
-          chainId: signerService?.chainId,
-          provider: signerService?.provider,
-          signer: signerService?.signer,
-          did: signerService?.did,
-          authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
-          roleEnrolmentStatus,
-          isEthSigner: signerService?.isEthSigner?.toString(),
-          isMetamaskPresent,
-          isConnectedToRightNetwork,
-        },
-      });
+      try {
+        const { signerService, roleEnrolmentStatus } = await getIamService(providerType as ProviderType);
+        console.log('Signer service: ', signerService);
+        if (signerService && roleEnrolmentStatus) {
+          dispatch(handleWeb3Listeners(signerService, dispatchModals));
+          dispatch({
+            type: Web3ActionTypes.SET_WEB3,
+            payload: {
+              ...initialStorageValues,
+              isLoading: false,
+              address: signerService?.address,
+              providerType: signerService?.providerType,
+              chainId: signerService?.chainId,
+              provider: signerService?.provider,
+              signer: signerService?.signer,
+              did: signerService?.did,
+              authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
+              roleEnrolmentStatus,
+              isEthSigner: signerService?.isEthSigner?.toString(),
+              isMetamaskPresent,
+              isConnectedToRightNetwork,
+            },
+          });
+        }
+      } catch (error) {
+        console.log('Error: ', error);
+      }
     } else {
       dispatch({
         type: Web3ActionTypes.SET_WEB3,
@@ -113,7 +123,7 @@ export const requestLogin =
     const isConnectedChainId =
       process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
     const publicKey = await signerService.publicKey();
-    if (signerService?.signer && signerService.address) {
+    if (signerService?.signer && signerService?.address) {
       dispatch(handleWeb3Listeners(signerService, dispatchModals));
 
       const payload = {

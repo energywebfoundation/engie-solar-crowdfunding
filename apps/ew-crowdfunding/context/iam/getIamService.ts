@@ -1,6 +1,6 @@
 import { setChainConfig, setCacheConfig, Claim, ProviderType } from 'iam-client-lib';
+import { RoleEnrollmentStatus } from '../../redux-store';
 import { getSignerService } from './getSignerService';
-import { RoleEnrollmentStatus } from '../types';
 
 export const getIamService = async (providerType : ProviderType) => {
   // // Set Cache Server
@@ -46,5 +46,6 @@ export const getIamService = async (providerType : ProviderType) => {
   } catch (error) {
     // throw new Error('No ethereum object');
     console.log('No ethereum object! Please connect your wallet!')
+    return;
   }
 };

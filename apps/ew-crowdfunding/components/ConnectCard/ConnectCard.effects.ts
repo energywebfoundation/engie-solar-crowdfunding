@@ -27,7 +27,7 @@ export const useConnectCardEffects = () => {
   const isMetamaskPresent = useSelector(selectIsMetamaskPresent);
   const provider = useSelector(selectProvider);
   const signer = useSelector(selectSigner);
-  console.log('Is loading: ', isLoading);
+  
   const logout = async () => {
     if (provider?.disconnect && typeof provider.disconnect === 'function') {
       await provider.disconnect();
