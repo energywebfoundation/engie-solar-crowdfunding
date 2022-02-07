@@ -4,6 +4,7 @@ export interface Web3ReducerState {
   isLoading: boolean;
   isConnectedToRightNetwork: boolean;
   isMetamaskPresent: boolean;
+  errorMessage: string;
   provider?: any;
   providerType?: ProviderType;
   address?: string;
@@ -17,7 +18,8 @@ export interface Web3ReducerState {
 }
 
 export const Web3ActionTypes = {
-  SET_WEB3: 'SET_WEB3',
+  SET_WEB3_SUCCESS: 'SET_WEB3_SUCCESS',
+  SET_WEB3_FAILURE: 'SET_WEB3_FAILURE',
   RESET_WEB3: 'RESET_WEB3',
   SET_METAMASK_PRESENT: 'SET_METAMASK_PRESENT',
   UPDATE_ROLE_ENROLLMENT_STATUS: 'UPDATE_ROLE_ENROLLMENT_STATUS',

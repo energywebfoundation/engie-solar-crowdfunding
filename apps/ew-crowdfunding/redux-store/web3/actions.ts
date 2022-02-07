@@ -18,8 +18,13 @@ export const setIsLoading = (payload: boolean) => ({
   payload,
 });
 
-export const setState = (payload: UpdateWeb3Payload) => ({
-  type: Web3ActionTypes.SET_WEB3,
+export const setStateSuccess = (payload: UpdateWeb3Payload) => ({
+  type: Web3ActionTypes.SET_WEB3_SUCCESS,
+  payload,
+});
+
+export const setStateFailure = (payload: string) => ({
+  type: Web3ActionTypes.SET_WEB3_FAILURE,
   payload,
 });
 
@@ -73,11 +78,11 @@ export const getWeb3 =
     if (providerType) {
       try {
         const { signerService, roleEnrolmentStatus } = await getIamService(providerType as ProviderType);
-        console.log('Signer service: ', signerService);
+
         if (signerService && roleEnrolmentStatus) {
           dispatch(handleWeb3Listeners(signerService, dispatchModals));
           dispatch({
-            type: Web3ActionTypes.SET_WEB3,
+            type: Web3ActionTypes.SET_WEB3_SUCCESS,
             payload: {
               ...initialStorageValues,
               isLoading: false,
@@ -96,11 +101,14 @@ export const getWeb3 =
           });
         }
       } catch (error) {
-        console.log('Error: ', error);
+        dispatch({
+          type: Web3ActionTypes.SET_WEB3_FAILURE,
+          payload: error,
+        });
       }
     } else {
       dispatch({
-        type: Web3ActionTypes.SET_WEB3,
+        type: Web3ActionTypes.SET_WEB3_SUCCESS,
         payload: {
           ...initialStorageValues,
           isLoading: false,
@@ -118,36 +126,43 @@ export const requestLogin =
       type: Web3ActionTypes.SET_IS_LOADING,
       payload: true,
     });
-    const { signerService, roleEnrolmentStatus } = await getIamService(providerType);
-    const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
-    const isConnectedChainId =
-      process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
-    const publicKey = await signerService.publicKey();
-    if (signerService?.signer && signerService?.address) {
-      dispatch(handleWeb3Listeners(signerService, dispatchModals));
+    try {
+      const { signerService, roleEnrolmentStatus } = await getIamService(providerType);
+      const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
+      const isConnectedChainId =
+        process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
+      const publicKey = await signerService.publicKey();
+      if (signerService?.signer && signerService?.address) {
+        dispatch(handleWeb3Listeners(signerService, dispatchModals));
 
-      const payload = {
-        address: signerService?.address,
-        providerType: signerService?.providerType,
-        chainId: signerService?.chainId,
-        provider: signerService?.provider,
-        signer: signerService?.signer,
-        did: signerService?.did,
-        authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
-        publicKey,
-        roleEnrolmentStatus,
-        isEthSigner: signerService?.isEthSigner?.toString(),
-      };
-      setLocalStorageAccount(payload);
+        const payload = {
+          address: signerService?.address,
+          providerType: signerService?.providerType,
+          chainId: signerService?.chainId,
+          provider: signerService?.provider,
+          signer: signerService?.signer,
+          did: signerService?.did,
+          authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
+          publicKey,
+          roleEnrolmentStatus,
+          isEthSigner: signerService?.isEthSigner?.toString(),
+        };
+        setLocalStorageAccount(payload);
 
+        dispatch({
+          type: Web3ActionTypes.SET_WEB3_SUCCESS,
+          payload: {
+            ...payload,
+            isLoading: false,
+            isMetamaskPresent,
+            isConnectedChainId,
+          },
+        });
+      }
+    } catch (error) {
       dispatch({
-        type: Web3ActionTypes.SET_WEB3,
-        payload: {
-          ...payload,
-          isLoading: false,
-          isMetamaskPresent,
-          isConnectedChainId,
-        },
+        type: Web3ActionTypes.SET_WEB3_FAILURE,
+        payload: error,
       });
     }
   };
