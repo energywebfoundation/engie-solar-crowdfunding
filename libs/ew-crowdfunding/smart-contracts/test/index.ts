@@ -5,6 +5,7 @@ import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
 import { DateTime } from "luxon";
 import { abi } from '../artifacts/contracts/libs/IClaimManager.sol/IClaimManager.json';
+import { timeStamp } from "console";
 
 use(solidity);
 let end : number;
@@ -281,7 +282,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await expect(asPatron3.stake({
               value: contributionLimit.add(oneEWT.mul(42))
           }),
-      ).to.emit(asPatron3, 'refundExceeded').withArgs(patron3.address, contributionLimit.add(oneEWT.mul(42)), overflow);
+      ).to.emit(asPatron3, 'RefundExceeded').withArgs(patron3.address, contributionLimit.add(oneEWT.mul(42)), overflow);
       expect(await asPatron3.balanceOf(patron3.address)).equals(contributionLimit);
     });
     
@@ -390,7 +391,51 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     it('fails when service provider sends reward before startDate', async () => {
       await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
     });
+  })
 
+  describe("\n+ Testing contract Pausing & Unpausing", () => {
+
+      it("Can Pause contract", async () => {
+        tx = await asOwner.pause();
+        await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
+      });
+  
+      it("fails when staking on paused contract", async () => {
+        await expect(asPatron3.stake({
+               value: oneEWT
+           }),
+       ).to.be.revertedWith('Contribution limit reached');
+      });
+  
+      it("fails when trying to pause an already paused contract", async () => {
+        await expect(asOwner.pause()).to.be.revertedWith("Contract is frozen");
+      });
+  
+      it("fails when trying to withdraw funds on a paused contract", async () => {
+        await expect(asOwner.redeemAll()).to.be.revertedWith("Contract is frozen");
+      });
+  
+      it('fails when trying to withdraw partially on paused contract', async () => {
+        await expect(
+          asPatron2.redeem(oneEWT.mul(1))
+        ).to.be.revertedWith("Contract is frozen");
+      });
+  
+      it("Can unPause contract", async () => {
+        await expect(asOwner.unPause()).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
+      });
+  
+      it("Can stake after unpause", async () => {
+        await expect(
+          tx = await asPatron2.stake({
+               value: oneEWT.mul(1)
+           }),
+       ).changeEtherBalance(asPatron2, oneEWT.mul(1));
+       await expect(tx).to.emit(asPatron2, 'Transfer').withArgs(nullAddress, patron2.address, oneEWT.mul(1));
+      });
+  })
+
+  describe("\n+ Testing interactions on activated contract (after startDate and before endDate)", () => {
     it('fails when trying to stake after startDate', async () => {
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
@@ -400,8 +445,12 @@ describe("[ Crowdfunding Staking contract ] ", () => {
         asPatron.stake({value: 1})
       ).to.be.revertedWith('Signup Ended');
     });
-
-    it('can deposit rewards when contract is activated', async () => {
+    
+    it('fails when non service provider sends reward on inactive contract', async () => {
+      await expect(asPatron.depositRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
+    });
+    
+    it('can receive rewards when contract is activated', async () => {
       const getTimestamp = async (transaction : ContractTransaction) => {
         const { blockNumber } = await transaction.wait();
         const { timestamp } = await provider.getBlock(blockNumber);
@@ -412,12 +461,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       })).to.emit(stakingContract, 'RewardSent').withArgs(owner.address, rewards, await getTimestamp(tx));
       await expect(tx).changeEtherBalance(asOwner, rewards);
     });
-    
-    it('fails when non service provider sends reward on inactive contract', async () => {
-      await expect(asPatron.depositRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
-    });
 
-    it('Checks rewards of users', async () => {
+    it('can check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
       const expectedReward = getReward(balance);
       const patronReward = await asPatron2.getRewards();
@@ -466,9 +511,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
   });
 
-  describe("\n+ Testing contract Pausing & Cancelling", () => {
-    it("Can Pause contract", async () => {
-
-    })
-  });
+  describe("\n + Testing campaign cancellation ", () => {
+    it("Can terminate campaign", async () => {
+      
+    });
+  })
 });

@@ -27,11 +27,12 @@ contract Staking is ERC20Burnable {
 
     mapping(address => Stake) private stakes;
     
+    event StatusChanged(string statusType, uint256 date);
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
     event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
     event TokenBurnt(address _user, uint256 _amout, uint256 _timestamp);
-    event refundExceeded(address _sender, uint256 amount, uint256 refunded);
+    event RefundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
 
     modifier initialized(){
@@ -116,10 +117,12 @@ contract Staking is ERC20Burnable {
 
     function pause() external onlyOwner notPaused {
         isContractPaused = true;
+        emit StatusChanged("contractPaused", block.timestamp);
     }
 
      function unPause() public onlyOwner paused {
         isContractPaused = false;
+        emit StatusChanged("contractUnpaused", block.timestamp);
     }
 
     function deleteParameters() internal {
@@ -153,7 +156,7 @@ contract Staking is ERC20Burnable {
             stakes[msg.sender].deposit = contributionLimit;
             _mint(msg.sender, msg.value - overflow); // mint the effective amount deposited
             payable(msg.sender).transfer(overflow);
-            emit refundExceeded(msg.sender, msg.value, overflow);
+            emit RefundExceeded(msg.sender, msg.value, overflow);
         } else {
             stakes[msg.sender].deposit += msg.value;
             _mint(msg.sender, msg.value);
@@ -165,7 +168,7 @@ contract Staking is ERC20Burnable {
         redeem(balanceOf(msg.sender));
     }
     
-    function redeem(uint256 _amount) public withdrawsAllowed sufficientBalance(_amount) notPaused {
+    function redeem(uint256 _amount) public notPaused withdrawsAllowed sufficientBalance(_amount) {
         uint256 toWithdraw = _getRewards(_amount);
         burn(_amount);
         payable(msg.sender).transfer(toWithdraw);
@@ -183,7 +186,7 @@ contract Staking is ERC20Burnable {
         reward = _amount + interests;
     }
 
-    function getRewards() external initialized notPaused view returns (uint256){
+    function getRewards() external notPaused initialized view returns (uint256){
         return _getRewards(balanceOf(msg.sender));
     }
 }
