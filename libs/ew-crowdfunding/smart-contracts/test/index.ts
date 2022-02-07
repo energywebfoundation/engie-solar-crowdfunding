@@ -512,8 +512,13 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   });
 
   describe("\n + Testing campaign cancellation ", () => {
-    it("Can terminate campaign", async () => {
-      
+    it("fails terminating campaign if contract is not paused", async () => {
+      await expect(asOwner.terminate()).to.be.revertedWith("Contract not Paused");
+    });
+
+    it("fails terminating campaign if non owner tries to terminate", async () => {
+      await expect(asOwner.pause()).to.emit(stakingContract, "StatusChanged").withArgs("contractPaused", timeStamp);
+      await expect(asOwner.terminate()).to.be.revertedWith("Must be the admin");
     });
   })
 });

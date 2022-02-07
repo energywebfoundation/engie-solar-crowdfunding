@@ -138,7 +138,7 @@ contract Staking is ERC20Burnable {
         delete isContractInitialized;
     }
 
-    function terminate() external activated onlyOwner paused {
+    function terminate() external onlyOwner paused {
 		uint256 payout = rewards;
         require(payout != 0, "No rewards to refund");
 		payable(rewardProvider).transfer(payout);
