@@ -8,3 +8,23 @@ export const selectAccountBalance = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.accountBalance,
 );
+
+export const selectUserContribution = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.userContribution,
+);
+
+export const selectSolarLoanTokenBalance = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.solarLoanTokenBalance,
+);
+
+export const selectRedeemableReward = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.redeemableReward,
+);
+
+export const selectTokensRedeemed = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.tokensRedeemed,
+);

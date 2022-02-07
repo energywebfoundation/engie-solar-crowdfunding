@@ -5,6 +5,7 @@ const initialState: Web3ReducerState = {
   isLoading: false,
   isConnectedToRightNetwork: false,
   provider: null,
+  errorMessage: null,
   providerType: null,
   address: null,
   chainId: null,
@@ -23,10 +24,15 @@ const web3Reducer: Reducer<Web3ReducerState> = (state: Web3ReducerState = initia
         ...state,
         isLoading: payload,
       };
-    case Web3ActionTypes.SET_WEB3:
+    case Web3ActionTypes.SET_WEB3_SUCCESS:
       return {
         ...state,
         ...payload,
+      };
+    case Web3ActionTypes.SET_WEB3_FAILURE:
+      return {
+        ...state,
+        errorMessage: payload,
       };
     case Web3ActionTypes.RESET_WEB3:
       return {
@@ -35,7 +41,7 @@ const web3Reducer: Reducer<Web3ReducerState> = (state: Web3ReducerState = initia
     case Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS:
       return {
         ...state,
-        roleEnrolmentStatus: payload
+        roleEnrolmentStatus: payload,
       };
     default:
       return state;

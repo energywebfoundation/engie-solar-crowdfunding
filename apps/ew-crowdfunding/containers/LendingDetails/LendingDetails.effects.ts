@@ -24,7 +24,6 @@ export const useLendingDetailsEffects = () => {
   }, [accountBalance]);
 
   /* API variables */
-  console.log('FROM STORE: ', accountBalance);
   const userContribution = 100;
   const solarLoanTokenBalance = 400;
   const redeemableReward = 50;
@@ -107,14 +106,6 @@ export const useLendingDetailsEffects = () => {
 
   const getErrorMessage = (loanValue: number) => {
     /* EWT Loan Amount” box greater than */
-    console.log(
-      'Get error message here: ',
-      typeof loanValue,
-      typeof solarLoanTokenBalance,
-      typeof (loanValue + solarLoanTokenBalance),
-      loanValue + solarLoanTokenBalance > globalTokenLimit,
-    );
-
     if (loanValue > accountBalance) {
       /* their account balance */
       return 'Amount exceeds account balance';

@@ -31,24 +31,24 @@ export const redeemSlt = (amount: number) => ({
 export const getAccountBalance =
   (): AppThunk =>
   async (dispatch): Promise<void> => {
-    let accountBalance = '0';
+    let formattedAccountBalance = '0';
     const providerType = await getFromStorage(PROVIDER_TYPE);
     const currentAddress = await getFromStorage(CURRENT_ADDRESS);
-    console.log('currentAddress: ', currentAddress)
-    console.log('providerType: ', providerType)
+
     try {
       if (currentAddress && providerType) {
         const { signerService } = await getIamService(providerType as ProviderType);
         if (signerService) {
           const currentBalance = await signerService.provider.getBalance(currentAddress);
-          accountBalance = ethers.utils.formatEther(currentBalance);
+          const accountBalance = ethers.utils.formatEther(currentBalance);
+          formattedAccountBalance = `${Number(accountBalance).toPrecision(3)}`
         }
       }
     } catch (error) {
-      console.log('Some error here: ', error)
+      console.log(error)
     }
     dispatch({
       type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
-      payload: accountBalance,
+      payload: formattedAccountBalance,
     });
   };
