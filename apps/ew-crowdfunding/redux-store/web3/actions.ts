@@ -65,10 +65,7 @@ export const handleWeb3Listeners =
 export const getWeb3 =
   (dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
   async (dispatch): Promise<void> => {
-    dispatch({
-      type: Web3ActionTypes.SET_IS_LOADING,
-      payload: true,
-    });
+   
     const providerType = await getFromStorage(PROVIDER_TYPE);
     const initialStorageValues: UpdateWeb3Payload = getLocalStorageAccount();
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
@@ -77,6 +74,10 @@ export const getWeb3 =
 
     if (providerType) {
       try {
+        dispatch({
+          type: Web3ActionTypes.SET_IS_LOADING,
+          payload: true,
+        });
         const { signerService, roleEnrolmentStatus } = await getIamService(providerType as ProviderType);
 
         if (signerService && roleEnrolmentStatus) {
@@ -101,6 +102,10 @@ export const getWeb3 =
           });
         }
       } catch (error) {
+        dispatch({
+          type: Web3ActionTypes.SET_IS_LOADING,
+          payload: false,
+        });
         dispatch({
           type: Web3ActionTypes.SET_WEB3_FAILURE,
           payload: error,
