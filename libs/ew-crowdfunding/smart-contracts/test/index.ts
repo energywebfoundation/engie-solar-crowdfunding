@@ -512,13 +512,17 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   });
 
   describe("\n + Testing campaign cancellation ", () => {
-    it("fails terminating campaign if contract is not paused", async () => {
-      await expect(asOwner.terminate()).to.be.revertedWith("Contract not Paused");
-    });
 
     it("fails terminating campaign if non owner tries to terminate", async () => {
-      await expect(asOwner.pause()).to.emit(stakingContract, "StatusChanged").withArgs("contractPaused", timeStamp);
-      await expect(asOwner.terminate()).to.be.revertedWith("Must be the admin");
+      await expect(asPatron.terminate()).to.be.revertedWith("Must be the admin");
+    });
+
+    it("Can terminate campaign", async () => {
+      await expect(asOwner.terminate()).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
+    });
+
+    it('fails when service provider sends reward after campaign abortion', async () => {
+      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Campaign aborted');
     });
   })
 });

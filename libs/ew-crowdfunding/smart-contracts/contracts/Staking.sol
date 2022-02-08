@@ -16,6 +16,7 @@ contract Staking is ERC20Burnable {
     address private owner;
     address private rewardProvider;
     uint256 public contributionLimit;
+    bool private aborted;
     bool private isContractPaused;
     bool private isContractInitialized;
     address public claimManagerAddress;
@@ -27,6 +28,7 @@ contract Staking is ERC20Burnable {
 
     mapping(address => Stake) private stakes;
     
+    event CampaignAborted(uint256 _timestamp);
     event StatusChanged(string statusType, uint256 date);
     event Funded(address _user, uint256 _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
@@ -86,7 +88,12 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function depositRewards() external payable activated notPaused {
+    modifier notAborted(){
+        require(!aborted, "Campaign aborted");
+        _;
+    }
+
+    function depositRewards() external payable notAborted activated {
         require(msg.value > 0, "Not rewards provided");
         require(hasRole(msg.sender, serviceRole), "Not enrolled as service provider");
         rewards += msg.value;
@@ -126,7 +133,6 @@ contract Staking is ERC20Burnable {
     }
 
     function deleteParameters() internal {
-		delete owner;
 		delete endDate;
 		delete hardCap;
         delete startDate;
@@ -138,15 +144,15 @@ contract Staking is ERC20Burnable {
         delete isContractInitialized;
     }
 
-    function terminate() external onlyOwner paused {
+    function terminate() external onlyOwner {
+        require(aborted == false , "Already terminated");
 		uint256 payout = rewards;
-        require(payout != 0, "No rewards to refund");
-		payable(rewardProvider).transfer(payout);
-
+        if (payout != 0){
+		    payable(rewardProvider).transfer(payout);
+        }
         deleteParameters();
-
-        //unPause to allow tokens redemption
-        unPause();
+        aborted = true;
+        emit CampaignAborted(block.timestamp);
     }
 
     function stake() external payable initialized belowLimit notPaused {
@@ -186,7 +192,7 @@ contract Staking is ERC20Burnable {
         reward = _amount + interests;
     }
 
-    function getRewards() external notPaused initialized view returns (uint256){
+    function getRewards() external notPaused view returns (uint256){
         return _getRewards(balanceOf(msg.sender));
     }
 }
