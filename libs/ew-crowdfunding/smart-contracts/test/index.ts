@@ -313,7 +313,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   
     });
 
-    it('fails when staking more than limit', async () => {
+    it('fails when not enrolled user tries to stake', async () => {
       await expect(asNotEnrolled.stake({
               value: oneEWT
           }),
@@ -504,6 +504,12 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
+    });
+
+    it('fails when not enrolled user tries to withdraw', async () => {
+      await asPatron3.approve(owner.address, oneEWT)
+      await asOwner.transferFrom(patron3.address, notEnrolled.address, oneEWT.div(2));
+      await expect(asNotEnrolled.redeemAll()).to.be.revertedWith('No patron role');
     });
 
     it('fails when service provider sends reward after endDate', async () => {
