@@ -29,14 +29,18 @@ export const LendingDetails: FC = () => {
     isReady,
   } = useLendingDetailsEffects();
 
-  return !isReady ? <CircularProgress /> : (
+  return (
     <Box className={`${classes.wrapper} gradientBorder`}>
       <Box className={classes.lendingDetails}>
         <Box className={classes.box}>
           <Typography mb={2} variant='h2'>
             Lending Details
           </Typography>
-          <ContributionItem title='Your account balance' value={accountBalance} type='EWT' />
+          {!isReady ? (
+            <CircularProgress />
+          ) : (
+            <ContributionItem title='Your account balance' value={accountBalance} type='EWT' />
+          )}
         </Box>
         <Box className={classes.box}>
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
