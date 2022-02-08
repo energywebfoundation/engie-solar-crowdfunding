@@ -85,6 +85,7 @@ contract Staking is ERC20Burnable {
 
     modifier withdrawsAllowed(){
         require(block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
+        require(hasRole(msg.sender, patronRole), "No patron role");
         _;
     }
 
