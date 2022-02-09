@@ -6,7 +6,7 @@ import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from
 
 export const useRedeemEffects = () => {
   const {
-    redeem: { open, tokenBalance },
+    redeem: { open, tokenBalance, onRedeem },
   } = useDSLAModalsStore();
   const dispatchModals = useDSLAModalsDispatch();
 
@@ -16,6 +16,7 @@ export const useRedeemEffects = () => {
       payload: {
         open: false,
         tokenBalance: null,
+        onRedeem,
       },
     });
   };
@@ -61,6 +62,7 @@ export const useRedeemEffects = () => {
 
   const onSubmit = async (data: { amount: number }) => {
     console.log('Stake amount: ', data);
+    onRedeem(data.amount);
     onReset();
   };
 
