@@ -21,6 +21,7 @@ export type ILogin = {
 export type IRedeem = {
   open: boolean;
   tokenBalance: number;
+  onRedeem: (amount: number) => void;
 };
 
 export type IConfirm = {
