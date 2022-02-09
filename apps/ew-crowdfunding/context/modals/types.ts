@@ -23,10 +23,18 @@ export type IRedeem = {
   tokenBalance: number;
 };
 
+export type IConfirm = {
+  open: boolean;
+  title?: string;
+  text: string;
+  onConfirm: () => void;
+};
+
 export interface IDSLAModalsStore {
   notification: TWeb3Notification;
   login: ILogin;
   redeem: IRedeem;
+  confirm: IConfirm;
 }
 
 interface IWeb3NotificationAction {
@@ -44,4 +52,9 @@ interface IRedeemAction {
   payload: IRedeem;
 }
 
-export type TDSLAModalsAction = IWeb3NotificationAction | ILoginAction | IRedeemAction;
+interface IConfirmAction {
+  type: DSLAModalsActionsEnum.SHOW_CONFIRM;
+  payload: IConfirm;
+}
+
+export type TDSLAModalsAction = IWeb3NotificationAction | ILoginAction | IRedeemAction | IConfirmAction;

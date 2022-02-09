@@ -65,7 +65,6 @@ export const handleWeb3Listeners =
 export const getWeb3 =
   (dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
   async (dispatch): Promise<void> => {
-   
     const providerType = await getFromStorage(PROVIDER_TYPE);
     const initialStorageValues: UpdateWeb3Payload = getLocalStorageAccount();
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
@@ -162,6 +161,78 @@ export const requestLogin =
             isMetamaskPresent,
             isConnectedChainId,
           },
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: Web3ActionTypes.SET_WEB3_FAILURE,
+        payload: error,
+      });
+    }
+  };
+
+export const cancelEnrollment =
+  (): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const providerType = await getFromStorage(PROVIDER_TYPE);
+    try {
+      const { signerService, role } = await getIamService(providerType as ProviderType);
+      if (signerService?.signer && signerService?.address) {
+        console.log('ROLE: ', role);
+        if (!role) {
+          dispatch({
+            type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
+            payload: RoleEnrollmentStatus.NOT_ENROLLED,
+          });
+        }
+        dispatch(deleteClaim(role.id));
+      }
+    } catch (error) {
+      dispatch({
+        type: Web3ActionTypes.SET_WEB3_FAILURE,
+        payload: error,
+      });
+    }
+  };
+
+export const deleteClaim =
+  (id: string): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const providerType = await getFromStorage(PROVIDER_TYPE);
+    try {
+      const { claimsService } = await getIamService(providerType as ProviderType);
+      if (claimsService) {
+        await claimsService.deleteClaim({ id });
+        dispatch({
+          type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
+          payload: RoleEnrollmentStatus.NOT_ENROLLED,
+        });
+      }
+    } catch (error) {
+      dispatch({
+        type: Web3ActionTypes.SET_WEB3_FAILURE,
+        payload: error,
+      });
+    }
+  };
+
+export const addRole =
+  (): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const providerType = await getFromStorage(PROVIDER_TYPE);
+    try {
+      const { claimsService, role } = await getIamService(providerType as ProviderType);
+      if (claimsService && role) {
+        if (!role) {
+          dispatch({
+            type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
+            payload: RoleEnrollmentStatus.NOT_ENROLLED,
+          });
+        }
+        await claimsService.registerOnchain(role);
+        dispatch({
+          type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
+          payload: RoleEnrollmentStatus.ENROLLED_SYNCED,
         });
       }
     } catch (error) {

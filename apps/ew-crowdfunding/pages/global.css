@@ -110,3 +110,14 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
+
+.successBorder {
+  position: relative;
+  border-radius: 4px;
+  background: linear-gradient(276.95deg, rgba(24, 253, 138, 0.2) -198.51%, rgba(13, 10, 25, 0) 157.75%);
+  background-clip: padding-box;
+  border: 1px solid #009688;
+  padding: 1px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
