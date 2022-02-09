@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Link, Typography } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
@@ -26,6 +26,7 @@ export const LendingDetails: FC = () => {
     onLoanChange,
     errorMessage,
     isRedeemDisabled,
+    isReady,
   } = useLendingDetailsEffects();
 
   return (
@@ -35,7 +36,11 @@ export const LendingDetails: FC = () => {
           <Typography mb={2} variant='h2'>
             Lending Details
           </Typography>
-          <ContributionItem title='Your account balance' value={accountBalance} type='EWT' />
+          {!isReady ? (
+            <CircularProgress />
+          ) : (
+            <ContributionItem title='Your account balance' value={accountBalance} type='EWT' />
+          )}
         </Box>
         <Box className={classes.box}>
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>

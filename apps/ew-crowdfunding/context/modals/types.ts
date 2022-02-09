@@ -1,6 +1,10 @@
-import { Web3ModalConfig } from '../web3/types';
 import { DSLAModalsActionsEnum } from './reducer';
-import { LoginOptions } from '../web3/iam';
+import { ProviderType } from 'iam-client-lib';
+
+export type Web3ModalConfig = {
+  title: string;
+  text: string;
+};
 
 export type TWeb3Notification = {
   open: boolean;
@@ -11,7 +15,7 @@ export type ILogin = {
   open: boolean;
   isConnectedToRightNetwork: boolean;
   isMetamaskPresent: boolean;
-  login: (loginOptions: LoginOptions) => void;
+  login: (providerType: ProviderType) => void;
 };
 
 export type IRedeem = {

@@ -1,5 +1,5 @@
 import { ProviderEvent, SignerService } from 'iam-client-lib';
-import { Web3ModalConfig } from './types';
+import { Web3ModalConfig } from '../modals/types';
 
 const displayAccountAndNetworkChanges = (changeType: ProviderEvent, callback: (config) => void) => {
   const { message, title } = getConfigInfo(changeType);

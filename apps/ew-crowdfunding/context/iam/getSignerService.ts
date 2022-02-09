@@ -1,8 +1,4 @@
-import {
-  initWithMetamask,
-  initWithWalletConnect,
-  ProviderType,
-} from 'iam-client-lib';
+import { initWithMetamask, initWithWalletConnect, ProviderType } from 'iam-client-lib';
 
 export const getSignerService = (providerType: ProviderType) => {
   switch (providerType) {
