@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import { FC } from 'react';
-import { EmailVerification, LendingDetails, LendingStats, LendingTerms } from '..';
+import { RoleEnrollment, LendingDetails, LendingStats, LendingTerms } from '..';
 import { useStyles } from './Lending.styles';
 
 export const Lending: FC = () => {
@@ -9,7 +9,7 @@ export const Lending: FC = () => {
     <Box className={classes.wrapper}>
       <LendingDetails />
       <Box className={classes.info}>
-        <EmailVerification />
+        <RoleEnrollment />
         <LendingStats />
         <LendingTerms />
       </Box>

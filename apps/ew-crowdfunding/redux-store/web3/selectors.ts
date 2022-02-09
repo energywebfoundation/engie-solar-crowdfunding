@@ -15,5 +15,6 @@ export const selectSigner = createSelector([selectWeb3], (web3) => web3.signer);
 export const selectDid = createSelector([selectWeb3], (web3) => web3.did);
 export const selectPublicKey = createSelector([selectWeb3], (web3) => web3.publicKey);
 export const selectAuthenticated = createSelector([selectWeb3], (web3) => web3.authenticated);
-export const selectRoleEnrollmentStatus = createSelector([selectWeb3], (web3) => web3.roleEnrolmentStatus);
 export const selectIsEthSigner = createSelector([selectWeb3], (web3) => web3.isEthSigner);
+
+export const selectRoleEnrollmentStatus = createSelector([selectWeb3], (web3) => web3.roleEnrolmentStatus);

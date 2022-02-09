@@ -3,13 +3,14 @@ import { Box, Button, Link, Typography } from '@mui/material';
 import { useStyles } from './EmailVerification.styles';
 import { useEmailVerificationEffects } from './EmailVerification.effects';
 import InfoIcon from '@mui/icons-material/Info';
-import { shortenAddress } from '../../utils';
-import { FormInputText } from '../../components';
+import { shortenAddress } from '../../../utils';
+import { FormInputText } from '../../../components';
+import { RoleEnrollmentStatus } from '../../../redux-store';
 
-export const EmailVerification: FC = () => {
+export const EmailVerification: FC<{roleEnrolmentStatus: RoleEnrollmentStatus}> = ({roleEnrolmentStatus}) => {
   const classes = useStyles();
   const { address, notEnrolled, control, handleSubmit, onSubmit, onEmailChange, errorMessage } =
-    useEmailVerificationEffects();
+    useEmailVerificationEffects(roleEnrolmentStatus);
 
   return (
     <Box className={`${classes.wrapper} ${notEnrolled ? 'warningBorder' : 'gradientBorder'}`}>
