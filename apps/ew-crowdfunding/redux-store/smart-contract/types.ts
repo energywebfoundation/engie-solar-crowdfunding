@@ -16,6 +16,7 @@ export interface SmartContractReducerState {
 }
 
 export const SmartContractActionTypes = {
+  GET_ACCOUNT_BALANCE: 'GET_ACCOUNT_BALANCE',
   SET_ACCOUNT_BALANCE: 'SET_ACCOUNT_BALANCE',
   SET_TOKEN_LIMIT: 'SET_TOKEN_LIMIT',
   SET_GLOBAL_TOKEN_LIMIT: 'SET_GLOBAL_TOKEN_LIMIT',
