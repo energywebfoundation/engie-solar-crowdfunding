@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ProviderType } from 'iam-client-lib';
+import { CacheClient, Claim, ClaimsService, ProviderType, SignerService } from 'iam-client-lib';
 export interface Web3ReducerState {
   isLoading: boolean;
   isConnectedToRightNetwork: boolean;
@@ -13,8 +13,14 @@ export interface Web3ReducerState {
   did?: string;
   publicKey?: string;
   authenticated?: boolean;
-  roleEnrolmentStatus?: RoleEnrollmentStatus;
   isEthSigner?: string;
+
+  roleEnrolmentStatus: RoleEnrollmentStatus;
+  signerService: SignerService;
+  cacheClient: CacheClient;
+  claims: Claim[];
+  claimsService: ClaimsService;
+  role: Claim;
 }
 
 export const Web3ActionTypes = {
@@ -36,7 +42,6 @@ export type UpdateWeb3Payload = Pick<
   | 'did'
   | 'publicKey'
   | 'authenticated'
-  | 'roleEnrolmentStatus'
   | 'isEthSigner'
 >;
 

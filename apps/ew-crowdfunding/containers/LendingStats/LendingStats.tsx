@@ -1,16 +1,29 @@
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { ContributionItem, ProgressBar } from '../../components';
 import { useLendingStatsEffects } from './LendingStats.effects';
 import { useStyles } from './LendingStats.styles';
 
 export const LendingStats = () => {
-  const { lendedAmount, globalTokenLimit } = useLendingStatsEffects();
+  const { isReady, totalLentAmount, globalTokenLimit } = useLendingStatsEffects();
   const classes = useStyles();
 
   return (
     <Box className={`${classes.wrapper} gradientBorder`}>
-      <ContributionItem title='Solar lending stats' value={lendedAmount} type='EWT' />
-      <ProgressBar value={lendedAmount} limit={globalTokenLimit} description='EWT Lending Limit' />
+      {!isReady ? (
+        <Box sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100%',
+        }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <>
+          <ContributionItem title='Solar lending stats' value={totalLentAmount} type='EWT' />
+          <ProgressBar value={totalLentAmount} limit={globalTokenLimit} description='EWT Lending Limit' />
+        </>
+      )}
     </Box>
   );
 };

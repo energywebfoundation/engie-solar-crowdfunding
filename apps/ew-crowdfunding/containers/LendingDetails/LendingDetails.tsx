@@ -2,6 +2,7 @@
 import { Box, Button, CircularProgress, Link, Typography } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
+import { RoleEnrollmentStatus } from '../../redux-store';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
 import { useStyles } from './LendingDetails.styles';
 
@@ -27,6 +28,7 @@ export const LendingDetails: FC = () => {
     errorMessage,
     isRedeemDisabled,
     isReady,
+    roleEnrolmentStatus,
   } = useLendingDetailsEffects();
 
   return (
@@ -90,7 +92,7 @@ export const LendingDetails: FC = () => {
                 variant='contained'
                 type='submit'
                 color='primary'
-                disabled={!!errorMessage}
+                disabled={!!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED}
                 style={{ minWidth: '200px' }}
               >
                 Lend

@@ -4,6 +4,7 @@ export enum DSLAModalsActionsEnum {
   SHOW_NOTIFICATION = 'SHOW_NOTIFICATION',
   SHOW_LOGIN = 'SHOW_LOGIN',
   SHOW_REDEEM = 'SHOW_REDEEM',
+  SHOW_CONFIRM = 'SHOW_CONFIRM',
 }
 
 export const dslaModalsInitialState: IDSLAModalsStore = {
@@ -25,6 +26,17 @@ export const dslaModalsInitialState: IDSLAModalsStore = {
   redeem: {
     open: false,
     tokenBalance: null,
+    onRedeem: (amount: number) => {
+      return;
+    },
+  },
+  confirm: {
+    open: false,
+    title: null,
+    text: null,
+    onConfirm: () => {
+      return;
+    },
   },
 };
 
@@ -36,5 +48,7 @@ export const dslaModalsReducer = (state = dslaModalsInitialState, action: TDSLAM
       return { ...state, login: action.payload };
     case DSLAModalsActionsEnum.SHOW_REDEEM:
       return { ...state, redeem: action.payload };
+    case DSLAModalsActionsEnum.SHOW_CONFIRM:
+      return { ...state, confirm: action.payload };
   }
 };

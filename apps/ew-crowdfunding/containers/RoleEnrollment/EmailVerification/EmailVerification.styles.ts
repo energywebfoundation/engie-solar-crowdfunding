@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles';
-import { theme } from '../../dsla-theme';
+import { theme } from '../../../dsla-theme';
 
 export const useStyles = makeStyles(() => {
   return {

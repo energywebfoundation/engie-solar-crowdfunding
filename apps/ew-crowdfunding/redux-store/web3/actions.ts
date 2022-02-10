@@ -65,7 +65,6 @@ export const handleWeb3Listeners =
 export const getWeb3 =
   (dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
   async (dispatch): Promise<void> => {
-   
     const providerType = await getFromStorage(PROVIDER_TYPE);
     const initialStorageValues: UpdateWeb3Payload = getLocalStorageAccount();
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
@@ -78,27 +77,37 @@ export const getWeb3 =
           type: Web3ActionTypes.SET_IS_LOADING,
           payload: true,
         });
-        const { signerService, roleEnrolmentStatus } = await getIamService(providerType as ProviderType);
+        const { signerService, cacheClient, claims, roleEnrolmentStatus, claimsService, role } = await getIamService(
+          providerType as ProviderType,
+        );
 
         if (signerService && roleEnrolmentStatus) {
           dispatch(handleWeb3Listeners(signerService, dispatchModals));
+
+          const payload = {
+            ...initialStorageValues,
+            isLoading: false,
+            address: signerService?.address,
+            providerType: signerService?.providerType,
+            chainId: signerService?.chainId,
+            provider: signerService?.provider,
+            signer: signerService?.signer,
+            did: signerService?.did,
+            authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
+            isEthSigner: signerService?.isEthSigner?.toString(),
+            isMetamaskPresent,
+            isConnectedToRightNetwork,
+            roleEnrolmentStatus,
+            cacheClient,
+            claims,
+            claimsService,
+            role,
+          };
+          setLocalStorageAccount(payload);
+
           dispatch({
             type: Web3ActionTypes.SET_WEB3_SUCCESS,
-            payload: {
-              ...initialStorageValues,
-              isLoading: false,
-              address: signerService?.address,
-              providerType: signerService?.providerType,
-              chainId: signerService?.chainId,
-              provider: signerService?.provider,
-              signer: signerService?.signer,
-              did: signerService?.did,
-              authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
-              roleEnrolmentStatus,
-              isEthSigner: signerService?.isEthSigner?.toString(),
-              isMetamaskPresent,
-              isConnectedToRightNetwork,
-            },
+            payload,
           });
         }
       } catch (error) {
@@ -132,7 +141,9 @@ export const requestLogin =
       payload: true,
     });
     try {
-      const { signerService, roleEnrolmentStatus } = await getIamService(providerType);
+      const { signerService, cacheClient, claims, roleEnrolmentStatus, claimsService, role } = await getIamService(
+        providerType,
+      );
       const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
       const isConnectedChainId =
         process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
@@ -149,8 +160,12 @@ export const requestLogin =
           did: signerService?.did,
           authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
           publicKey,
-          roleEnrolmentStatus,
           isEthSigner: signerService?.isEthSigner?.toString(),
+          roleEnrolmentStatus,
+          cacheClient,
+          claims,
+          claimsService,
+          role,
         };
         setLocalStorageAccount(payload);
 

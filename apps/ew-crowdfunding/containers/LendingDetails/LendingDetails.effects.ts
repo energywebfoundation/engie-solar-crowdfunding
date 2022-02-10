@@ -5,40 +5,82 @@ import { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAccountBalance, selectAccountBalance } from '../../redux-store';
+import {
+  getAccountBalance,
+  getContributionDeadline,
+  getGlobalTokenLimit,
+  getInterestRate,
+  getRedeemableReward,
+  getSolarLoansDistributed,
+  getSolarLoansMature,
+  getSolarLoanTokenBalance,
+  getTokenLimit,
+  getTokensRedeemed,
+  getUserContribution,
+  lend,
+  redeemSlt,
+  selectAccountBalance,
+  selectAddress,
+  selectContributionDeadline,
+  selectGlobalTokenLimit,
+  selectInterestRate,
+  selectProvider,
+  selectRedeemableReward,
+  selectRoleEnrollmentStatus,
+  selectSolarLoansDistributed,
+  selectSolarLoansMature,
+  selectSolarLoanTokenBalance,
+  selectTokenLimit,
+  selectTokensRedeemed,
+  selectUserContribution,
+} from '../../redux-store';
+import { propertyExists } from '../../utils';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
+  const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
+
+  const provider = useSelector(selectProvider);
+  const currentAddress = useSelector(selectAddress);
 
   useEffect(() => {
-    dispatch(getAccountBalance());
+    dispatch(getTokenLimit());
+    dispatch(getGlobalTokenLimit());
+    dispatch(getUserContribution());
+    dispatch(getSolarLoanTokenBalance());
+    dispatch(getRedeemableReward());
+    dispatch(getTokensRedeemed());
+    dispatch(getInterestRate());
+    dispatch(getContributionDeadline());
+    dispatch(getSolarLoansDistributed());
+    dispatch(getSolarLoansMature());
+  });
+
+  useEffect(() => {
+    if (propertyExists(provider) && propertyExists(currentAddress)) {
+      dispatch(getAccountBalance(provider, currentAddress));
+    }
   });
 
   const accountBalance = useSelector(selectAccountBalance);
+  const tokenLimit = useSelector(selectTokenLimit);
+  const globalTokenLimit = useSelector(selectGlobalTokenLimit);
+  const userContribution = useSelector(selectUserContribution);
+  const solarLoanTokenBalance = useSelector(selectSolarLoanTokenBalance);
+  const redeemableReward = useSelector(selectRedeemableReward);
+  const tokensRedeemed = useSelector(selectTokensRedeemed);
+
+  const interestRate = useSelector(selectInterestRate);
+  const contributionDeadline = useSelector(selectContributionDeadline);
+  const solarLoansDistributed = useSelector(selectSolarLoansDistributed);
+  const solarLoansMature = useSelector(selectSolarLoansMature);
 
   useEffect(() => {
-    if (accountBalance) {
+    if (propertyExists(accountBalance)) {
       setIsReady(true);
     }
   }, [accountBalance]);
-
-  /* API variables */
-  const userContribution = 100;
-  const solarLoanTokenBalance = 400;
-  const redeemableReward = 50;
-
-  const tokensRedeemed = 137;
-  /* End of API variables */
-
-  /* MAIN LIMITS */
-  const tokenLimit = Number(process.env.NEXT_PUBLIC_TOKEN_LIMIT);
-  const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
-  const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
-  const contributionDeadline = process.env.NEXT_PUBLIC_CONTRIBUTION_DEADLINE;
-  const solarLoansDistributed = process.env.NEXT_PUBLIC_SOLAR_LOANS_DISTRIBUTED;
-  const solarLoansMature = process.env.NEXT_PUBLIC_SOLAR_LOANS_MATURE;
-  /* End of limits */
 
   const isRedeemDisabled = new Date() >= new Date(contributionDeadline);
 
@@ -85,16 +127,20 @@ export const useLendingDetailsEffects = () => {
     if (errorMessage) {
       return;
     }
-    console.log('Loan amount: ', data);
+    dispatch(lend(data.loan));
+  };
+
+  const onRedeem = (amount: number) => {
+    dispatch(redeemSlt(amount));
   };
 
   const onRedeemSlt = () => {
-    console.log('On redeem');
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_REDEEM,
       payload: {
         open: true,
         tokenBalance: solarLoanTokenBalance,
+        onRedeem,
       },
     });
   };
@@ -142,5 +188,6 @@ export const useLendingDetailsEffects = () => {
     errorMessage,
     isRedeemDisabled,
     isReady,
+    roleEnrolmentStatus,
   };
 };
