@@ -1,13 +1,28 @@
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTotalLentAmount, selectGlobalTokenLimit, selectTotalLentAmount } from '../../redux-store';
+import { propertyExists } from '../../utils';
 
 export const useLendingStatsEffects = () => {
   const dispatch = useDispatch();
+  const [isReady, setIsReady] = useState<boolean>(undefined);
 
-  const lendedAmount = 200;
-  const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
+  useEffect(() => {
+    dispatch(getTotalLentAmount());
+  });
+
+  const totalLentAmount = useSelector(selectTotalLentAmount);
+  const globalTokenLimit = useSelector(selectGlobalTokenLimit);
+
+  useEffect(() => {
+    if (propertyExists(totalLentAmount) && propertyExists(globalTokenLimit)) {
+      setIsReady(true);
+    }
+  }, [totalLentAmount, globalTokenLimit]);
 
   return {
-    lendedAmount,
+    isReady,
+    totalLentAmount,
     globalTokenLimit,
   };
 };

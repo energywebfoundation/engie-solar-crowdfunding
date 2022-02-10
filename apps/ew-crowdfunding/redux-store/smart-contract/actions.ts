@@ -159,3 +159,14 @@ export const getSolarLoansMature =
       payload: solarLoansMature,
     });
   };
+
+export const getTotalLentAmount =
+  (): AppThunk =>
+  async (dispatch): Promise<void> => {
+    // This will be taken from the smart contract
+    const totalLentAmount = 5740;
+    dispatch({
+      type: SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT,
+      payload: totalLentAmount,
+    });
+  };

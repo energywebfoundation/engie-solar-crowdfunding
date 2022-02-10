@@ -32,7 +32,8 @@ export const getIamService = async (providerType : ProviderType) => {
     const claims: Claim[] = await cacheClient.getClaimsByRequester(signerService?.did, {
       namespace: process.env.NEXT_PUBLIC_PATRON_ROLE.split('.roles.').pop(),
     });
-    const role = claims.filter((item) => !item.isRejected)[0];
+    const role = claims.find((item) => item.isAccepted);
+
     const roleEnrolmentStatus = getEnrollmentStatus(claims);
 
     return {

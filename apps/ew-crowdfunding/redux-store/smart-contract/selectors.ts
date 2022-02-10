@@ -52,3 +52,8 @@ export const selectSolarLoansMature = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.solarLoansMature,
 );
+
+export const selectTotalLentAmount = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.totalLentAmount,
+);

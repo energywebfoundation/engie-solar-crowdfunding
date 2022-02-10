@@ -11,6 +11,7 @@ export interface SmartContractReducerState {
   contributionDeadline: string;
   solarLoansDistributed: string;
   solarLoansMature: string;
+  totalLentAmount: number;
   error: string;
 }
 
@@ -26,5 +27,6 @@ export const SmartContractActionTypes = {
   SET_CONTRIBUTION_DEADLINE: 'SET_CONTRIBUTION_DEADLINE',
   SET_SOLAR_LOANS_DISTRIBUTED: 'SET_SOLAR_LOANS_DISTRIBUTED',
   SET_SOLAR_LOANS_MATURE: 'SET_SOLAR_LOANS_MATURE',
+  SET_TOTAL_LENT_AMOUNT: 'SET_TOTAL_LENT_AMOUNT',
   GET_ROLE: 'GET_ROLE',
 };
