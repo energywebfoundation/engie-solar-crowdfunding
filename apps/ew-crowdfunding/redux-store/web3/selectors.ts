@@ -17,4 +17,10 @@ export const selectPublicKey = createSelector([selectWeb3], (web3) => web3.publi
 export const selectAuthenticated = createSelector([selectWeb3], (web3) => web3.authenticated);
 export const selectIsEthSigner = createSelector([selectWeb3], (web3) => web3.isEthSigner);
 
+// Selectors for iam-client-lib services
 export const selectRoleEnrollmentStatus = createSelector([selectWeb3], (web3) => web3.roleEnrolmentStatus);
+export const selectRole = createSelector([selectWeb3], (web3) => web3.role);
+export const selectSignerService = createSelector([selectWeb3], (web3) => web3.signerService);
+export const selectCacheClient = createSelector([selectWeb3], (web3) => web3.cacheClient);
+export const selectClaims = createSelector([selectWeb3], (web3) => web3.claims);
+export const selectClaimsService = createSelector([selectWeb3], (web3) => web3.claimsService);

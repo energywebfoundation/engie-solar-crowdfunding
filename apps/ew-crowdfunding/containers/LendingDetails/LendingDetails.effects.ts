@@ -20,9 +20,11 @@ import {
   lend,
   redeemSlt,
   selectAccountBalance,
+  selectAddress,
   selectContributionDeadline,
   selectGlobalTokenLimit,
   selectInterestRate,
+  selectProvider,
   selectRedeemableReward,
   selectRoleEnrollmentStatus,
   selectSolarLoansDistributed,
@@ -32,14 +34,17 @@ import {
   selectTokensRedeemed,
   selectUserContribution,
 } from '../../redux-store';
+import { propertyExists } from '../../utils';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
   const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
 
+  const provider = useSelector(selectProvider);
+  const currentAddress = useSelector(selectAddress);
+
   useEffect(() => {
-    dispatch(getAccountBalance());
     dispatch(getTokenLimit());
     dispatch(getGlobalTokenLimit());
     dispatch(getUserContribution());
@@ -50,6 +55,12 @@ export const useLendingDetailsEffects = () => {
     dispatch(getContributionDeadline());
     dispatch(getSolarLoansDistributed());
     dispatch(getSolarLoansMature());
+  });
+
+  useEffect(() => {
+    if (propertyExists(provider) && propertyExists(currentAddress)) {
+      dispatch(getAccountBalance(provider, currentAddress));
+    }
   });
 
   const accountBalance = useSelector(selectAccountBalance);
@@ -66,7 +77,7 @@ export const useLendingDetailsEffects = () => {
   const solarLoansMature = useSelector(selectSolarLoansMature);
 
   useEffect(() => {
-    if (accountBalance !== undefined) {
+    if (propertyExists(accountBalance)) {
       setIsReady(true);
     }
   }, [accountBalance]);

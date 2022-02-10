@@ -13,8 +13,14 @@ const initialState: Web3ReducerState = {
   did: null,
   publicKey: null,
   authenticated: false,
-  roleEnrolmentStatus: null,
   isMetamaskPresent: false,
+
+  roleEnrolmentStatus: null,
+  signerService:null,
+  cacheClient: null,
+  claims: null,
+  claimsService: null,
+  role: null,
 };
 
 const web3Reducer: Reducer<Web3ReducerState> = (state: Web3ReducerState = initialState, { type, payload, error }) => {
