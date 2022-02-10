@@ -2,7 +2,7 @@ import { setChainConfig, setCacheConfig, Claim, ProviderType } from 'iam-client-
 import { RoleEnrollmentStatus } from '../../redux-store';
 import { getSignerService } from './getSignerService';
 
-export const getIamService = async (providerType : ProviderType) => {
+export const getIamService = async (providerType: ProviderType) => {
   // // Set Cache Server
   setCacheConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
     url: process.env.NEXT_PUBLIC_CACHE_SERVER,
@@ -16,7 +16,8 @@ export const getIamService = async (providerType : ProviderType) => {
     if (enrollments.length === 0) {
       return RoleEnrollmentStatus.NOT_ENROLLED;
     }
-    if (enrollments[0].isAccepted) {
+    const role = enrollments?.find((item) => item.isAccepted);
+    if (role) {
       return RoleEnrollmentStatus.ENROLLED_APPROVED;
     }
     return RoleEnrollmentStatus.ENROLLED_NOT_APPROVED;
@@ -46,7 +47,7 @@ export const getIamService = async (providerType : ProviderType) => {
     };
   } catch (error) {
     // throw new Error('No ethereum object');
-    console.log('No ethereum object! Please connect your wallet!')
+    console.log('No ethereum object! Please connect your wallet!');
     return;
   }
 };
