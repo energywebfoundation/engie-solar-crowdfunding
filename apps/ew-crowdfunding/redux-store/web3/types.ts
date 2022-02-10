@@ -42,7 +42,6 @@ export type UpdateWeb3Payload = Pick<
   | 'did'
   | 'publicKey'
   | 'authenticated'
-  | 'roleEnrolmentStatus'
   | 'isEthSigner'
 >;
 
