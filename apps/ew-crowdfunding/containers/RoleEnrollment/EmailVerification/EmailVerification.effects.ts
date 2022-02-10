@@ -3,9 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useEffect, useState } from 'react';
 import domains from 'disposable-email-domains';
-import { getIamService } from '../../../context/iam';
-import { RegistrationTypes } from 'iam-client-lib';
-import { RoleEnrollmentStatus, selectAddress, selectProviderType, Web3ActionTypes } from '../../../redux-store';
+import { createClaimRequest, RoleEnrollmentStatus, selectAddress } from '../../../redux-store';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentStatus) => {
@@ -15,11 +13,8 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   const [errorMessage, setErrorMessage] = useState(null);
 
   const address = useSelector(selectAddress);
-  const providerType = useSelector(selectProviderType);
 
   const notEnrolled = Boolean(roleEnrolmentStatus === RoleEnrollmentStatus.NOT_ENROLLED || !roleEnrolmentStatus);
-
-  const PATRON_ROLE_VERSION = 1;
 
   const validationSchema = yup
     .object({
@@ -43,34 +38,11 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
     }
   }, [isSubmitSuccessful, reset]);
 
-  const onSubmit = async (data: { email: number }) => {
+  const onSubmit = async (data: { email: string }) => {
     if (errorMessage) {
       return;
     }
-    console.log('Email: ', data);
-
-    const { claimsService } = await getIamService(providerType);
-    try {
-      await claimsService.createClaimRequest({
-        registrationTypes: [RegistrationTypes.OnChain],
-        claim: {
-          fields: [
-            {
-              key: 'email',
-              value: data.email,
-            },
-          ],
-          claimType: process.env.NEXT_PUBLIC_PATRON_ROLE,
-          claimTypeVersion: PATRON_ROLE_VERSION,
-        },
-      });
-      dispatch({
-        type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
-        payload: RoleEnrollmentStatus.ENROLLED_NOT_APPROVED,
-      });
-    } catch (error) {
-      console.log('Error creating claim request: ', error);
-    }
+    dispatch(createClaimRequest(data.email));
   };
 
   const onEmailChange = () => {

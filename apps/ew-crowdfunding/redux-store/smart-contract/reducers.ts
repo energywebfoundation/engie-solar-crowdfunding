@@ -14,6 +14,7 @@ const initialState: SmartContractReducerState = {
   contributionDeadline: null,
   solarLoansDistributed: null,
   solarLoansMature: null,
+  totalLentAmount: null,
   error: null,
 };
 
@@ -76,6 +77,11 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
       return {
         ...state,
         solarLoansMature: payload,
+      };
+    case SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT:
+      return {
+        ...state,
+        totalLentAmount: payload,
       };
     default:
       return state;

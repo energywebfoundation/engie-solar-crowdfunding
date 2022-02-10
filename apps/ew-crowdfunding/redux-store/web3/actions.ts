@@ -1,4 +1,4 @@
-import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
+import { isMetamaskExtensionPresent, ProviderType, RegistrationTypes } from 'iam-client-lib';
 import { DSLAModalsActionsEnum } from '../../context';
 import { TDSLAModalsAction, Web3ModalConfig } from '../../context/modals/types';
 import { getIamService } from '../../context/iam';
@@ -81,23 +81,27 @@ export const getWeb3 =
 
         if (signerService && roleEnrolmentStatus) {
           dispatch(handleWeb3Listeners(signerService, dispatchModals));
+
+          const payload = {
+            ...initialStorageValues,
+            isLoading: false,
+            address: signerService?.address,
+            providerType: signerService?.providerType,
+            chainId: signerService?.chainId,
+            provider: signerService?.provider,
+            signer: signerService?.signer,
+            did: signerService?.did,
+            authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
+            roleEnrolmentStatus,
+            isEthSigner: signerService?.isEthSigner?.toString(),
+            isMetamaskPresent,
+            isConnectedToRightNetwork,
+          };
+          setLocalStorageAccount(payload);
+
           dispatch({
             type: Web3ActionTypes.SET_WEB3_SUCCESS,
-            payload: {
-              ...initialStorageValues,
-              isLoading: false,
-              address: signerService?.address,
-              providerType: signerService?.providerType,
-              chainId: signerService?.chainId,
-              provider: signerService?.provider,
-              signer: signerService?.signer,
-              did: signerService?.did,
-              authenticated: Boolean(signerService?.address) && Boolean(signerService?.providerType),
-              roleEnrolmentStatus,
-              isEthSigner: signerService?.isEthSigner?.toString(),
-              isMetamaskPresent,
-              isConnectedToRightNetwork,
-            },
+            payload,
           });
         }
       } catch (error) {
@@ -171,6 +175,38 @@ export const requestLogin =
     }
   };
 
+export const createClaimRequest =
+  (email: string): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const providerType = await getFromStorage(PROVIDER_TYPE);
+    // const providerType = useSelector(selectProviderType);
+
+    const PATRON_ROLE_VERSION = 1;
+
+    try {
+      const { claimsService } = await getIamService(providerType as ProviderType);
+      await claimsService.createClaimRequest({
+        registrationTypes: [RegistrationTypes.OnChain],
+        claim: {
+          requestorFields: [
+            {
+              key: 'email',
+              value: email,
+            },
+          ],
+          claimType: process.env.NEXT_PUBLIC_PATRON_ROLE,
+          claimTypeVersion: PATRON_ROLE_VERSION,
+        },
+      });
+      dispatch({
+        type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
+        payload: RoleEnrollmentStatus.ENROLLED_NOT_APPROVED,
+      });
+    } catch (error) {
+      console.log('Error creating claim request: ', error);
+    }
+  };
+
 export const cancelEnrollment =
   (): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -178,7 +214,6 @@ export const cancelEnrollment =
     try {
       const { signerService, role } = await getIamService(providerType as ProviderType);
       if (signerService?.signer && signerService?.address) {
-        console.log('ROLE: ', role);
         if (!role) {
           dispatch({
             type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
@@ -223,6 +258,7 @@ export const addRole =
     try {
       const { claimsService, role } = await getIamService(providerType as ProviderType);
       if (claimsService && role) {
+        console.log('ROLE HERE: ', role);
         if (!role) {
           dispatch({
             type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
