@@ -18,21 +18,23 @@ jobs:
     env:
         MODE: CI
         NEXT_PUBLIC_UI_BASE_URL: https://esc-dev.energyweb.org
-        NEXT_PUBLIC_CHAIN_ID: 246
-        NEXT_PUBLIC_RPC_URL: https://rpc.energyweb.org/
-        NEXT_PUBLIC_CACHE_SERVER: https://identitycache.energyweb.org/v1
+        NEXT_PUBLIC_CHAIN_ID: 73799
+        NEXT_PUBLIC_RPC_URL: https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/
+        NEXT_PUBLIC_CACHE_SERVER: https://identitycache-dev.energyweb.org/v1
         NEXT_PUBLIC_ORG_NAMESPACE: iam.ewc
-        NEXT_PUBLIC_NETWORK_NAME: EWC
-        NEXT_PUBLIC_CURRENCY_NAME: EWT
-        NEXT_PUBLIC_CURRENCY_SYMBOL: EWT
+        NEXT_PUBLIC_NETWORK_NAME: EnergyWeb Volta Chain
+        NEXT_PUBLIC_CURRENCY_NAME: Volta Token
+        NEXT_PUBLIC_CURRENCY_SYMBOL: VT
         NEXT_PUBLIC_PATRON_ROLE: email.roles.eea.apps.florin.engietestvolta.iam.ewc
+        NEXT_PUBLIC_PATRON_ROLE_VERSION: 1
         NEXT_PUBLIC_TOKEN_LIMIT: 200
         NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT: 10000
         NEXT_PUBLIC_INTEREST_RATE: 10%
         NEXT_PUBLIC_CONTRIBUTION_DEADLINE: "2022-04-16"
         NEXT_PUBLIC_SOLAR_LOANS_DISTRIBUTED: "2022-04-17"
         NEXT_PUBLIC_SOLAR_LOANS_MATURE: "2023-04-17"
-        NEXT_PUBLIC_BLOCK_EXPLORER_URL: https://explorer.energyweb.org
+        NEXT_PUBLIC_BLOCK_EXPLORER_URL: https://volta-explorer.energyweb.org
+        NEXT_PUBLIC_CLAIM_MANAGER_ADDRESS: '0x5339adE9332A604A1c957B9bC1C6eee0Bcf7a031'
   
     steps:
       - name: Get GHA environment name

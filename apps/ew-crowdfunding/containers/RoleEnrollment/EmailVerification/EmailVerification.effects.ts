@@ -12,7 +12,6 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   const claimsService = useSelector(selectClaimsService);
 
   const EMAIL_DOMAINS_WHITELIST = 'yopmail.com;yopmail.fr';
-  const PATRON_ROLE_VERSION = 1;
   const [errorMessage, setErrorMessage] = useState(null);
 
   const address = useSelector(selectAddress);
@@ -56,7 +55,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
             },
           ],
           claimType: process.env.NEXT_PUBLIC_PATRON_ROLE,
-          claimTypeVersion: PATRON_ROLE_VERSION,
+          claimTypeVersion: Number(process.env.NEXT_PUBLIC_PATRON_ROLE_VERSION),
         },
       });
       dispatch({
