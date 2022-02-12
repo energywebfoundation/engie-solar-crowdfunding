@@ -10,7 +10,8 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'start',
       gap: '30px',
-      padding: '30px',
+      borderRadius: '16px',
+      padding: '40px',
     },
     divider: {
       height: '3px',

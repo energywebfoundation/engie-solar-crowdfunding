@@ -10,7 +10,7 @@ const lightTheme: ThemeOptions = {
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#142938',
+      main: '#0F1E29',
       dark: '#EE6C4D',
       contrastText: '#FFFFFF',
     },
@@ -30,8 +30,8 @@ const lightTheme: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '4px',
-          padding: '8px 25px',
+          borderRadius: '32px',
+          padding: '12.5px 25px',
         },
       },
     },

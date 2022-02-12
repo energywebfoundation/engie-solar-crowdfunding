@@ -9,9 +9,10 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      gap: '10px',
-      paddingBottom: '20px',
-      maxWidth: '600px',
+      gap: '20px',
+      borderRadius: '16px',
+      padding: '40px',
+      maxWidth: '700px',
       [theme.breakpoints.down('md')]: {
         maxWidth: '100%',
       },

@@ -11,8 +11,9 @@ export interface ProgressBardProps {
 export const ProgressBar: FC<ProgressBardProps> = ({ value, limit, description }: ProgressBardProps) => {
   const classes = useStyles();
   return (
-    <Box className={classes.progress}>
+    <Box className={classes.wrapper}>
       <LinearProgress
+        className={classes.bar}
         style={{ height: 10, borderRadius: 5 }}
         value={(value / limit) * 100}
         variant='determinate'

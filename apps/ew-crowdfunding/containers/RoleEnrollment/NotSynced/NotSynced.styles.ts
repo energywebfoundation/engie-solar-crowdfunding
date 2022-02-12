@@ -16,17 +16,6 @@ export const useStyles = makeStyles(() => {
         maxWidth: '100%',
       },
     },
-    info: {
-      display: 'flex',
-      gap: '10px',
-    },
-    disclaimer: {
-      display: 'flex',
-      alignItems: 'start',
-      flexDirection: 'column',
-      zIndex: 10,
-      gap: '10px',
-    },
     buttonWrapper: {
       width: '100%',
       display: 'flex',

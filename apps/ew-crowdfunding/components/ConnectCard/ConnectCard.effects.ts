@@ -1,16 +1,11 @@
-import WalletConnectProvider from '@walletconnect/ethereum-provider';
 import { ProviderType } from 'iam-client-lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
 import {
   selectIsConnectedToRightNetwork,
   selectIsMetamaskPresent,
-  selectAuthenticated,
   selectIsLoading,
   requestLogin,
-  requestLogout,
-  selectProvider,
-  selectSigner,
 } from '../../redux-store';
 
 export const useConnectCardEffects = () => {
@@ -23,20 +18,7 @@ export const useConnectCardEffects = () => {
 
   const isLoading = useSelector(selectIsLoading);
   const isConnectedToRightNetwork = useSelector(selectIsConnectedToRightNetwork);
-  const authenticated = useSelector(selectAuthenticated);
   const isMetamaskPresent = useSelector(selectIsMetamaskPresent);
-  const provider = useSelector(selectProvider);
-  const signer = useSelector(selectSigner);
-  
-  const logout = async () => {
-    if (provider?.disconnect && typeof provider.disconnect === 'function') {
-      await provider.disconnect();
-    }
-    if (signer instanceof WalletConnectProvider) {
-      await signer.disconnect();
-    }
-    dispatch(requestLogout());
-  };
 
   const onConnect = () => {
     dispatchModals({
@@ -50,5 +32,5 @@ export const useConnectCardEffects = () => {
     });
   };
 
-  return { onConnect, authenticated, logout, isLoading };
+  return { onConnect, isLoading };
 };
