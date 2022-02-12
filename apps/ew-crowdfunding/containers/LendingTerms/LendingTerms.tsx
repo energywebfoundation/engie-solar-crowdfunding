@@ -1,4 +1,4 @@
-import { Box, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Paper, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useLendingTermsEffects } from './LendingTerms.effects';
 import { useStyles } from './LendingTerms.styles';
@@ -9,7 +9,7 @@ export const LendingTerms: FC = () => {
   const classes = useStyles();
 
   return (
-    <Box className={`${classes.wrapper} gradientBorder`}>
+    <Paper className={classes.wrapper}>
       <Typography style={{ paddingLeft: '20px', paddingTop: '20px' }} variant='h4'>
         Lending Terms
       </Typography>
@@ -25,6 +25,6 @@ export const LendingTerms: FC = () => {
           );
         })}
       </List>
-    </Box>
+    </Paper>
   );
 };

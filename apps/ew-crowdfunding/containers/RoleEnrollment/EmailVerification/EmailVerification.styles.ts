@@ -16,26 +16,12 @@ export const useStyles = makeStyles(() => {
         maxWidth: '100%',
       },
     },
-    info: {
-      display: 'flex',
-      gap: '10px',
-    },
     form: {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'start',
       gap: '10px',
       width: '100%',
-    },
-    disclaimer: {
-      display: 'flex',
-      zIndex: 10,
-      gap: '5px',
-      [theme.breakpoints.down('sm')]: {
-        flexDirection: 'column',
-        gap: '10px',
-        alignItems: 'start',
-      },
     },
     buttonWrapper: {
       width: '100%',
@@ -46,5 +32,9 @@ export const useStyles = makeStyles(() => {
         justifyContent: 'flex-start',
       },
     },
+    divider: {
+      marginRight: '-40px',
+      marginLeft: '-40px'
+    }
   };
 });

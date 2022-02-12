@@ -121,3 +121,11 @@ input[type='number']::-webkit-outer-spin-button {
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
+
+.bg-warning {
+  background-color: #ffcc80;
+}
+
+.bg-success {
+  background-color: #1de9b6;
+}

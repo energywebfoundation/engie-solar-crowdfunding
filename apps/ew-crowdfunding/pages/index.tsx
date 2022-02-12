@@ -1,23 +1,12 @@
 import type { NextPage } from 'next';
-import { Box, Container } from '@mui/material';
-import { ConnectCard } from '../components';
-import { Footer, InfoContainer, InfoPane, Welcome, Lending } from '../containers';
+import { Button, Container } from '@mui/material';
 import { theme } from '../dsla-theme';
-import { useDispatch } from 'react-redux';
-import { getWeb3 } from '../redux-store';
-import { useEffect } from 'react';
-import { useDSLAModalsDispatch } from '../context';
+import Link from 'next/link';
+import { Footer } from '../containers';
 
 const Home: NextPage = () => {
-  const dispatch = useDispatch();
-  const dispatchModals = useDSLAModalsDispatch();
-
-  useEffect(() => {
-    dispatch(getWeb3(dispatchModals));
-  })
-
   return (
-    <div className='backgroundImage'>
+    <div>
       <Container
         maxWidth={false}
         sx={{
@@ -38,24 +27,11 @@ const Home: NextPage = () => {
           gap: '40px',
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'start',
-            [theme.breakpoints.down('md')]: {
-              flexDirection: 'column',
-            },
-            gap: '40px',
-          }}
-        >
-          <Welcome />
-          <ConnectCard />
-        </Box>
-        <InfoContainer />
-        <InfoPane />
-        <Lending />
+        <Button variant='contained'>
+          <Link href='/wallet'>
+            <a>Wallet</a>
+          </Link>
+        </Button>
       </Container>
       <Footer />
     </div>

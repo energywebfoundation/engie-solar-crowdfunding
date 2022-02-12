@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Button, CircularProgress, Link, Typography } from '@mui/material';
+import { Box, Paper, Button, CircularProgress, Link, Typography } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { RoleEnrollmentStatus } from '../../redux-store';
@@ -32,10 +32,10 @@ export const LendingDetails: FC = () => {
   } = useLendingDetailsEffects();
 
   return (
-    <Box className={`${classes.wrapper} gradientBorder`}>
+    <Paper className={classes.wrapper}>
       <Box className={classes.lendingDetails}>
         <Box className={classes.box}>
-          <Typography mb={2} variant='h2'>
+          <Typography mb={2} variant='h3'>
             Lending Details
           </Typography>
           {!isReady ? (
@@ -121,6 +121,6 @@ export const LendingDetails: FC = () => {
         </Box>
       </Box>
       <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
-    </Box>
+    </Paper>
   );
 };

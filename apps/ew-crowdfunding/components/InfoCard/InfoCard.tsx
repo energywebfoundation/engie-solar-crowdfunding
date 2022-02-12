@@ -14,16 +14,16 @@ export const InfoCard: FC<InfoCardProps> = ({ title, type, text }: InfoCardProps
 
   return (
     <div className={classes.wrapper}>
-      <Paper className={classes.paper}>
+      <Paper className={classes.darkPaper}>
         <Box className={classes.title}>
-          <Typography variant='h3' fontWeight={'bold'} color='common.black'>
+          <Typography variant='h3' fontWeight={'bold'} color='common.white'>
             {title}
           </Typography>
-          <Typography variant='h5' fontWeight={'bold'} color='common.black'>
+          <Typography variant='h5' fontWeight={'bold'} color='common.white'>
             {type}
           </Typography>
         </Box>
-        <Typography mt={2}>{text}</Typography>
+        <Typography color='common.white' mt={2}>{text}</Typography>
       </Paper>
       <div className={classes.border}></div>
     </div>

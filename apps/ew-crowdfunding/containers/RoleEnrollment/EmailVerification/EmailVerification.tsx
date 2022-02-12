@@ -1,61 +1,62 @@
 import { FC } from 'react';
-import { Box, Button, Link, Typography } from '@mui/material';
+import { Box, Button, Checkbox, Divider, FormControlLabel, Link, Typography } from '@mui/material';
 import { useStyles } from './EmailVerification.styles';
 import { useEmailVerificationEffects } from './EmailVerification.effects';
-import InfoIcon from '@mui/icons-material/Info';
 import { shortenAddress } from '../../../utils';
-import { FormInputText } from '../../../components';
+import { FormInputText, WalletCard } from '../../../components';
 import { RoleEnrollmentStatus } from '../../../redux-store';
 
-export const EmailVerification: FC<{roleEnrolmentStatus: RoleEnrollmentStatus}> = ({roleEnrolmentStatus}) => {
+export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }> = ({ roleEnrolmentStatus }) => {
   const classes = useStyles();
-  const { address, notEnrolled, control, handleSubmit, onSubmit, onEmailChange, errorMessage } =
+  const { address, control, handleSubmit, onSubmit, onEmailChange, errorMessage, acknowledged, setAcknowledge } =
     useEmailVerificationEffects(roleEnrolmentStatus);
 
   return (
-    <Box className={`${classes.wrapper} ${notEnrolled ? 'warningBorder' : 'gradientBorder'}`}>
+    <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
+      <Typography align='center' variant='body2' style={{ fontWeight: 500 }}>
+        You must verify your email to lend
+      </Typography>
+
       {address && (
-        <Box className={classes.info}>
-          <InfoIcon color={`${notEnrolled ? 'warning' : 'primary'}`} />
-          <Typography variant='body2'>
-            You haven`t verified your email for the current wallet <strong>{shortenAddress(address)}</strong>. If this
-            is not your lending wallet, change wallets in Metamask and refresh the page
+        <Box>
+          <Typography align='center' variant='body2'>
+            You haven`t verified your email for the current wallet <strong>{shortenAddress(address)}</strong>.
+          </Typography>
+          <Typography align='center' variant='body2'>
+            If this is not your lending wallet, change wallets in Metamask and refresh the page
           </Typography>
         </Box>
       )}
-      <Box className={classes.info}>
-        <InfoIcon color={`${notEnrolled ? 'warning' : 'primary'}`} />
-        <Typography variant='body2'>You must verify your email to lend</Typography>
-      </Box>
+
       <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
         <FormInputText
           name='email'
           control={control}
           label='Email'
+          disabled={!acknowledged}
           type='email'
           valueChanged={onEmailChange}
           errorMessage={errorMessage}
         />
-        <Box className={classes.disclaimer}>
-          <Typography variant='body2'>
-            By clicking &quot;SUBMIT&quot;, you acknowledge{' '}
-            <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
-              this disclaimer
-            </Link>
-          </Typography>
-        </Box>
-        <Box className={classes.buttonWrapper} mt={2}>
-          <Button
-            variant='contained'
-            type='submit'
-            color='primary'
-            style={{ minWidth: '200px' }}
-            disabled={!!errorMessage}
-          >
+        <Divider className={classes.divider} style={{ marginTop: '20px' }} />
+        <FormControlLabel
+          control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
+          label={
+            <Typography variant='body2'>
+              I acknowledge{' '}
+              <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
+                this disclaimer
+              </Link>
+            </Typography>
+          }
+        />
+        <Divider className={classes.divider} style={{ marginBottom: '20px' }} />
+        <Box className={classes.buttonWrapper}>
+          <Button variant='contained' type='submit' color='primary' style={{ width: '100%' }} disabled={!!errorMessage}>
             Submit
           </Button>
         </Box>
       </form>
-    </Box>
+    </WalletCard>
   );
 };
