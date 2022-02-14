@@ -59,7 +59,8 @@ const config: HardhatUserConfig = {
       }
     },
   },
-  defaultNetwork: 'ganache',
+  // defaultNetwork: 'ganache',
+  defaultNetwork: 'volta',
   networks: {
     volta: {
       url: process.env.VOLTA_URL,
