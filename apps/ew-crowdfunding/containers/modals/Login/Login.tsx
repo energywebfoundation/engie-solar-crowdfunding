@@ -20,9 +20,13 @@ export const Login = () => {
 
   return (
     <Dialog className={classes.dialog} onClose={closeModal} aria-labelledby='login-dialog-title' open={open}>
-      <BootstrapDialogTitle id='login-dialog-title' onClose={closeModal}>
-        Connect to your wallet
-      </BootstrapDialogTitle>
+      <BootstrapDialogTitle
+        id='login-dialog-title'
+        title='Connect to your wallet'
+        // subtitle='Do you want to lend 50 EWT?'
+        // icon='/Confetti.png'
+        // colorClass='bg-success'
+      />
       <DialogContent dividers>
         <Box className={classes.buttonContainer}>
           {noMetamaskInstalled ? (
@@ -34,7 +38,7 @@ export const Login = () => {
                 handleInstall();
                 closeModal();
               }}
-              startIcon={<img width={40} height={40} src='/metamask-logo.svg' alt='Metamask logo' />}
+              startIcon={<img width={30} height={30} src='/metamask-logo.svg' alt='Metamask logo' />}
             >
               <Box style={{ width: '100%' }}>Install Metamask</Box>
             </Button>
@@ -48,7 +52,7 @@ export const Login = () => {
                 login(ProviderType.MetaMask);
                 closeModal();
               }}
-              startIcon={<img width={40} height={40} src='/metamask-logo.svg' alt='Metamask logo' />}
+              startIcon={<img width={30} height={30} src='/metamask-logo.svg' alt='Metamask logo' />}
             >
               <Box style={{ width: '100%' }}>Use Metamask</Box>
             </Button>
@@ -62,7 +66,7 @@ export const Login = () => {
               login(ProviderType.WalletConnect);
               closeModal();
             }}
-            startIcon={<img width={40} height={40} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
+            startIcon={<img width={30} height={30} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
           >
             <Box style={{ width: '100%' }}>Use Wallet Connect</Box>
           </Button>
@@ -79,7 +83,7 @@ export const Login = () => {
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={closeModal}>
+        <Button variant='outlined' color='primary' style={{ width: '100%' }} autoFocus onClick={closeModal}>
           Cancel
         </Button>
       </DialogActions>

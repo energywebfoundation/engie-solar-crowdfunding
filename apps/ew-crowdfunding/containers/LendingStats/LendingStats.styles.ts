@@ -16,5 +16,8 @@ export const useStyles = makeStyles(() => {
         maxWidth: '100%',
       },
     },
+    barColorPrimary: {
+      backgroundColor: theme.palette.secondary.main
+    },
   };
 });

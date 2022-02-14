@@ -27,8 +27,6 @@ export const useStyles = makeStyles(() => {
         alignItems: 'center',
         borderRadius: '50%',
         padding: '13px',
-        width: '96px',
-        height: '96px',
     },
     content: {
         width: '100%',

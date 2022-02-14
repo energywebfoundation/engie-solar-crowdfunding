@@ -21,7 +21,7 @@ export const WalletCard: FC<WalletCardProps> = ({ icon, colorClass, step, childr
       </Box>
       <Box className={classes.content}>
         <Box className={`${classes.iconWrapper} ${colorClass}`}>
-          <img src={icon} alt='Lock'></img>
+          <img width={60} height={60} src={icon} alt={icon}></img>
         </Box>
         {children}
       </Box>
