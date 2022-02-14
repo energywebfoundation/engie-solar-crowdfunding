@@ -84,7 +84,7 @@ contract Staking is ERC20Burnable {
     }
 
     modifier withdrawsAllowed(){
-        require(block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
+        require(aborted || block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
         require(hasRole(msg.sender, patronRole), "No patron role");
         _;
     }
@@ -96,7 +96,7 @@ contract Staking is ERC20Burnable {
 
     function depositRewards() external payable notAborted activated {
         require(msg.value > 0, "Not rewards provided");
-        require(hasRole(msg.sender, serviceRole), "Not enrolled as service provider");
+        require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
         rewards += msg.value;
         rewardProvider = msg.sender;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
@@ -110,6 +110,7 @@ contract Staking is ERC20Burnable {
         uint256 _hardCap,
         uint256 _contributionLimit
     ) external onlyOwner {//To-Do: prevent resetting by owner
+        require(!isContractInitialized, "Already initialized");
         require(_contributionLimit > 0, "wrong contribution limit");
         require(_hardCap >= _contributionLimit, "hardCap exceeded");
         require(_signupStart < _signupEnd, "Wrong signup config");
@@ -123,7 +124,7 @@ contract Staking is ERC20Burnable {
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function pause() external onlyOwner notPaused {
+    function pause() external notAborted onlyOwner notPaused {
         isContractPaused = true;
         emit StatusChanged("contractPaused", block.timestamp);
     }
@@ -138,7 +139,6 @@ contract Staking is ERC20Burnable {
 		delete hardCap;
         delete startDate;
         delete signupEnd;
-		delete patronRole;
         delete isContractPaused;
 		delete contributionLimit;
         delete claimManagerAddress;
@@ -183,7 +183,7 @@ contract Staking is ERC20Burnable {
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
     }
 
-    function hasRole(address _provider, bytes32 _role) internal view returns (bool){
+    function hasRole(address _provider, bytes32 _role) public view returns (bool){
 		IClaimManager claimManager = IClaimManager(claimManagerAddress); // Contract deployed and maintained by EnergyWeb Fondation
         return (claimManager.hasRole(_provider, _role, 1));
     }
