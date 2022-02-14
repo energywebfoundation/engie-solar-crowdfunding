@@ -13,13 +13,13 @@ export const ProgressBar: FC<ProgressBardProps> = ({ value, limit, description }
   return (
     <Box className={classes.wrapper}>
       <LinearProgress
-        className={classes.bar}
         style={{ height: 10, borderRadius: 5 }}
+        classes={{colorPrimary: classes.colorPrimary, barColorPrimary: classes.barColorPrimary}}
         value={(value / limit) * 100}
         variant='determinate'
         color='primary'
       />
-      <Typography variant='h5'>
+      <Typography variant='body2'>
         {(value / limit) * 100}% of {limit} {description}
       </Typography>
     </Box>
