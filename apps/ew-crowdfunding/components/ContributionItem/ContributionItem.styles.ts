@@ -7,6 +7,7 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
+      gap: '10px',
     },
     valueContainer: {
       display: 'flex',
