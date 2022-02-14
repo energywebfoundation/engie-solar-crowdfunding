@@ -21,6 +21,7 @@ import {
   redeemSlt,
   selectAccountBalance,
   selectAddress,
+  selectAuthenticated,
   selectContributionDeadline,
   selectGlobalTokenLimit,
   selectInterestRate,
@@ -40,6 +41,7 @@ export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
   const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
+  const authenticated = useSelector(selectAuthenticated);
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
@@ -61,7 +63,7 @@ export const useLendingDetailsEffects = () => {
     if (propertyExists(provider) && propertyExists(currentAddress)) {
       dispatch(getAccountBalance(provider, currentAddress));
     }
-  });
+  }, [dispatch, authenticated, provider, currentAddress]);
 
   const accountBalance = useSelector(selectAccountBalance);
   const tokenLimit = useSelector(selectTokenLimit);

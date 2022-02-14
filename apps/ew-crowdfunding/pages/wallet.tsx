@@ -79,7 +79,7 @@ const WalletPage: NextPage = () => {
         }}
       >
         <InfoPane />
-        <Lending />
+        {authenticated && <Lending />}
       </Container>
       <Footer />
     </div>

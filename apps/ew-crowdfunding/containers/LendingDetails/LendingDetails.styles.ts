@@ -57,7 +57,7 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       gap: '28px',
-      background: theme.palette.primary.main,
+      background: theme.palette.secondary.main,
       borderRadius: '0px 0px 16px 16px',
       color: 'white',
       padding: '40px 0px 40px 40px',

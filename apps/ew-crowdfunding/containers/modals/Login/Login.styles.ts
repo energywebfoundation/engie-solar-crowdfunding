@@ -4,23 +4,27 @@ import { theme } from '../../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     dialog: {
+      '& .MuiDialog-paper':{
+        borderRadius: '16px',
+        minWidth: '370px',
+      },
       '& .MuiDialogContent-root': {
-        padding: theme.spacing(2),
+        padding: theme.spacing(4),
       },
       '& .MuiDialogActions-root': {
-        padding: theme.spacing(1),
+        padding: theme.spacing(4),
       },
     },
     buttonContainer: {
+      width: '100%',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'column',
       gap: 15,
-      padding: '15px',
     },
     button: {
-      width: 300,
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'start',
