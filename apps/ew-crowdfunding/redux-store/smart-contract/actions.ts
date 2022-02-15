@@ -4,18 +4,19 @@ import { DSLAModalsActionsEnum } from '../../context';
 import { TDSLAModalsAction } from '../../context/modals/types';
 import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
+import { Action, ActionCreator } from 'redux';
 
-export const setAccountBalance = (accountBalance: string) => ({
+export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
   payload: accountBalance,
 });
 
-export const setTokenLimit = (tokenLimit: string) => ({
+export const setTokenLimit: ActionCreator<Action> = (tokenLimit: string) => ({
   type: SmartContractActionTypes.SET_TOKEN_LIMIT,
   payload: tokenLimit,
 });
 
-export const setContribution = () => ({
+export const setContribution: ActionCreator<Action> = () => ({
   type: SmartContractActionTypes.SET_CONTRIBUTION,
 });
 

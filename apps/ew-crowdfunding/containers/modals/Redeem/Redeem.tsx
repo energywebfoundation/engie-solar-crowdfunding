@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-undef */
 import { useStyles } from './Redeem.styles';
 import { Box, Button, InputAdornment } from '@mui/material';
 import { FormInputText } from '../../../components';
