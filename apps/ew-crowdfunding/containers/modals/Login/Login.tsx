@@ -1,9 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { ProviderType } from 'iam-client-lib';
 import { useLoginEffects } from './Login.effects';
 import { useStyles } from './Login.styles';
-import { BootstrapDialogTitle } from '../../../components';
+import { DialogContainer, DialogTitleProps } from '../../../components';
 
 export const Login = () => {
   const classes = useStyles();
@@ -18,69 +18,66 @@ export const Login = () => {
     noMetamaskInstalled,
   } = useLoginEffects();
 
+  const titleProps: DialogTitleProps = {
+    id: 'login-dialog-title',
+    title: 'Connect to your wallet',
+  };
+
   return (
-    <Dialog className={classes.dialog} onClose={closeModal} aria-labelledby='login-dialog-title' open={open}>
-      <BootstrapDialogTitle id='login-dialog-title' title='Connect to your wallet' />
-      <DialogContent dividers>
-        <Box className={classes.buttonContainer}>
-          {noMetamaskInstalled ? (
-            <Button
-              className={classes.button}
-              variant='outlined'
-              color='primary'
-              onClick={() => {
-                handleInstall();
-                closeModal();
-              }}
-              startIcon={<img width={30} height={30} src='/metamask-logo.svg' alt='Metamask logo' />}
-            >
-              <Box style={{ width: '100%' }}>Install Metamask</Box>
-            </Button>
-          ) : (
-            <Button
-              className={classes.button}
-              disabled={!isMetamaskPresent || !isConnectedToRightNetwork}
-              variant='outlined'
-              color='primary'
-              onClick={() => {
-                login(ProviderType.MetaMask);
-                closeModal();
-              }}
-              startIcon={<img width={30} height={30} src='/metamask-logo.svg' alt='Metamask logo' />}
-            >
-              <Box style={{ width: '100%' }}>Use Metamask</Box>
-            </Button>
-          )}
+    <DialogContainer titleProps={titleProps} open={open} closeModal={closeModal}>
+      <Box className={classes.buttonContainer}>
+        {noMetamaskInstalled ? (
           <Button
             className={classes.button}
-            disabled={!isConnectedToRightNetwork}
             variant='outlined'
             color='primary'
             onClick={() => {
-              login(ProviderType.WalletConnect);
+              handleInstall();
               closeModal();
             }}
-            startIcon={<img width={30} height={30} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
+            startIcon={<img width={30} height={30} src='/metamask-logo.svg' alt='Metamask logo' />}
           >
-            <Box style={{ width: '100%' }}>Use Wallet Connect</Box>
+            <Box style={{ width: '100%' }}>Install Metamask</Box>
           </Button>
-          {!isConnectedToRightNetwork && !noMetamaskInstalled && (
-            <Box sx={{ display: 'flex', flexDirection: 'column' }} mt={2}>
-              <Typography variant='h5' color='textSecondary'>
-                You are not connected to {process.env.NEXT_PUBLIC_NETWORK_NAME}
-              </Typography>
-              <Button variant='text' onClick={importMetamaskConf}>
-                Import configuration
-              </Button>
-            </Box>
-          )}
-        </Box>
-      </DialogContent>
-      <DialogActions>
-        <Button variant='outlined' color='primary' style={{ width: '100%' }} autoFocus onClick={closeModal}>
-          Cancel
+        ) : (
+          <Button
+            className={classes.button}
+            disabled={!isMetamaskPresent || !isConnectedToRightNetwork}
+            variant='outlined'
+            color='primary'
+            onClick={() => {
+              login(ProviderType.MetaMask);
+              closeModal();
+            }}
+            startIcon={<img width={30} height={30} src='/metamask-logo.svg' alt='Metamask logo' />}
+          >
+            <Box style={{ width: '100%' }}>Use Metamask</Box>
+          </Button>
+        )}
+        <Button
+          className={classes.button}
+          disabled={!isConnectedToRightNetwork}
+          variant='outlined'
+          color='primary'
+          onClick={() => {
+            login(ProviderType.WalletConnect);
+            closeModal();
+          }}
+          startIcon={<img width={30} height={30} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
+        >
+          <Box style={{ width: '100%' }}>Use Wallet Connect</Box>
         </Button>
-      </DialogActions>
-    </Dialog>
+        {!isConnectedToRightNetwork && !noMetamaskInstalled && (
+          <Box sx={{ display: 'flex', flexDirection: 'column' }} mt={2}>
+            <Typography variant='h5' color='textSecondary'>
+              You are not connected to {process.env.NEXT_PUBLIC_NETWORK_NAME}
+            </Typography>
+            <Button variant='text' onClick={importMetamaskConf}>
+              Import configuration
+            </Button>
+          </Box>
+        )}
+      </Box>
+    </DialogContainer>
   );
 };

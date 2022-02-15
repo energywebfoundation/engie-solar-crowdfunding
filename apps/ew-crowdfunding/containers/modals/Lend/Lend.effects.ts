@@ -11,7 +11,7 @@ export const useLendEffects = () => {
       type: DSLAModalsActionsEnum.SHOW_LEND,
       payload: {
         open: false,
-        amount: null,
+        amount,
         onLend,
       },
     });
