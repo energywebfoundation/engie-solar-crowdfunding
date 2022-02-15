@@ -1,4 +1,4 @@
-import { isMetamaskExtensionPresent, ProviderType } from 'iam-client-lib';
+import { isMetamaskExtensionPresent, ProviderType, SignerService } from 'iam-client-lib';
 import { DSLAModalsActionsEnum } from '../../context';
 import { TDSLAModalsAction, Web3ModalConfig } from '../../context/modals/types';
 import { getIamService } from '../../context/iam';
@@ -12,27 +12,28 @@ import {
   setLocalStorageAccount,
 } from '../localStorage';
 import { RoleEnrollmentStatus, UpdateWeb3Payload, Web3ActionTypes } from './types';
+import { Action, ActionCreator } from 'redux';
 
-export const setIsLoading = (payload: boolean) => ({
+export const setIsLoading: ActionCreator<Action> = (payload: boolean) => ({
   type: Web3ActionTypes.SET_IS_LOADING,
   payload,
 });
 
-export const setStateSuccess = (payload: UpdateWeb3Payload) => ({
+export const setStateSuccess: ActionCreator<Action> = (payload: UpdateWeb3Payload) => ({
   type: Web3ActionTypes.SET_WEB3_SUCCESS,
   payload,
 });
 
-export const setStateFailure = (payload: string) => ({
+export const setStateFailure: ActionCreator<Action> = (payload: string) => ({
   type: Web3ActionTypes.SET_WEB3_FAILURE,
   payload,
 });
 
-export const resetState = () => ({
+export const resetState: ActionCreator<Action> = () => ({
   type: Web3ActionTypes.RESET_WEB3,
 });
 
-export const updateRoleEnrollmentStatus = (payload: RoleEnrollmentStatus) => ({
+export const updateRoleEnrollmentStatus: ActionCreator<Action> = (payload: RoleEnrollmentStatus) => ({
   type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
   payload,
 });
@@ -46,7 +47,7 @@ export const requestLogout =
   };
 
 export const handleWeb3Listeners =
-  (signerService, dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
+  (signerService: SignerService, dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
   async (dispatch): Promise<void> => {
     const handleListeners = (config: Web3ModalConfig) => {
       dispatchModals({
