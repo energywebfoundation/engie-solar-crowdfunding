@@ -17,5 +17,12 @@ export const useStyles = makeStyles(() => {
       alignItems: 'center',
       justifyContent: 'start',
     },
+    dialogActions: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      flexDirection: 'column',
+      gap: 15,
+    }
   };
 });
