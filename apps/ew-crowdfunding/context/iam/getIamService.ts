@@ -27,7 +27,8 @@ export const getIamService = async (providerType: ProviderType) => {
   };
 
   try {
-    if (!window?.ethereum) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (!(window as any).ethereum) {
       return;
     }
     const { signerService, connectToCacheServer } = await getSignerService(providerType);

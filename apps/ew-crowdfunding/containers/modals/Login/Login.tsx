@@ -20,13 +20,7 @@ export const Login = () => {
 
   return (
     <Dialog className={classes.dialog} onClose={closeModal} aria-labelledby='login-dialog-title' open={open}>
-      <BootstrapDialogTitle
-        id='login-dialog-title'
-        title='Connect to your wallet'
-        // subtitle='Do you want to lend 50 EWT?'
-        // icon='/Confetti.png'
-        // colorClass='bg-success'
-      />
+      <BootstrapDialogTitle id='login-dialog-title' title='Connect to your wallet' />
       <DialogContent dividers>
         <Box className={classes.buttonContainer}>
           {noMetamaskInstalled ? (

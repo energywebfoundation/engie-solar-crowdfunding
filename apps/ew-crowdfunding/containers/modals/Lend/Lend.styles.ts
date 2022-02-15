@@ -4,7 +4,7 @@ import { theme } from '../../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     dialog: {
-      '& .MuiDialog-paper':{
+      '& .MuiDialog-paper': {
         borderRadius: '16px',
         minWidth: '370px',
         maxWidth: '450px',
@@ -44,6 +44,6 @@ export const useStyles = makeStyles(() => {
       alignItems: 'center',
       flexDirection: 'column',
       gap: 15,
-    }
+    },
   };
 });

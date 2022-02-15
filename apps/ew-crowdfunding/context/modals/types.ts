@@ -31,11 +31,23 @@ export type IConfirm = {
   onConfirm: () => void;
 };
 
+export type ICongrats = {
+  open: boolean;
+};
+
+export type ILend = {
+  open: boolean;
+  amount: number;
+  onLend: (amount: number) => void;
+};
+
 export interface IDSLAModalsStore {
   notification: TWeb3Notification;
   login: ILogin;
   redeem: IRedeem;
   confirm: IConfirm;
+  congrats: ICongrats;
+  lend: ILend;
 }
 
 interface IWeb3NotificationAction {
@@ -58,4 +70,20 @@ interface IConfirmAction {
   payload: IConfirm;
 }
 
-export type TDSLAModalsAction = IWeb3NotificationAction | ILoginAction | IRedeemAction | IConfirmAction;
+interface ICongratsAction {
+  type: DSLAModalsActionsEnum.SHOW_CONGRATS;
+  payload: ICongrats;
+}
+
+interface ILendAction {
+  type: DSLAModalsActionsEnum.SHOW_LEND;
+  payload: ILend;
+}
+
+export type TDSLAModalsAction =
+  | IWeb3NotificationAction
+  | ILoginAction
+  | IRedeemAction
+  | IConfirmAction
+  | ICongratsAction
+  | ILendAction;

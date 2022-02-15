@@ -1,13 +1,13 @@
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import { useWeb3NotificationEffects } from './Web3Notification.effects';
-import { useStyles } from './Web3Notification.styles';
+import { useCongratsEffects } from './Congrats.effects';
+import { useStyles } from './Congrats.styles';
 import { BootstrapDialogTitle } from '../../../components';
 import { Divider } from '@mui/material';
 
-export const Web3Notification = () => {
-  const { open, config, closeModal } = useWeb3NotificationEffects();
+export const Congrats = () => {
+  const { open, closeModal } = useCongratsEffects();
   const classes = useStyles();
 
   return (
@@ -17,8 +17,14 @@ export const Web3Notification = () => {
       aria-labelledby='web3-notification-dialog-title'
       open={open}
     >
-      <BootstrapDialogTitle id='web3-notification-dialog-title' title={config?.title} subtitle={config?.text} />
-      <Divider/>
+      <BootstrapDialogTitle
+        id='web3-notification-dialog-title'
+        title='Congratulations!'
+        subtitle='You just signed a new staking contract. EWT is now sent to the staking pool!'
+        icon='/Confetti.png'
+        colorClass='bg-success'
+      />
+      <Divider />
       <DialogActions>
         <Button variant='outlined' color='primary' style={{ width: '100%' }} autoFocus onClick={closeModal}>
           Close
