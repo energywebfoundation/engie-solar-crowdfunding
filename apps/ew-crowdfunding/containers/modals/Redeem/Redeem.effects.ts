@@ -57,6 +57,7 @@ export const useRedeemEffects = () => {
   };
 
   const onSubmit = async (data: { amount: number }) => {
+    console.log('On submit redeem: ', data)
     onRedeem(data.amount);
     onReset();
   };
