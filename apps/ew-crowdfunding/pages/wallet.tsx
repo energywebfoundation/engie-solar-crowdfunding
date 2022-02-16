@@ -1,5 +1,5 @@
 import type { NextPage } from 'next';
-import { Container } from '@mui/material';
+import { Container, Divider } from '@mui/material';
 import { Footer, InfoContainer, InfoPane, Lending, Navigation, Welcome } from '../containers';
 import { theme } from '../dsla-theme';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,6 +42,10 @@ const WalletPage: NextPage = () => {
         }}
       >
         <InfoPane />
+        <Divider
+          style={{ width: '100%', marginTop: '40px', marginBottom: '40px', borderColor: theme.palette.primary.dark }}
+          light={false}
+        />
         {authenticated && <Lending />}
       </Container>
       <Footer />

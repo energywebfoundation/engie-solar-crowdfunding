@@ -12,10 +12,12 @@ export const Welcome: FC = () => {
   const authenticated = useSelector(selectAuthenticated);
 
   return (
-    <Container className={classes.container} maxWidth={false}>
-      <Box className={classes.wrapper}>
-        <Box className={classes.background}>
-          <img className={classes.imageContainer} src='/PeopleInAfrica.svg' alt='Children in Africa' />
+    <div>
+      <Box className={classes.background}>
+        <Box>{authenticated ? <RoleEnrollment /> : <ConnectCard />}</Box>
+      </Box>
+      <Container className={classes.container} maxWidth={false}>
+        <Box className={classes.wrapper}>
           <Paper className={classes.paper}>
             <Typography variant='h3' color='common.black'>
               Stake your Energy Web Tokens to provide Energy Access
@@ -30,9 +32,9 @@ export const Welcome: FC = () => {
               porta erat.
             </Typography>
           </Paper>
+          <img className={classes.imageContainer} src='/Bubbles2.png' alt='Engie Bubbles' />
         </Box>
-        {authenticated ? <RoleEnrollment /> : <ConnectCard />}
-      </Box>
-    </Container>
+      </Container>
+    </div>
   );
 };
