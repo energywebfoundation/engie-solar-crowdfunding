@@ -1,26 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ethers } from 'ethers';
+import { DSLAModalsActionsEnum } from '../../context';
+import { TDSLAModalsAction } from '../../context/modals/types';
 import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
+import { Action, ActionCreator } from 'redux';
 
-export const setAccountBalance = (accountBalance: string) => ({
+export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
   payload: accountBalance,
 });
 
-export const setTokenLimit = (tokenLimit: string) => ({
+export const setTokenLimit: ActionCreator<Action> = (tokenLimit: string) => ({
   type: SmartContractActionTypes.SET_TOKEN_LIMIT,
   payload: tokenLimit,
 });
 
-export const setContribution = () => ({
+export const setContribution: ActionCreator<Action> = () => ({
   type: SmartContractActionTypes.SET_CONTRIBUTION,
 });
 
 export const lend =
-  (amount: number): AppThunk =>
+  (amount: number, dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
   async (dispatch): Promise<void> => {
     console.log('Lending amount: ', amount);
+    dispatchModals({
+      type: DSLAModalsActionsEnum.SHOW_CONGRATS,
+      payload: {
+        open: true,
+      },
+    });
   };
 
 export const redeemSlt =
@@ -33,13 +42,17 @@ export const getAccountBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
     let formattedAccountBalance = '0';
-    const currentBalance = await provider.getBalance(currentAddress);
-    const accountBalance = ethers.utils.formatEther(currentBalance);
-    formattedAccountBalance = `${Number(accountBalance).toPrecision(3)}`;
-    dispatch({
-      type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
-      payload: formattedAccountBalance,
-    });
+    try {
+      const currentBalance = await provider.getBalance(currentAddress);
+      const accountBalance = ethers.utils.formatEther(currentBalance);
+      formattedAccountBalance = `${Number(accountBalance).toPrecision(3)}`;
+      dispatch({
+        type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
+        payload: formattedAccountBalance,
+      });
+    } catch {
+      console.log('Error getting account balance');
+    }
   };
 
 export const getTokenLimit =

@@ -1,20 +1,20 @@
 import { Box, Typography } from '@mui/material';
 import { FC } from 'react';
-import { theme } from '../../dsla-theme';
 import { useStyles } from './ContributionItem.styles';
 
 export interface IContributionItemProps {
   title: string;
   value: string | number;
   type: string;
+  className?: string;
 }
 
-export const ContributionItem: FC<IContributionItemProps> = ({ title, value, type }: IContributionItemProps) => {
+export const ContributionItem: FC<IContributionItemProps> = ({ title, value, type, className }: IContributionItemProps) => {
   const classes = useStyles();
 
   return (
-    <Box className={classes.wrapper}>
-      <Typography style={{ textTransform: 'uppercase' }} variant='h5' color={theme.palette.primary.main}>
+    <Box className={`${classes.wrapper} ${className}`}>
+      <Typography variant='body2'>
         {title}
       </Typography>
       <Box className={classes.valueContainer}>

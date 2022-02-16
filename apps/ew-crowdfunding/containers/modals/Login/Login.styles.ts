@@ -1,26 +1,17 @@
 import { makeStyles } from '@mui/styles';
-import { theme } from '../../../dsla-theme';
 
 export const useStyles = makeStyles(() => {
   return {
-    dialog: {
-      '& .MuiDialogContent-root': {
-        padding: theme.spacing(2),
-      },
-      '& .MuiDialogActions-root': {
-        padding: theme.spacing(1),
-      },
-    },
     buttonContainer: {
+      width: '100%',
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
       flexDirection: 'column',
       gap: 15,
-      padding: '15px',
     },
     button: {
-      width: 300,
+      width: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'start',

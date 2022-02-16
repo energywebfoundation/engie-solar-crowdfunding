@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from '../../../context';
 
 export const useRedeemEffects = () => {
@@ -9,6 +9,8 @@ export const useRedeemEffects = () => {
     redeem: { open, tokenBalance, onRedeem },
   } = useDSLAModalsStore();
   const dispatchModals = useDSLAModalsDispatch();
+
+  const amountWithdrawals = [25, 50, 75, 100];
 
   const closeModal = () => {
     dispatchModals({
@@ -20,8 +22,6 @@ export const useRedeemEffects = () => {
       },
     });
   };
-
-  const [redeemAll, setRedeemAll] = useState(false);
 
   const validationSchema = yup
     .object({
@@ -51,24 +51,19 @@ export const useRedeemEffects = () => {
     }
   }, [isSubmitSuccessful, reset]);
 
-  const handleRedeemAll = () => {
-    setRedeemAll(!redeemAll);
-    if (!redeemAll === true) {
-      setValue('amount', tokenBalance);
-    } else {
-      reset();
-    }
+  const handleRedeemPartial = (amount: number) => {
+    const redeemValue = (tokenBalance * amount) / 100;
+    setValue('amount', redeemValue);
   };
 
   const onSubmit = async (data: { amount: number }) => {
-    console.log('Stake amount: ', data);
+    console.log('On submit redeem: ', data)
     onRedeem(data.amount);
     onReset();
   };
 
   const onReset = () => {
     reset();
-    setRedeemAll(false);
     closeModal();
   };
 
@@ -78,10 +73,9 @@ export const useRedeemEffects = () => {
     onSubmit,
     errors,
     open,
-    closeModal,
     tokenBalance,
     onReset,
-    redeemAll,
-    handleRedeemAll,
+    handleRedeemPartial,
+    amountWithdrawals,
   };
 };

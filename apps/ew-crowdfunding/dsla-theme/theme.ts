@@ -1,17 +1,16 @@
 import { createTheme, Theme, ThemeOptions } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
 
 const lightTheme: ThemeOptions = {
   palette: {
     mode: 'light',
     primary: {
       main: '#00AAFF',
-      dark: '#A566FF',
+      dark: '#1F106D',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#142938',
-      dark: '#EE6C4D',
+      main: '#00486B',
+      dark: '#0E2333',
       contrastText: '#FFFFFF',
     },
     info: {
@@ -19,7 +18,7 @@ const lightTheme: ThemeOptions = {
       contrastText: '#FFFFFF',
     },
     error: {
-      main: red.A400,
+      main: '#E74A50',
     },
     background: {
       default: '#FFFFFF',
@@ -30,8 +29,8 @@ const lightTheme: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '4px',
-          padding: '8px 25px',
+          borderRadius: '32px',
+          padding: '12.5px 25px',
         },
       },
     },

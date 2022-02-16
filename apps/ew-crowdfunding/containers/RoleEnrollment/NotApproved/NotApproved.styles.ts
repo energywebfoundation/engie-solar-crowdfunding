@@ -16,20 +16,6 @@ export const useStyles = makeStyles(() => {
         maxWidth: '100%',
       },
     },
-    info: {
-      display: 'flex',
-      gap: '10px',
-    },
-    disclaimer: {
-      display: 'flex',
-      zIndex: 10,
-      gap: '5px',
-      [theme.breakpoints.down('sm')]: {
-        flexDirection: 'column',
-        gap: '10px',
-        alignItems: 'start',
-      },
-    },
     buttonWrapper: {
       width: '100%',
       display: 'flex',

@@ -1,51 +1,49 @@
-/* eslint-disable react/jsx-no-undef */
 import { useStyles } from './Redeem.styles';
-import {
-  Button,
-  Checkbox,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  FormControlLabel,
-  InputAdornment,
-} from '@mui/material';
-import { BootstrapDialogTitle, FormInputText } from '../../../components';
+import { Box, Button, InputAdornment } from '@mui/material';
+import { FormInputText } from '../../../components';
 import { useRedeemEffects } from './Redeem.effects';
+import { DialogContainer, DialogTitleProps, DialogAction } from '../../../components';
 
 export const Redeem = () => {
   const classes = useStyles();
-  const { control, handleSubmit, onSubmit, open, closeModal, tokenBalance, onReset, redeemAll, handleRedeemAll } =
+  const { control, handleSubmit, onSubmit, open, tokenBalance, onReset, amountWithdrawals, handleRedeemPartial } =
     useRedeemEffects();
 
+  const titleProps: DialogTitleProps = {
+    id: 'redeem-dialog-title',
+    title: 'Redeem your SLT tokens',
+    subtitle: 'EWT will be transferred to your account balance. You will be charged with gass fee.',
+  };
+
+  const dialogAction: DialogAction = {
+    name: 'Redeem',
+    type: 'submit',
+    onAction: handleSubmit(onSubmit),
+  };
+
   return (
-    <Dialog className={classes.dialog} aria-labelledby='login-dialog-title' open={open}>
-      <BootstrapDialogTitle id='login-dialog-title' onClose={closeModal}>
-        Redeem your SLT tokens
-      </BootstrapDialogTitle>
-      <form autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
-        <DialogContent dividers>
-          <FormInputText
-            name='amount'
-            disabled={redeemAll}
-            control={control}
-            label='Claim Amount'
-            type='number'
-            hint={`Max. ${tokenBalance} SLT`}
-            inputProps={{
-              endAdornment: <InputAdornment position='end'>SLT</InputAdornment>,
-            }}
-          />
-          <FormControlLabel control={<Checkbox checked={redeemAll} onChange={handleRedeemAll} />} label='Redeem all' />
-        </DialogContent>
-        <DialogActions>
-          <Button type='reset' autoFocus onClick={onReset} style={{ minWidth: '200px' }}>
-            Cancel
-          </Button>
-          <Button variant='contained' type='submit' color='primary' style={{ minWidth: '200px' }}>
-            Redeem
-          </Button>
-        </DialogActions>
-      </form>
-    </Dialog>
+    <form autoComplete='off'>
+      <DialogContainer titleProps={titleProps} open={open} closeModal={onReset} dialogAction={dialogAction}>
+        <FormInputText
+          name='amount'
+          control={control}
+          label='Withdraw Amount'
+          type='number'
+          hint={`Max. ${tokenBalance} SLT`}
+          inputProps={{
+            endAdornment: <InputAdornment position='end'>SLT</InputAdornment>,
+          }}
+        />
+        <Box className={classes.redeemButtons}>
+          {amountWithdrawals.map((value: number) => {
+            return (
+              <Button key={`key-${value}`} type='button' variant='outlined' onClick={() => handleRedeemPartial(value)}>
+                {value}%
+              </Button>
+            );
+          })}
+        </Box>
+      </DialogContainer>
+    </form>
   );
 };

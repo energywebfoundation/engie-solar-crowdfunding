@@ -21,6 +21,7 @@ import {
   redeemSlt,
   selectAccountBalance,
   selectAddress,
+  selectAuthenticated,
   selectContributionDeadline,
   selectGlobalTokenLimit,
   selectInterestRate,
@@ -40,9 +41,14 @@ export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
   const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
+  const authenticated = useSelector(selectAuthenticated);
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
+
+  const [errorMessage, setErrorMessage] = useState(null);
+
+  const dispatchModals = useDSLAModalsDispatch();
 
   useEffect(() => {
     dispatch(getTokenLimit());
@@ -61,7 +67,7 @@ export const useLendingDetailsEffects = () => {
     if (propertyExists(provider) && propertyExists(currentAddress)) {
       dispatch(getAccountBalance(provider, currentAddress));
     }
-  });
+  }, [dispatch, authenticated, provider, currentAddress]);
 
   const accountBalance = useSelector(selectAccountBalance);
   const tokenLimit = useSelector(selectTokenLimit);
@@ -83,10 +89,6 @@ export const useLendingDetailsEffects = () => {
   }, [accountBalance]);
 
   const isRedeemDisabled = new Date() >= new Date(contributionDeadline);
-
-  const [errorMessage, setErrorMessage] = useState(null);
-
-  const dispatchModals = useDSLAModalsDispatch();
 
   const formatDate = (date: string) => {
     if (!date) {
@@ -123,11 +125,23 @@ export const useLendingDetailsEffects = () => {
     }
   }, [isSubmitSuccessful, reset]);
 
+  const onLendEwt = (loan: number) => {
+    dispatch(lend(loan, dispatchModals));
+  };
+
   const onSubmit = async (data: { loan: number }) => {
     if (errorMessage) {
       return;
     }
-    dispatch(lend(data.loan));
+    
+    dispatchModals({
+      type: DSLAModalsActionsEnum.SHOW_LEND,
+      payload: {
+        open: true,
+        amount: data.loan,
+        onLend: onLendEwt,
+      },
+    });
   };
 
   const onRedeem = (amount: number) => {

@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Button, CircularProgress, Link, Typography } from '@mui/material';
+import { Box, Paper, Button, CircularProgress, Link, Typography, Divider } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { RoleEnrollmentStatus } from '../../redux-store';
@@ -32,10 +32,10 @@ export const LendingDetails: FC = () => {
   } = useLendingDetailsEffects();
 
   return (
-    <Box className={`${classes.wrapper} gradientBorder`}>
-      <Box className={classes.lendingDetails}>
-        <Box className={classes.box}>
-          <Typography mb={2} variant='h2'>
+    <Paper className={classes.wrapper}>
+      <Box className={classes.lendingContainer}>
+        <Box className={classes.lendingTitle}>
+          <Typography mb={2} variant='h3'>
             Lending Details
           </Typography>
           {!isReady ? (
@@ -44,7 +44,7 @@ export const LendingDetails: FC = () => {
             <ContributionItem title='Your account balance' value={accountBalance} type='EWT' />
           )}
         </Box>
-        <Box className={classes.box}>
+        <Box className={classes.formContainer}>
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <FormInputText
               name='loan'
@@ -101,26 +101,48 @@ export const LendingDetails: FC = () => {
           </form>
         </Box>
       </Box>
-      <div className={classes.divider}></div>
+      {/* <div className={classes.divider}></div> */}
       <Box className={classes.contributionWrapper}>
         <Box className={classes.contribution}>
-          <ContributionItem title='Your contribution' value={userContribution} type='EWT' />
-          <ContributionItem title='Solar loan token balance' value={solarLoanTokenBalance} type='SLT' />
-          <ContributionItem title='Redeemable reward' value={redeemableReward} type='EWT' />
+          <ContributionItem
+            className={classes.contributionItem}
+            title='Your contribution'
+            value={userContribution}
+            type='EWT'
+          />
+          <ContributionItem
+            className={classes.contributionItem}
+            title='Solar loan token balance'
+            value={solarLoanTokenBalance}
+            type='SLT'
+          />
+          <ContributionItem
+            className={classes.redeemableReward}
+            title='Redeemable reward'
+            value={redeemableReward}
+            type='EWT'
+          />
         </Box>
-        <Box>
-          <Button
-            disabled={isRedeemDisabled}
-            variant='contained'
-            color='primary'
-            style={{ minWidth: '200px' }}
-            onClick={onRedeemSlt}
-          >
-            Redeem SLT
-          </Button>
+        <Box className={classes.redeem}>
+          <Box className={classes.progressBarItem}>
+            <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
+          </Box>
+          <Box className={classes.progressBarItem}>
+            <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='Timeline' />
+          </Box>
+          <Box className={classes.redeemAction}>
+            <Button
+              disabled={isRedeemDisabled}
+              variant='outlined'
+              color='primary'
+              style={{ minWidth: '200px' }}
+              onClick={onRedeemSlt}
+            >
+              Redeem SLT
+            </Button>
+          </Box>
         </Box>
       </Box>
-      <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
-    </Box>
+    </Paper>
   );
 };

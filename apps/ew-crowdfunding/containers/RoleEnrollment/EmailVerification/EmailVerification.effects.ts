@@ -10,13 +10,12 @@ import { RegistrationTypes } from 'iam-client-lib';
 export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentStatus) => {
   const dispatch = useDispatch();
   const claimsService = useSelector(selectClaimsService);
+  const [acknowledged, setAcknowledge] = useState(false);
 
   const EMAIL_DOMAINS_WHITELIST = 'yopmail.com;yopmail.fr';
   const [errorMessage, setErrorMessage] = useState(null);
 
   const address = useSelector(selectAddress);
-
-  const notEnrolled = Boolean(roleEnrolmentStatus === RoleEnrollmentStatus.NOT_ENROLLED || !roleEnrolmentStatus);
 
   const validationSchema = yup
     .object({
@@ -89,12 +88,13 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
 
   return {
     address,
-    notEnrolled,
     control,
     handleSubmit,
     onSubmit,
     errors,
     onEmailChange,
     errorMessage,
+    acknowledged,
+    setAcknowledge,
   };
 };
