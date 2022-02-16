@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Link, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography } from '@mui/material';
 import { useStyles } from './InfoPane.styles';
 import { Info, useInfoPaneEffects } from './InfoPane.effects';
 
@@ -29,7 +29,7 @@ export const InfoPane: FC = () => {
               onClick={() => setSelected(infoItem)}
               key={`${infoItem.name}-${infoItem.title}`}
             >
-              <Typography align='center' variant='h5' fontWeight={500}>
+              <Typography variant='h5' fontWeight={500}>
                 {infoItem.name}
               </Typography>
             </Paper>
