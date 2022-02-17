@@ -5,7 +5,7 @@ import { TDSLAModalsAction } from '../../context/modals/types';
 import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
-import { Staking__factory } from '../../../../libs/ew-crowdfunding/smart-contracts/ethers/factories/Staking__factory'
+import { Staking__factory } from '../../../../libs/ew-crowdfunding/smart-contracts/ethers/factories/Staking__factory';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
