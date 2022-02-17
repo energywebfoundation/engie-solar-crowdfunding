@@ -42,6 +42,9 @@ export const useStyles = makeStyles(() => {
       paddingRight: '120px',
       position: 'relative',
       zIndex: 30,
+      [theme.breakpoints.down('md')]: {
+        justifyContent: 'center',
+      },
     },
     paper: {
       width: '100%',
@@ -66,6 +69,6 @@ export const useStyles = makeStyles(() => {
       marginRight: '-195px',
       marginBottom: '-50px',
       zIndex: 1,
-    }
+    },
   };
 });

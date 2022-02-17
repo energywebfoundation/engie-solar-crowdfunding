@@ -32,7 +32,6 @@ export const Welcome: FC = () => {
               porta erat.
             </Typography>
           </Paper>
-          <img className={classes.imageContainer} src='/Bubbles2.png' alt='Engie Bubbles' />
         </Box>
       </Container>
     </div>
