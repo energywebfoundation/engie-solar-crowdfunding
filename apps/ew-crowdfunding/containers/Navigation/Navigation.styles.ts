@@ -4,7 +4,7 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     appBar: {
-      backgroundColor: 'white',
+      backgroundColor: theme.palette.common.white,
       boxShadow: 'none',
     },
     avatar: {

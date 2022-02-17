@@ -28,12 +28,14 @@ export const useStyles = makeStyles(() => {
       width: '100%',
       position: 'relative',
       zIndex: 10,
+      padding: '40px 0',
     },
     background: {
       backgroundImage: `url('./Cover.png')`,
       minHeight: '590px',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
       width: '100%',
       display: 'flex',
       justifyContent: 'end',
@@ -44,6 +46,7 @@ export const useStyles = makeStyles(() => {
       zIndex: 30,
       [theme.breakpoints.down('md')]: {
         justifyContent: 'center',
+        paddingRight: '40px',
       },
     },
     paper: {
@@ -66,9 +69,20 @@ export const useStyles = makeStyles(() => {
       position: 'absolute',
       right: 0,
       bottom: 0,
-      marginRight: '-195px',
-      marginBottom: '-50px',
+      marginBottom: '-180px',
+      marginRight: '-150px',
       zIndex: 1,
+      [theme.breakpoints.between(750, 1650)]: {
+        marginRight: '-50px',
+      },
+      [theme.breakpoints.down(750)]: {
+        marginRight: 0,
+      },
+    },
+    powerLogo: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   };
 });

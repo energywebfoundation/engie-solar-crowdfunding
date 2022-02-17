@@ -4,7 +4,7 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     paper: {
-      background: theme.palette.secondary.main,
+      background: theme.palette.primary.dark,
       paddingTop: '130px',
       paddingBottom: '130px',
       position: 'relative',
