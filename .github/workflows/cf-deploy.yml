@@ -15,27 +15,8 @@ jobs:
   deploy:
     needs: [cancel-previous]
     runs-on: ubuntu-latest
-    env:
+    env: # @TODO - Refactor env if repo is public
         MODE: CI
-        NEXT_PUBLIC_UI_BASE_URL: https://esc-dev.energyweb.org
-        NEXT_PUBLIC_CHAIN_ID: 73799
-        NEXT_PUBLIC_RPC_URL: https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/
-        NEXT_PUBLIC_CACHE_SERVER: https://identitycache-dev.energyweb.org/v1
-        NEXT_PUBLIC_ORG_NAMESPACE: iam.ewc
-        NEXT_PUBLIC_NETWORK_NAME: EnergyWeb Volta Chain
-        NEXT_PUBLIC_CURRENCY_NAME: Volta Token
-        NEXT_PUBLIC_CURRENCY_SYMBOL: VT
-        NEXT_PUBLIC_PATRON_ROLE: email.roles.eea.apps.florin.engietestvolta.iam.ewc
-        NEXT_PUBLIC_PATRON_ROLE_VERSION: 1
-        NEXT_PUBLIC_TOKEN_LIMIT: 200
-        NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT: 10000
-        NEXT_PUBLIC_INTEREST_RATE: 10%
-        NEXT_PUBLIC_CONTRIBUTION_DEADLINE: "2022-04-16"
-        NEXT_PUBLIC_SOLAR_LOANS_DISTRIBUTED: "2022-04-17"
-        NEXT_PUBLIC_SOLAR_LOANS_MATURE: "2023-04-17"
-        NEXT_PUBLIC_BLOCK_EXPLORER_URL: https://volta-explorer.energyweb.org
-        NEXT_PUBLIC_CLAIM_MANAGER_ADDRESS: '0x5339adE9332A604A1c957B9bC1C6eee0Bcf7a031'
-
     steps:
       - name: Get GHA environment name
         id: env_vars # @TODO - consider production deployments?
@@ -47,6 +28,48 @@ jobs:
             echo "::set-output name=aws_region::${{ secrets.AWS_REGION }}"
             echo "::set-output name=bucket_name::${{ secrets.DEV_BUCKET_NAME }}"
             echo "::set-output name=cloudfront_id::${{ secrets.DEV_CLOUDFRONT_ID }}"
+            echo "::set-output name=next_public_ui_base_url::https://esc-dev.energyweb.org"
+            echo "::set-output name=next_public_chain_id::73799"
+            echo "::set-output name=next_public_rpc_url::https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/"
+            echo "::set-output name=next_public_cache_server::https://identitycache-dev.energyweb.org/v1"
+            echo "::set-output name=next_public_org_namespace::iam.ewc"
+            echo "::set-output name=next_public_network_name::EnergyWeb Volta Chain"
+            echo "::set-output name=next_public_currency_name::Volta Token"
+            echo "::set-output name=next_public_currency_symbol::VT"
+            echo "::set-output name=next_public_patron_role::email.roles.eea.apps.florin.engietestvolta.iam.ewc"
+            echo "::set-output name=next_public_patron_role_version::1"
+            echo "::set-output name=next_public_token_limit::200"
+            echo "::set-output name=next_public_global_token_limit::10000"
+            echo "::set-output name=next_public_interest_rate::10%"
+            echo "::set-output name=next_public_contribution_deadline::2022-04-16"
+            echo "::set-output name=next_public_solar_loans_distributed::2022-04-17"
+            echo "::set-output name=next_public_solar_loans_mature::2022-04-17"
+            echo "::set-output name=next_public_block_explorer_url::https://volta-explorer.energyweb.org"
+            echo "::set-output name=next_public_claim_manager_address::0x5339adE9332A604A1c957B9bC1C6eee0Bcf7a031"
+          elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "::set-output name=aws_access_key_id::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
+            echo "::set-output name=aws_secret_key::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
+            echo "::set-output name=aws_region::${{ secrets.AWS_REGION }}"
+            echo "::set-output name=bucket_name::${{ secrets.PROD_BUCKET_NAME }}"
+            echo "::set-output name=cloudfront_id::${{ secrets.PROD_CLOUDFRONT_ID }}"
+            echo "::set-output name=next_public_ui_base_url::https://esc.energyweb.org"
+            echo "::set-output name=next_public_chain_id::246"
+            echo "::set-output name=next_public_rpc_url::https://rpc.energyweb.org"
+            echo "::set-output name=next_public_cache_server::https://identitycache.energyweb.org/v1"
+            echo "::set-output name=next_public_org_namespace::iam.ewc"
+            echo "::set-output name=next_public_network_name::EWC"
+            echo "::set-output name=next_public_currency_name::EWT"
+            echo "::set-output name=next_public_currency_symbol::EWC"
+            echo "::set-output name=next_public_patron_role::email.roles.eea.apps.florin.engietestvolta.iam.ewc"
+            echo "::set-output name=next_public_patron_role_version::1"
+            echo "::set-output name=next_public_token_limit::200"
+            echo "::set-output name=next_public_global_token_limit::10000"
+            echo "::set-output name=next_public_interest_rate::10%"
+            echo "::set-output name=next_public_contribution_deadline::2022-04-16"
+            echo "::set-output name=next_public_solar_loans_distributed::2022-04-17"
+            echo "::set-output name=next_public_solar_loans_mature::2022-04-17"
+            echo "::set-output name=next_public_block_explorer_url::https://explorer.energyweb.org"
+            echo "::set-output name=next_public_claim_manager_address::0x23b026631A6f265d17CFee8aa6ced1B244f3920C"
           else
             echo "Branch ${{ github.ref }} is not configured for deployment"
             exit 1
@@ -75,6 +98,25 @@ jobs:
           npm install
       - name: Build branch
         run: npm run build:fe
+        env:
+          NEXT_PUBLIC_UI_BASE_URL: ${{ steps.env_vars.outputs.next_public_ui_base_url }}
+          NEXT_PUBLIC_CHAIN_ID: ${{ steps.env_vars.outputs.next_public_chain_id }}
+          NEXT_PUBLIC_RPC_URL: ${{ steps.env_vars.outputs.next_public_rpc_url }}
+          NEXT_PUBLIC_CACHE_SERVER: ${{ steps.env_vars.outputs.next_public_cache_server }}
+          NEXT_PUBLIC_ORG_NAMESPACE: ${{ steps.env_vars.outputs.next_public_org_namespace }}
+          NEXT_PUBLIC_NETWORK_NAME: ${{ steps.env_vars.outputs.next_public_network_name }}
+          NEXT_PUBLIC_CURRENCY_NAME: ${{ steps.env_vars.outputs.next_public_currency_name }}
+          NEXT_PUBLIC_CURRENCY_SYMBOL: ${{ steps.env_vars.outputs.next_public_currency_symbol }}
+          NEXT_PUBLIC_PATRON_ROLE: ${{ steps.env_vars.outputs.next_public_patron_role }}
+          NEXT_PUBLIC_PATRON_ROLE_VERSION: ${{ steps.env_vars.outputs.next_public_patron_role_version }}
+          NEXT_PUBLIC_TOKEN_LIMIT: ${{ steps.env_vars.outputs.next_public_token_limit }}
+          NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT: ${{ steps.env_vars.outputs.next_public_global_token_limit }}
+          NEXT_PUBLIC_INTEREST_RATE: ${{ steps.env_vars.outputs.next_public_interest_rate }}
+          NEXT_PUBLIC_CONTRIBUTION_DEADLINE: ${{ steps.env_vars.outputs.next_public_contribution_deadline }}
+          NEXT_PUBLIC_SOLAR_LOANS_DISTRIBUTED: ${{ steps.env_vars.outputs.next_public_solar_loans_distributed }}
+          NEXT_PUBLIC_SOLAR_LOANS_MATURE: ${{ steps.env_vars.outputs.next_public_solar_loans_mature }}
+          NEXT_PUBLIC_BLOCK_EXPLORER_URL: ${{ steps.env_vars.outputs.next_public_block_explorer_url }}
+          NEXT_PUBLIC_CLAIM_MANAGER_ADDRESS: ${{ steps.env_vars.outputs.next_public_claim_manager_address }}
       - name: Ensure dist is present
         run: |
           test -d "dist/apps/ew-crowdfunding/exported" && echo OK || exit 1
