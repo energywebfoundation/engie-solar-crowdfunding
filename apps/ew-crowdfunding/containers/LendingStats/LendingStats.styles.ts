@@ -17,7 +17,7 @@ export const useStyles = makeStyles(() => {
       },
     },
     barColorPrimary: {
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.primary.main
     },
   };
 });

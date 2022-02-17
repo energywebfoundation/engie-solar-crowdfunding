@@ -15,10 +15,7 @@ export const Navigation = () => {
         <AppBar position='static' className={classes.appBar}>
           <Toolbar>
             <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              {/* <img width={40} height={40} src='/Logo.png' alt='Lab icon' />
-              <Typography variant='h6' component='div'>
-                Engie Africa
-              </Typography> */}
+              <img src='/EngieLogo.png' alt='Lab icon' />
             </Box>
             <Box
               sx={{

@@ -5,11 +5,11 @@ const lightTheme: ThemeOptions = {
     mode: 'light',
     primary: {
       main: '#00AAFF',
-      dark: '#1F106D',
+      dark: '#0F1E29',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#00486B',
+      main: '#23D2B5',
       dark: '#0E2333',
       contrastText: '#FFFFFF',
     },
@@ -24,6 +24,13 @@ const lightTheme: ThemeOptions = {
       default: '#FFFFFF',
       paper: '#FFFFFF', // #081016
     },
+  },
+  typography: {
+    fontFamily: [
+      'Roboto',
+      'sans-serif',
+      'Lato',
+    ],
   },
   components: {
     MuiButton: {
