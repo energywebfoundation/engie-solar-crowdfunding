@@ -2,7 +2,7 @@ name: Deploy to bucket
 
 on:
   push:
-    branches: ['develop', 'master', 'release', 'ci/deployments', 'DOI-1722_*']
+    branches: ['develop', 'master', 'release', 'ci/deployments']
 jobs:
   cancel-previous:
     name: 'Cancel Previous Runs'
@@ -46,7 +46,7 @@ jobs:
             echo "::set-output name=next_public_solar_loans_mature::2022-04-17"
             echo "::set-output name=next_public_block_explorer_url::https://volta-explorer.energyweb.org"
             echo "::set-output name=next_public_claim_manager_address::0x5339adE9332A604A1c957B9bC1C6eee0Bcf7a031"
-          elif [ "${{ github.ref }}" = "refs/heads/DOI-1722_engie_prod_setup" ]; then
+          elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
             echo "::set-output name=aws_access_key_id::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=aws_secret_key::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
             echo "::set-output name=aws_region::${{ secrets.AWS_REGION }}"
