@@ -5,18 +5,24 @@ import { useNavigationEffects } from './Navigation.effects';
 import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { shortenDid } from '../../utils';
+import Link from 'next/link';
 
 export const Navigation = () => {
   const classes = useStyles();
+
   const { authenticated, did, avatar, logout } = useNavigationEffects();
   return (
-    authenticated && (
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar position='static' className={classes.appBar}>
-          <Toolbar>
-            <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <img src='/EngieLogo.png' alt='Lab icon' />
-            </Box>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position='static' className={classes.appBar}>
+        <Toolbar>
+          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
+            <Link href='/'>
+              <a>
+                <img src='/EngieLogo.png' alt='Lab icon' />
+              </a>
+            </Link>
+          </Box>
+          {authenticated && (
             <Box
               sx={{
                 display: 'flex',
@@ -42,9 +48,9 @@ export const Navigation = () => {
                 <LogoutIcon />
               </IconButton>
             </Box>
-          </Toolbar>
-        </AppBar>
-      </Box>
-    )
+          )}
+        </Toolbar>
+      </AppBar>
+    </Box>
   );
 };

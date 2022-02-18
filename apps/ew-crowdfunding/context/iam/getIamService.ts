@@ -7,7 +7,6 @@ export const getIamService = async (providerType: ProviderType) => {
   setCacheConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
     url: process.env.NEXT_PUBLIC_CACHE_SERVER,
   });
-  // Set RPC
 
   const getEnrollmentStatus = (enrollments: Claim[]) => {
     if (enrollments.length === 0) {

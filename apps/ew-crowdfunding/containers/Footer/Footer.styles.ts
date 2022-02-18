@@ -7,17 +7,19 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       width: '100%',
       borderRadius: 0,
+      paddingLeft: '100px',
+      paddingRight: '100px',
       background: theme.palette.primary.dark,
+      justifyContent: 'space-between',
       [theme.breakpoints.down('sm')]: {
         flexDirection: 'column',
-        justifyContent: 'center',
+        padding: 0,
       },
     },
     wrapper: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      margin: '0 auto',
       padding: '20px',
     },
     socialLinks: {
@@ -25,7 +27,6 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'center',
       padding: '20px',
-      paddingLeft: '100px',
       [theme.breakpoints.down('sm')]: {
         justifyContent: 'center',
         paddingLeft: '0',
