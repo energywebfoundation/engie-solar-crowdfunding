@@ -2,11 +2,12 @@ import type { NextPage } from 'next';
 import { Button, Container } from '@mui/material';
 import { theme } from '../dsla-theme';
 import Link from 'next/link';
-import { Footer } from '../containers';
+import { Navigation, Footer } from '../containers';
 
 const Home: NextPage = () => {
   return (
     <div>
+      <Navigation />
       <Container
         maxWidth={false}
         sx={{

@@ -14,5 +14,8 @@ export const useStyles = makeStyles(() => {
       background: theme.palette.primary.main,
       padding: '3px',
     },
+    logo: {
+      cursor: 'pointer',
+    }
   };
 });
