@@ -31,6 +31,12 @@ export const Welcome: FC = () => {
               Sed tincidunt lorem ut ante feugiat, at vehicula nibh scelerisque. Suspendisse potenti. Vestibulum et
               porta erat.
             </Typography>
+            <Box className={classes.powerLogo}>
+              <Typography mr={2}>
+                Powered by <strong>Lab.EnergyWeb</strong>
+              </Typography>
+              <img width={40} height={40} src='/EWLogo.png' alt='Lab icon' />
+            </Box>
           </Paper>
           <img className={classes.imageContainer} src='/Bubbles2.png' alt='Engie Bubbles' />
         </Box>
