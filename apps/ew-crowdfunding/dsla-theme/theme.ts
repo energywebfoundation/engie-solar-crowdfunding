@@ -26,11 +26,7 @@ const lightTheme: ThemeOptions = {
     },
   },
   typography: {
-    fontFamily: [
-      'Roboto',
-      'sans-serif',
-      'Lato',
-    ],
+    fontFamily: 'Lato',
   },
   components: {
     MuiButton: {
