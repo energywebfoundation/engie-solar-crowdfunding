@@ -32,10 +32,10 @@ export const Welcome: FC = () => {
               porta erat.
             </Typography>
             <Box className={classes.powerLogo}>
-              <Typography mr={2}>
-                Powered by <strong>Lab.EnergyWeb</strong>
+              <Typography mr={2} style={{ fontWeight: 700 }}>
+                Powered by Lab.EnergyWeb
               </Typography>
-              <img width={40} height={40} src='/EWLogo.png' alt='Lab icon' />
+              <img src='/EW_lab.png' alt='Lab icon' />
             </Box>
           </Paper>
           <img className={classes.imageContainer} src='/Bubbles2.png' alt='Engie Bubbles' />

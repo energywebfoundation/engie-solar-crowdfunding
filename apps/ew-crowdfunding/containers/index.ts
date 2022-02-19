@@ -9,3 +9,4 @@ export * from './LendingStats';
 export * from './LendingTerms';
 export * from './RoleEnrollment';
 export * from './Navigation';
+export * from './Carousel';

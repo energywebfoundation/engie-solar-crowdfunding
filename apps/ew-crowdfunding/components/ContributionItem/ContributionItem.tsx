@@ -7,14 +7,21 @@ export interface IContributionItemProps {
   value: string | number;
   type: string;
   className?: string;
+  titleClass?: string;
 }
 
-export const ContributionItem: FC<IContributionItemProps> = ({ title, value, type, className }: IContributionItemProps) => {
+export const ContributionItem: FC<IContributionItemProps> = ({
+  title,
+  value,
+  type,
+  className,
+  titleClass,
+}: IContributionItemProps) => {
   const classes = useStyles();
 
   return (
     <Box className={`${classes.wrapper} ${className}`}>
-      <Typography variant='body2'>
+      <Typography variant='body2' className={titleClass}>
         {title}
       </Typography>
       <Box className={classes.valueContainer}>

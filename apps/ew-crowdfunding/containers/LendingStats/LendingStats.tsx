@@ -22,7 +22,12 @@ export const LendingStats = () => {
         </Box>
       ) : (
         <>
-          <ContributionItem title='Solar lending stats' value={totalLentAmount} type='EWT' />
+          <ContributionItem
+            titleClass={classes.titleClass}
+            title='Solar lending stats'
+            value={totalLentAmount}
+            type='EWT'
+          />
           <ProgressBar
             value={totalLentAmount}
             limit={globalTokenLimit}
