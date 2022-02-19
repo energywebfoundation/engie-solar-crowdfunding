@@ -15,7 +15,7 @@ export const ImageText: FC<ImageTextProps> = ({ imagePath, title, text, reverse 
   const classes = useStyles();
 
   return (
-    <Box className={classes.wrapper} sx={{ flexDirection: reverse ? 'row-reverse' : 'row' }}>
+    <Box my={3} className={classes.wrapper} sx={{ flexDirection: reverse ? 'row-reverse' : 'row' }}>
       <Box className={classes.imageWrapper}>
         <img src={imagePath} />
       </Box>

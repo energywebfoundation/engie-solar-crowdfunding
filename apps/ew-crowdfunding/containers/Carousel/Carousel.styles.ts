@@ -17,7 +17,6 @@ export const useStyles = makeStyles(() => {
     appBar: {
       background: 'rgba(15, 30, 41, 0.64)',
       border: `2px solid ${theme.palette.common.white}`,
-      boxShadow: 'none',
     },
     wrapper: {
       display: 'flex',

@@ -2,7 +2,7 @@
 import { Box, Container, Paper, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useStyles } from './Welcome.styles';
-import { ConnectCard } from '../../components';
+import { ConnectCard, AppContainer } from '../../components';
 import { RoleEnrollment } from '../RoleEnrollment';
 import { useSelector } from 'react-redux';
 import { selectAuthenticated } from '../../redux-store';
@@ -16,7 +16,7 @@ export const Welcome: FC = () => {
       <Box className={classes.background}>
         <Box>{authenticated ? <RoleEnrollment /> : <ConnectCard />}</Box>
       </Box>
-      <Container className={classes.container} maxWidth={false}>
+      <AppContainer>
         <Box className={classes.wrapper}>
           <Paper className={classes.paper}>
             <Typography variant='h3' color='common.black'>
@@ -40,7 +40,7 @@ export const Welcome: FC = () => {
           </Paper>
           <img className={classes.imageContainer} src='/Bubbles2.png' alt='Engie Bubbles' />
         </Box>
-      </Container>
+      </AppContainer>
     </div>
   );
 };
