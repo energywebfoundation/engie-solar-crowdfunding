@@ -1,33 +1,14 @@
 import type { NextPage } from 'next';
-import { Container } from '@mui/material';
+import { Carousel, Contact, Footer } from '../containers';
+import { AppContainer, ImageText, MediaText } from '../components';
 import { theme } from '../dsla-theme';
-import { Carousel, Footer } from '../containers';
-import { ImageText } from '../components';
+import { Box, Paper } from '@mui/material';
 
 const Home: NextPage = () => {
   return (
     <div>
       <Carousel />
-      <Container
-        maxWidth={false}
-        sx={{
-          maxWidth: '1400px',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          [theme.breakpoints.up('md')]: {
-            padding: '50px',
-          },
-          [theme.breakpoints.down('md')]: {
-            padding: '50px',
-          },
-          [theme.breakpoints.down('sm')]: {
-            padding: '25px',
-          },
-          gap: '40px',
-        }}
-      >
+      <AppContainer>
         <ImageText
           imagePath='/Store.png'
           title='Headline H2'
@@ -39,12 +20,38 @@ const Home: NextPage = () => {
           text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
           reverse={true}
         />
+      </AppContainer>
+      <Paper style={{ background: theme.palette.primary.dark }}>
+        <AppContainer darkBackground={true}>
+          <ImageText
+            imagePath='/Store.png'
+            title='Headline H2'
+            text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
+          />
+        </AppContainer>
+      </Paper>
+      <Box py={5} style={{ backgroundColor: ' #F8F9FA' }}>
+        <AppContainer>
+          <MediaText
+            videoUrl='https://www.youtube.com/watch?v=fdXqhNjQQdM'
+            heading='Lorem ipsum dolor sit amet'
+            title='Headline H2'
+            text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
+          />
+        </AppContainer>
+      </Box>
+      <AppContainer>
         <ImageText
           imagePath='/AfricaMap.png'
           title='Headline H2'
           text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
         />
-      </Container>
+      </AppContainer>
+      <Box py={5} style={{ backgroundColor: ' #F8F9FA' }}>
+        <AppContainer>
+          <Contact />
+        </AppContainer>
+      </Box>
       <Footer />
     </div>
   );

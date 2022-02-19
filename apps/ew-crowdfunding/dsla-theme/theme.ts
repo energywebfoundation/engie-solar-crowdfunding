@@ -63,11 +63,11 @@ const lightTheme: ThemeOptions = {
         },
         h4: {
           fontWeight: 400,
-          fontSize: '1.5rem',
+          fontSize: '1.3rem',
         },
         h5: {
           fontWeight: 400,
-          fontSize: '1.2rem',
+          fontSize: '1.1rem',
         },
       },
     },
