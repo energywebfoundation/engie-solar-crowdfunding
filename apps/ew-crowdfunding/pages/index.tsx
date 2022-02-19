@@ -1,13 +1,13 @@
 import type { NextPage } from 'next';
-import { Button, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { theme } from '../dsla-theme';
-import Link from 'next/link';
-import { Navigation, Footer } from '../containers';
+import { Carousel, Footer } from '../containers';
+import { ImageText } from '../components';
 
 const Home: NextPage = () => {
   return (
     <div>
-      <Navigation />
+      <Carousel />
       <Container
         maxWidth={false}
         sx={{
@@ -28,11 +28,22 @@ const Home: NextPage = () => {
           gap: '40px',
         }}
       >
-        <Button variant='contained'>
-          <Link href='/wallet'>
-            <a>Wallet</a>
-          </Link>
-        </Button>
+        <ImageText
+          imagePath='/Store.png'
+          title='Headline H2'
+          text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
+        />
+        <ImageText
+          imagePath='/House.png'
+          title='Headline H2'
+          text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
+          reverse={true}
+        />
+        <ImageText
+          imagePath='/AfricaMap.png'
+          title='Headline H2'
+          text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
+        />
       </Container>
       <Footer />
     </div>
