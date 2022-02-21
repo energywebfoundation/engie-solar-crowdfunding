@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { FC } from 'react';
 import { Box, Button, Typography, AppBar, Toolbar } from '@mui/material';
 import { useStyles } from './Carousel.styles';
@@ -9,7 +10,7 @@ export const Carousel: FC = () => {
     <Box className={classes.carousel}>
       <AppBar position='static' className={classes.appBar}>
         <Toolbar>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
+          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1}>
             <Link href='/'>
               <a>
                 <img src='/EngieLogoWhite.png' alt='Lab icon' />
