@@ -9,15 +9,26 @@ export interface ImageTextProps {
   title: string;
   text?: string;
   reverse?: boolean;
+  shadow?: boolean;
 }
 
-export const ImageText: FC<ImageTextProps> = ({ imagePath, title, text, reverse = false }: ImageTextProps) => {
+export const ImageText: FC<ImageTextProps> = ({
+  imagePath,
+  title,
+  text,
+  reverse = false,
+  shadow = true,
+}: ImageTextProps) => {
   const classes = useStyles();
 
   return (
     <Box my={3} className={classes.wrapper} sx={{ flexDirection: reverse ? 'row-reverse' : 'row' }}>
       <Box className={classes.imageWrapper}>
-        <img src={imagePath} />
+        <img
+          className={classes.image}
+          src={imagePath}
+          style={{ boxShadow: shadow && '-80px 8px 40px rgba(0, 0, 0, 0.24)' }}
+        />
       </Box>
       <Box className={classes.textWrapper}>
         <Typography variant='h3'>{title}</Typography>

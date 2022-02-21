@@ -15,6 +15,14 @@ export const useStyles = makeStyles(() => {
     },
     imageWrapper: {
       flex: '1 0 auto',
+      maxWidth: '600px',
+      [theme.breakpoints.down(1200)]: {
+        width: '100%',
+      },
+    },
+    image: {
+      width: '100%',
+      borderRadius: '16px',
     },
     textWrapper: {
       display: 'flex',
@@ -22,7 +30,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'start',
       gap: '24px',
-      maxWidth: '500px'
+      maxWidth: '500px',
     },
   };
 });

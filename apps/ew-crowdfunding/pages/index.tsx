@@ -45,13 +45,10 @@ const Home: NextPage = () => {
           imagePath='/AfricaMap.png'
           title='Headline H2'
           text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
+          shadow={false}
         />
       </AppContainer>
-      <Box py={5} style={{ backgroundColor: ' #F8F9FA' }}>
-        <AppContainer>
-          <Contact />
-        </AppContainer>
-      </Box>
+      <Contact />
       <Footer />
     </div>
   );

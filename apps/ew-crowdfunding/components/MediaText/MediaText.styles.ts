@@ -8,7 +8,8 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       flexDirection: 'column',
       gap: '60px',
-      justifyContent: 'center',
+      justifyContent: 'space-betweem',
+      width: '100%',
       alignItems: 'center',
     },
     wrapper: {
@@ -28,6 +29,11 @@ export const useStyles = makeStyles(() => {
       borderRadius: '16px',
       position: 'relative',
       zIndex: 10,
+      [theme.breakpoints.down(1200)]: {
+        width: '100%'
+      },
+      maxWidth: '600px',
+      boxShadow: '-80px 8px 40px rgba(0, 0, 0, 0.24)',
     },
     player: {
       borderRadius: '16px',
@@ -44,15 +50,21 @@ export const useStyles = makeStyles(() => {
     },
     ellipse: {
       position: 'absolute',
-      left: '170px',
-      top: '215px',
+      left: '270px',
+      top: '230px',
       zIndex: 2,
+      [theme.breakpoints.down(1200)]: {
+        left: '270px',
+        top: '230px',
+      },
+      [theme.breakpoints.down(880)]: {
+        left: '0',
+        top: '230px',
+      },
+      [theme.breakpoints.down(550)]: {
+        width: '300px',
+        top: '330px',
+      },
     },
-    ellipse2: {
-      position: 'absolute',
-      left: '390px',
-      top: '450px',
-      zIndex: 3,
-    }
   };
 });
