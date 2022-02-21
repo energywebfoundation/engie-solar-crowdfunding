@@ -102,6 +102,10 @@ contract Staking is ERC20Burnable {
         emit RewardSent(msg.sender, msg.value, block.timestamp);
     }
 
+    function burn(uint256 _amount) public override {
+        redeem(_amount);
+    }
+
     function init(
         uint256 _signupStart,
         uint256 _signupEnd,
@@ -177,7 +181,8 @@ contract Staking is ERC20Burnable {
     
     function redeem(uint256 _amount) public notPaused withdrawsAllowed sufficientBalance(_amount) {
         uint256 toWithdraw = _getRewards(_amount);
-        burn(_amount);
+        // burn(_amount);
+        _burn(_msgSender(), _amount);
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
