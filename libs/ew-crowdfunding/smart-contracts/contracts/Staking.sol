@@ -113,8 +113,8 @@ contract Staking is ERC20Burnable {
         uint256 _endDate,
         uint256 _hardCap,
         uint256 _contributionLimit
-    ) external onlyOwner {//To-Do: prevent resetting by owner
-        require(!isContractInitialized, "Already initialized");
+    ) external onlyOwner {
+        require(!isContractInitialized, "Already initialized");//Preventing resetting by owner
         require(_contributionLimit > 0, "wrong contribution limit");
         require(_hardCap >= _contributionLimit, "hardCap exceeded");
         require(_signupStart < _signupEnd, "Wrong signup config");
@@ -146,7 +146,6 @@ contract Staking is ERC20Burnable {
         delete isContractPaused;
 		delete contributionLimit;
         delete claimManagerAddress;
-        delete isContractInitialized;
     }
 
     function terminate() external onlyOwner {
