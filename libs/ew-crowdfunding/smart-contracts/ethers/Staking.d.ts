@@ -22,85 +22,12 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface StakingInterface extends ethers.utils.Interface {
   functions: {
-    "allowance(address,address)": FunctionFragment;
-    "approve(address,uint256)": FunctionFragment;
-    "balanceOf(address)": FunctionFragment;
-    "burn(uint256)": FunctionFragment;
-    "burnFrom(address,uint256)": FunctionFragment;
-    "claimManagerAddress()": FunctionFragment;
-    "contributionLimit()": FunctionFragment;
-    "decimals()": FunctionFragment;
-    "decreaseAllowance(address,uint256)": FunctionFragment;
-    "depositRewards()": FunctionFragment;
-    "endDate()": FunctionFragment;
-    "getRewards()": FunctionFragment;
-    "hardCap()": FunctionFragment;
-    "hasRole(address,bytes32)": FunctionFragment;
-    "increaseAllowance(address,uint256)": FunctionFragment;
     "init(uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
-    "name()": FunctionFragment;
-    "patronRole()": FunctionFragment;
-    "pause()": FunctionFragment;
-    "redeem(uint256)": FunctionFragment;
-    "redeemAll()": FunctionFragment;
-    "rewards()": FunctionFragment;
-    "serviceRole()": FunctionFragment;
-    "signupEnd()": FunctionFragment;
     "stake()": FunctionFragment;
-    "startDate()": FunctionFragment;
-    "symbol()": FunctionFragment;
-    "terminate()": FunctionFragment;
-    "totalSupply()": FunctionFragment;
-    "transfer(address,uint256)": FunctionFragment;
-    "transferFrom(address,address,uint256)": FunctionFragment;
-    "unPause()": FunctionFragment;
+    "withdraw(uint256)": FunctionFragment;
+    "withdrawAll()": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "allowance",
-    values: [string, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "approve",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
-  encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
-  encodeFunctionData(
-    functionFragment: "burnFrom",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "claimManagerAddress",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "contributionLimit",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "decreaseAllowance",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "depositRewards",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "endDate", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "getRewards",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "hardCap", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "hasRole",
-    values: [string, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "increaseAllowance",
-    values: [string, BigNumberish]
-  ): string;
   encodeFunctionData(
     functionFragment: "init",
     values: [
@@ -112,134 +39,34 @@ interface StakingInterface extends ethers.utils.Interface {
       BigNumberish
     ]
   ): string;
-  encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "stake", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "patronRole",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "pause", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "redeem",
+    functionFragment: "withdraw",
     values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "redeemAll", values?: undefined): string;
-  encodeFunctionData(functionFragment: "rewards", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "serviceRole",
+    functionFragment: "withdrawAll",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "signupEnd", values?: undefined): string;
-  encodeFunctionData(functionFragment: "stake", values?: undefined): string;
-  encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
-  encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
-  encodeFunctionData(functionFragment: "terminate", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "totalSupply",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transfer",
-    values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferFrom",
-    values: [string, string, BigNumberish]
-  ): string;
-  encodeFunctionData(functionFragment: "unPause", values?: undefined): string;
 
-  decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "claimManagerAddress",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "contributionLimit",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "decreaseAllowance",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "depositRewards",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "endDate", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getRewards", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hardCap", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "increaseAllowance",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "init", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "patronRole", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "redeem", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "redeemAll", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "rewards", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "serviceRole",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "signupEnd", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "stake", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "terminate", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "withdraw", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "totalSupply",
+    functionFragment: "withdrawAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "transfer", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "transferFrom",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "unPause", data: BytesLike): Result;
 
   events: {
-    "Approval(address,address,uint256)": EventFragment;
-    "CampaignAborted(uint256)": EventFragment;
     "Funded(address,uint256,uint256)": EventFragment;
-    "RefundExceeded(address,uint256,uint256)": EventFragment;
-    "RewardSent(address,uint256,uint256)": EventFragment;
     "StakingPoolInitialized(uint256,uint256,uint256)": EventFragment;
-    "StatusChanged(string,uint256)": EventFragment;
-    "TokenBurnt(address,uint256,uint256)": EventFragment;
-    "Transfer(address,address,uint256)": EventFragment;
     "Withdrawn(address,uint256,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "CampaignAborted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Funded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RefundExceeded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RewardSent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakingPoolInitialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "StatusChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "TokenBurnt"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Withdrawn"): EventFragment;
 }
-
-export type ApprovalEvent = TypedEvent<
-  [string, string, BigNumber] & {
-    owner: string;
-    spender: string;
-    value: BigNumber;
-  }
->;
-
-export type CampaignAbortedEvent = TypedEvent<
-  [BigNumber] & { _timestamp: BigNumber }
->;
 
 export type FundedEvent = TypedEvent<
   [string, BigNumber, BigNumber] & {
@@ -249,44 +76,12 @@ export type FundedEvent = TypedEvent<
   }
 >;
 
-export type RefundExceededEvent = TypedEvent<
-  [string, BigNumber, BigNumber] & {
-    _sender: string;
-    amount: BigNumber;
-    refunded: BigNumber;
-  }
->;
-
-export type RewardSentEvent = TypedEvent<
-  [string, BigNumber, BigNumber] & {
-    provider: string;
-    amount: BigNumber;
-    time: BigNumber;
-  }
->;
-
 export type StakingPoolInitializedEvent = TypedEvent<
   [BigNumber, BigNumber, BigNumber] & {
     initDate: BigNumber;
     _startDate: BigNumber;
     _endDate: BigNumber;
   }
->;
-
-export type StatusChangedEvent = TypedEvent<
-  [string, BigNumber] & { statusType: string; date: BigNumber }
->;
-
-export type TokenBurntEvent = TypedEvent<
-  [string, BigNumber, BigNumber] & {
-    _user: string;
-    _amout: BigNumber;
-    _timestamp: BigNumber;
-  }
->;
-
-export type TransferEvent = TypedEvent<
-  [string, string, BigNumber] & { from: string; to: string; value: BigNumber }
 >;
 
 export type WithdrawnEvent = TypedEvent<
@@ -341,65 +136,6 @@ export class Staking extends BaseContract {
   interface: StakingInterface;
 
   functions: {
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    approve(
-      spender: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    burn(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    claimManagerAddress(overrides?: CallOverrides): Promise<[string]>;
-
-    contributionLimit(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    decimals(overrides?: CallOverrides): Promise<[number]>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    depositRewards(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    endDate(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    hardCap(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    hasRole(
-      _provider: string,
-      _role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     init(
       _signupStart: BigNumberish,
       _signupEnd: BigNumberish,
@@ -410,119 +146,19 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    name(overrides?: CallOverrides): Promise<[string]>;
-
-    patronRole(overrides?: CallOverrides): Promise<[string]>;
-
-    pause(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    redeem(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    redeemAll(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    rewards(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    serviceRole(overrides?: CallOverrides): Promise<[string]>;
-
-    signupEnd(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     stake(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    startDate(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    symbol(overrides?: CallOverrides): Promise<[string]>;
-
-    terminate(
+    withdraw(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    unPause(
+    withdrawAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
-
-  allowance(
-    owner: string,
-    spender: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  approve(
-    spender: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  burn(
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  burnFrom(
-    account: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  claimManagerAddress(overrides?: CallOverrides): Promise<string>;
-
-  contributionLimit(overrides?: CallOverrides): Promise<BigNumber>;
-
-  decimals(overrides?: CallOverrides): Promise<number>;
-
-  decreaseAllowance(
-    spender: string,
-    subtractedValue: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  depositRewards(
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  endDate(overrides?: CallOverrides): Promise<BigNumber>;
-
-  getRewards(overrides?: CallOverrides): Promise<BigNumber>;
-
-  hardCap(overrides?: CallOverrides): Promise<BigNumber>;
-
-  hasRole(
-    _provider: string,
-    _role: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  increaseAllowance(
-    spender: string,
-    addedValue: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   init(
     _signupStart: BigNumberish,
@@ -534,115 +170,20 @@ export class Staking extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  name(overrides?: CallOverrides): Promise<string>;
-
-  patronRole(overrides?: CallOverrides): Promise<string>;
-
-  pause(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  redeem(
-    _amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  redeemAll(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  rewards(overrides?: CallOverrides): Promise<BigNumber>;
-
-  serviceRole(overrides?: CallOverrides): Promise<string>;
-
-  signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
-
   stake(
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  startDate(overrides?: CallOverrides): Promise<BigNumber>;
-
-  symbol(overrides?: CallOverrides): Promise<string>;
-
-  terminate(
+  withdraw(
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-  transfer(
-    recipient: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  transferFrom(
-    sender: string,
-    recipient: string,
-    amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  unPause(
+  withdrawAll(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    approve(
-      spender: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    burn(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    claimManagerAddress(overrides?: CallOverrides): Promise<string>;
-
-    contributionLimit(overrides?: CallOverrides): Promise<BigNumber>;
-
-    decimals(overrides?: CallOverrides): Promise<number>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    depositRewards(overrides?: CallOverrides): Promise<void>;
-
-    endDate(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getRewards(overrides?: CallOverrides): Promise<BigNumber>;
-
-    hardCap(overrides?: CallOverrides): Promise<BigNumber>;
-
-    hasRole(
-      _provider: string,
-      _role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
     init(
       _signupStart: BigNumberish,
       _signupEnd: BigNumberish,
@@ -653,75 +194,14 @@ export class Staking extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    name(overrides?: CallOverrides): Promise<string>;
-
-    patronRole(overrides?: CallOverrides): Promise<string>;
-
-    pause(overrides?: CallOverrides): Promise<void>;
-
-    redeem(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
-
-    redeemAll(overrides?: CallOverrides): Promise<void>;
-
-    rewards(overrides?: CallOverrides): Promise<BigNumber>;
-
-    serviceRole(overrides?: CallOverrides): Promise<string>;
-
-    signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
-
     stake(overrides?: CallOverrides): Promise<void>;
 
-    startDate(overrides?: CallOverrides): Promise<BigNumber>;
+    withdraw(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
-    symbol(overrides?: CallOverrides): Promise<string>;
-
-    terminate(overrides?: CallOverrides): Promise<void>;
-
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    unPause(overrides?: CallOverrides): Promise<void>;
+    withdrawAll(overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
-    "Approval(address,address,uint256)"(
-      owner?: string | null,
-      spender?: string | null,
-      value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { owner: string; spender: string; value: BigNumber }
-    >;
-
-    Approval(
-      owner?: string | null,
-      spender?: string | null,
-      value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { owner: string; spender: string; value: BigNumber }
-    >;
-
-    "CampaignAborted(uint256)"(
-      _timestamp?: null
-    ): TypedEventFilter<[BigNumber], { _timestamp: BigNumber }>;
-
-    CampaignAborted(
-      _timestamp?: null
-    ): TypedEventFilter<[BigNumber], { _timestamp: BigNumber }>;
-
     "Funded(address,uint256,uint256)"(
       _user?: null,
       _amout?: null,
@@ -740,42 +220,6 @@ export class Staking extends BaseContract {
       { _user: string; _amout: BigNumber; _timestamp: BigNumber }
     >;
 
-    "RefundExceeded(address,uint256,uint256)"(
-      _sender?: null,
-      amount?: null,
-      refunded?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { _sender: string; amount: BigNumber; refunded: BigNumber }
-    >;
-
-    RefundExceeded(
-      _sender?: null,
-      amount?: null,
-      refunded?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { _sender: string; amount: BigNumber; refunded: BigNumber }
-    >;
-
-    "RewardSent(address,uint256,uint256)"(
-      provider?: null,
-      amount?: null,
-      time?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { provider: string; amount: BigNumber; time: BigNumber }
-    >;
-
-    RewardSent(
-      provider?: null,
-      amount?: null,
-      time?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { provider: string; amount: BigNumber; time: BigNumber }
-    >;
-
     "StakingPoolInitialized(uint256,uint256,uint256)"(
       initDate?: null,
       _startDate?: null,
@@ -792,58 +236,6 @@ export class Staking extends BaseContract {
     ): TypedEventFilter<
       [BigNumber, BigNumber, BigNumber],
       { initDate: BigNumber; _startDate: BigNumber; _endDate: BigNumber }
-    >;
-
-    "StatusChanged(string,uint256)"(
-      statusType?: null,
-      date?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { statusType: string; date: BigNumber }
-    >;
-
-    StatusChanged(
-      statusType?: null,
-      date?: null
-    ): TypedEventFilter<
-      [string, BigNumber],
-      { statusType: string; date: BigNumber }
-    >;
-
-    "TokenBurnt(address,uint256,uint256)"(
-      _user?: null,
-      _amout?: null,
-      _timestamp?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { _user: string; _amout: BigNumber; _timestamp: BigNumber }
-    >;
-
-    TokenBurnt(
-      _user?: null,
-      _amout?: null,
-      _timestamp?: null
-    ): TypedEventFilter<
-      [string, BigNumber, BigNumber],
-      { _user: string; _amout: BigNumber; _timestamp: BigNumber }
-    >;
-
-    "Transfer(address,address,uint256)"(
-      from?: string | null,
-      to?: string | null,
-      value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { from: string; to: string; value: BigNumber }
-    >;
-
-    Transfer(
-      from?: string | null,
-      to?: string | null,
-      value?: null
-    ): TypedEventFilter<
-      [string, string, BigNumber],
-      { from: string; to: string; value: BigNumber }
     >;
 
     "Withdrawn(address,uint256,uint256)"(
@@ -866,65 +258,6 @@ export class Staking extends BaseContract {
   };
 
   estimateGas: {
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    approve(
-      spender: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    burn(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    claimManagerAddress(overrides?: CallOverrides): Promise<BigNumber>;
-
-    contributionLimit(overrides?: CallOverrides): Promise<BigNumber>;
-
-    decimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    depositRewards(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    endDate(overrides?: CallOverrides): Promise<BigNumber>;
-
-    getRewards(overrides?: CallOverrides): Promise<BigNumber>;
-
-    hardCap(overrides?: CallOverrides): Promise<BigNumber>;
-
-    hasRole(
-      _provider: string,
-      _role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     init(
       _signupStart: BigNumberish,
       _signupEnd: BigNumberish,
@@ -935,126 +268,21 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    name(overrides?: CallOverrides): Promise<BigNumber>;
-
-    patronRole(overrides?: CallOverrides): Promise<BigNumber>;
-
-    pause(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    redeem(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    redeemAll(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    rewards(overrides?: CallOverrides): Promise<BigNumber>;
-
-    serviceRole(overrides?: CallOverrides): Promise<BigNumber>;
-
-    signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
-
     stake(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    startDate(overrides?: CallOverrides): Promise<BigNumber>;
-
-    symbol(overrides?: CallOverrides): Promise<BigNumber>;
-
-    terminate(
+    withdraw(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
-
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    unPause(
+    withdrawAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    allowance(
-      owner: string,
-      spender: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    approve(
-      spender: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    balanceOf(
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    burn(
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    burnFrom(
-      account: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    claimManagerAddress(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    contributionLimit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    decreaseAllowance(
-      spender: string,
-      subtractedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    depositRewards(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    endDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    getRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    hardCap(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    hasRole(
-      _provider: string,
-      _role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    increaseAllowance(
-      spender: string,
-      addedValue: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     init(
       _signupStart: BigNumberish,
       _signupEnd: BigNumberish,
@@ -1065,57 +293,16 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    patronRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    pause(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    redeem(
-      _amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    redeemAll(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    rewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    serviceRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    signupEnd(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     stake(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    startDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    terminate(
+    withdraw(
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    transfer(
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    unPause(
+    withdrawAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
