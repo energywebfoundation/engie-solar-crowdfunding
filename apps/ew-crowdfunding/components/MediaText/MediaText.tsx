@@ -13,7 +13,7 @@ export interface MediaTextProps {
   reverse?: boolean;
 }
 
-export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, reverse = false }: ImageTextProps) => {
+export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, reverse = false }: MediaTextProps) => {
   const classes = useStyles();
 
   return (
