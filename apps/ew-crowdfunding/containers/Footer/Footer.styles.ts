@@ -4,8 +4,10 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     paper: {
+      position: 'relative',
       display: 'flex',
       width: '100%',
+      zIndex: 10,
       borderRadius: 0,
       paddingLeft: '100px',
       paddingRight: '100px',

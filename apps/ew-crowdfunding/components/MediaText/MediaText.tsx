@@ -21,15 +21,19 @@ export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, 
       <Typography variant='h3'>{heading}</Typography>
       <Box className={classes.wrapper} sx={{ flexDirection: reverse ? 'row-reverse' : 'row' }}>
         <Box className={classes.mediaWrapper}>
-          <ReactPlayer style={{ borderRadius: '16px', overflow: 'hidden' }} url={videoUrl} controls={true} />
+          <ReactPlayer
+            style={{ borderRadius: '16px', overflow: 'hidden', width: '100%' }}
+            url={videoUrl}
+            controls={true}
+            width='100%'
+          />
         </Box>
         <Box className={classes.textWrapper}>
           <Typography variant='h3'>{title}</Typography>
           <Typography variant='h5'>{text}</Typography>
         </Box>
       </Box>
-      <img className={classes.ellipse} src='/EllipseMedia1.png' alt='Engie bubble' />
-      <img className={classes.ellipse2} src='/Ellipse2.png' alt='Engie bubble' />
+      <img className={classes.ellipse} src='/EllipseMedia.png' alt='Engie bubble' />
     </Box>
   );
 };

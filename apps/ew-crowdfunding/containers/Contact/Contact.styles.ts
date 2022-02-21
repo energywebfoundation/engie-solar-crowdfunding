@@ -3,8 +3,13 @@ import { theme } from '../../dsla-theme';
 
 export const useStyles = makeStyles(() => {
   return {
+    container: {
+      position: 'relative',
+      backgroundColor: ' #F8F9FA',
+    },
     wrapper: {
       display: 'flex',
+      zIndex: 10,
       flexDirection: 'column',
       gap: '30px',
       alignItems: 'center',
@@ -18,6 +23,32 @@ export const useStyles = makeStyles(() => {
       borderRadius: '16px',
       [theme.breakpoints.down('sm')]: {
         padding: '40px',
+      },
+    },
+    topBubble: {
+      position: 'absolute',
+      top: '25%',
+      left: '30%',
+      zIndex: 2,
+      [theme.breakpoints.down(1200)]: {
+        top: '25%',
+        left: '20%',
+      },
+      [theme.breakpoints.down(880)]: {
+        top: '25%',
+        left: '10%',
+      },
+      [theme.breakpoints.down(550)]: {
+        display: 'none',
+      },
+    },
+    ellipse: {
+      position: 'absolute',
+      right: '0px',
+      bottom: '0px',
+      zIndex: 2,
+      [theme.breakpoints.down(550)]: {
+        display: 'none',
       },
     },
   };
