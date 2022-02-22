@@ -27,7 +27,7 @@ export const ImageText: FC<ImageTextProps> = ({
         <img
           className={classes.image}
           src={imagePath}
-          style={{ boxShadow: shadow && '-80px 8px 40px rgba(0, 0, 0, 0.24)' }}
+          style={{ boxShadow: shadow && '-40px 4px 40px rgba(0, 0, 0, 0.24)' }}
         />
       </Box>
       <Box className={classes.textWrapper}>
