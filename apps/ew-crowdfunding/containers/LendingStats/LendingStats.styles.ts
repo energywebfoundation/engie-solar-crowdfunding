@@ -17,7 +17,12 @@ export const useStyles = makeStyles(() => {
       },
     },
     barColorPrimary: {
-      backgroundColor: theme.palette.secondary.main
+      backgroundColor: theme.palette.secondary.main,
+    },
+    titleClass: {
+      fontWeight: 500,
+      fontSize: '20px',
+      lineHeight: '24px',
     },
   };
 });

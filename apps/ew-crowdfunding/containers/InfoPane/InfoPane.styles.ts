@@ -4,20 +4,18 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     wrapper: {
-      width: '100%',
       display: 'flex',
-      flexDirection: 'row',
-      justifyContent: 'center',
+      justifyContent: 'start',
       alignItems: 'start',
-      flex: '1 1 0',
+      flexDirection: 'row',
       gap: '30px',
+      width: '100%',
       [theme.breakpoints.down('md')]: {
         flexDirection: 'column-reverse',
       },
     },
     paper: {
       width: '100%',
-      maxWidth: '700px',
       display: 'flex',
       flex: 1,
       flexDirection: 'column',
@@ -34,14 +32,12 @@ export const useStyles = makeStyles(() => {
     },
     buttonWrapper: {
       display: 'flex',
+      minWidth: '445px',
       flexDirection: 'column',
       justifyContent: 'start',
-      alignItems: 'center',
-      gap: '20px',
-      minWidth: '250px',
-      maxWidth: '450px',
+      alignItems: 'start',
+      gap: '30px',
       [theme.breakpoints.down('md')]: {
-        maxWidth: '100%',
         width: '100%',
       },
     },
