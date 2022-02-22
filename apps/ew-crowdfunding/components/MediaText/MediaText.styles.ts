@@ -33,7 +33,7 @@ export const useStyles = makeStyles(() => {
         width: '100%'
       },
       maxWidth: '600px',
-      boxShadow: '-80px 8px 40px rgba(0, 0, 0, 0.24)',
+      boxShadow: '-40px 4px 40px rgba(0, 0, 0, 0.24)',
     },
     player: {
       borderRadius: '16px',
