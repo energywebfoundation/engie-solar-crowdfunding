@@ -148,8 +148,8 @@ export const requestLogin =
       const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
       const isConnectedChainId =
         process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
-      if (signerService && signerService?.signer && signerService?.address) {
-        const publicKey = await signerService.publicKey();
+      const publicKey = await signerService.publicKey();
+      if (signerService?.signer && signerService?.address) {
         dispatch(handleWeb3Listeners(signerService, dispatchModals));
 
         const payload = {
@@ -181,10 +181,6 @@ export const requestLogin =
         });
       }
     } catch (error) {
-      dispatch({
-        type: Web3ActionTypes.SET_IS_LOADING,
-        payload: false,
-      });
       dispatch({
         type: Web3ActionTypes.SET_WEB3_FAILURE,
         payload: error,

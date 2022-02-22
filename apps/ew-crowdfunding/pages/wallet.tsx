@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getWeb3, selectAuthenticated } from '../redux-store';
 import { useEffect } from 'react';
 import { useDSLAModalsDispatch } from '../context';
-import { AppContainer } from '../components';
 
 const WalletPage: NextPage = () => {
   const dispatch = useDispatch();
@@ -22,14 +21,33 @@ const WalletPage: NextPage = () => {
       <Navigation />
       <Welcome />
       <InfoContainer />
-      <AppContainer>
+      <Container
+        maxWidth={false}
+        sx={{
+          maxWidth: '1400px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          [theme.breakpoints.up('md')]: {
+            padding: '50px',
+          },
+          [theme.breakpoints.down('md')]: {
+            padding: '50px',
+          },
+          [theme.breakpoints.down('sm')]: {
+            padding: '25px',
+          },
+          gap: '40px',
+        }}
+      >
         <InfoPane />
         <Divider
           style={{ width: '100%', marginTop: '40px', marginBottom: '40px', borderColor: theme.palette.primary.dark }}
           light={false}
         />
         {authenticated && <Lending />}
-      </AppContainer>
+      </Container>
       <Footer />
     </div>
   );

@@ -1,4 +1,4 @@
-import { setCacheConfig, Claim, ProviderType } from 'iam-client-lib';
+import { setChainConfig, setCacheConfig, Claim, ProviderType } from 'iam-client-lib';
 import { RoleEnrollmentStatus } from '../../redux-store';
 import { getSignerService } from './getSignerService';
 
@@ -6,6 +6,13 @@ export const getIamService = async (providerType: ProviderType) => {
   // // Set Cache Server
   setCacheConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
     url: process.env.NEXT_PUBLIC_CACHE_SERVER,
+  });
+  // Set RPC
+  setChainConfig(+process.env.NEXT_PUBLIC_CHAIN_ID || 73799, {
+    // rpcUrl: process.env.NEXT_PUBLIC_RPC_URL,
+    claimManagerAddress: process.env.NEXT_PUBLIC_CLAIM_MANAGER_ADDRESS,
+    // working address: 0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210 - will be changed soon with the one below which is not working
+    // replace with this : 0x5339adE9332A604A1c957B9bC1C6eee0Bcf7a031
   });
 
   const getEnrollmentStatus = (enrollments: Claim[]) => {

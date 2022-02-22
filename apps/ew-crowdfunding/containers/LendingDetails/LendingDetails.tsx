@@ -101,6 +101,7 @@ export const LendingDetails: FC = () => {
           </form>
         </Box>
       </Box>
+      {/* <div className={classes.divider}></div> */}
       <Box className={classes.contributionWrapper}>
         <Box className={classes.contribution}>
           <ContributionItem
@@ -122,8 +123,6 @@ export const LendingDetails: FC = () => {
             type='EWT'
           />
         </Box>
-        <Divider className={classes.divider} />
-        <Divider className={classes.separator} />
         <Box className={classes.redeem}>
           <Box className={classes.progressBarItem}>
             <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
