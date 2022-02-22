@@ -51,7 +51,7 @@ const lightTheme: ThemeOptions = {
         },
         h1: {
           fontWeight: 500,
-          fontSize: '4.5rem',
+          fontSize: '4rem',
         },
         h2: {
           fontWeight: 400,
@@ -63,11 +63,11 @@ const lightTheme: ThemeOptions = {
         },
         h4: {
           fontWeight: 400,
-          fontSize: '1.2rem',
+          fontSize: '1.3rem',
         },
         h5: {
           fontWeight: 400,
-          fontSize: '1rem',
+          fontSize: '1.1rem',
         },
       },
     },

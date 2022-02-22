@@ -20,10 +20,10 @@ export const Footer: FC = () => {
         })}
       </Box>
       <Box className={classes.wrapper}>
-        <Typography color='common.white' mr={2}>
-          Powered by <strong>Lab.EnergyWeb</strong>
+        <Typography color='common.white' style={{ fontWeight: 700 }} mr={2}>
+          Powered by Lab.EnergyWeb
         </Typography>
-        <img width={40} height={40} src='/EWLogo.png' alt='Lab icon' />
+        <img src='/EW_lab.png' alt='Lab icon' />
       </Box>
     </Paper>
   );
