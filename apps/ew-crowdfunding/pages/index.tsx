@@ -24,7 +24,7 @@ const Home: NextPage = () => {
       <Paper style={{ background: theme.palette.primary.dark }}>
         <AppContainer darkBackground={true}>
           <ImageText
-            imagePath='/Store.png'
+            imagePath='/Store2.png'
             title='Headline H2'
             text='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus. '
           />
