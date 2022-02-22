@@ -5,11 +5,11 @@ const lightTheme: ThemeOptions = {
     mode: 'light',
     primary: {
       main: '#00AAFF',
-      dark: '#1F106D',
+      dark: '#0F1E29',
       contrastText: '#FFFFFF',
     },
     secondary: {
-      main: '#00486B',
+      main: '#23D2B5',
       dark: '#0E2333',
       contrastText: '#FFFFFF',
     },
@@ -24,6 +24,9 @@ const lightTheme: ThemeOptions = {
       default: '#FFFFFF',
       paper: '#FFFFFF', // #081016
     },
+  },
+  typography: {
+    fontFamily: 'Lato',
   },
   components: {
     MuiButton: {
@@ -48,7 +51,7 @@ const lightTheme: ThemeOptions = {
         },
         h1: {
           fontWeight: 500,
-          fontSize: '4.5rem',
+          fontSize: '4rem',
         },
         h2: {
           fontWeight: 400,
@@ -60,11 +63,11 @@ const lightTheme: ThemeOptions = {
         },
         h4: {
           fontWeight: 400,
-          fontSize: '1.2rem',
+          fontSize: '1.3rem',
         },
         h5: {
           fontWeight: 400,
-          fontSize: '1rem',
+          fontSize: '1.1rem',
         },
       },
     },

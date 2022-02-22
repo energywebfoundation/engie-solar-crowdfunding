@@ -14,7 +14,12 @@ export const useNotSyncedEffects = () => {
       });
     }
     try {
-      await claimsService.registerOnchain(role);
+      await claimsService.registerOnchain({
+        token: role.token,
+        subjectAgreement: role.subjectAgreement,
+        onChainProof: role.onChainProof,
+        acceptedBy: role.acceptedBy,
+      });
       dispatch({
         type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
         payload: RoleEnrollmentStatus.ENROLLED_SYNCED,
