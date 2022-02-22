@@ -22,12 +22,7 @@ contract Staking is ERC20Burnable {
     bool private isContractInitialized;
     address public claimManagerAddress;
 
-    struct Stake {
-        uint256 time;
-        uint256 deposit;
-    }
-
-    mapping(address => Stake) private stakes;
+    mapping(address => uint256) private stakes;
     
     event CampaignAborted(uint256 _timestamp);
     event StatusChanged(string statusType, uint256 date);
@@ -73,7 +68,7 @@ contract Staking is ERC20Burnable {
     modifier belowLimit(){
         require(msg.value > 0, "No EWT provided");
         require(block.timestamp < signupEnd, "Signup Ended");
-        require(stakes[msg.sender].deposit < contributionLimit, "Contribution limit reached"); //prevent reentrency
+        require(stakes[msg.sender] < contributionLimit, "Contribution limit reached"); //prevent reentrency
         _;
     }
 
@@ -168,17 +163,16 @@ contract Staking is ERC20Burnable {
 
     function stake() external payable notAborted initialized belowLimit notPaused {
         require(hasRole(msg.sender, patronRole), "No patron role");
-        if (stakes[msg.sender].deposit + msg.value > contributionLimit){
-            uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender].deposit);
-            stakes[msg.sender].deposit = contributionLimit;
+        if (stakes[msg.sender] + msg.value > contributionLimit){
+            uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender]);
+            stakes[msg.sender] = contributionLimit;
             _mint(msg.sender, msg.value - overflow); // mint the effective amount deposited
             payable(msg.sender).transfer(overflow);
             emit RefundExceeded(msg.sender, msg.value, overflow);
         } else {
-            stakes[msg.sender].deposit += msg.value;
+            stakes[msg.sender] += msg.value;
             _mint(msg.sender, msg.value);
         }
-        stakes[msg.sender].time = block.timestamp;
     }
 
     function redeemAll() external notPaused {
