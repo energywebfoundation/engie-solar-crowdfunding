@@ -17,6 +17,7 @@ contract Staking is ERC20Burnable {
     address private rewardProvider;
     uint256 public contributionLimit;
     bool private aborted;
+    bool private contractFunded;
     bool private isContractPaused;
     bool private isContractInitialized;
     address public claimManagerAddress;
@@ -94,11 +95,17 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function depositRewards() external payable notAborted activated {
+    modifier notfunded(){
+        require(contractFunded == false, "Already funded");
+        _;
+    }
+
+    function depositRewards() external payable notAborted activated notfunded {
         require(msg.value > 0, "Not rewards provided");
         require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
         rewards += msg.value;
         rewardProvider = msg.sender;
+        contractFunded = true;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
     }
 

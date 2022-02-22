@@ -469,6 +469,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       })).to.emit(stakingContract, 'RewardSent').withArgs(owner.address, rewards, await getTimestamp(tx));
       await expect(tx).changeEtherBalance(asOwner, rewards);
     });
+    
+    it('fails when depositing reward more than once', async () => {
+      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Already funded');
+    })
 
     it('can check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
