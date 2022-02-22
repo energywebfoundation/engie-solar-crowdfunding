@@ -8,9 +8,9 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'start',
       flexDirection: 'row',
-      gap: '30px',
+      gap: '20px',
       width: '100%',
-      [theme.breakpoints.down(1052)]: {
+      [theme.breakpoints.down('md')]: {
         flexDirection: 'column',
       },
     },
@@ -19,8 +19,8 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      gap: '30px',
-      [theme.breakpoints.down(1052)]: {
+      gap: '20px',
+      [theme.breakpoints.down('md')]: {
         width: '100%',
       },
     },

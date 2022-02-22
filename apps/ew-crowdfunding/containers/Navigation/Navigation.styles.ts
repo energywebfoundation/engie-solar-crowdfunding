@@ -4,7 +4,7 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     appBar: {
-      backgroundColor: theme.palette.common.white,
+      backgroundColor: 'white',
       boxShadow: 'none',
     },
     avatar: {
@@ -14,8 +14,5 @@ export const useStyles = makeStyles(() => {
       background: theme.palette.primary.main,
       padding: '3px',
     },
-    logo: {
-      cursor: 'pointer',
-    }
   };
 });

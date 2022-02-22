@@ -13,7 +13,7 @@ export const useStyles = makeStyles(() => {
       borderRadius: '16px',
       padding: '40px',
       maxWidth: '700px',
-      [theme.breakpoints.down(1052)]: {
+      [theme.breakpoints.down('md')]: {
         maxWidth: '100%',
       },
     },

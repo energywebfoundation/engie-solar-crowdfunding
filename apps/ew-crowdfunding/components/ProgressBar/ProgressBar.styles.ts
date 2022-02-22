@@ -12,7 +12,7 @@ export const useStyles = makeStyles(() => {
       backgroundColor: '#D3D3D3',
     },
     barColorPrimary: {
-      backgroundColor: '#0F1E29'
+      backgroundColor: '#552382'
     },
   };
 });
