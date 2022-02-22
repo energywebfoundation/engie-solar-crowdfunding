@@ -1,7 +1,5 @@
-// import { Contract } from "ethers";
 const Contract = require("ethers").Contract;
 const Staking = require("../ethers").Staking;
-// import { Staking } from "../ethers";
 
 const _prompt = require("prompt-sync")();
 
@@ -31,10 +29,13 @@ const checkAnswer = (answer : string, promptMode = "noLoop") => {
 }
 
 const getClaimManagerAddress = (hardhatNetwork : string | undefined) => {
-  const EWC_CLAIM_MANAGER_ADDRESS = "0x23b026631A6f265d17CFee8aa6ced1B244f3920C";
-  const VOLTA_CLAIM_MANAGER_ADDRESS = "0xC3dD7ED75779b33F5Cfb709E0aB02b71fbFA3210";
-
-  return hardhatNetwork === 'ewc' ? EWC_CLAIM_MANAGER_ADDRESS : VOLTA_CLAIM_MANAGER_ADDRESS;
+  const claimManagerAddress = (
+    hardhatNetwork === 'ewc' ?
+    process.env.EWC_CLAIM_MANAGER_ADDRESS 
+  : process.env.VOLTA_CLAIM_MANAGER_ADDRESS
+  );
+  
+  return claimManagerAddress;
 }
 
 const deployContract = async (contractName : string) => {
@@ -69,6 +70,10 @@ const deploy = async () => {
     const stakingPoolContract = await deployContract("Staking");
     //Find a way to properly expose contract address, i.e deployedContract.address, to the environment
     return stakingPoolContract.address
+}
+
+module.exports = {
+  checkAnswer
 }
 
 deploy()
