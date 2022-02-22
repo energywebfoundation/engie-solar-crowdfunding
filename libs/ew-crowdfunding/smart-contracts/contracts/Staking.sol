@@ -166,7 +166,7 @@ contract Staking is ERC20Burnable {
         emit CampaignAborted(block.timestamp);
     }
 
-    function stake() external payable initialized belowLimit notPaused {
+    function stake() external payable notAborted initialized belowLimit notPaused {
         require(hasRole(msg.sender, patronRole), "No patron role");
         if (stakes[msg.sender].deposit + msg.value > contributionLimit){
             uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender].deposit);

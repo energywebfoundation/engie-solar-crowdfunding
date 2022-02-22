@@ -539,6 +539,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await expect(asOwner.terminate()).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
     });
 
+    it('fails when patron tries to stake after campaign abortion', async () => {
+      await expect(asPatron.stake({value: oneEWT})).to.be.revertedWith('Campaign aborted');
+    })
+
     it('fails when service provider sends reward after campaign abortion', async () => {
       await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Campaign aborted');
     });
