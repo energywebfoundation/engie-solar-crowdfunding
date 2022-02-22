@@ -67,7 +67,7 @@ const deployContract = async (contractName : string) => {
 
 const deploy = async () => {  
     const stakingPoolContract = await deployContract("Staking");
-    //Find a wait to export contract address, i.e deployedContract.address
+    //Find a way to properly expose contract address, i.e deployedContract.address, to the environment
     return stakingPoolContract.address
 }
 
