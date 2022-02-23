@@ -70,8 +70,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   const rewards = oneEWT.mul(1000);
   const contributionLimit = oneEWT.mul(200);
   
-  const getReward = (amount : BigNumber) => {
-    const interests = amount.mul((rewards.div(hardCap)));
+  const getReward = (amount : BigNumber, totalStaked : BigNumber) => {
+    const percentageOfStake = amount.div(totalStaked);
+    const interests = (percentageOfStake.div(rewards));
     return amount.add(interests);
   }
 
@@ -492,7 +493,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('can check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
-      const expectedReward = getReward(balance);
+      const totalStaked = await asPatron2.totalStaked()
+      const expectedReward = getReward(balance, totalStaked);
       const patronReward = await asPatron2.getRewards();
       expect(patronReward).to.equal(expectedReward);
     });
@@ -517,7 +519,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       //Moving to endDate
       await timeTravel(provider, end);
       let tx;
-      const expectedReward = getReward(oneEWT.mul(1));
+      const totalStaked = await asPatron2.totalStaked()
+      const expectedReward = getReward(oneEWT.mul(1), totalStaked);
       expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
@@ -527,7 +530,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     it('Can withdraw all funds after end date', async () => {
       let tx;
       const patronBalance = await asPatron2.balanceOf(patron2.address);
-      const expectedReward = getReward(patronBalance);
+      const totalStaked = await asPatron2.totalStaked()
+      const expectedReward = getReward(patronBalance, totalStaked);
       expect(tx = await asPatron2.redeemAll()).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
