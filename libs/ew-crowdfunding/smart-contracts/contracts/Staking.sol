@@ -228,7 +228,14 @@ contract Staking is ERC20Burnable {
     }
 
     function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
-        uint256 interests = _amount * (rewards / hardCap);
+        uint256 percentageOfStake = _amount / totalStaked;
+        uint256 interests;
+        if (rewards != 0){
+           interests = percentageOfStake / rewards;
+        }
+        else {
+            interests = 0;
+        }
         reward = _amount + interests;
     }
 
