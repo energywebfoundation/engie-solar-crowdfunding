@@ -6,7 +6,6 @@ import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
 import { Staking__factory, Staking } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
-// import { Staking__factory } from '../../../../libs/ew-crowdfunding/smart-contracts/ethers/factories/Staking__factory';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
@@ -114,25 +113,25 @@ export const getTokensRedeemed =
   (): AppThunk =>
   async (dispatch): Promise<void> => {
     const stakingPool = {
-      address: "0x0BB89202CF5ec4fA68C5A6cD3456e8f0a1f9Fd3d" // find a proper way way to get this value from deployed contract
-    }
+      address: '0x0BB89202CF5ec4fA68C5A6cD3456e8f0a1f9Fd3d', // find a proper way way to get this value from deployed contract
+    };
     const stakingBytcode = Staking__factory.bytecode;
     const stakingInterface = Staking__factory.createInterface();
     const stakingContract = new Staking__factory(stakingInterface, stakingBytcode).attach(stakingPool.address);
-           
-            /* ***********************************************************************  */
-           /*         First way to interact with smart-contract                        */
-          /*                                                                          */
-         /*           await stakingContract.withdrawAll()                            */
-        /*                                                                          */
-       /* ***********************************************************************  */
-      /*        Alternaive way to call contract functions                         */
-     /*                                                                          */
+
+    /* ***********************************************************************  */
+    /*         First way to interact with smart-contract                        */
+    /*                                                                          */
+    /*           await stakingContract.withdrawAll()                            */
+    /*                                                                          */
+    /* ***********************************************************************  */
+    /*        Alternaive way to call contract functions                         */
+    /*                                                                          */
     /* const staking = new Staking(stakingPool.address, stakingInterface)       */
-   /*  await staking.withdrawAll()                                             */
-  /* ***********************************************************************  */ 
-    
-  // This will be taken from the smart contract
+    /*  await staking.withdrawAll()                                             */
+    /* ***********************************************************************  */
+
+    // This will be taken from the smart contract
     const tokensRedeemed = 137;
     dispatch({
       type: SmartContractActionTypes.SET_TOKENS_REDEEMED,

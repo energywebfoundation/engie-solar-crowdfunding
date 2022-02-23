@@ -41,6 +41,10 @@
     "typescript": "^4.5.4"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@openzeppelin/contracts": "^4.4.2"
+=======
+    "dotenv": "^16.0.0"
+>>>>>>> abf5b3e (Fix import error)
   }
 }
