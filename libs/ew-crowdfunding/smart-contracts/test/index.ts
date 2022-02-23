@@ -253,7 +253,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           wrongContributionLimit,
           signupStart,
           signupEnd
-        )).to.be.revertedWith('hardCap exceeded');
+        )).to.be.revertedWith('Hardcap Exceeded');
       })
       
       it("Can initialize Contract",  async () => {
@@ -359,6 +359,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           }),
       ).to.emit(asPatron, 'RefundExceeded').withArgs(patron.address, oneEWT.mul(242), overflow);
       expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(47));
+    });
+
+    it('fails when trying to stake more than Hardcap', async () => {
+      await expect(asPatron2.stake({ value : oneEWT})).to.be.revertedWith('Hardcap Exceeded');
     });
 
     it('fails when trying to unstake all funds without deposit', async () => {
