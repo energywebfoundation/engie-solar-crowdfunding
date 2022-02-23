@@ -349,16 +349,21 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       +                                                                                       +
       + Staking 242 EWTs while totalStaked = 207 / 247 and userStakes = 7 / 200               +
       +                                                                                       +
-      + Expected Results: only 40 EWTs of the 242 will be staked and 202 EWT will be refunded +
+      + Expected Results:                                                                     +
+      +                 * only 40 EWTs of the 242 will be staked                              +
+      +                 * 202 EWTs will be refunded                                           +
       +                                                                                       +
       \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
       const overflow = oneEWT.mul(202);
-      await expect(asPatron.stake({
+      await expect(tx = await asPatron.stake({
               value: oneEWT.mul(242)
           }),
       ).to.emit(asPatron, 'RefundExceeded').withArgs(patron.address, oneEWT.mul(242), overflow);
       expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(47));
+      
+      //Checking that wallet is correctly refunded (i.e only 40 EWTs have been consumed instead of 242)
+      expect(tx).changeEtherBalance(patron, (oneEWT.mul(-40)));
     });
 
     it('fails when trying to stake more than Hardcap', async () => {
