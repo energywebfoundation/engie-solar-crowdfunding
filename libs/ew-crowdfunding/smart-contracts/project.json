@@ -17,6 +17,36 @@
         "jestConfig": "libs/ew-crowdfunding/smart-contracts/jest.config.js",
         "passWithNoTests": true
       }
+    },
+    "hardhat-test": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npx hardhat test"
+          }
+        ]
+      }
+    },
+    "hardhat-test-volta": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npx hardhat test --network volta"
+          }
+        ]
+      }
+    },
+    "compile": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          {
+            "command": "npx hardhat compile"
+          }
+        ]
+      }
     }
   },
   "tags": []
