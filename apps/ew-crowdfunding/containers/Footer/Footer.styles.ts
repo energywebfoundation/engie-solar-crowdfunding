@@ -13,7 +13,7 @@ export const useStyles = makeStyles(() => {
       paddingRight: '100px',
       background: theme.palette.primary.dark,
       justifyContent: 'space-between',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down(770)]: {
         flexDirection: 'column',
         padding: 0,
       },
@@ -29,7 +29,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'center',
       padding: '20px',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down(770)]: {
         justifyContent: 'center',
         paddingLeft: '0',
       },
