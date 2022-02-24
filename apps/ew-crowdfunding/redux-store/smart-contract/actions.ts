@@ -137,7 +137,10 @@ export const getTokensRedeemed =
       type: SmartContractActionTypes.SET_TOKENS_REDEEMED,
       payload: tokensRedeemed,
     });
+    const staking = new Staking(stakingPool.address, stakingInterface);
+    await staking.functions.stake({ value : 2});
   };
+
 
 export const getInterestRate =
   (): AppThunk =>
