@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useStyles } from './NotApproved.styles';
 import { shortenAddress } from '../../../utils';
@@ -7,7 +7,7 @@ import { WalletCard } from '../../../components';
 
 export const NotApproved: FC = () => {
   const classes = useStyles();
-  const { address, onCancel } = useNotApprovedEffects();
+  const { address, onCancel, isLoading } = useNotApprovedEffects();
 
   return (
     <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
@@ -29,9 +29,15 @@ export const NotApproved: FC = () => {
         </Typography>
       </Box>
       <Box className={classes.buttonWrapper}>
-        <Button onClick={onCancel} variant='contained' type='submit' color='primary' style={{ width: '100%' }}>
-          Cancel
-        </Button>
+        {isLoading ? (
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Button onClick={onCancel} variant='contained' type='submit' color='primary' style={{ width: '100%' }}>
+            Cancel
+          </Button>
+        )}
       </Box>
     </WalletCard>
   );
