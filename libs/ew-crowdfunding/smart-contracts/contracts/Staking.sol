@@ -137,7 +137,7 @@ contract Staking is ERC20Burnable {
         emit StatusChanged("contractPaused", block.timestamp);
     }
 
-     function unPause() public onlyOwner paused {
+     function unPause() public onlyOwner paused notAborted {
         isContractPaused = false;
         emit StatusChanged("contractUnpaused", block.timestamp);
     }
