@@ -1,6 +1,7 @@
+const fs = require('fs');
+const path = require('path');
 const Contract = require("ethers").Contract;
 const Staking = require("../ethers").Staking;
-
 const _prompt = require("prompt-sync")();
 
 const emoji = require("node-emoji");
@@ -66,9 +67,14 @@ const deployContract = async (contractName : string) => {
   }
 };
 
+const exportContractAddress = async (contractAdress : string) => {
+  const addressFile = await fs.writeFileSync(path.join(__dirname, '..', 'src', 'lib', 'deployedAddress.ts'), `export const deployedAddress = "${contractAdress}";` )
+}
+
 const deploy = async () => {  
     const stakingPoolContract = await deployContract("Staking");
     //Find a way to properly expose contract address, i.e deployedContract.address, to the environment
+    await exportContractAddress(stakingPoolContract.address);
     return stakingPoolContract.address
 }
 
