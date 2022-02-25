@@ -142,7 +142,9 @@ describe('[ Contract flow for Staking contract ] ', () => {
 
   describe.only('\n+ Testing Staking & Widthdrawal & Redemption flow', () => {
     it('Should handle floating values of the reward', async () => {
-      const stakedAmount = ethers.utils.parseUnits("0.7", "ether");
+      const testStakedAmount = 3.77;
+      const stakedAmount = ethers.utils.parseUnits(`${testStakedAmount}`, 'ether');
+
       let tx: ContractTransaction;
       tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
       const { blockNumber } = await tx.wait();
@@ -158,8 +160,8 @@ describe('[ Contract flow for Staking contract ] ', () => {
       });
       const balance = await asPatron.balanceOf(patron.address);
       const balance2 = await asPatron2.balanceOf(patron2.address);
-      console.log("Balance ", balance)
-      console.log('Staked Amount : ', stakedAmount)
+      console.log('Balance ', balance);
+      console.log('Staked Amount : ', stakedAmount);
       expect(balance).to.equal(stakedAmount);
       expect(balance2).to.equal(oneEWT.mul(5));
 
@@ -185,11 +187,14 @@ describe('[ Contract flow for Staking contract ] ', () => {
         reward = interest + stackedAmount (3.3)
       */
 
-      const calculateReward = () => {
-        return (stakedAmount + stakedAmount * 0.1).toString();
+      const calculateReward = (): number => {
+        const reward = testStakedAmount + testStakedAmount * 0.1;
+        if (reward % 1 === 0) {
+          return reward;
+        }
+        return parseFloat((reward).toString());
       };
-      console.log('calculateReward: ', calculateReward());
-      expect(expectedReward).to.eq(calculateReward());
+      expect(ethers.utils.formatEther(expectedReward)).to.eq(calculateReward().toString());
     });
   });
 });
