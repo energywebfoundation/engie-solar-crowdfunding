@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 contract Staking is ERC20Burnable {
     uint256 public hardCap;
     uint256 public endDate;
-    uint256 public rewards;
+    uint256 public totalRewards;
     uint256 public signupEnd;
     uint256 public startDate;
     uint256 public totalStaked;
@@ -100,7 +100,7 @@ contract Staking is ERC20Burnable {
     function depositRewards() external payable notAborted activated notfunded {
         require(msg.value > 0, "Not rewards provided");
         require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
-        rewards += msg.value;
+        totalRewards += msg.value;
         rewardProvider = msg.sender;
         contractFunded = true;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
@@ -154,7 +154,7 @@ contract Staking is ERC20Burnable {
 
     function terminate() external onlyOwner {
         require(aborted == false , "Already terminated");
-		uint256 payout = rewards;
+		uint256 payout = totalRewards;
         if (payout != 0){
 		    payable(rewardProvider).transfer(payout);
         }
@@ -228,18 +228,15 @@ contract Staking is ERC20Burnable {
     }
 
     function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
-        // uint256 percentageOfStake = _amount / totalStaked;
-        // uint256 interests;
-        // if (rewards != 0){
-        //    interests = percentageOfStake / rewards;
-        // }
-        // else {
-        //     interests = 0;
-        // }
-        // reward = _amount + interests;
-        uint256 interests;
-        interests = _amount * 1e2;
-        reward = interests / 1e3 + _amount;
+
+        // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
+        if (totalRewards != 0){ 
+            uint256 interests = _amount * 1e2;
+            reward = interests / 1e3 + _amount;
+        } else {
+            reward = _amount;
+        }
+        
     }
 
     function getRewards() external notPaused view returns (uint256){
