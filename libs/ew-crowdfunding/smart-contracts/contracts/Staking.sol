@@ -8,25 +8,22 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 contract Staking is ERC20Burnable {
     uint256 public hardCap;
     uint256 public endDate;
-    uint256 public rewards;
+    uint256 public totalRewards;
     uint256 public signupEnd;
     uint256 public startDate;
+    uint256 public totalStaked;
     bytes32 public serviceRole;
     bytes32 public patronRole;
     address private owner;
     address private rewardProvider;
     uint256 public contributionLimit;
     bool private aborted;
+    bool private contractFunded;
     bool private isContractPaused;
     bool private isContractInitialized;
     address public claimManagerAddress;
 
-    struct Stake {
-        uint256 time;
-        uint256 deposit;
-    }
-
-    mapping(address => Stake) private stakes;
+    mapping(address => uint256) private stakes;
     
     event CampaignAborted(uint256 _timestamp);
     event StatusChanged(string statusType, uint256 date);
@@ -72,7 +69,8 @@ contract Staking is ERC20Burnable {
     modifier belowLimit(){
         require(msg.value > 0, "No EWT provided");
         require(block.timestamp < signupEnd, "Signup Ended");
-        require(stakes[msg.sender].deposit < contributionLimit, "Contribution limit reached"); //prevent reentrency
+        require(totalStaked < hardCap, "Hardcap Exceeded");
+        require(stakes[msg.sender] < contributionLimit, "Contribution limit reached"); //prevent reentrency
         _;
     }
 
@@ -94,11 +92,17 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function depositRewards() external payable notAborted activated {
+    modifier notfunded(){
+        require(contractFunded == false, "Already funded");
+        _;
+    }
+
+    function depositRewards() external payable notAborted activated notfunded {
         require(msg.value > 0, "Not rewards provided");
         require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
-        rewards += msg.value;
+        totalRewards += msg.value;
         rewardProvider = msg.sender;
+        contractFunded = true;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
     }
 
@@ -116,7 +120,7 @@ contract Staking is ERC20Burnable {
     ) external onlyOwner {
         require(!isContractInitialized, "Already initialized");//Preventing resetting by owner
         require(_contributionLimit > 0, "wrong contribution limit");
-        require(_hardCap >= _contributionLimit, "hardCap exceeded");
+        require(_hardCap >= _contributionLimit, "Hardcap Exceeded");
         require(_signupStart < _signupEnd, "Wrong signup config");
         require(_startDate > _signupEnd, "Start febore signup period");
 		endDate = _endDate;
@@ -133,7 +137,7 @@ contract Staking is ERC20Burnable {
         emit StatusChanged("contractPaused", block.timestamp);
     }
 
-     function unPause() public onlyOwner paused {
+     function unPause() public onlyOwner paused notAborted {
         isContractPaused = false;
         emit StatusChanged("contractUnpaused", block.timestamp);
     }
@@ -150,7 +154,7 @@ contract Staking is ERC20Burnable {
 
     function terminate() external onlyOwner {
         require(aborted == false , "Already terminated");
-		uint256 payout = rewards;
+		uint256 payout = totalRewards;
         if (payout != 0){
 		    payable(rewardProvider).transfer(payout);
         }
@@ -159,19 +163,50 @@ contract Staking is ERC20Burnable {
         emit CampaignAborted(block.timestamp);
     }
 
-    function stake() external payable initialized belowLimit notPaused {
+    function refund(uint256 _amount) internal {
+        payable(msg.sender).transfer(_amount);
+    }
+
+     function stake() external payable notAborted initialized belowLimit notPaused {
         require(hasRole(msg.sender, patronRole), "No patron role");
-        if (stakes[msg.sender].deposit + msg.value > contributionLimit){
-            uint256 overflow = msg.value - (contributionLimit - stakes[msg.sender].deposit);
-            stakes[msg.sender].deposit = contributionLimit;
-            _mint(msg.sender, msg.value - overflow); // mint the effective amount deposited
-            payable(msg.sender).transfer(overflow);
-            emit RefundExceeded(msg.sender, msg.value, overflow);
-        } else {
-            stakes[msg.sender].deposit += msg.value;
-            _mint(msg.sender, msg.value);
+
+        if ((stakes[msg.sender] + msg.value >= contributionLimit)){
+            uint256 overFlow_limit = msg.value - (contributionLimit - stakes[msg.sender]);
+            uint256 toMint_limit = msg.value - overFlow_limit;
+            //Check if we overflow from hardCap
+            if ((totalStaked + toMint_limit) >= hardCap){
+                uint256 overFlow_hardCap = toMint_limit - (hardCap - totalStaked);
+                uint256 finalMint = toMint_limit - overFlow_hardCap;
+                
+                stakes[msg.sender] += finalMint;
+                _mint(msg.sender, finalMint);
+                emit RefundExceeded((msg.sender), msg.value, overFlow_limit + overFlow_hardCap);
+                refund(overFlow_limit + overFlow_hardCap);
+                totalStaked += finalMint;
+            } else {
+                stakes[msg.sender] += toMint_limit;
+                _mint(msg.sender, toMint_limit);
+                emit RefundExceeded((msg.sender), msg.value, overFlow_limit);
+                refund(overFlow_limit);
+                totalStaked += toMint_limit;
+            }
+        } else { 
+            if (totalStaked + msg.value >= hardCap){
+
+                uint256 overFlow_hardCap = msg.value - (hardCap - totalStaked);
+                uint256 finalMint = msg.value - overFlow_hardCap;
+                
+                stakes[msg.sender] += finalMint;
+                _mint(msg.sender, finalMint);
+                emit RefundExceeded((msg.sender), msg.value, overFlow_hardCap);
+                refund(overFlow_hardCap);
+                totalStaked += finalMint;
+            } else {   
+                stakes[msg.sender] += msg.value;
+                _mint(msg.sender, msg.value);
+                totalStaked += msg.value;
+            }
         }
-        stakes[msg.sender].time = block.timestamp;
     }
 
     function redeemAll() external notPaused {
@@ -180,11 +215,11 @@ contract Staking is ERC20Burnable {
     
     function redeem(uint256 _amount) public notPaused withdrawsAllowed sufficientBalance(_amount) {
         uint256 toWithdraw = _getRewards(_amount);
-        // burn(_amount);
         _burn(_msgSender(), _amount);
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
+        totalStaked -= _amount;
     }
 
     function hasRole(address _provider, bytes32 _role) public view returns (bool){
@@ -193,8 +228,15 @@ contract Staking is ERC20Burnable {
     }
 
     function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
-        uint256 interests = _amount * (rewards / hardCap);
-        reward = _amount + interests;
+
+        // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
+        if (totalRewards != 0){ 
+            uint256 interests = _amount * 1e2;
+            reward = interests / 1e3 + _amount;
+        } else {
+            reward = _amount;
+        }
+        
     }
 
     function getRewards() external notPaused view returns (uint256){

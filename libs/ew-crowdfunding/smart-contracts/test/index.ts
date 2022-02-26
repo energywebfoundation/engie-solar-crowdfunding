@@ -30,10 +30,7 @@ let stakingContract: Staking;
 const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
 const tokenName = "SOLAR TOKEN";
-//const patronRole = utils.namehash('patron.Role');
-// const serviceProviderRole = utils.namehash('service.Role');
 const nullAddress = '0x0000000000000000000000000000000000000000';
-//email.roles.verification.apps.energyweb.iam.ewc
 const patronRole = utils.namehash("email.roles.verification.apps.energyweb.iam.ewc"); // 0xd83104a5ca54632eb1cb11c562631db005434d589ddd5945399e64672b7d944e (volta)
                                                                                        // 0xf38d9dea0045e3374755be597c94e71e067bc00d8cd8c6bb2e556e3ae1ad573c (dev)
 
@@ -69,12 +66,13 @@ const initializeContract = async (
 describe("[ Crowdfunding Staking contract ] ", () => {
   const claimManagerABI = abi;
   const oneEWT = utils.parseUnits("1", "ether");
-  const hardCap = oneEWT.mul(10000);
-  const rewards = oneEWT.mul(9000);
+  const hardCap = oneEWT.mul(247);
+  const rewards = oneEWT.mul(1000);
   const contributionLimit = oneEWT.mul(200);
   
-  const getReward = (amount : BigNumber) => {
-    const interests = amount.mul((rewards.div(hardCap)));
+  const getReward = (amount : BigNumber, totalStaked : BigNumber) => {
+    const percentageOfStake = amount.div(totalStaked);
+    const interests = (percentageOfStake.div(rewards));
     return amount.add(interests);
   }
 
@@ -256,7 +254,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           wrongContributionLimit,
           signupStart,
           signupEnd
-        )).to.be.revertedWith('hardCap exceeded');
+        )).to.be.revertedWith('Hardcap Exceeded');
       })
       
       it("Can initialize Contract",  async () => {
@@ -284,13 +282,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   describe("\n+ Testing Staking & Widthdrawal", () => {
 
     it('Refunds when added stake exceeds contributionlimit', async () => {
-      const beforeStake = await asPatron3.balanceOf(patron3.address);
-      // overflow = amountSent - (contributionLimit - amountStaked);
-      const overflow = contributionLimit.add(oneEWT.mul(42)).sub(contributionLimit.sub(beforeStake));
+      const overflow = oneEWT.mul(40);
       await expect(asPatron3.stake({
-              value: contributionLimit.add(oneEWT.mul(42))
+              value: contributionLimit.add(oneEWT.mul(40))
           }),
-      ).to.emit(asPatron3, 'RefundExceeded').withArgs(patron3.address, contributionLimit.add(oneEWT.mul(42)), overflow);
+      ).to.emit(asPatron3, 'RefundExceeded').withArgs(patron3.address, oneEWT.mul(240), overflow);
       expect(await asPatron3.balanceOf(patron3.address)).equals(contributionLimit);
     });
     
@@ -318,7 +314,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           }),
       ).changeEtherBalance(asPatron, oneEWT.mul(3));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
-  
     });
 
     it('fails when not enrolled user tries to stake', async () => {
@@ -346,10 +341,38 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   
       expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
+    });
 
+    it('Refunds when added stake exceeds HardCap & ContributionLimit', async () => {
+
+      /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
+      +  Hardcap = 247 EWT && ContributionLimit = 200                                         +
+      +                                                                                       +
+      + Staking 242 EWTs while totalStaked = 207 / 247 and userStakes = 7 / 200               +
+      +                                                                                       +
+      + Expected Results:                                                                     +
+      +                 * only 40 EWTs of the 242 will be staked                              +
+      +                 * 202 EWTs will be refunded                                           +
+      +                                                                                       +
+      \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+      const overflow = oneEWT.mul(202);
+      await expect(tx = await asPatron.stake({
+              value: oneEWT.mul(242)
+          }),
+      ).to.emit(asPatron, 'RefundExceeded').withArgs(patron.address, oneEWT.mul(242), overflow);
+      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(47));
+      
+      //Checking that wallet is correctly refunded (i.e only 40 EWTs have been consumed instead of 242)
+      expect(tx).changeEtherBalance(patron, (oneEWT.mul(-40)));
+    });
+
+    it('fails when trying to stake more than Hardcap', async () => {
+      await expect(asPatron2.stake({ value : oneEWT})).to.be.revertedWith('Hardcap Exceeded');
     });
 
     it('fails when trying to unstake all funds without deposit', async () => {
+
       await expect(asPatron2.redeemAll()).to.be.revertedWith('error: withdraw 0 EWT');
     });
 
@@ -362,28 +385,22 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
   
     it('Can withdraw partial funds before start date', async () => {
-      await expect(
-        await asPatron2.stake({
-            value: oneEWT.mul(7)
-        }),
-      ).changeEtherBalance(asPatron2, oneEWT.mul(7));
-  
-      expect(tx = await asPatron2.redeem(oneEWT.mul(5))).changeEtherBalance(asPatron2, (oneEWT.mul(-5)));
+      expect(tx = await asPatron.redeem(oneEWT.mul(40))).changeEtherBalance(asPatron2, (oneEWT.mul(-40)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
-      await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, oneEWT.mul(5), timestamp);
+      await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(40), timestamp);
     });
 
     it('Checks SLT Token burning on withdraw', async () => {
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
-      await expect(tx).to.emit(stakingContract, 'TokenBurnt').withArgs(patron2.address, oneEWT.mul(5), timestamp);
-      expect(await asPatron.balanceOf(patron2.address)).equals(oneEWT.mul(2));
+      await expect(tx).to.emit(stakingContract, 'TokenBurnt').withArgs(patron.address, oneEWT.mul(40), timestamp);
+      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
     });
 
     it('fails when trying to withdraw more funds than staked', async () => {
       await expect(
-        asPatron2.redeem(oneEWT.mul(15))
+        asPatron.redeem(oneEWT.mul(15))
       ).to.be.revertedWith('Not enough EWT at stake');
     });
   
@@ -436,10 +453,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       it("Can stake after unpause", async () => {
         await expect(
           tx = await asPatron2.stake({
-               value: oneEWT.mul(1)
+               value: oneEWT.mul(2)
            }),
-       ).changeEtherBalance(asPatron2, oneEWT.mul(1));
-       await expect(tx).to.emit(asPatron2, 'Transfer').withArgs(nullAddress, patron2.address, oneEWT.mul(1));
+       ).changeEtherBalance(asPatron2, oneEWT.mul(2));
+       await expect(tx).to.emit(asPatron2, 'Transfer').withArgs(nullAddress, patron2.address, oneEWT.mul(2));
       });
   })
 
@@ -469,10 +486,15 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       })).to.emit(stakingContract, 'RewardSent').withArgs(owner.address, rewards, await getTimestamp(tx));
       await expect(tx).changeEtherBalance(asOwner, rewards);
     });
+    
+    it('fails when depositing reward more than once', async () => {
+      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Already funded');
+    })
 
     it('can check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
-      const expectedReward = getReward(balance);
+      const totalStaked = await asPatron2.totalStaked()
+      const expectedReward = getReward(balance, totalStaked);
       const patronReward = await asPatron2.getRewards();
       expect(patronReward).to.equal(expectedReward);
     });
@@ -483,13 +505,13 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('fails when trying to withdraw partially after startDate and before end', async () => {
       await expect(
-        asPatron.redeem(oneEWT.mul(1))
+        asPatron2.redeem(oneEWT.mul(1))
       ).to.be.revertedWith('Withdraws not allowed');
     });
 
     it('fails when trying to unstake all funds after startDate and before end', async () => {
       await expect(
-        asPatron.redeemAll()
+        asPatron2.redeemAll()
       ).to.be.revertedWith('Withdraws not allowed');
     });
 
@@ -497,7 +519,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       //Moving to endDate
       await timeTravel(provider, end);
       let tx;
-      const expectedReward = getReward(oneEWT);
+      const totalStaked = await asPatron2.totalStaked()
+      const expectedReward = getReward(oneEWT.mul(1), totalStaked);
       expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
@@ -507,7 +530,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     it('Can withdraw all funds after end date', async () => {
       let tx;
       const patronBalance = await asPatron2.balanceOf(patron2.address);
-      const expectedReward = getReward(patronBalance);
+      const totalStaked = await asPatron2.totalStaked()
+      const expectedReward = getReward(patronBalance, totalStaked);
       expect(tx = await asPatron2.redeemAll()).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
@@ -534,6 +558,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     it("Can terminate campaign", async () => {
       await expect(asOwner.terminate()).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
     });
+
+    it('fails when patron tries to stake after campaign abortion', async () => {
+      await expect(asPatron.stake({value: oneEWT})).to.be.revertedWith('Campaign aborted');
+    })
 
     it('fails when service provider sends reward after campaign abortion', async () => {
       await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Campaign aborted');
