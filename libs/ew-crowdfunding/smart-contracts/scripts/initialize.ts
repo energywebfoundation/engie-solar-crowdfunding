@@ -1,22 +1,27 @@
 const _emoji = require("node-emoji");
 const prompt_ = require("prompt-sync")();
+const deployedAddress = require('../src/lib/deployedAddress').deployedAddress;
+
+const throwError = (errorMessage : string) => {
+  throw (`\n\x1b[31m${errorMessage}\x1b[0m\n`);
+}
 
 const _checkAnswer = (answer : string, promptMode = "noLoop") => {
-    const isInvalid = (answer : string) => (answer !== "n" && answer !== "N" && answer !== "Y" && answer !== "y");
-      if (promptMode === "loop"){
-        while (isInvalid(answer)){
-          console.log(`\t${emoji.emojify(":rotating_light:")} Invalid option \" ${answer}\" ... Please choose a valid option !`);
-          answer = _prompt("Init? (Y/n) ") as string;
-        }
-      } else {
-        if (isInvalid(answer)){
-          console.log(`\t${emoji.emojify(":x:")} \"${answer}\" is not a valid option. Aborting ...`);
-        }
+  const isInvalid = (answer : string) => (answer !== "n" && answer !== "N" && answer !== "Y" && answer !== "y");
+    if (promptMode === "loop"){
+      while (isInvalid(answer)){
+        console.log(`\t${emoji.emojify(":rotating_light:")} Invalid option \" ${answer}\" ... Please choose a valid option !`);
+        answer = _prompt("Init? (Y/n) ") as string;
       }
-      if (answer !== "Y" && answer != "y") {
-          process.exit(0);
+    } else {
+      if (isInvalid(answer)){
+        console.log(`\t${emoji.emojify(":x:")} \"${answer}\" is not a valid option. Aborting ...`);
       }
-  }
+    }
+    if (answer !== "Y" && answer != "y") {
+        process.exit(0);
+    }
+}
 
 const getEWTAmount = (field: string, emoji?: string) => {
     console.log("\n");
@@ -31,7 +36,7 @@ const getDate = (label : string) => {
         console.log(label , " date : ", new Date(date).toLocaleString());
         return Math.floor(new Date(date).getTime() / 1000);
     } else {
-        throw("DateERROR: No date entered ...");
+        throwError("DateERROR: No date entered ...")
     }
 }
 
@@ -53,8 +58,7 @@ const getInitParams = async (_deployedContract : typeof Contract) => {
         contributionLimit,
     }
   
-  }
-
+}
 
 const initializeContract = async (_deployedContract : typeof Contract) => {
 
@@ -102,8 +106,8 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
       console.log(
         `${_emoji.emojify(":large_green_circle:")} Staking Pool ${_deployedContract.address} initialized
         
-        \t* start date : ${new Date(startDate * 1000).toLocaleString()}
-        \t* end   date : ${new Date(endDate * 1000).toLocaleString()} \n`,
+        \t* start date : ${new Date(startDate! * 1000).toLocaleString()}
+        \t* end   date : ${new Date(endDate! * 1000).toLocaleString()} \n`,
       );
     } catch (error) {
       console.log(
@@ -112,20 +116,28 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
     }
 };
 
-  const init = async () => {
-    if (process.env.CONTRACT_ADDRESS) {
-      const Contract = await ethers.getContractFactory("Staking");
-      const stakingPoolContract = Contract.attach(process.env.CONTRACT_ADDRESS);
+const init = async (contractAddress : string) => {
+  const contractName = process.env.CONTRACT_NAME || "Staking"
+  if (contractAddress){
+    try {
+      console.log(`Initialing ${contractName} contract:`, contractAddress)
+
+      const Contract = await ethers.getContractFactory(contractName);
+      const stakingPoolContract = Contract.attach(contractAddress);
   
       await initializeContract(stakingPoolContract);
-    } else {
-      throw("Provide deployed contract address into CONTRACT_ADDRESS variable in .env");
+    } catch(err) {
+      const error = err as string
+      throw(new Error(error));
     }
+  } else {
+    throwError(` Contract address not found : \n\tPlease set contract address or make sure that ${contractName} contract is deployed`)
   }
+}
   
-  init()
-    .then(() => process.exit(0))
-    .catch((error) => {
-      console.error(error);
-      process.exit(1);
-    });
+init(deployedAddress)
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
