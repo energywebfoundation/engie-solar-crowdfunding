@@ -27,7 +27,6 @@ let stakingContract: Staking;
 const tokenSymbol = 'SLT';
 const defaultRoleVersion = 1;
 const tokenName = 'SOLAR TOKEN';
-const nullAddress = '0x0000000000000000000000000000000000000000';
 const patronRole = utils.namehash('email.roles.verification.apps.energyweb.iam.ewc'); // 0xd83104a5ca54632eb1cb11c562631db005434d589ddd5945399e64672b7d944e (volta)
 
 // 0xf38d9dea0045e3374755be597c94e71e067bc00d8cd8c6bb2e556e3ae1ad573c (dev)
