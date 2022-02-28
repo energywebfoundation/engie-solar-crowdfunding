@@ -138,7 +138,7 @@ describe('[ Rewards calculation ] ', () => {
     stakingContract = params.stakingContract;
   });
 
-  describe.only('\n+ Testing Staking & Widthdrawal & Redemption flow', () => {
+  describe('\n+ Testing Staking & Widthdrawal & Redemption flow', () => {
     const testStakedAmount = 3.77;
     const deposit : BigNumber = ethers.utils.parseEther(testStakedAmount.toString());
 
