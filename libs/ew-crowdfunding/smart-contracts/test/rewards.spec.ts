@@ -16,6 +16,7 @@ let asOwner: Staking;
 let asPatron: Staking;
 let asPatron2: Staking;
 let signupEnd: number;
+let timestamp : number;
 let signupStart: number;
 let contractAddress: string;
 let provider: MockProvider;
@@ -49,7 +50,7 @@ const initializeContract = async (
   return transaction;
 };
 
-describe('[ Contract flow for Staking contract ] ', () => {
+describe('[ Rewards calculation ] ', () => {
   const claimManagerABI = abi;
   const oneEWT = utils.parseUnits('1', 'ether');
   const hardCap = oneEWT.mul(247);
@@ -64,9 +65,6 @@ describe('[ Contract flow for Staking contract ] ', () => {
     //set endDate 1 year ahead
     const end = Number(DateTime.fromSeconds(start).plus({ year: 1 }).toSeconds().toFixed(0));
     const claimManagerMocked = await deployMockContract(owner, claimManagerABI);
-    console.log('ClaimManager address >> ', claimManagerMocked.address);
-    console.log('Patron Role >> ', patronRole);
-    console.log('Service Provider Role >> ', serviceProviderRole);
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
       serviceProviderRole,
@@ -141,60 +139,68 @@ describe('[ Contract flow for Staking contract ] ', () => {
   });
 
   describe.only('\n+ Testing Staking & Widthdrawal & Redemption flow', () => {
-    it('Should handle floating values of the reward', async () => {
-      const testStakedAmount = 3.77;
-      const stakedAmount = ethers.utils.parseUnits(`${testStakedAmount}`, 'ether');
+    const testStakedAmount = 3.77;
+    const deposit : BigNumber = ethers.utils.parseEther(testStakedAmount.toString());
 
-      let tx: ContractTransaction;
-      tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+    it('Should handle floating values of the reward', async () => {
+      
+      const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
       const { blockNumber } = await tx.wait();
-      const { timestamp } = await provider.getBlock(blockNumber);
+      timestamp = (await provider.getBlock(blockNumber)).timestamp;
 
       await expect(tx).to.emit(stakingContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
 
       await asPatron.stake({
-        value: stakedAmount,
+        value: deposit,
       });
       await asPatron2.stake({
         value: oneEWT.mul(5),
       });
       const balance = await asPatron.balanceOf(patron.address);
       const balance2 = await asPatron2.balanceOf(patron2.address);
-      console.log('Balance ', balance);
-      console.log('Staked Amount : ', stakedAmount);
-      expect(balance).to.equal(stakedAmount);
+      expect(balance).to.equal(deposit);
       expect(balance2).to.equal(oneEWT.mul(5));
+    })
 
-      const afterStart = start - timestamp + 42000;
-      await timeTravel(provider, afterStart);
-
-      await asOwner.depositRewards({
-        value: rewards,
-      });
-
-      await timeTravel(provider, end);
-
-      const expectedReward = await asPatron.getRewards();
-
-      /*
-        Example implementation:
-        // Third test - with 10%
-        interest = _amount * 0.1
-        reward = interest + stakedAmount
-        For amount 3, reward is 0.3
-
-        interest = _amount * 1e2 (at the end divide it by 1e3)
-        reward = interest + stackedAmount (3.3)
-      */
-
-      const calculateReward = (): number => {
-        const reward = testStakedAmount + testStakedAmount * 0.1;
-        if (reward % 1 === 0) {
-          return reward;
-        }
-        return parseFloat((reward).toString());
-      };
-      expect(ethers.utils.formatEther(expectedReward)).to.eq(calculateReward().toString());
+    
+    it("Should correctly calculate reward without interests before campaign activation", async () => {
+      const patronReward = await asPatron.getRewards();
+      expect(patronReward).to.eq(deposit);
     });
+
+    it("Should correctly calculate reward with interests after campaign activation", async () => {
+           //Moving time on activation time sothat contract can be funded
+           const afterStart = start - timestamp + 42000;
+           await timeTravel(provider, afterStart);
+       
+           await asOwner.depositRewards({
+             value: rewards,
+           });
+       
+           await timeTravel(provider, end);
+       
+           const expectedReward = await asPatron.getRewards();
+       
+           /*
+             Example implementation:
+             // Third test - with 10%
+             interest = _amount * 0.1
+             reward = interest + stakedAmount
+             For amount 3, reward is 0.3
+       
+             interest = _amount * 1e2 (at the end divide it by 1e3)
+             reward = interest + stackedAmount (3.3)
+           */
+       
+           const calculateReward = (): number => {
+             const reward = testStakedAmount + testStakedAmount * 0.1;
+             if (reward % 1 === 0) {
+               return reward;
+             }
+             return parseFloat((reward).toString());
+           };
+           expect(ethers.utils.formatEther(expectedReward)).to.eq(calculateReward().toString());
+    });
+
   });
 });
