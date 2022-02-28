@@ -9,15 +9,25 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      gap: '30px',
-      padding: '30px',
+      borderRadius: '16px',
     },
     divider: {
-      height: '3px',
+      position: 'absolute',
+      height: '1px',
       width: '100%',
-      background: 'linear-gradient(135deg, #00AAFF 0.89%, #23D2B5 94.05%)',
+      background: 'rgba(0, 0, 0, 0.64)',
     },
-    lendingDetails: {
+    separator: {
+      position: 'absolute',
+      width: '100%',
+      height: '1px',
+      background: 'rgba(0, 0, 0, 0.64)',
+      bottom: '160px',
+      [theme.breakpoints.down('sm')]: {
+        bottom: '120px',
+      },
+    },
+    lendingContainer: {
       width: '100%',
       display: 'flex',
       flexDirection: 'row',
@@ -27,11 +37,22 @@ export const useStyles = makeStyles(() => {
         gap: '30px',
       },
     },
+    formContainer: {
+      width: '100%',
+      padding: '40px',
+    },
+    lendingTitle: {
+      background: 'linear-gradient(253.88deg, #0F1E29 -348.29%, #B5F9FE -262.61%, #0F1E29 81.26%)',
+      borderRadius: '16px 16px 0px 0px',
+      color: theme.palette.common.white,
+      padding: '40px',
+      minWidth: '320px',
+    },
     contributionWrapper: {
+      position: 'relative',
       width: '100%',
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'flex-end',
       justifyContent: 'space-between',
       [theme.breakpoints.down('sm')]: {
         flexDirection: 'column',
@@ -43,10 +64,22 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'start',
-      gap: '10px',
+      gap: '28px',
+      background: 'linear-gradient(135deg, #00AAFF 0.89%, #23D2B5 94.05%)',
+      borderRadius: '0px 0px 16px 16px',
+      color: theme.palette.common.black,
+      padding: '40px 0px 40px 40px',
+      minWidth: '320px',
+      [theme.breakpoints.down('sm')]: {
+        width: '100%',
+      },
     },
-    box: {
-      width: '100%',
+    contributionItem: {
+      background: 'rgba(196, 196, 196, 0.16)',
+      border: '1px solid rgba(0, 0, 0, 0.16)',
+      borderRadius: '16px 0px 0px 16px',
+      padding: '16px',
+      height: '86px',
     },
     form: {
       display: 'flex',
@@ -83,11 +116,53 @@ export const useStyles = makeStyles(() => {
         justifyContent: 'flex-start',
       },
     },
+    redeem: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start',
+      gap: '28px',
+      padding: '40px 40px 40px 0px',
+    },
+    redeemableReward: {
+      marginTop: '50px',
+      padding: '16px',
+      height: '86px',
+      [theme.breakpoints.down('sm')]: {
+        marginTop: 0,
+      },
+    },
+    progressBarItem: {
+      background: 'rgba(196, 196, 196, 0.16)',
+      border: '1px solid rgba(0, 0, 0, 0.16)',
+      borderRadius: '0px 16px 16px 0px',
+      padding: '16px',
+      paddingLeft: '100px',
+      height: '86px',
+      [theme.breakpoints.down('md')]: {
+        paddingLeft: '16px',
+      },
+      [theme.breakpoints.between(900, 1280)]: {
+        paddingLeft: '5px',
+      },
+      display: 'flex',
+      alignItems: 'center',
+    },
     progress: {
       width: '100%',
       display: 'flex',
       gap: '10px',
       flexDirection: 'column',
+    },
+    redeemAction: {
+      marginTop: '50px',
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end',
+      paddingTop: '16px',
+      [theme.breakpoints.down('sm')]: {
+        marginTop: 0,
+      },
     },
   };
 });

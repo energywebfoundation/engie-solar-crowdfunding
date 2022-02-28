@@ -1,6 +1,10 @@
-import { Web3ModalConfig } from '../web3/types';
 import { DSLAModalsActionsEnum } from './reducer';
-import { LoginOptions } from '../web3/iam';
+import { ProviderType } from 'iam-client-lib';
+
+export type Web3ModalConfig = {
+  title: string;
+  text: string;
+};
 
 export type TWeb3Notification = {
   open: boolean;
@@ -11,12 +15,39 @@ export type ILogin = {
   open: boolean;
   isConnectedToRightNetwork: boolean;
   isMetamaskPresent: boolean;
-  login: (loginOptions: LoginOptions) => void;
+  login: (providerType: ProviderType) => void;
+};
+
+export type IRedeem = {
+  open: boolean;
+  tokenBalance: number;
+  onRedeem: (amount: number) => void;
+};
+
+export type IConfirm = {
+  open: boolean;
+  title?: string;
+  text: string;
+  onConfirm: () => void;
+};
+
+export type ICongrats = {
+  open: boolean;
+};
+
+export type ILend = {
+  open: boolean;
+  amount: number;
+  onLend: (amount: number) => void;
 };
 
 export interface IDSLAModalsStore {
   notification: TWeb3Notification;
   login: ILogin;
+  redeem: IRedeem;
+  confirm: IConfirm;
+  congrats: ICongrats;
+  lend: ILend;
 }
 
 interface IWeb3NotificationAction {
@@ -29,4 +60,30 @@ interface ILoginAction {
   payload: ILogin;
 }
 
-export type TDSLAModalsAction = IWeb3NotificationAction | ILoginAction;
+interface IRedeemAction {
+  type: DSLAModalsActionsEnum.SHOW_REDEEM;
+  payload: IRedeem;
+}
+
+interface IConfirmAction {
+  type: DSLAModalsActionsEnum.SHOW_CONFIRM;
+  payload: IConfirm;
+}
+
+interface ICongratsAction {
+  type: DSLAModalsActionsEnum.SHOW_CONGRATS;
+  payload: ICongrats;
+}
+
+interface ILendAction {
+  type: DSLAModalsActionsEnum.SHOW_LEND;
+  payload: ILend;
+}
+
+export type TDSLAModalsAction =
+  | IWeb3NotificationAction
+  | ILoginAction
+  | IRedeemAction
+  | IConfirmAction
+  | ICongratsAction
+  | ILendAction;

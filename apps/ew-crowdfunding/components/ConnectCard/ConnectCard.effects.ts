@@ -1,10 +1,24 @@
-import { useContext } from 'react';
-import { DSLAModalsActionsEnum, useDSLAModalsDispatch, Web3Context } from '../../context';
+import { ProviderType } from 'iam-client-lib';
+import { useDispatch, useSelector } from 'react-redux';
+import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
+import {
+  selectIsConnectedToRightNetwork,
+  selectIsMetamaskPresent,
+  selectIsLoading,
+  requestLogin,
+} from '../../redux-store';
 
 export const useConnectCardEffects = () => {
   const dispatchModals = useDSLAModalsDispatch();
-  const { isConnectedToRightNetwork, authenticated, isMetamaskPresent, login, logout, isLoading } =
-    useContext(Web3Context);
+  const dispatch = useDispatch();
+
+  const login = (providerType: ProviderType) => {
+    dispatch(requestLogin(providerType, dispatchModals));
+  };
+
+  const isLoading = useSelector(selectIsLoading);
+  const isConnectedToRightNetwork = useSelector(selectIsConnectedToRightNetwork);
+  const isMetamaskPresent = useSelector(selectIsMetamaskPresent);
 
   const onConnect = () => {
     dispatchModals({
@@ -18,5 +32,5 @@ export const useConnectCardEffects = () => {
     });
   };
 
-  return { onConnect, authenticated, logout, isLoading };
+  return { onConnect, isLoading };
 };
