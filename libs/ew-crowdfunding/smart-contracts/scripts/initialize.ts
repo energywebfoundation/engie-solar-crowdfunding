@@ -42,19 +42,20 @@ const getDate = (label : string) => {
 
 const getInitParams = async (_deployedContract : typeof Contract) => {
   
-    const signupStart = getDate("signupStart")
-    const signupEnd = getDate("signupEnd");
-    const startDate = getDate("Start");
-    const endDate = getDate("End");
-    const hardCap = getEWTAmount("hardCap", ":moneybag:");
-    const contributionLimit = getEWTAmount("contributionLimit", ":lock:");
-  
+    const signupStart = (process.env.SIGNUP_START || getDate("signupStart")) as number;
+    const signupEnd = (process.env.SIGNUP_END || getDate("signupEnd")) as number;
+    const startDate = (process.env.START_DATE || getDate("Start")) as number;
+    const endDate = (process.env.END_DATE || getDate("End")) as number;
+    const hardCap = (process.env.HARDCAP || getEWTAmount("hardCap", ":moneybag:")) as number;
+    const contributionLimit = (process.env.CONTRIBUTION_LIMIT || getEWTAmount("contributionLimit", ":lock:")) as number;
+    const minRequiredStake = (process.env.MIN_REQUIRED_STAKE || getEWTAmount("minRequiredStake", ":arrow_heading_up:")) as number;
     return {
         hardCap,
         endDate,
         startDate,
         signupEnd,
         signupStart,
+        minRequiredStake,
         contributionLimit,
     }
   
@@ -68,17 +69,12 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
         startDate,
         signupEnd,
         signupStart,
+        minRequiredStake,
         contributionLimit,
-    } = await getInitParams(_deployedContract);    
-
-    const answer = prompt_("Do you want to initialize the contract ? (Y/n) ");
-    _checkAnswer(answer as string, "loop");
-  
-    console.log(`
-    \t${_emoji.emojify(":fuelpump:")} Initializing contract ...`
-    );
+    } = await getInitParams(_deployedContract);
+    
     console.log(
-      `\t\tInit params:
+      `\n\t\tInit params:
 
             Signup start = ${signupStart} (unix timestamp)
             Signup end = ${signupEnd} (unix timestamp)
@@ -86,8 +82,17 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
             End Date = ${endDate} (unix timestamp)
             HardCap = ${hardCap} wei
             Contribution Limit = ${contributionLimit} wei
+            Minimum required stake = ${minRequiredStake} wei
       `,
     );
+
+    const answer = prompt_("Do you want to initialize the contract ? (Y/n) ");
+    _checkAnswer(answer as string, "loop");
+  
+    console.log(`
+    \t${_emoji.emojify(":fuelpump:")} Initializing contract ...`
+    );
+    
 
     try {
       const tx = await _deployedContract.init(
@@ -97,6 +102,7 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
         endDate,
         hardCap,
         contributionLimit,
+        minRequiredStake,
       );
   
       console.log(`\t Transaction hash :  ${tx.hash}\n`);
