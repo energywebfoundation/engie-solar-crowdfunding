@@ -1,30 +1,90 @@
-// We require the Hardhat Runtime Environment explicitly here. This is optional
-// but useful for running the script in a standalone fashion through `node <script>`.
-//
-// When running the script with `npx hardhat run <script>` you'll find the Hardhat
-// Runtime Environment's members available in the global scope.
-import { ethers } from "hardhat";
+const fs = require('fs');
+const path = require('path');
+const Contract = require("ethers").Contract;
+const Staking = require("../ethers").Staking;
+const _prompt = require("prompt-sync")();
 
-async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+const emoji = require("node-emoji");
+const { ethers } = require("hardhat");
 
-  // We get the contract to deploy
-  const Greeter = await ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+const displayContractInfos = (_contractName:string, _contract : typeof Staking) => {
+  console.log(`\n[ ${_contractName}'s infos ]`);
+  console.log(`\tAddress: ${_contract.address}\n`);
+};
 
-  await greeter.deployed();
-
-  console.log("Greeter deployed to:", greeter.address);
+const checkAnswer = (answer : string, promptMode = "noLoop") => {
+  const isInvalid = (answer : string) => (answer !== "n" && answer !== "N" && answer !== "Y" && answer !== "y");
+    if (promptMode === "loop"){
+      while (isInvalid(answer)){
+        console.log(`\t${emoji.emojify(":rotating_light:")} Invalid option \" ${answer}\" ... Please choose a valid option !`);
+        answer = _prompt("Init? (Y/n) ") as string;
+      }
+    } else {
+      if (isInvalid(answer)){
+        console.log(`\t${emoji.emojify(":x:")} \"${answer}\" is not a valid option. Aborting ...`);
+      }
+    }
+    if (answer !== "Y" && answer != "y") {
+        process.exit(0);
+    }
 }
 
-// We recommend this pattern to be able to use async/await everywhere
-// and properly handle errors.
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+const getClaimManagerAddress = (hardhatNetwork : string | undefined) => {
+  const claimManagerAddress = (
+    hardhatNetwork === 'ewc' ?
+    process.env.EWC_CLAIM_MANAGER_ADDRESS 
+  : process.env.VOLTA_CLAIM_MANAGER_ADDRESS
+  );
+  
+  return claimManagerAddress;
+}
+
+const deployContract = async (contractName : string) => {
+  const answer = _prompt(`\t${emoji.emojify(":warning:")}\tYou are about to deploy ${contractName} contract to ${process.env.HARDHAT_NETWORK} network. This will consume some EWT. Do you Confirm ? (Y/n) :  `) as string;
+
+  checkAnswer(answer);
+  console.log(`\t${emoji.emojify(":hourglass_flowing_sand:")} Deploying ${contractName} ...`);
+  
+  const Contract = await ethers.getContractFactory(contractName);
+
+  const claimManagerAddress = getClaimManagerAddress(process.env.HARDHAT_NETWORK);
+
+  try {
+    const deployedContract = await Contract.deploy(
+      claimManagerAddress,
+      process.env.SERVICE_ROLE,
+      process.env.PATRON_ROLE,
+      process.env.TOKEN_NAME,
+      process.env.TOKEN_SYMBOL
+    );
+    displayContractInfos(contractName, deployedContract);
+    console.log(`${emoji.emojify(":large_green_circle:")} ${contractName} deployed ${emoji.emojify(":rocket:")}`);
+
+    return deployedContract;
+  } catch (error) {
+    console.log(`${emoji.emojify(":red_circle:")} An error occurred during contract deployment ${error}`);
+    return undefined;
+  }
+};
+
+const exportContractAddress = async (contractAdress : string) => {
+  const addressFile = await fs.writeFileSync(path.join(__dirname, '..', 'src', 'lib', 'deployedAddress.ts'), `export const deployedAddress = "${contractAdress}";` )
+}
+
+const deploy = async () => {  
+    const stakingPoolContract = await deployContract("Staking");
+    //Find a way to properly expose contract address, i.e deployedContract.address, to the environment
+    await exportContractAddress(stakingPoolContract.address);
+    return stakingPoolContract.address
+}
+
+module.exports = {
+  checkAnswer
+}
+
+deploy()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
