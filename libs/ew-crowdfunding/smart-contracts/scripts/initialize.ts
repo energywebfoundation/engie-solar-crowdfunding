@@ -34,18 +34,25 @@ const getDate = (label : string) => {
     const date = prompt_(`${_emoji.emojify(":calendar:")} Enter the ${label} date (YYYY-MM-DD h:mm:ss) : `);
     if (date){
         console.log(label , " date : ", new Date(date).toLocaleString());
-        return Math.floor(new Date(date).getTime() / 1000);
+        return Math.floor(new Date(date).getTime());
     } else {
         throwError("DateERROR: No date entered ...")
     }
 }
 
+const formatDate = (date: string | undefined): number | undefined => {
+  if (!date) {
+    return;
+  }
+  return Math.floor(new Date(date).getTime());
+}
+
 const getInitParams = async (_deployedContract : typeof Contract) => {
   
-    const signupStart = (process.env.SIGNUP_START || getDate("signupStart")) as number;
-    const signupEnd = (process.env.SIGNUP_END || getDate("signupEnd")) as number;
-    const startDate = (process.env.START_DATE || getDate("Start")) as number;
-    const endDate = (process.env.END_DATE || getDate("End")) as number;
+    const signupStart = (formatDate(process.env.SIGNUP_START) || getDate("signupStart")) as number;
+    const signupEnd = (formatDate(process.env.SIGNUP_END) || getDate("signupEnd")) as number;
+    const startDate = (formatDate(process.env.START_DATE) || getDate("Start")) as number;
+    const endDate = (formatDate(process.env.END_DATE) || getDate("End")) as number;
     const hardCap = (process.env.HARDCAP || getEWTAmount("hardCap", ":moneybag:")) as number;
     const contributionLimit = (process.env.CONTRIBUTION_LIMIT || getEWTAmount("contributionLimit", ":lock:")) as number;
     const minRequiredStake = (process.env.MIN_REQUIRED_STAKE || getEWTAmount("minRequiredStake", ":arrow_heading_up:")) as number;
