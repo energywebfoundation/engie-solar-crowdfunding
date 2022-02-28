@@ -44,11 +44,10 @@ const formatDate = (date: string | undefined): number | undefined => {
   if (!date) {
     return;
   }
-  return Math.floor(new Date(date).getTime());
+  return Math.floor(new Date(date).getTime()) / 1000;
 }
 
 const getInitParams = async (_deployedContract : typeof Contract) => {
-  
     const signupStart = (formatDate(process.env.SIGNUP_START) || getDate("signupStart")) as number;
     const signupEnd = (formatDate(process.env.SIGNUP_END) || getDate("signupEnd")) as number;
     const startDate = (formatDate(process.env.START_DATE) || getDate("Start")) as number;
