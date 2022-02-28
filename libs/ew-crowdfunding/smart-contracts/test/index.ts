@@ -49,7 +49,8 @@ const initializeContract = async (
     hardCap : BigNumber,
     contributionLimit : BigNumber,
     signupStart : number,
-    signupEnd : number
+    signupEnd : number,
+    minRequiredStake: BigNumber,
   ) : Promise<ContractTransaction> => {
    const transaction =  await contract.init(
     signupStart,
@@ -57,7 +58,8 @@ const initializeContract = async (
     start,
     end,
     hardCap,
-    contributionLimit
+    contributionLimit,
+    minRequiredStake
     );
 
     return transaction;
@@ -69,6 +71,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   const hardCap = oneEWT.mul(247);
   const rewards = oneEWT.mul(1000);
   const contributionLimit = oneEWT.mul(200);
+  const minRequiredStake = oneEWT.div(2);
 
   const getReward = async (amount : BigNumber, totalStaked : BigNumber) => {
     let finalReward: BigNumber;
@@ -150,6 +153,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       stakingContract,
       contributionLimit,
       claimManagerMocked,
+      minRequiredStake,
       asOwner: stakingContract.connect(owner),
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
@@ -197,7 +201,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           hardCap,
           contributionLimit,
           signupStart,
-          signupEnd
+          signupEnd,
+          minRequiredStake
           )
         ).to.be.revertedWith('Must be the admin');
       });
@@ -215,7 +220,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
             hardCap,
             contributionLimit,
             signupStart,
-            signupEnd
+            signupEnd,
+            minRequiredStake
           )).to.be.revertedWith('Start febore signup period');
           //increment wrongStart to the next day
           wrongStart = Number(DateTime.fromSeconds(wrongStart).plus({day: 1}).toSeconds().toFixed(0));
@@ -231,6 +237,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           contributionLimit,
           signupEnd, // Inversion of signup End and signup start (end < start)
           signupStart,
+          minRequiredStake
         )).to.be.revertedWith('Wrong signup config');
     
         await expect(initializeContract(
@@ -241,6 +248,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           contributionLimit,
           signupStart,
           signupStart, // Setting the same date on signup End and signup start
+          minRequiredStake
         )).to.be.revertedWith('Wrong signup config');
       });
       
@@ -261,7 +269,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           wrongHardCap,
           wrongContributionLimit,
           signupStart,
-          signupEnd
+          signupEnd,
+          minRequiredStake
         )).to.be.revertedWith('Hardcap Exceeded');
       })
       
@@ -273,12 +282,12 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           hardCap,
           provider,
           stakingContract,
-          contributionLimit
+          contributionLimit,
+          minRequiredStake
         } = await loadFixture(
           defaultFixture,
         );
-    
-        tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+        tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd, minRequiredStake);
         const { blockNumber } = await tx.wait();
         const { timestamp } = await provider.getBlock(blockNumber);
     

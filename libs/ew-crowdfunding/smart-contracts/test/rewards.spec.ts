@@ -11,10 +11,12 @@ let end: number;
 let start: number;
 let patron: Wallet;
 let patron2: Wallet;
+let patron3: Wallet;
 let owner: Wallet;
 let asOwner: Staking;
 let asPatron: Staking;
 let asPatron2: Staking;
+let asPatron3: Staking;
 let signupEnd: number;
 let timestamp : number;
 let signupStart: number;
@@ -27,6 +29,7 @@ const defaultRoleVersion = 1;
 const tokenName = 'SOLAR TOKEN';
 const nullAddress = '0x0000000000000000000000000000000000000000';
 const patronRole = utils.namehash('email.roles.verification.apps.energyweb.iam.ewc'); // 0xd83104a5ca54632eb1cb11c562631db005434d589ddd5945399e64672b7d944e (volta)
+
 // 0xf38d9dea0045e3374755be597c94e71e067bc00d8cd8c6bb2e556e3ae1ad573c (dev)
 
 const serviceProviderRole = utils.namehash('email.roles.eea.apps.florin.engietestvolta.iam.ewc'); //0xe00e224c60394052a994978cde84b44e76076341daafc2a0194b1a8d06a1e453
@@ -44,8 +47,9 @@ const initializeContract = async (
   contributionLimit: BigNumber,
   signupStart: number,
   signupEnd: number,
+  minRequiredStake: BigNumber,
 ): Promise<ContractTransaction> => {
-  const transaction = await contract.init(signupStart, signupEnd, start, end, hardCap, contributionLimit);
+  const transaction = await contract.init(signupStart, signupEnd, start, end, hardCap, contributionLimit, minRequiredStake);
 
   return transaction;
 };
@@ -56,15 +60,17 @@ describe('[ Rewards calculation ] ', () => {
   const hardCap = oneEWT.mul(247);
   const rewards = oneEWT.mul(1000);
   const contributionLimit = oneEWT.mul(200);
+  const minRequiredStake = oneEWT.div(2);
 
   async function fixture(
     start: number,
-    [owner, patron, patron2, patron3, patron4, notEnrolled]: Wallet[],
+    [owner, patron, patron2, patron3, notEnrolled]: Wallet[],
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
     const end = Number(DateTime.fromSeconds(start).plus({ year: 1 }).toSeconds().toFixed(0));
     const claimManagerMocked = await deployMockContract(owner, claimManagerABI);
+
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
       serviceProviderRole,
@@ -93,6 +99,8 @@ describe('[ Rewards calculation ] ', () => {
 
     await claimManagerMocked.mock.hasRole.withArgs(patron2.address, patronRole, defaultRoleVersion).returns(true);
 
+    await claimManagerMocked.mock.hasRole.withArgs(patron3.address, patronRole, defaultRoleVersion).returns(true);
+
     await claimManagerMocked.mock.hasRole.withArgs(notEnrolled.address, patronRole, defaultRoleVersion).returns(false);
 
     return {
@@ -101,6 +109,7 @@ describe('[ Rewards calculation ] ', () => {
       owner,
       patron,
       patron2,
+      patron3,
       provider,
       hardCap,
       signupEnd,
@@ -108,10 +117,12 @@ describe('[ Rewards calculation ] ', () => {
       stakingContract,
       contributionLimit,
       claimManagerMocked,
+      minRequiredStake,
       asOwner: stakingContract.connect(owner),
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
       asPatron2: stakingContract.connect(patron2),
+      asPatron3: stakingContract.connect(patron3),
     };
   }
 
@@ -128,9 +139,11 @@ describe('[ Rewards calculation ] ', () => {
     owner = params.owner;
     patron = params.patron;
     patron2 = params.patron2;
+    patron3 = params.patron3;
     asOwner = params.asOwner;
     asPatron = params.asPatron;
     asPatron2 = params.asPatron2;
+    asPatron3 = params.asPatron3;
     provider = params.provider;
     signupEnd = params.signupEnd;
     signupStart = params.signupStart;
@@ -143,8 +156,7 @@ describe('[ Rewards calculation ] ', () => {
     const deposit : BigNumber = ethers.utils.parseEther(testStakedAmount.toString());
 
     it('Should handle floating values of the reward', async () => {
-      
-      const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd);
+      const tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd, minRequiredStake);
       const { blockNumber } = await tx.wait();
       timestamp = (await provider.getBlock(blockNumber)).timestamp;
 
@@ -161,7 +173,12 @@ describe('[ Rewards calculation ] ', () => {
       expect(balance).to.equal(deposit);
       expect(balance2).to.equal(oneEWT.mul(5));
     })
-
+    
+    it("Should fail if stake value is less then the minimum required value", async () => {
+      await expect(asPatron3.stake(
+        {value: oneEWT.mul(4).div(10)}
+      )).to.be.revertedWith('Value to low');
+    });
     
     it("Should correctly calculate reward without interests before campaign activation", async () => {
       const patronReward = await asPatron.getRewards();
