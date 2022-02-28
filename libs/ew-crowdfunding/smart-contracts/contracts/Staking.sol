@@ -22,6 +22,7 @@ contract Staking is ERC20Burnable {
     bool private isContractPaused;
     bool private isContractInitialized;
     address public claimManagerAddress;
+    uint256 public minRequiredStake;
 
     mapping(address => uint256) private stakes;
     
@@ -97,6 +98,11 @@ contract Staking is ERC20Burnable {
         _;
     }
 
+    modifier minStaked() {
+        require(msg.value >= minRequiredStake, "Value to low");
+        _;
+    }
+
     function depositRewards() external payable notAborted activated notfunded {
         require(msg.value > 0, "Not rewards provided");
         require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
@@ -116,7 +122,8 @@ contract Staking is ERC20Burnable {
         uint256 _startDate,
         uint256 _endDate,
         uint256 _hardCap,
-        uint256 _contributionLimit
+        uint256 _contributionLimit,
+        uint256 _minRequiredStake
     ) external onlyOwner {
         require(!isContractInitialized, "Already initialized");//Preventing resetting by owner
         require(_contributionLimit > 0, "wrong contribution limit");
@@ -129,6 +136,7 @@ contract Staking is ERC20Burnable {
         signupEnd = _signupEnd;
         isContractInitialized = true;
         contributionLimit = _contributionLimit;
+        minRequiredStake = _minRequiredStake;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
@@ -167,7 +175,7 @@ contract Staking is ERC20Burnable {
         payable(msg.sender).transfer(_amount);
     }
 
-     function stake() external payable notAborted initialized belowLimit notPaused {
+     function stake() external payable notAborted initialized belowLimit notPaused minStaked {
         require(hasRole(msg.sender, patronRole), "No patron role");
 
         if ((stakes[msg.sender] + msg.value >= contributionLimit)){
