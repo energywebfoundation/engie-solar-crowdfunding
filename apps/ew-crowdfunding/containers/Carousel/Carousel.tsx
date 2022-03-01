@@ -25,7 +25,7 @@ export const Carousel: FC = () => {
           <Typography variant='h1'>Solar Crowdfunding Platform</Typography>
           <Typography variant='h5'>
             Over x% of people living in sub-Saharan Africa don`t have access to electricity. ENGIE EnergyAccess (EEA)
-            and Energy Web are partnering to deploy more solar to vulnerable populations bytapping in new sources of
+            and Energy Web are partnering to deploy more solar to vulnerable populations by tapping in new sources of
             funding: crypto-based decentralized finance. This pilot platform is theinitial proof of concept leveraging
             decentralized finance (DeFi) to accelerate clean andaffordable energy access for all.
           </Typography>
