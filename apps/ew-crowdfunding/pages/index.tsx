@@ -27,7 +27,7 @@ const Home: NextPage = () => {
           <ImageText
             imagePath='/Store2.png'
             title='How does this platform work?'
-            text='This DeFi platform uses the open-source Energy Web technology stack and runs on the Energy Web Chain. Micro-investors can finance the installation of clean energy assets by staking their Energy Web Tokens (EWT), the native token of the Energy Web Chain. In this first proof ofconcept, the target goal is to collect $100,000 worth of EWT within START_DATE and END_DATE.'
+            text='This DeFi platform uses the open-source Energy Web technology stack and runs on the Energy Web Chain. Micro-investors can finance the installation of clean energy assets by staking their Energy Web Tokens (EWT), the native token of the Energy Web Chain. In this first proof of concept, the target goal is to collect $100,000 worth of EWT within START_DATE and END_DATE.'
           />
         </AppContainer>
       </Paper>
