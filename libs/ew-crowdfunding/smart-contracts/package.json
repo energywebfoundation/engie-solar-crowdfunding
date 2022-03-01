@@ -4,6 +4,7 @@
     "test": "npx hardhat test",
     "compile": "npx hardhat compile",
     "deploy": "npx hardhat run scripts/deploy.ts",
+    "init": "npx hardhat run scripts/initialize.ts",
     "test:volta": "npx hardhat test --network volta"
   },
   "devDependencies": {
