@@ -146,24 +146,22 @@ contract Staking is ERC20Burnable {
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
-    function pause() external notAborted onlyOwner notPaused {
+    function pause() external onlyOwner notPaused {
         isContractPaused = true;
         emit StatusChanged("contractPaused", block.timestamp);
     }
 
-     function unPause() public onlyOwner paused notAborted {
+     function unPause() public onlyOwner paused {
         isContractPaused = false;
         emit StatusChanged("contractUnpaused", block.timestamp);
     }
 
     function deleteParameters() internal {
-		delete endDate;
 		delete hardCap;
-        delete startDate;
         delete signupEnd;
+        delete totalRewards;
         delete isContractPaused;
 		delete contributionLimit;
-        delete claimManagerAddress;
     }
 
     function terminate() external onlyOwner {
@@ -244,7 +242,7 @@ contract Staking is ERC20Burnable {
     function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
-        if (totalRewards != 0){ 
+        if (!aborted && totalRewards != 0){ 
             uint256 interests = _amount * 1e2;
             reward = interests / 1e3 + _amount;
         } else {

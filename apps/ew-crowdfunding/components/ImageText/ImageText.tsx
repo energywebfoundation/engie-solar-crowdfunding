@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { FC } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 import { useStyles } from './ImageText.styles';
 
 export interface ImageTextProps {
@@ -10,6 +10,8 @@ export interface ImageTextProps {
   text?: string;
   reverse?: boolean;
   shadow?: boolean;
+  link?: string;
+  linkText?: string;
 }
 
 export const ImageText: FC<ImageTextProps> = ({
@@ -18,6 +20,8 @@ export const ImageText: FC<ImageTextProps> = ({
   text,
   reverse = false,
   shadow = true,
+  link,
+  linkText,
 }: ImageTextProps) => {
   const classes = useStyles();
 
@@ -33,6 +37,14 @@ export const ImageText: FC<ImageTextProps> = ({
       <Box className={classes.textWrapper}>
         <Typography variant='h3'>{title}</Typography>
         <Typography variant='h5'>{text}</Typography>
+        {link && (
+          <Typography variant='h5'>
+            Learn more{' '}
+            <Link href={link} target='_blank'>
+              {linkText || link}
+            </Link>
+          </Typography>
+        )}
       </Box>
     </Box>
   );

@@ -25,8 +25,11 @@ export const useStyles = makeStyles(() => {
       alignItems: 'center',
       gap: '60px',
       padding: '104px',
-      maxWidth: '750px',
+      textAlign: 'center',
       color: theme.palette.common.white,
+      [theme.breakpoints.down('md')]: {
+        padding: '0',
+      },
     },
   };
 });

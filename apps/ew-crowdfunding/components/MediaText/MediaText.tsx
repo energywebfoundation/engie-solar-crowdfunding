@@ -7,8 +7,8 @@ import ReactPlayer from 'react-player';
 
 export interface MediaTextProps {
   videoUrl: string;
-  heading: string;
-  title: string;
+  heading?: string;
+  title?: string;
   text?: string;
   reverse?: boolean;
 }
@@ -18,7 +18,7 @@ export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, 
 
   return (
     <Box my={3} className={classes.mainWrapper}>
-      <Typography variant='h3'>{heading}</Typography>
+      {heading && <Typography variant='h3'>{heading}</Typography>}
       <Box className={classes.wrapper} sx={{ flexDirection: reverse ? 'row-reverse' : 'row' }}>
         <Box className={classes.mediaWrapper}>
           <ReactPlayer
@@ -29,8 +29,8 @@ export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, 
           />
         </Box>
         <Box className={classes.textWrapper}>
-          <Typography variant='h3'>{title}</Typography>
-          <Typography variant='h5'>{text}</Typography>
+          {title && <Typography variant='h3'>{title}</Typography>}
+          {text && <Typography variant='h5'>{text}</Typography>}
         </Box>
       </Box>
       <img className={classes.ellipse} src='/EllipseMedia.png' alt='Engie bubble' />
