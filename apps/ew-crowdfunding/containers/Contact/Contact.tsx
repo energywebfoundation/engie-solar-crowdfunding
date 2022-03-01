@@ -20,12 +20,12 @@ export const Contact: FC = () => {
           </Typography>
           <Typography variant='h5' mt={3} align='center'>
             Contact Energy Web at
-            <a className={classes.link} href='mailto:Lab@energyweb.organd'>
-              Lab@energyweb.organd
+            <a className={classes.link} href='mailto:Lab@energyweb.org'>
+              Lab@energyweb.org
             </a>
           </Typography>
           <Typography variant='h5' mb={5} align='center'>
-            EEA at
+            and EEA at
             <a className={classes.link} href='mailto:stefan.zelazny@engie.com.'>
               stefan.zelazny@engie.com.
             </a>
