@@ -3,6 +3,7 @@ import { FC } from 'react';
 import { Box, Button, Typography, AppBar, Toolbar } from '@mui/material';
 import { useStyles } from './Carousel.styles';
 import Link from 'next/link';
+import { AppContainer } from '../../components';
 
 export const Carousel: FC = () => {
   const classes = useStyles();
@@ -19,20 +20,24 @@ export const Carousel: FC = () => {
           </Box>
         </Toolbar>
       </AppBar>
-      <Box className={classes.wrapper}>
-        <Typography variant='h1'>Headline H1</Typography>
-        <Typography variant='h5'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit
-          auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus.
-        </Typography>
-        <Link href='/wallet'>
-          <a>
-            <Button style={{ width: '200px' }} variant='contained'>
-              Wallet
-            </Button>
-          </a>
-        </Link>
-      </Box>
+      <AppContainer>
+        <Box className={classes.wrapper}>
+          <Typography variant='h1'>Solar Crowdfunding Platform</Typography>
+          <Typography variant='h5'>
+            Over x% of people living in sub-Saharan Africa don`t have access to electricity. ENGIE EnergyAccess (EEA)
+            and Energy Web are partnering to deploy more solar to vulnerable populations by tapping in new sources of
+            funding: crypto-based decentralized finance. This pilot platform is the initial proof of concept leveraging
+            decentralized finance (DeFi) to accelerate clean and affordable energy access for all.
+          </Typography>
+          <Link href='/wallet'>
+            <a>
+              <Button style={{ width: '200px' }} variant='contained'>
+                Fund solar
+              </Button>
+            </a>
+          </Link>
+        </Box>
+      </AppContainer>
     </Box>
   );
 };

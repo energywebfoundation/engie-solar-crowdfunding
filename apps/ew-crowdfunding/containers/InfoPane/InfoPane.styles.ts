@@ -39,6 +39,7 @@ export const useStyles = makeStyles(() => {
       gap: '30px',
       [theme.breakpoints.down('md')]: {
         width: '100%',
+        minWidth: '100%',
       },
     },
     button: {

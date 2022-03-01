@@ -7,6 +7,14 @@ export const useStyles = makeStyles(() => {
       backgroundColor: theme.palette.common.white,
       boxShadow: 'none',
     },
+    didContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: '10px',
+      [theme.breakpoints.down(505)]: {
+        display: 'none',
+      },
+    },
     avatar: {
       width: '40px',
       height: '40px',
@@ -16,6 +24,6 @@ export const useStyles = makeStyles(() => {
     },
     logo: {
       cursor: 'pointer',
-    }
+    },
   };
 });

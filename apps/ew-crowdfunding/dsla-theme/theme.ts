@@ -48,6 +48,7 @@ const lightTheme: ThemeOptions = {
       styleOverrides: {
         root: {
           fontWeight: 400,
+          lineHeight: '1.6',
         },
         h1: {
           fontWeight: 500,
@@ -74,4 +75,4 @@ const lightTheme: ThemeOptions = {
   },
 };
 
-export const theme: Theme = createTheme(lightTheme)
+export const theme: Theme = createTheme(lightTheme);
