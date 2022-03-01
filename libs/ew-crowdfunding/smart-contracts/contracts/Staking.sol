@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
-import "./libs/IClaimManager.sol";
+pragma solidity ^0.8.12;
+import "./interfaces/IClaimManager.sol";
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
@@ -45,7 +45,13 @@ contract Staking is ERC20Burnable {
         _;
     }
    
-    constructor(address _claimManager, bytes32 _serviceRole, bytes32 _patronRole, string memory tokenName, string memory tokenSymbol) ERC20(tokenName, tokenSymbol) {
+    constructor(
+        address _claimManager,
+        bytes32 _serviceRole,
+        bytes32 _patronRole,
+        string memory tokenName,
+        string memory tokenSymbol
+    ) ERC20(tokenName, tokenSymbol) {
         owner = msg.sender;
         claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;

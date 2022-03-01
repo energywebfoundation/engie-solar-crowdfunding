@@ -4,7 +4,7 @@ import { MockProvider, solidity, deployContract, loadFixture, deployMockContract
 import StakingContract from '../artifacts/contracts/Staking.sol/Staking.json';
 import { Wallet, utils, BigNumber, ContractTransaction } from 'ethers';
 import { DateTime } from 'luxon';
-import { abi } from '../artifacts/contracts/libs/IClaimManager.sol/IClaimManager.json';
+import { abi } from '../artifacts/contracts/interfaces/IClaimManager.sol/IClaimManager.json';
 
 use(solidity);
 let end: number;
