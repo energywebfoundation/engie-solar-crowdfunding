@@ -51,7 +51,7 @@ const getChainId = (networkName : string = 'volta') => {
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.4",
+    version: "0.8.12",
     settings: {
       optimizer: {
         enabled: true,
@@ -59,7 +59,8 @@ const config: HardhatUserConfig = {
       }
     },
   },
-  defaultNetwork: 'ganache',
+  // defaultNetwork: 'ganache',
+  defaultNetwork: 'volta',
   networks: {
     volta: {
       url: process.env.VOLTA_URL,
