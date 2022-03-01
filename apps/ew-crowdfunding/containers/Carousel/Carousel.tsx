@@ -20,15 +20,17 @@ export const Carousel: FC = () => {
         </Toolbar>
       </AppBar>
       <Box className={classes.wrapper}>
-        <Typography variant='h1'>Headline H1</Typography>
+        <Typography variant='h1'>Solar Crowdfunding Platform</Typography>
         <Typography variant='h5'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a fringilla tortor. Donec eu diam ut velit
-          auctor ultrices. Mauris in augue pellentesque mauris dignissim hendrerit at in purus.
+          Over x% of people living in sub-Saharan Africa don`t have access to electricity. ENGIE EnergyAccess (EEA) and
+          Energy Web are partnering to deploy more solar to vulnerable populations bytapping in new sources of funding:
+          crypto-based decentralized finance. This pilot platform is theinitial proof of concept leveraging
+          decentralized finance (DeFi) to accelerate clean andaffordable energy access for all.
         </Typography>
         <Link href='/wallet'>
           <a>
             <Button style={{ width: '200px' }} variant='contained'>
-              Wallet
+              Fund solar
             </Button>
           </a>
         </Link>
