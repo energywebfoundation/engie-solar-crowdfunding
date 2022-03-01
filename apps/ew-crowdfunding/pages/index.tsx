@@ -37,7 +37,7 @@ const Home: NextPage = () => {
             videoUrl='https://www.youtube.com/watch?v=jkjfa3otdQM'
             heading='Why Crowdfund for Solar?'
             // title='Headline H2'
-            text='These funds will be distributedas micro-loans to residents of Benin,Rwanda, and Zambia-African countries with some of the lowest rates of electrification enabling communities to purchase solar systems without taking out high-interest loans from traditional banks. These installations will increase clean energy access for X number of people. In addition to creating this impact, investors will be paid back their principal and 10% interest after the 1-year completion of the campaign.'
+            text='These funds will be distributed as micro-loans to residents of Benin, Rwanda and Zambia-African countries with some of the lowest rates of electrification enabling communities to purchase solar systems without taking out high-interest loans from traditional banks. These installations will increase clean energy access for X number of people. In addition to creating this impact, investors will be paid back their principal and 10% interest after the 1-year completion of the campaign.'
           />
         </AppContainer>
       </Box>
