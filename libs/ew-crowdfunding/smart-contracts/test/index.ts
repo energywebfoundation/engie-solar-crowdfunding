@@ -14,10 +14,12 @@ let patron: Wallet;
 let owner : Wallet;
 let patron2: Wallet;
 let patron3: Wallet;
+let patron4: Wallet;
 let asOwner : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
 let asPatron3: Staking;
+let asPatron4: Staking;
 let signupEnd : number;
 let notEnrolled: Wallet;
 let signupStart : number;
@@ -89,7 +91,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
   async function fixture(
     start: number,
-    [owner, patron, patron2, patron3, notEnrolled]: Wallet[],
+    [owner, patron, patron2, patron3, patron4, notEnrolled]: Wallet[],
     provider: MockProvider,
   ) {
     //set endDate 1 year ahead
@@ -133,6 +135,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     await claimManagerMocked.mock.hasRole
     .withArgs(patron3.address, patronRole, defaultRoleVersion)
     .returns(true);
+    
+    await claimManagerMocked.mock.hasRole
+    .withArgs(patron4.address, patronRole, defaultRoleVersion)
+    .returns(true);
 
     await claimManagerMocked.mock.hasRole
     .withArgs(notEnrolled.address, patronRole, defaultRoleVersion)
@@ -145,6 +151,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       patron,
       patron2,
       patron3,
+      patron4,
       provider,
       hardCap,
       signupEnd,
@@ -159,6 +166,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       asPatron: stakingContract.connect(patron),
       asPatron2: stakingContract.connect(patron2),
       asPatron3: stakingContract.connect(patron3),
+      asPatron4: stakingContract.connect(patron4),
       asNotEnrolled: stakingContract.connect(notEnrolled),
     };
   }
@@ -177,11 +185,13 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     patron = params.patron;
     patron2 = params.patron2;
     patron3 = params.patron3;
+    patron4 = params.patron4;
     asOwner = params.asOwner;
     asPatron = params.asPatron;
     provider = params.provider;
     asPatron2 = params.asPatron2;
     asPatron3 = params.asPatron3;
+    asPatron4 = params.asPatron4;
     signupEnd = params.signupEnd;
     signupStart = params.signupStart;
     notEnrolled = params.notEnrolled;
@@ -468,12 +478,21 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       });
   
       it("Can stake after unpause", async () => {
+        //Patron2's stake
         await expect(
           tx = await asPatron2.stake({
                value: oneEWT.mul(2)
            }),
        ).changeEtherBalance(asPatron2, oneEWT.mul(2));
        await expect(tx).to.emit(asPatron2, 'Transfer').withArgs(nullAddress, patron2.address, oneEWT.mul(2));
+      
+       //patron4's stake
+       await expect(
+        tx = await asPatron4.stake({
+             value: oneEWT.mul(2)
+         }),
+     ).changeEtherBalance(asPatron4, oneEWT.mul(2));
+     await expect(tx).to.emit(asPatron4, 'Transfer').withArgs(nullAddress, patron4.address, oneEWT.mul(2));
       });
   })
 
@@ -582,6 +601,24 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('fails when service provider sends reward after campaign abortion', async () => {
       await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Campaign aborted');
+    });
+
+    it ('should accept freezing on a cancelled contract', async () => {
+      tx = await asOwner.pause();
+      await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
+    });
+
+    it ('should fail on tokens withdrawals if a cancelled contract is frozen', async () => {
+      await expect(asPatron4.redeemAll()).to.be.revertedWith("Contract is frozen");
+    });
+
+    it ('should accept unfreezing on a cancelled contract', async () => {
+      await expect(asOwner.unPause()).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
+    });
+
+    it ('should allow tokens withdrawals if a cancelled contract is unfrozen', async () => {
+      expect(await asPatron4.balanceOf(patron4.address)).to.equal(oneEWT.mul(2))
+      expect(tx = await asPatron4.redeemAll()).changeEtherBalance(asPatron, (oneEWT.mul(-2)));
     });
   })
 });
