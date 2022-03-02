@@ -5,7 +5,7 @@ import { TDSLAModalsAction } from '../../context/modals/types';
 import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
-import { Staking__factory, Staking } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { Staking, Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
@@ -70,14 +70,13 @@ export const getGlobalTokenLimit =
   (): AppThunk =>
   async (dispatch): Promise<void> => {
     const stakingPool = {
-      address: '0x0BB89202CF5ec4fA68C5A6cD3456e8f0a1f9Fd3d', // find a proper way way to get this value from deployed contract
+      address: deployedAddress, // find a proper way way to get this value from deployed contract
+      bytecode: Staking__factory.bytecode,
+      abi: Staking__factory.createInterface(),
     };
    
-    if (Staking__factory) {
-      const stakingBytcode = Staking__factory.bytecode;
-      const stakingInterface = Staking__factory.createInterface();
-      const stakingContract = new Staking__factory(stakingInterface, stakingBytcode).attach(stakingPool.address);
-    }
+    const stakingContract = new Staking__factory(stakingPool.abi, stakingPool.bytecode).attach(stakingPool.address);
+
     /* ***********************************************************************  */
     /*         First way to interact with smart-contract                        */
     /*                                                                          */
