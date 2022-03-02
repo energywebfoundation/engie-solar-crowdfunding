@@ -57,9 +57,12 @@ export const getAccountBalance =
   };
 
 export const getTokenLimit =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const tokenLimit = Number(process.env.NEXT_PUBLIC_TOKEN_LIMIT);
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const contributionLimit = (await stakingContract.contributionLimit()).toString();
+    const tokenLimit = ethers.utils.formatEther(contributionLimit);
+
     dispatch({
       type: SmartContractActionTypes.SET_TOKEN_LIMIT,
       payload: tokenLimit,
@@ -67,33 +70,12 @@ export const getTokenLimit =
   };
 
 export const getGlobalTokenLimit =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    console.log('Staking__factory: ', Staking__factory)
-    const stakingPool = {
-      address: deployedAddress,
-      bytecode: Staking__factory.bytecode,
-      abi: Staking__factory.createInterface(),
-    };
-    console.log('stakingPool: ', stakingPool)
-   
-    const stakingContract = new Staking__factory(stakingPool.abi, stakingPool.bytecode).attach(stakingPool.address);
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const hardCap = (await stakingContract.hardCap()).toString();
+    const globalTokenLimit = ethers.utils.formatEther(hardCap);
 
-    /* ***********************************************************************  */
-    /*         First way to interact with smart-contract                        */
-    /*                                                                          */
-    /*           await stakingContract.withdrawAll()                            */
-    /*                                                                          */
-    /* ***********************************************************************  */
-    /*        Alternaive way to call contract functions                         */
-    /*                                                                          */
-    /* const staking = new Staking(stakingPool.address, stakingInterface)       */
-    /*  await staking.withdrawAll()                                             */
-    /* ***********************************************************************  */
-
-    // const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
-    const globalTokenLimit = await stakingContract.hardCap()
-    console.log('globalTokenLimit: ', globalTokenLimit)
     dispatch({
       type: SmartContractActionTypes.SET_GLOBAL_TOKEN_LIMIT,
       payload: globalTokenLimit,
@@ -155,7 +137,7 @@ export const getInterestRate =
   };
 
 export const getContributionDeadline =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const contributionDeadline = process.env.NEXT_PUBLIC_CONTRIBUTION_DEADLINE;
     dispatch({
@@ -165,9 +147,11 @@ export const getContributionDeadline =
   };
 
 export const getSolarLoansDistributed =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const solarLoansDistributed = process.env.NEXT_PUBLIC_SOLAR_LOANS_DISTRIBUTED;
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const endDate: number = +(await stakingContract.endDate()).toString();
+    const solarLoansDistributed = new Date(endDate * 1000)
     dispatch({
       type: SmartContractActionTypes.SET_SOLAR_LOANS_DISTRIBUTED,
       payload: solarLoansDistributed,
@@ -175,9 +159,12 @@ export const getSolarLoansDistributed =
   };
 
 export const getSolarLoansMature =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const solarLoansMature = process.env.NEXT_PUBLIC_SOLAR_LOANS_MATURE;
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const endDate: number = +(await stakingContract.endDate()).toString();
+    const solarLoansMature = new Date(endDate * 1000);
+
     dispatch({
       type: SmartContractActionTypes.SET_SOLAR_LOANS_MATURE,
       payload: solarLoansMature,

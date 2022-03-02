@@ -51,21 +51,21 @@ export const useLendingDetailsEffects = () => {
   const dispatchModals = useDSLAModalsDispatch();
 
   useEffect(() => {
-    dispatch(getTokenLimit());
-    dispatch(getGlobalTokenLimit());
     dispatch(getUserContribution());
     dispatch(getSolarLoanTokenBalance());
     dispatch(getRedeemableReward());
     dispatch(getTokensRedeemed());
     dispatch(getInterestRate());
-    dispatch(getContributionDeadline());
-    dispatch(getSolarLoansDistributed());
-    dispatch(getSolarLoansMature());
   });
 
   useEffect(() => {
     if (propertyExists(provider) && propertyExists(currentAddress)) {
       dispatch(getAccountBalance(provider, currentAddress));
+      dispatch(getGlobalTokenLimit(provider));
+      dispatch(getTokenLimit(provider));
+      dispatch(getContributionDeadline(provider));
+      dispatch(getSolarLoansDistributed(provider));
+      dispatch(getSolarLoansMature(provider));
     }
   }, [dispatch, authenticated, provider, currentAddress]);
 
@@ -133,7 +133,7 @@ export const useLendingDetailsEffects = () => {
     if (errorMessage) {
       return;
     }
-    
+
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_LEND,
       payload: {

@@ -67,8 +67,8 @@ const deployContract = async (contractName : string) => {
   }
 };
 
-const exportContractAddress = async (contractAdress : string) => {
-  const addressFile = await fs.writeFileSync(path.join(__dirname, '..', 'src', 'lib', 'deployedAddress.ts'), `export const deployedAddress = "${contractAdress}";` )
+const exportContractAddress = async (contractAdress : string): Promise<string> => {
+  return await fs.writeFileSync(path.join(__dirname, '..', 'src', 'lib', 'deployedAddress.ts'), `export const deployedAddress = '${contractAdress}';` )
 }
 
 const deploy = async () => {  
