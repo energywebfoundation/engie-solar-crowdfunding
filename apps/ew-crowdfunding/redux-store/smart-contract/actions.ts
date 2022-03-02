@@ -5,7 +5,7 @@ import { TDSLAModalsAction } from '../../context/modals/types';
 import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
-import { Staking, Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
