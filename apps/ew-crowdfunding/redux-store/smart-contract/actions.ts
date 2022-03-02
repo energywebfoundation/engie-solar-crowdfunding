@@ -89,7 +89,9 @@ export const getGlobalTokenLimit =
     /*  await staking.withdrawAll()                                             */
     /* ***********************************************************************  */
 
-    const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
+    // const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
+    const globalTokenLimit = stakingContract.hardCap()
+
     dispatch({
       type: SmartContractActionTypes.SET_GLOBAL_TOKEN_LIMIT,
       payload: globalTokenLimit,
