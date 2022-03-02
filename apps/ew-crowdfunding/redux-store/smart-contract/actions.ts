@@ -69,11 +69,13 @@ export const getTokenLimit =
 export const getGlobalTokenLimit =
   (): AppThunk =>
   async (dispatch): Promise<void> => {
+    console.log('Staking__factory: ', Staking__factory)
     const stakingPool = {
-      address: deployedAddress, // find a proper way way to get this value from deployed contract
+      address: deployedAddress,
       bytecode: Staking__factory.bytecode,
       abi: Staking__factory.createInterface(),
     };
+    console.log('stakingPool: ', stakingPool)
    
     const stakingContract = new Staking__factory(stakingPool.abi, stakingPool.bytecode).attach(stakingPool.address);
 
@@ -90,8 +92,8 @@ export const getGlobalTokenLimit =
     /* ***********************************************************************  */
 
     // const globalTokenLimit = Number(process.env.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT);
-    const globalTokenLimit = stakingContract.hardCap()
-
+    const globalTokenLimit = await stakingContract.hardCap()
+    console.log('globalTokenLimit: ', globalTokenLimit)
     dispatch({
       type: SmartContractActionTypes.SET_GLOBAL_TOKEN_LIMIT,
       payload: globalTokenLimit,

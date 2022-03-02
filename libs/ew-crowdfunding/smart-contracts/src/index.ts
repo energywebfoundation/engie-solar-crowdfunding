@@ -1,3 +1,2 @@
-export * from './lib/deployedAddress';
-export * from '../ethers/factories/Staking__factory';
-export * from './lib/ew-crowdfunding-smart-contracts';
+export * from './lib';
+export * from '../ethers';
