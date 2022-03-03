@@ -340,6 +340,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
               value: oneEWT.mul(3)
           }),
       ).changeEtherBalance(asPatron, oneEWT.mul(3));
+      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(3));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
     });
 
