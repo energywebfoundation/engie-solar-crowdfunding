@@ -13,7 +13,9 @@ export const useStyles = makeStyles(() => {
       paddingRight: '100px',
       background: theme.palette.primary.dark,
       justifyContent: 'space-between',
-      [theme.breakpoints.down(770)]: {
+      [theme.breakpoints.down(860)]: {
+        justifyContent: 'center',
+        alignItems: 'center',
         flexDirection: 'column',
         padding: 0,
       },

@@ -11,7 +11,6 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       zIndex: 10,
       flexDirection: 'column',
-      gap: '30px',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '96px',
@@ -24,6 +23,7 @@ export const useStyles = makeStyles(() => {
       [theme.breakpoints.down('sm')]: {
         padding: '40px',
       },
+      textAlign: 'center'
     },
     topBubble: {
       position: 'absolute',
@@ -51,5 +51,13 @@ export const useStyles = makeStyles(() => {
         display: 'none',
       },
     },
+    link: {
+      cursor: 'pointer',
+      marginLeft: '10px',
+      color: theme.palette.primary.main,
+      '&:hover': {
+        color: theme.palette.primary.dark
+      }
+    }
   };
 });

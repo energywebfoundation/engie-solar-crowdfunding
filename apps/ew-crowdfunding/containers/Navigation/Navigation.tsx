@@ -30,10 +30,12 @@ export const Navigation = () => {
                 gap: '10px',
               }}
             >
-              <Typography variant='body1' component='div' style={{ color: '#A6A5AC' }}>
-                {shortenDid(did)}
-              </Typography>
-              <img className={classes.avatar} src={avatar} />
+              <Box className={classes.didContainer}>
+                <Typography variant='body1' component='div' style={{ color: '#A6A5AC' }}>
+                  {shortenDid(did)}
+                </Typography>
+                <img className={classes.avatar} src={avatar} />
+              </Box>
               <Typography
                 style={{ cursor: 'pointer' }}
                 variant='h6'

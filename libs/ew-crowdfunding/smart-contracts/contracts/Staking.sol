@@ -11,6 +11,7 @@ contract Staking is ERC20Burnable {
     uint256 public totalRewards;
     uint256 public signupEnd;
     uint256 public startDate;
+    uint256 public signupStart;
     uint256 public totalStaked;
     bytes32 public serviceRole;
     bytes32 public patronRole;
@@ -140,6 +141,7 @@ contract Staking is ERC20Burnable {
         hardCap = _hardCap;
 		startDate = _startDate;
         signupEnd = _signupEnd;
+        signupStart = _signupStart;
         isContractInitialized = true;
         contributionLimit = _contributionLimit;
         minRequiredStake = _minRequiredStake;
@@ -219,6 +221,10 @@ contract Staking is ERC20Burnable {
                 totalStaked += msg.value;
             }
         }
+    }
+
+    function getDeposit() external view returns(uint256) {
+        return stakes[msg.sender];
     }
 
     function redeemAll() external notPaused {
