@@ -31,7 +31,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'center',
       padding: '20px',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down(770)]: {
         justifyContent: 'center',
         paddingLeft: '0',
       },

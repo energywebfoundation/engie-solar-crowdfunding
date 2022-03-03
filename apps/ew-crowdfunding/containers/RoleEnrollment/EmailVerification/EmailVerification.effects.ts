@@ -11,6 +11,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   const dispatch = useDispatch();
   const claimsService = useSelector(selectClaimsService);
   const [acknowledged, setAcknowledge] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const EMAIL_DOMAINS_WHITELIST = 'yopmail.com;yopmail.fr';
   const [errorMessage, setErrorMessage] = useState(null);
@@ -43,6 +44,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
     if (errorMessage) {
       return;
     }
+    setIsLoading(true);
     try {
       await claimsService.createClaimRequest({
         registrationTypes: [RegistrationTypes.OnChain],
@@ -61,12 +63,14 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
         type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,
         payload: RoleEnrollmentStatus.ENROLLED_NOT_APPROVED,
       });
+      setIsLoading(false);
     } catch (error) {
       console.log('Error creating claim request: ', error);
       dispatch({
         type: Web3ActionTypes.SET_WEB3_FAILURE,
         payload: error,
       });
+      setIsLoading(false);
     }
   };
 
@@ -96,5 +100,6 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
     errorMessage,
     acknowledged,
     setAcknowledge,
+    isLoading,
   };
 };
