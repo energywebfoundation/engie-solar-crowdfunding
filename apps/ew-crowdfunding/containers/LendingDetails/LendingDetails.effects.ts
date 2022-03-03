@@ -9,13 +9,11 @@ import {
   getAccountBalance,
   getContributionDeadline,
   getGlobalTokenLimit,
-  getInterestRate,
   getRedeemableReward,
   getSolarLoansDistributed,
   getSolarLoansMature,
   getSolarLoanTokenBalance,
   getTokenLimit,
-  getTokensRedeemed,
   getUserContribution,
   lend,
   redeemSlt,
@@ -24,7 +22,6 @@ import {
   selectAuthenticated,
   selectContributionDeadline,
   selectGlobalTokenLimit,
-  selectInterestRate,
   selectProvider,
   selectRedeemableReward,
   selectRoleEnrollmentStatus,
@@ -32,7 +29,6 @@ import {
   selectSolarLoansMature,
   selectSolarLoanTokenBalance,
   selectTokenLimit,
-  selectTokensRedeemed,
   selectUserContribution,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
@@ -51,14 +47,6 @@ export const useLendingDetailsEffects = () => {
   const dispatchModals = useDSLAModalsDispatch();
 
   useEffect(() => {
-    dispatch(getUserContribution());
-    dispatch(getSolarLoanTokenBalance());
-    dispatch(getRedeemableReward());
-    dispatch(getTokensRedeemed());
-    dispatch(getInterestRate());
-  });
-
-  useEffect(() => {
     if (propertyExists(provider) && propertyExists(currentAddress)) {
       dispatch(getAccountBalance(provider, currentAddress));
       dispatch(getGlobalTokenLimit(provider));
@@ -66,6 +54,9 @@ export const useLendingDetailsEffects = () => {
       dispatch(getContributionDeadline(provider));
       dispatch(getSolarLoansDistributed(provider));
       dispatch(getSolarLoansMature(provider));
+      dispatch(getUserContribution(provider));
+      dispatch(getSolarLoanTokenBalance(provider, currentAddress));
+      dispatch(getRedeemableReward(provider));
     }
   }, [dispatch, authenticated, provider, currentAddress]);
 
@@ -75,9 +66,8 @@ export const useLendingDetailsEffects = () => {
   const userContribution = useSelector(selectUserContribution);
   const solarLoanTokenBalance = useSelector(selectSolarLoanTokenBalance);
   const redeemableReward = useSelector(selectRedeemableReward);
-  const tokensRedeemed = useSelector(selectTokensRedeemed);
 
-  const interestRate = useSelector(selectInterestRate);
+  const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
   const contributionDeadline = useSelector(selectContributionDeadline);
   const solarLoansDistributed = useSelector(selectSolarLoansDistributed);
   const solarLoansMature = useSelector(selectSolarLoansMature);
@@ -126,7 +116,10 @@ export const useLendingDetailsEffects = () => {
   }, [isSubmitSuccessful, reset]);
 
   const onLendEwt = (loan: number) => {
-    dispatch(lend(loan, dispatchModals));
+    if (!loan || !provider) {
+      return;
+    }
+    dispatch(lend(loan, dispatchModals, provider));
   };
 
   const onSubmit = async (data: { loan: number }) => {
@@ -145,7 +138,10 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeem = (amount: number) => {
-    dispatch(redeemSlt(amount));
+    if (!provider || !amount) {
+      return;
+    }
+    dispatch(redeemSlt(amount, provider));
   };
 
   const onRedeemSlt = () => {
@@ -196,7 +192,6 @@ export const useLendingDetailsEffects = () => {
     errors,
     onRedeemSlt,
     accountBalance,
-    tokensRedeemed,
     tokenLimit,
     onLoanChange,
     errorMessage,

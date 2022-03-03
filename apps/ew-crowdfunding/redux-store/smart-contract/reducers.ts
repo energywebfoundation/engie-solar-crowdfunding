@@ -9,7 +9,6 @@ const initialState: SmartContractReducerState = {
   userContribution: null,
   solarLoanTokenBalance: null,
   redeemableReward: null,
-  tokensRedeemed: null,
   interestRate: null,
   contributionDeadline: null,
   solarLoansDistributed: null,
@@ -52,11 +51,6 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
       return {
         ...state,
         redeemableReward: payload,
-      };
-    case SmartContractActionTypes.SET_TOKENS_REDEEMED:
-      return {
-        ...state,
-        tokensRedeemed: payload,
       };
     case SmartContractActionTypes.SET_INTEREST_RATE:
       return {

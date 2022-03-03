@@ -31,13 +31,6 @@ export const selectRedeemableReward = createSelector(
   (smartContract) => smartContract.redeemableReward,
 );
 
-export const selectTokensRedeemed = createSelector(
-  [selectSmartContract],
-  (smartContract) => smartContract.tokensRedeemed,
-);
-
-export const selectInterestRate = createSelector([selectSmartContract], (smartContract) => smartContract.interestRate);
-
 export const selectContributionDeadline = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.contributionDeadline,

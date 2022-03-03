@@ -126,10 +126,10 @@ export const LendingDetails: FC = () => {
         <Divider className={classes.separator} />
         <Box className={classes.redeem}>
           <Box className={classes.progressBarItem}>
-            <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
+            <ProgressBar value={userContribution} limit={tokenLimit} description='EWT Personal Limit' />
           </Box>
           <Box className={classes.progressBarItem}>
-            <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='Timeline' />
+            <ProgressBar value={solarLoanTokenBalance} limit={tokenLimit} description='SLT Timeline' />
           </Box>
           <Box className={classes.redeemAction}>
             <Button

@@ -22,21 +22,40 @@ export const setContribution: ActionCreator<Action> = () => ({
 });
 
 export const lend =
-  (amount: number, dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
+  (amount: number, dispatchModals: React.Dispatch<TDSLAModalsAction>, provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    console.log('Lending amount: ', amount);
-    dispatchModals({
-      type: DSLAModalsActionsEnum.SHOW_CONGRATS,
-      payload: {
-        open: true,
-      },
-    });
+    const ledingAmount = ethers.utils.parseEther(amount.toString());
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    try {
+      // Set loading true for lend
+      const stackingTx = await stakingContract.stake({ value: ledingAmount });
+      await stackingTx.wait();
+      // Set loading for lend false
+      dispatchModals({
+        type: DSLAModalsActionsEnum.SHOW_CONGRATS,
+        payload: {
+          open: true,
+        },
+      });
+    } catch (error) {
+      console.log('Error while lending: ', error);
+    }
   };
 
 export const redeemSlt =
-  (amount: number): AppThunk =>
+  (amount: number, provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    console.log('Redeeming amount: ', amount);
+    const redeemingAmount = ethers.utils.parseEther(amount.toString());
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    try {
+      // Set loading true for redeem
+      console.log('Redeeming amount: ', amount);
+      const redeemTx = await stakingContract.redeem(redeemingAmount);
+      await redeemTx.wait();
+      // Set loading for lend redeem
+    } catch (error) {
+      console.log('Error while lending: ', error);
+    }
   };
 
 export const getAccountBalance =
@@ -83,9 +102,11 @@ export const getGlobalTokenLimit =
   };
 
 export const getUserContribution =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     // This will be taken from the smart contract
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+
     const userContribution = 100;
     dispatch({
       type: SmartContractActionTypes.SET_CONTRIBUTION,
@@ -94,10 +115,11 @@ export const getUserContribution =
   };
 
 export const getSolarLoanTokenBalance =
-  (): AppThunk =>
+  (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    // This will be taken from the smart contract
-    const solarLoanTokenBalance = 400;
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const balanceOf = (await stakingContract.balanceOf(currentAddress)).toString();
+    const solarLoanTokenBalance = ethers.utils.formatEther(balanceOf);
     dispatch({
       type: SmartContractActionTypes.SET_SOLAR_LOANS_TOKEN_BALANCE,
       payload: solarLoanTokenBalance,
@@ -105,59 +127,44 @@ export const getSolarLoanTokenBalance =
   };
 
 export const getRedeemableReward =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    // This will be taken from the smart contract
-    const redeemableReward = 50;
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const rewards = (await stakingContract.getRewards()).toString();
+    const redeemableReward = ethers.utils.formatEther(rewards);
     dispatch({
       type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
       payload: redeemableReward,
     });
   };
 
-export const getTokensRedeemed =
-  (): AppThunk =>
-  async (dispatch): Promise<void> => {
-    // This will be taken from the smart contract
-    const tokensRedeemed = 137;
-    dispatch({
-      type: SmartContractActionTypes.SET_TOKENS_REDEEMED,
-      payload: tokensRedeemed,
-    });
-  };
-
-export const getInterestRate =
-  (): AppThunk =>
-  async (dispatch): Promise<void> => {
-    const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
-    dispatch({
-      type: SmartContractActionTypes.SET_INTEREST_RATE,
-      payload: interestRate,
-    });
-  };
-
+// Lending is disabled when current date is greater or equal
 export const getContributionDeadline =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const contributionDeadline = process.env.NEXT_PUBLIC_CONTRIBUTION_DEADLINE;
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const signupEnd: number = +(await stakingContract.signupEnd()).toString();
+    const contributionDeadline = new Date(signupEnd * 1000);
     dispatch({
       type: SmartContractActionTypes.SET_CONTRIBUTION_DEADLINE,
       payload: contributionDeadline,
     });
   };
 
+// Enrollment & Lending is disabled until current date is greater or equal
 export const getSolarLoansDistributed =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const endDate: number = +(await stakingContract.endDate()).toString();
-    const solarLoansDistributed = new Date(endDate * 1000)
+    const startDate: number = +(await stakingContract.startDate()).toString();
+    const solarLoansDistributed = new Date(startDate * 1000);
     dispatch({
       type: SmartContractActionTypes.SET_SOLAR_LOANS_DISTRIBUTED,
       payload: solarLoansDistributed,
     });
   };
 
+// Campaign ends
 export const getSolarLoansMature =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -172,10 +179,11 @@ export const getSolarLoansMature =
   };
 
 export const getTotalLentAmount =
-  (): AppThunk =>
+  (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    // This will be taken from the smart contract
-    const totalLentAmount = 5740;
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const lentAmount = await (await stakingContract.totalStaked()).toString();
+    const totalLentAmount = ethers.utils.formatEther(lentAmount);
     dispatch({
       type: SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT,
       payload: totalLentAmount,
