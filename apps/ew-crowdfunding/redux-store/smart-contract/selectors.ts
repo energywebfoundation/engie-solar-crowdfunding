@@ -4,6 +4,11 @@ import { SmartContractReducerState } from './types';
 
 const selectSmartContract: Selector<RootState, SmartContractReducerState> = (state) => state.smartContract;
 
+export const selectSmartContractLoading = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.loading,
+);
+
 export const selectAccountBalance = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.accountBalance,

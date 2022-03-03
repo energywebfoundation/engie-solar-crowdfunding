@@ -21,16 +21,27 @@ export const setContribution: ActionCreator<Action> = () => ({
   type: SmartContractActionTypes.SET_CONTRIBUTION,
 });
 
+export const setLoading: ActionCreator<Action> = (loading: boolean) => ({
+  type: SmartContractActionTypes.SET_LOADING,
+  payload: loading,
+});
+
 export const lend =
   (amount: number, dispatchModals: React.Dispatch<TDSLAModalsAction>, provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const ledingAmount = ethers.utils.parseEther(amount.toString());
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     try {
-      // Set loading true for lend
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: true,
+      });
       const stackingTx = await stakingContract.stake({ value: ledingAmount });
       await stackingTx.wait();
-      // Set loading for lend false
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: false,
+      });
       dispatchModals({
         type: DSLAModalsActionsEnum.SHOW_CONGRATS,
         payload: {
@@ -48,11 +59,17 @@ export const redeemSlt =
     const redeemingAmount = ethers.utils.parseEther(amount.toString());
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     try {
-      // Set loading true for redeem
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: true,
+      });
       console.log('Redeeming amount: ', amount);
       const redeemTx = await stakingContract.redeem(redeemingAmount);
       await redeemTx.wait();
-      // Set loading for lend redeem
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: false,
+      });
     } catch (error) {
       console.log('Error while lending: ', error);
     }

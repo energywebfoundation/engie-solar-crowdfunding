@@ -22,6 +22,11 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
   { type, payload, error },
 ) => {
   switch (type) {
+    case SmartContractActionTypes.SET_LOADING:
+      return {
+        ...state,
+        loading: payload,
+      };
     case SmartContractActionTypes.SET_ACCOUNT_BALANCE:
       return {
         ...state,

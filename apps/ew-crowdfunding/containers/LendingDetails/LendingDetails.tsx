@@ -22,13 +22,13 @@ export const LendingDetails: FC = () => {
     onSubmit,
     onRedeemSlt,
     accountBalance,
-    tokensRedeemed,
     tokenLimit,
     onLoanChange,
     errorMessage,
     isRedeemDisabled,
     isReady,
     roleEnrolmentStatus,
+    smartContractLoading,
   } = useLendingDetailsEffects();
 
   return (
@@ -88,15 +88,21 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
-              <Button
-                variant='contained'
-                type='submit'
-                color='primary'
-                disabled={!!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED}
-                style={{ minWidth: '200px' }}
-              >
-                Lend
-              </Button>
+              {smartContractLoading ? (
+                <Box sx={{ display: 'flex' }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Button
+                  variant='contained'
+                  type='submit'
+                  color='primary'
+                  disabled={!!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED}
+                  style={{ minWidth: '200px' }}
+                >
+                  Lend
+                </Button>
+              )}
             </Box>
           </form>
         </Box>
@@ -132,15 +138,21 @@ export const LendingDetails: FC = () => {
             <ProgressBar value={solarLoanTokenBalance} limit={tokenLimit} description='SLT Timeline' />
           </Box>
           <Box className={classes.redeemAction}>
-            <Button
-              disabled={isRedeemDisabled}
-              variant='outlined'
-              color='primary'
-              style={{ minWidth: '200px' }}
-              onClick={onRedeemSlt}
-            >
-              Redeem SLT
-            </Button>
+            {smartContractLoading ? (
+              <Box sx={{ display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Button
+                disabled={isRedeemDisabled}
+                variant='outlined'
+                color='primary'
+                style={{ minWidth: '200px' }}
+                onClick={onRedeemSlt}
+              >
+                Redeem SLT
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

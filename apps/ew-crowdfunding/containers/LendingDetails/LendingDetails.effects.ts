@@ -25,6 +25,7 @@ import {
   selectProvider,
   selectRedeemableReward,
   selectRoleEnrollmentStatus,
+  selectSmartContractLoading,
   selectSolarLoansDistributed,
   selectSolarLoansMature,
   selectSolarLoanTokenBalance,
@@ -41,6 +42,8 @@ export const useLendingDetailsEffects = () => {
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
+
+  const smartContractLoading = useSelector(selectSmartContractLoading);
 
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -198,5 +201,6 @@ export const useLendingDetailsEffects = () => {
     isRedeemDisabled,
     isReady,
     roleEnrolmentStatus,
+    smartContractLoading,
   };
 };
