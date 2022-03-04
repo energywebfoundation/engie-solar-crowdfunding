@@ -71,7 +71,7 @@ export const lend =
   };
 
 export const redeemSlt =
-  (amount: number, provider: any): AppThunk =>
+  (amount: number, provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
     const redeemingAmount = ethers.utils.parseEther(amount.toString());
     const signer = provider?.getSigner();
@@ -83,12 +83,19 @@ export const redeemSlt =
       });
       const redeemTx = await stakingContract.redeem(redeemingAmount);
       await redeemTx.wait();
+
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
         payload: false,
       });
+
+      dispatch(getAccountBalance(provider, currentAddress));
+      dispatch(getUserContribution(provider));
+      dispatch(getSolarLoanTokenBalance(provider, currentAddress));
+      dispatch(getRedeemableReward(provider));
+
     } catch (error) {
-      console.log('Error while lending: ', error);
+      console.log('Error while redeeming: ', error);
     }
   };
 

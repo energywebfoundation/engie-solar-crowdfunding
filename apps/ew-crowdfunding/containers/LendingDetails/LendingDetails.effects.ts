@@ -148,10 +148,10 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeem = (amount: number) => {
-    if (!provider || !amount) {
+    if (!provider || !amount || !currentAddress) {
       return;
     }
-    dispatch(redeemSlt(amount, provider));
+    dispatch(redeemSlt(amount, provider, currentAddress));
   };
 
   const onRedeemSlt = () => {
