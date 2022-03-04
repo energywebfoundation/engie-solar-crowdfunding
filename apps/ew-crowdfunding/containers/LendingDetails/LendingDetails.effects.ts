@@ -91,7 +91,7 @@ export const useLendingDetailsEffects = () => {
     if (!date) {
       return;
     }
-    return DateTime.fromJSDate(new Date(date)).toFormat('dd LLL yy');
+    return DateTime.fromJSDate(new Date(date)).toFormat('dd LLL yy HH:MM');
   };
 
   const validationSchema = yup
