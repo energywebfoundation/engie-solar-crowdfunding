@@ -57,14 +57,14 @@ export const redeemSlt =
   (amount: number, provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const redeemingAmount = ethers.utils.parseEther(amount.toString());
+    const signer = provider.getSigner();
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     try {
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
         payload: true,
       });
-      console.log('Redeeming amount: ', amount);
-      const redeemTx = await stakingContract.redeem(redeemingAmount);
+      const redeemTx = await stakingContract.connect(signer).redeem(redeemingAmount);
       await redeemTx.wait();
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
@@ -146,13 +146,19 @@ export const getSolarLoanTokenBalance =
 export const getRedeemableReward =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const rewards = (await stakingContract.getRewards()).toString();
-    const redeemableReward = ethers.utils.formatEther(rewards);
+    const stakingContract = await Staking__factory.connect(deployedAddress, provider);
+    try {
+      const rewards = await stakingContract.connect(provider.getSigner()).getRewards();      
+      const redeemableReward = ethers.utils.formatEther(rewards);
     dispatch({
       type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
       payload: redeemableReward,
     });
+
+    } catch(err){
+      console.log();
+      throw(`An Error Occurred : ${err}`);
+    }
   };
 
 // Lending is disabled when current date is greater or equal
