@@ -51,7 +51,7 @@ export const LendingDetails: FC = () => {
             <FormInputText
               name='loan'
               control={control}
-              label='EWT Loan Amount'
+              label='EWT Stake Amount'
               type='number'
               hint={`Max. ${tokenLimit} EWT per user`}
               errorMessage={errorMessage}

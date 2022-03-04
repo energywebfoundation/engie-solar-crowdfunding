@@ -101,13 +101,13 @@ export const useLendingDetailsEffects = () => {
     .object({
       loan: yup
         .number()
-        .typeError('EWT Loan Amount is required')
-        .min(0)
+        .typeError('EWT Stake Amount is required')
+        .min(0.51)
         .max(200)
-        .required('EWT Loan Amount is required')
-        .label('EWT Loan Amount'),
+        .required('EWT Stake Amount is required')
+        .label('EWT Stake Amount'),
     })
-    .required('EWT Loan Amount is required');
+    .required('EWT Stake Amount is required');
 
   const {
     handleSubmit,
@@ -174,7 +174,7 @@ export const useLendingDetailsEffects = () => {
     console.log('Loan value: ', loanValue);
     console.log('solarLoanTokenBalance value: ', solarLoanTokenBalance);
     console.log('globalTokenLimit: ', globalTokenLimit);
-    /* EWT Loan Amount” box greater than */
+    /* EWT Stake Amount” box greater than */
     if (loanValue > Number(accountBalance)) {
       /* their account balance */
       return 'Amount exceeds account balance';
