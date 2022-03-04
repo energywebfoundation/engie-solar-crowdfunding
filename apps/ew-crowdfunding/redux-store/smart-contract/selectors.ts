@@ -55,3 +55,8 @@ export const selectTotalLentAmount = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.totalLentAmount,
 );
+
+export const selectActivateStackingDate = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.activateStakingDate,
+);

@@ -10,11 +10,13 @@ const initialState: SmartContractReducerState = {
   solarLoanTokenBalance: null,
   redeemableReward: null,
   interestRate: null,
+  totalLentAmount: null,
+  error: null,
+  // Dates
+  activateStakingDate: null,
   contributionDeadline: null,
   solarLoansDistributed: null,
   solarLoansMature: null,
-  totalLentAmount: null,
-  error: null,
 };
 
 const smartContractReducer: Reducer<SmartContractReducerState> = (
@@ -81,6 +83,11 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
       return {
         ...state,
         totalLentAmount: payload,
+      };
+    case SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE:
+      return {
+        ...state,
+        activateStakingDate: payload,
       };
     default:
       return state;

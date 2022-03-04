@@ -164,14 +164,17 @@ export const useLendingDetailsEffects = () => {
   };
 
   const getErrorMessage = (loanValue: number) => {
+    console.log('Loan value: ', loanValue);
+    console.log('solarLoanTokenBalance value: ', solarLoanTokenBalance);
+    console.log('globalTokenLimit: ', globalTokenLimit);
     /* EWT Loan Amount” box greater than */
-    if (loanValue > accountBalance) {
+    if (loanValue > Number(accountBalance)) {
       /* their account balance */
       return 'Amount exceeds account balance';
-    } else if (loanValue > tokenLimit) {
+    } else if (loanValue > Number(tokenLimit)) {
       /* their personal limit of 200 EWT */
       return 'Amount exceeds personal limit';
-    } else if (loanValue + solarLoanTokenBalance > globalTokenLimit) {
+    } else if (loanValue + Number(solarLoanTokenBalance) > Number(globalTokenLimit)) {
       /* an amount that makes the total contribution exceed the global limit (10,000 EWT) */ // This needs to be checked
       return 'Amount exceeds global limit';
     } else {

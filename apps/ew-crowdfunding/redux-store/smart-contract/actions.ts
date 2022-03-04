@@ -50,6 +50,10 @@ export const lend =
         },
       });
     } catch (error) {
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: false,
+      });
       console.log('Error while lending: ', error);
     }
   };
@@ -122,12 +126,9 @@ export const getGlobalTokenLimit =
 export const getUserContribution =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    // This will be taken from the smart contract
-    // const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    // const contribution = (await stakingContract.getDeposit()).toString();
-    // const userContribution = ethers.utils.formatEther(contribution);
-    const userContribution = 100;
-
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const contribution = (await stakingContract.getDeposit()).toString();
+    const userContribution = ethers.utils.formatEther(contribution);
     dispatch({
       type: SmartContractActionTypes.SET_CONTRIBUTION,
       payload: userContribution,
@@ -163,6 +164,19 @@ export const getRedeemableReward =
     }
   };
 
+// Sign up start from Smart Contract
+export const getActivateStackingDate =
+  (provider: any): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const signupStart: number = +(await stakingContract.signupStart()).toString();
+    const activateStackingDate = new Date(signupStart * 1000);
+    dispatch({
+      type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
+      payload: activateStackingDate,
+    });
+  };
+
 // Lending is disabled when current date is greater or equal
 export const getContributionDeadline =
   (provider: any): AppThunk =>
@@ -196,6 +210,7 @@ export const getSolarLoansMature =
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const endDate: number = +(await stakingContract.endDate()).toString();
     const solarLoansMature = new Date(endDate * 1000);
+
     dispatch({
       type: SmartContractActionTypes.SET_SOLAR_LOANS_MATURE,
       payload: solarLoansMature,

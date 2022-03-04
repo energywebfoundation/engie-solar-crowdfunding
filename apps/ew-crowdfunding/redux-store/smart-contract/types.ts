@@ -7,11 +7,13 @@ export interface SmartContractReducerState {
   solarLoanTokenBalance: number;
   redeemableReward: number;
   interestRate: string;
-  contributionDeadline: string;
-  solarLoansDistributed: string;
-  solarLoansMature: string;
   totalLentAmount: number;
   error: string;
+  // Dates
+  activateStakingDate: string; // Sign up start from Smart Contract
+  contributionDeadline: string; // Signup end from Smart Contract
+  solarLoansDistributed: string; // Start Date from Smart Contract
+  solarLoansMature: string; // End Date from Smart Contract
 }
 
 export const SmartContractActionTypes = {
@@ -26,6 +28,7 @@ export const SmartContractActionTypes = {
   SET_INTEREST_RATE: 'SET_INTEREST_RATE',
   SET_CONTRIBUTION_DEADLINE: 'SET_CONTRIBUTION_DEADLINE',
   SET_SOLAR_LOANS_DISTRIBUTED: 'SET_SOLAR_LOANS_DISTRIBUTED',
+  SET_ACTIVATE_STACKING_DATE: 'SET_ACTIVATE_STACKING_DATE',
   SET_SOLAR_LOANS_MATURE: 'SET_SOLAR_LOANS_MATURE',
   SET_TOTAL_LENT_AMOUNT: 'SET_TOTAL_LENT_AMOUNT',
   GET_ROLE: 'GET_ROLE',
