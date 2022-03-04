@@ -63,13 +63,13 @@ export const redeemSlt =
   async (dispatch): Promise<void> => {
     const redeemingAmount = ethers.utils.parseEther(amount.toString());
     const signer = provider.getSigner();
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const stakingContract = Staking__factory.connect(deployedAddress, signer);
     try {
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
         payload: true,
       });
-      const redeemTx = await stakingContract.connect(signer).redeem(redeemingAmount);
+      const redeemTx = await stakingContract.redeem(redeemingAmount);
       await redeemTx.wait();
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
@@ -126,7 +126,7 @@ export const getGlobalTokenLimit =
 export const getUserContribution =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const stakingContract = Staking__factory.connect(deployedAddress, provider.getSigner());
     const contribution = (await stakingContract.getDeposit()).toString();
     const userContribution = ethers.utils.formatEther(contribution);
     dispatch({
@@ -138,7 +138,7 @@ export const getUserContribution =
 export const getSolarLoanTokenBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const stakingContract = Staking__factory.connect(deployedAddress, provider.getSigner());
     const balanceOf = (await stakingContract.balanceOf(currentAddress)).toString();
     const solarLoanTokenBalance = ethers.utils.formatEther(balanceOf);
     dispatch({
@@ -150,17 +150,20 @@ export const getSolarLoanTokenBalance =
 export const getRedeemableReward =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = await Staking__factory.connect(deployedAddress, provider);
+    const stakingContract = await Staking__factory.connect(deployedAddress, provider.getSigner());
     try {
-      const rewards = await stakingContract.connect(provider.getSigner()).getRewards();
+      const rewards = await stakingContract.getRewards();
       const redeemableReward = ethers.utils.formatEther(rewards);
       dispatch({
         type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
         payload: redeemableReward,
       });
     } catch (err) {
-      console.log();
-      throw `An Error Occurred : ${err}`;
+      console.log( `An Error Occurred : ${err}`);
+      dispatch({
+        type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
+        payload: 0,
+      });
     }
   };
 
