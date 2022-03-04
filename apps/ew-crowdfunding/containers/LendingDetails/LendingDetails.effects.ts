@@ -85,7 +85,10 @@ export const useLendingDetailsEffects = () => {
     }
   }, [accountBalance]);
 
-  const isRedeemDisabled = new Date() >= new Date(closeStackingDate);
+  const isStackingDisabled = new Date() < new Date(activateStackingDate) || new Date() >= new Date(closeStackingDate);
+  const isRedeemDisabled =
+    new Date() < new Date(activateStackingDate) ||
+    (new Date() >= new Date(closeStackingDate) && new Date() < new Date(releaseRewardsDate));
 
   const formatDate = (date: string) => {
     if (!date) {
@@ -210,5 +213,6 @@ export const useLendingDetailsEffects = () => {
     roleEnrolmentStatus,
     smartContractLoading,
     activateStackingDate,
+    isStackingDisabled,
   };
 };

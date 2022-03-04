@@ -187,6 +187,7 @@ export const getCloseStackingDate =
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const signupEnd: number = +(await stakingContract.signupEnd()).toString();
     const closeStackingDate = new Date(signupEnd * 1000);
+    // const closeStackingDate = new Date('2022-03-04 12:32')
     dispatch({
       type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
       payload: closeStackingDate,

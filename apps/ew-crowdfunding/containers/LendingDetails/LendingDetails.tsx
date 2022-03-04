@@ -30,6 +30,7 @@ export const LendingDetails: FC = () => {
     roleEnrolmentStatus,
     smartContractLoading,
     activateStackingDate,
+    isStackingDisabled,
   } = useLendingDetailsEffects();
 
   return (
@@ -104,7 +105,9 @@ export const LendingDetails: FC = () => {
                   variant='contained'
                   type='submit'
                   color='primary'
-                  disabled={!!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED}
+                  disabled={
+                    !!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED || isStackingDisabled
+                  }
                   style={{ minWidth: '200px' }}
                 >
                   Lend

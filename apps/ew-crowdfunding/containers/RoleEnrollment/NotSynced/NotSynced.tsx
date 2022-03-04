@@ -6,7 +6,7 @@ import { WalletCard } from '../../../components';
 
 export const NotSynced: FC = () => {
   const classes = useStyles();
-  const { onAddRole, isLoading } = useNotSyncedEffects();
+  const { onAddRole, isLoading, isEnrollmentDisabled } = useNotSyncedEffects();
 
   return (
     <WalletCard icon='/IdentificationBadge.png' colorClass='bg-warning' step='step 3'>
@@ -26,7 +26,14 @@ export const NotSynced: FC = () => {
             <CircularProgress />
           </Box>
         ) : (
-          <Button onClick={onAddRole} variant='contained' type='submit' color='primary' style={{ width: '100%' }}>
+          <Button
+            onClick={onAddRole}
+            variant='contained'
+            type='submit'
+            color='primary'
+            style={{ width: '100%' }}
+            disabled={isEnrollmentDisabled}
+          >
             Proceed
           </Button>
         )}

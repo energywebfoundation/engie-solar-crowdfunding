@@ -14,7 +14,6 @@ export const useLendingEffects = () => {
     }
   }, [roleEnrolmentStatus, authenticated]);
 
-
   return {
     isVisible
   };
