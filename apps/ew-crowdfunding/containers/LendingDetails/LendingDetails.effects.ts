@@ -7,17 +7,19 @@ import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAccountBalance,
-  getContributionDeadline,
+  getActivateStackingDate,
+  getCloseStackingDate,
   getGlobalTokenLimit,
   getRedeemableReward,
-  getSolarLoansDistributed,
-  getSolarLoansMature,
+  getLockStakesDate,
+  getReleaseRewardsDate,
   getSolarLoanTokenBalance,
   getTokenLimit,
   getUserContribution,
   lend,
   redeemSlt,
   selectAccountBalance,
+  selectActivateStackingDate,
   selectAddress,
   selectAuthenticated,
   selectContributionDeadline,
@@ -54,9 +56,10 @@ export const useLendingDetailsEffects = () => {
       dispatch(getAccountBalance(provider, currentAddress));
       dispatch(getGlobalTokenLimit(provider));
       dispatch(getTokenLimit(provider));
-      dispatch(getContributionDeadline(provider));
-      dispatch(getSolarLoansDistributed(provider));
-      dispatch(getSolarLoansMature(provider));
+      dispatch(getActivateStackingDate(provider));
+      dispatch(getCloseStackingDate(provider));
+      dispatch(getLockStakesDate(provider));
+      dispatch(getReleaseRewardsDate(provider));
       dispatch(getUserContribution(provider));
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
@@ -71,9 +74,10 @@ export const useLendingDetailsEffects = () => {
   const redeemableReward = useSelector(selectRedeemableReward);
 
   const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
-  const contributionDeadline = useSelector(selectContributionDeadline);
-  const solarLoansDistributed = useSelector(selectSolarLoansDistributed);
-  const solarLoansMature = useSelector(selectSolarLoansMature);
+  const activateStackingDate = useSelector(selectActivateStackingDate);
+  const closeStackingDate = useSelector(selectContributionDeadline);
+  const lockStakesDate = useSelector(selectSolarLoansDistributed);
+  const releaseRewardsDate = useSelector(selectSolarLoansMature);
 
   useEffect(() => {
     if (propertyExists(accountBalance)) {
@@ -81,7 +85,7 @@ export const useLendingDetailsEffects = () => {
     }
   }, [accountBalance]);
 
-  const isRedeemDisabled = new Date() >= new Date(contributionDeadline);
+  const isRedeemDisabled = new Date() >= new Date(closeStackingDate);
 
   const formatDate = (date: string) => {
     if (!date) {
@@ -185,9 +189,9 @@ export const useLendingDetailsEffects = () => {
   return {
     globalTokenLimit,
     interestRate,
-    contributionDeadline,
-    solarLoansDistributed,
-    solarLoansMature,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
     userContribution,
     solarLoanTokenBalance,
     redeemableReward,
@@ -205,5 +209,6 @@ export const useLendingDetailsEffects = () => {
     isReady,
     roleEnrolmentStatus,
     smartContractLoading,
+    activateStackingDate,
   };
 };

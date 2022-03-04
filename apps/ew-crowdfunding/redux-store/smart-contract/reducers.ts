@@ -14,9 +14,9 @@ const initialState: SmartContractReducerState = {
   error: null,
   // Dates
   activateStakingDate: null,
-  contributionDeadline: null,
-  solarLoansDistributed: null,
-  solarLoansMature: null,
+  closeStackingDate: null,
+  lockStakesDate: null,
+  releaseRewardsDate: null,
 };
 
 const smartContractReducer: Reducer<SmartContractReducerState> = (
@@ -64,20 +64,20 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
         ...state,
         interestRate: payload,
       };
-    case SmartContractActionTypes.SET_CONTRIBUTION_DEADLINE:
+    case SmartContractActionTypes.SET_CLOSE_STACKING_DATE:
       return {
         ...state,
-        contributionDeadline: payload,
+        closeStackingDate: payload,
       };
-    case SmartContractActionTypes.SET_SOLAR_LOANS_DISTRIBUTED:
+    case SmartContractActionTypes.SET_LOCK_STAKES_DATE:
       return {
         ...state,
-        solarLoansDistributed: payload,
+        lockStakesDate: payload,
       };
-    case SmartContractActionTypes.SET_SOLAR_LOANS_MATURE:
+    case SmartContractActionTypes.SET_RELEASE_REWARDS_DATE:
       return {
         ...state,
-        solarLoansMature: payload,
+        releaseRewardsDate: payload,
       };
     case SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT:
       return {

@@ -178,42 +178,42 @@ export const getActivateStackingDate =
   };
 
 // Lending is disabled when current date is greater or equal
-export const getContributionDeadline =
+export const getCloseStackingDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const signupEnd: number = +(await stakingContract.signupEnd()).toString();
-    const contributionDeadline = new Date(signupEnd * 1000);
+    const closeStackingDate = new Date(signupEnd * 1000);
     dispatch({
-      type: SmartContractActionTypes.SET_CONTRIBUTION_DEADLINE,
-      payload: contributionDeadline,
+      type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
+      payload: closeStackingDate,
     });
   };
 
 // Enrollment & Lending is disabled until current date is greater or equal
-export const getSolarLoansDistributed =
+export const getLockStakesDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const startDate: number = +(await stakingContract.startDate()).toString();
-    const solarLoansDistributed = new Date(startDate * 1000);
+    const lockStakesDate = new Date(startDate * 1000);
     dispatch({
-      type: SmartContractActionTypes.SET_SOLAR_LOANS_DISTRIBUTED,
-      payload: solarLoansDistributed,
+      type: SmartContractActionTypes.SET_LOCK_STAKES_DATE,
+      payload: lockStakesDate,
     });
   };
 
 // Campaign ends
-export const getSolarLoansMature =
+export const getReleaseRewardsDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const endDate: number = +(await stakingContract.endDate()).toString();
-    const solarLoansMature = new Date(endDate * 1000);
+    const releaseRewardsDate = new Date(endDate * 1000);
 
     dispatch({
-      type: SmartContractActionTypes.SET_SOLAR_LOANS_MATURE,
-      payload: solarLoansMature,
+      type: SmartContractActionTypes.SET_RELEASE_REWARDS_DATE,
+      payload: releaseRewardsDate,
     });
   };
 

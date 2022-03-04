@@ -38,17 +38,17 @@ export const selectRedeemableReward = createSelector(
 
 export const selectContributionDeadline = createSelector(
   [selectSmartContract],
-  (smartContract) => smartContract.contributionDeadline,
+  (smartContract) => smartContract.closeStackingDate,
 );
 
 export const selectSolarLoansDistributed = createSelector(
   [selectSmartContract],
-  (smartContract) => smartContract.solarLoansDistributed,
+  (smartContract) => smartContract.lockStakesDate,
 );
 
 export const selectSolarLoansMature = createSelector(
   [selectSmartContract],
-  (smartContract) => smartContract.solarLoansMature,
+  (smartContract) => smartContract.releaseRewardsDate,
 );
 
 export const selectTotalLentAmount = createSelector(

@@ -10,9 +10,9 @@ export const LendingDetails: FC = () => {
   const classes = useStyles();
   const {
     interestRate,
-    contributionDeadline,
-    solarLoansDistributed,
-    solarLoansMature,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
     userContribution,
     solarLoanTokenBalance,
     redeemableReward,
@@ -29,6 +29,7 @@ export const LendingDetails: FC = () => {
     isReady,
     roleEnrolmentStatus,
     smartContractLoading,
+    activateStackingDate,
   } = useLendingDetailsEffects();
 
   return (
@@ -62,21 +63,27 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Contribution deadline</Typography>
+              <Typography variant='body2'>Activate staking</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
-                {formatDate(contributionDeadline)}
+                {formatDate(activateStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Solar loans distributed</Typography>
+              <Typography variant='body2'>Close Stacking</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
-                {formatDate(solarLoansDistributed)}
+                {formatDate(closeStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Solar loans mature</Typography>
+              <Typography variant='body2'>Lock Stakes</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
-                {formatDate(solarLoansMature)}
+                {formatDate(lockStakesDate)}
+              </Typography>
+            </Box>
+            <Box className={classes.details}>
+              <Typography variant='body2'>Release Rewards</Typography>
+              <Typography variant='body2' fontWeight={'bold'}>
+                {formatDate(releaseRewardsDate)}
               </Typography>
             </Box>
             <Box className={classes.disclaimer}>
