@@ -30,13 +30,14 @@ export const lend =
   (amount: number, dispatchModals: React.Dispatch<TDSLAModalsAction>, provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const ledingAmount = ethers.utils.parseEther(amount.toString());
+    const signer = provider.getSigner();
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     try {
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
         payload: true,
       });
-      const stackingTx = await stakingContract.stake({ value: ledingAmount });
+      const stackingTx = await stakingContract.connect(signer).stake({ value: ledingAmount });
       await stackingTx.wait();
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
@@ -122,9 +123,11 @@ export const getUserContribution =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     // This will be taken from the smart contract
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-
+    // const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    // const contribution = (await stakingContract.getDeposit()).toString();
+    // const userContribution = ethers.utils.formatEther(contribution);
     const userContribution = 100;
+
     dispatch({
       type: SmartContractActionTypes.SET_CONTRIBUTION,
       payload: userContribution,
@@ -148,16 +151,15 @@ export const getRedeemableReward =
   async (dispatch): Promise<void> => {
     const stakingContract = await Staking__factory.connect(deployedAddress, provider);
     try {
-      const rewards = await stakingContract.connect(provider.getSigner()).getRewards();      
+      const rewards = await stakingContract.connect(provider.getSigner()).getRewards();
       const redeemableReward = ethers.utils.formatEther(rewards);
-    dispatch({
-      type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
-      payload: redeemableReward,
-    });
-
-    } catch(err){
+      dispatch({
+        type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
+        payload: redeemableReward,
+      });
+    } catch (err) {
       console.log();
-      throw(`An Error Occurred : ${err}`);
+      throw `An Error Occurred : ${err}`;
     }
   };
 
@@ -194,7 +196,6 @@ export const getSolarLoansMature =
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const endDate: number = +(await stakingContract.endDate()).toString();
     const solarLoansMature = new Date(endDate * 1000);
-
     dispatch({
       type: SmartContractActionTypes.SET_SOLAR_LOANS_MATURE,
       payload: solarLoansMature,

@@ -33,6 +33,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositRewards()": FunctionFragment;
     "endDate()": FunctionFragment;
+    "getDeposit()": FunctionFragment;
     "getRewards()": FunctionFragment;
     "hardCap()": FunctionFragment;
     "hasRole(address,bytes32)": FunctionFragment;
@@ -46,6 +47,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "redeemAll()": FunctionFragment;
     "serviceRole()": FunctionFragment;
     "signupEnd()": FunctionFragment;
+    "signupStart()": FunctionFragment;
     "stake()": FunctionFragment;
     "startDate()": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -91,6 +93,10 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "endDate", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "getDeposit",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getRewards",
     values?: undefined
   ): string;
@@ -135,6 +141,10 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "signupEnd", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "signupStart",
+    values?: undefined
+  ): string;
   encodeFunctionData(functionFragment: "stake", values?: undefined): string;
   encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
@@ -184,6 +194,7 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "endDate", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getDeposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRewards", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hardCap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
@@ -206,6 +217,10 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "signupEnd", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "signupStart",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "stake", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
@@ -409,6 +424,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getDeposit(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     hardCap(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -458,6 +475,8 @@ export class Staking extends BaseContract {
     serviceRole(overrides?: CallOverrides): Promise<[string]>;
 
     signupEnd(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    signupStart(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     stake(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -538,6 +557,8 @@ export class Staking extends BaseContract {
 
   endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
+
   getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
   hardCap(overrides?: CallOverrides): Promise<BigNumber>;
@@ -587,6 +608,8 @@ export class Staking extends BaseContract {
   serviceRole(overrides?: CallOverrides): Promise<string>;
 
   signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
+
+  signupStart(overrides?: CallOverrides): Promise<BigNumber>;
 
   stake(
     overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -662,6 +685,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     hardCap(overrides?: CallOverrides): Promise<BigNumber>;
@@ -704,6 +729,8 @@ export class Staking extends BaseContract {
     serviceRole(overrides?: CallOverrides): Promise<string>;
 
     signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
+
+    signupStart(overrides?: CallOverrides): Promise<BigNumber>;
 
     stake(overrides?: CallOverrides): Promise<void>;
 
@@ -949,6 +976,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     hardCap(overrides?: CallOverrides): Promise<BigNumber>;
@@ -998,6 +1027,8 @@ export class Staking extends BaseContract {
     serviceRole(overrides?: CallOverrides): Promise<BigNumber>;
 
     signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
+
+    signupStart(overrides?: CallOverrides): Promise<BigNumber>;
 
     stake(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
@@ -1084,6 +1115,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     hardCap(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1133,6 +1166,8 @@ export class Staking extends BaseContract {
     serviceRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     signupEnd(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    signupStart(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     stake(
       overrides?: PayableOverrides & { from?: string | Promise<string> }
