@@ -12,7 +12,7 @@ export const useLendingStatsEffects = () => {
     dispatch(getTotalLentAmount(provider));
   }, [dispatch, provider]);
 
-  const totalLentAmount = useSelector(selectTotalLentAmount);
+  const totalLentAmount = `${Number(useSelector(selectTotalLentAmount))?.toPrecision(3)}`;
   const globalTokenLimit = useSelector(selectGlobalTokenLimit);
 
   useEffect(() => {

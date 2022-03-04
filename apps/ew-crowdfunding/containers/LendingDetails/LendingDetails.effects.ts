@@ -126,10 +126,10 @@ export const useLendingDetailsEffects = () => {
   }, [isSubmitSuccessful, reset]);
 
   const onLendEwt = (loan: number) => {
-    if (!loan || !provider) {
+    if (!loan || !provider || !currentAddress) {
       return;
     }
-    dispatch(lend(loan, dispatchModals, provider));
+    dispatch(lend(loan, dispatchModals, provider, currentAddress));
   };
 
   const onSubmit = async (data: { loan: number }) => {

@@ -27,10 +27,15 @@ export const setLoading: ActionCreator<Action> = (loading: boolean) => ({
 });
 
 export const lend =
-  (amount: number, dispatchModals: React.Dispatch<TDSLAModalsAction>, provider: any): AppThunk =>
+  (
+    amount: number,
+    dispatchModals: React.Dispatch<TDSLAModalsAction>,
+    provider: any,
+    currentAddress: string,
+  ): AppThunk =>
   async (dispatch): Promise<void> => {
     const ledingAmount = ethers.utils.parseEther(amount.toString());
-    const signer = provider.getSigner();
+    const signer = provider?.getSigner();
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     try {
       dispatch({
@@ -39,10 +44,17 @@ export const lend =
       });
       const stackingTx = await stakingContract.connect(signer).stake({ value: ledingAmount });
       await stackingTx.wait();
+
       dispatch({
         type: SmartContractActionTypes.SET_LOADING,
         payload: false,
       });
+
+      dispatch(getAccountBalance(provider, currentAddress));
+      dispatch(getUserContribution(provider));
+      dispatch(getSolarLoanTokenBalance(provider, currentAddress));
+      dispatch(getRedeemableReward(provider));
+
       dispatchModals({
         type: DSLAModalsActionsEnum.SHOW_CONGRATS,
         payload: {
@@ -62,7 +74,7 @@ export const redeemSlt =
   (amount: number, provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
     const redeemingAmount = ethers.utils.parseEther(amount.toString());
-    const signer = provider.getSigner();
+    const signer = provider?.getSigner();
     const stakingContract = Staking__factory.connect(deployedAddress, signer);
     try {
       dispatch({
@@ -126,7 +138,7 @@ export const getGlobalTokenLimit =
 export const getUserContribution =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider.getSigner());
+    const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
     const contribution = (await stakingContract.getDeposit()).toString();
     const userContribution = ethers.utils.formatEther(contribution);
     dispatch({
@@ -138,7 +150,7 @@ export const getUserContribution =
 export const getSolarLoanTokenBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider.getSigner());
+    const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
     const balanceOf = (await stakingContract.balanceOf(currentAddress)).toString();
     const solarLoanTokenBalance = ethers.utils.formatEther(balanceOf);
     dispatch({
@@ -150,7 +162,7 @@ export const getSolarLoanTokenBalance =
 export const getRedeemableReward =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = await Staking__factory.connect(deployedAddress, provider.getSigner());
+    const stakingContract = await Staking__factory.connect(deployedAddress, provider?.getSigner());
     try {
       const rewards = await stakingContract.getRewards();
       const redeemableReward = ethers.utils.formatEther(rewards);
@@ -159,7 +171,7 @@ export const getRedeemableReward =
         payload: redeemableReward,
       });
     } catch (err) {
-      console.log( `An Error Occurred : ${err}`);
+      console.log(`An Error Occurred : ${err}`);
       dispatch({
         type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
         payload: 0,
@@ -167,7 +179,6 @@ export const getRedeemableReward =
     }
   };
 
-// Sign up start from Smart Contract
 export const getActivateStackingDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -180,7 +191,6 @@ export const getActivateStackingDate =
     });
   };
 
-// Lending is disabled when current date is greater or equal
 export const getCloseStackingDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -194,7 +204,6 @@ export const getCloseStackingDate =
     });
   };
 
-// Enrollment & Lending is disabled until current date is greater or equal
 export const getLockStakesDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -207,7 +216,6 @@ export const getLockStakesDate =
     });
   };
 
-// Campaign ends
 export const getReleaseRewardsDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -224,7 +232,7 @@ export const getReleaseRewardsDate =
 export const getTotalLentAmount =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
     const lentAmount = await (await stakingContract.totalStaked()).toString();
     const totalLentAmount = ethers.utils.formatEther(lentAmount);
     dispatch({
