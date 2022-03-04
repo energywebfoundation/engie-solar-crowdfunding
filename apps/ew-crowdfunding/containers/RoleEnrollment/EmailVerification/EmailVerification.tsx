@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Box, Button, Checkbox, Divider, FormControlLabel, Link, Typography } from '@mui/material';
+import { Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, Link, Typography } from '@mui/material';
 import { useStyles } from './EmailVerification.styles';
 import { useEmailVerificationEffects } from './EmailVerification.effects';
 import { shortenAddress } from '../../../utils';
@@ -8,8 +8,17 @@ import { RoleEnrollmentStatus } from '../../../redux-store';
 
 export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }> = ({ roleEnrolmentStatus }) => {
   const classes = useStyles();
-  const { address, control, handleSubmit, onSubmit, onEmailChange, errorMessage, acknowledged, setAcknowledge } =
-    useEmailVerificationEffects(roleEnrolmentStatus);
+  const {
+    address,
+    control,
+    handleSubmit,
+    onSubmit,
+    onEmailChange,
+    errorMessage,
+    acknowledged,
+    setAcknowledge,
+    isLoading,
+  } = useEmailVerificationEffects(roleEnrolmentStatus);
 
   return (
     <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
@@ -52,9 +61,21 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
         />
         <Divider className={classes.divider} style={{ marginBottom: '20px' }} />
         <Box className={classes.buttonWrapper}>
-          <Button variant='contained' type='submit' color='primary' style={{ width: '100%' }} disabled={!!errorMessage}>
-            Submit
-          </Button>
+          {isLoading ? (
+            <Box sx={{ display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          ) : (
+            <Button
+              variant='contained'
+              type='submit'
+              color='primary'
+              style={{ width: '100%' }}
+              disabled={!!errorMessage}
+            >
+              Submit
+            </Button>
+          )}
         </Box>
       </form>
     </WalletCard>

@@ -9,11 +9,15 @@ export const getIamService = async (providerType: ProviderType) => {
   });
 
   const getEnrollmentStatus = (enrollments: Claim[]) => {
-    if (enrollments.length === 0) {
+    if (enrollments?.length === 0) {
       return RoleEnrollmentStatus.NOT_ENROLLED;
     }
     const role = enrollments?.filter((item) => !item.isRejected)[0];
-    if (role.isAccepted) {
+
+    if (!role) {
+      return RoleEnrollmentStatus.NOT_ENROLLED;
+    }
+    if (role?.isAccepted) {
       return RoleEnrollmentStatus.ENROLLED_APPROVED;
     }
     return RoleEnrollmentStatus.ENROLLED_NOT_APPROVED;
@@ -33,6 +37,7 @@ export const getIamService = async (providerType: ProviderType) => {
 
     const role = claims.filter((item) => !item.isRejected)[0];
     let roleEnrolmentStatus = getEnrollmentStatus(claims);
+
     if (roleEnrolmentStatus === RoleEnrollmentStatus.ENROLLED_APPROVED && signerService?.did) {
       const hasOnChainRole = await claimsService.hasOnChainRole(
         signerService?.did,
@@ -53,6 +58,7 @@ export const getIamService = async (providerType: ProviderType) => {
       role,
     };
   } catch (error) {
+    console.log('Error: ', error);
     // throw new Error('No ethereum object');
     console.log('No ethereum object! Please connect your wallet!');
     return;

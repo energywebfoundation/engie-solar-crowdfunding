@@ -19,11 +19,8 @@ export const useStyles = makeStyles(() => {
     buttonWrapper: {
       width: '100%',
       display: 'flex',
-      justifyContent: 'end',
-      alignItems: 'flex-end',
-      [theme.breakpoints.down('sm')]: {
-        justifyContent: 'flex-start',
-      },
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   };
 });

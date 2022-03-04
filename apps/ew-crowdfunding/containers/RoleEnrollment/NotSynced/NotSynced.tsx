@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, CircularProgress, TextField, Typography } from '@mui/material';
 import { useNotSyncedEffects } from './NotSynced.effects';
 import { useStyles } from './NotSynced.styles';
 import { WalletCard } from '../../../components';
 
 export const NotSynced: FC = () => {
   const classes = useStyles();
-  const onAddRole = useNotSyncedEffects();
+  const { onAddRole, isLoading } = useNotSyncedEffects();
 
   return (
     <WalletCard icon='/IdentificationBadge.png' colorClass='bg-warning' step='step 3'>
@@ -21,9 +21,15 @@ export const NotSynced: FC = () => {
         We respect your privacy, adding this role does not expose your email on-chain.
       </Typography>
       <Box className={classes.buttonWrapper}>
-        <Button onClick={onAddRole} variant='contained' type='submit' color='primary' style={{ width: '100%' }}>
-          Proceed
-        </Button>
+        {isLoading ? (
+          <Box sx={{ display: 'flex' }}>
+            <CircularProgress />
+          </Box>
+        ) : (
+          <Button onClick={onAddRole} variant='contained' type='submit' color='primary' style={{ width: '100%' }}>
+            Proceed
+          </Button>
+        )}
       </Box>
     </WalletCard>
   );
