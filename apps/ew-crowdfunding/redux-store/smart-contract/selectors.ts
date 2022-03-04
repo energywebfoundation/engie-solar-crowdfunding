@@ -4,6 +4,11 @@ import { SmartContractReducerState } from './types';
 
 const selectSmartContract: Selector<RootState, SmartContractReducerState> = (state) => state.smartContract;
 
+export const selectSmartContractLoading = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.loading,
+);
+
 export const selectAccountBalance = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.accountBalance,
@@ -31,29 +36,27 @@ export const selectRedeemableReward = createSelector(
   (smartContract) => smartContract.redeemableReward,
 );
 
-export const selectTokensRedeemed = createSelector(
-  [selectSmartContract],
-  (smartContract) => smartContract.tokensRedeemed,
-);
-
-export const selectInterestRate = createSelector([selectSmartContract], (smartContract) => smartContract.interestRate);
-
 export const selectContributionDeadline = createSelector(
   [selectSmartContract],
-  (smartContract) => smartContract.contributionDeadline,
+  (smartContract) => smartContract.closeStackingDate,
 );
 
 export const selectSolarLoansDistributed = createSelector(
   [selectSmartContract],
-  (smartContract) => smartContract.solarLoansDistributed,
+  (smartContract) => smartContract.lockStakesDate,
 );
 
 export const selectSolarLoansMature = createSelector(
   [selectSmartContract],
-  (smartContract) => smartContract.solarLoansMature,
+  (smartContract) => smartContract.releaseRewardsDate,
 );
 
 export const selectTotalLentAmount = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.totalLentAmount,
+);
+
+export const selectActivateStackingDate = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.activateStakingDate,
 );

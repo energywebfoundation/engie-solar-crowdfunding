@@ -10,9 +10,9 @@ export const LendingDetails: FC = () => {
   const classes = useStyles();
   const {
     interestRate,
-    contributionDeadline,
-    solarLoansDistributed,
-    solarLoansMature,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
     userContribution,
     solarLoanTokenBalance,
     redeemableReward,
@@ -22,13 +22,15 @@ export const LendingDetails: FC = () => {
     onSubmit,
     onRedeemSlt,
     accountBalance,
-    tokensRedeemed,
     tokenLimit,
     onLoanChange,
     errorMessage,
     isRedeemDisabled,
     isReady,
     roleEnrolmentStatus,
+    smartContractLoading,
+    activateStackingDate,
+    isStackingDisabled,
   } = useLendingDetailsEffects();
 
   return (
@@ -49,7 +51,7 @@ export const LendingDetails: FC = () => {
             <FormInputText
               name='loan'
               control={control}
-              label='EWT Loan Amount'
+              label='EWT Stake Amount'
               type='number'
               hint={`Max. ${tokenLimit} EWT per user`}
               errorMessage={errorMessage}
@@ -62,21 +64,27 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Contribution deadline</Typography>
+              <Typography variant='body2'>Activate staking</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
-                {formatDate(contributionDeadline)}
+                {formatDate(activateStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Solar loans distributed</Typography>
+              <Typography variant='body2'>Close Stacking</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
-                {formatDate(solarLoansDistributed)}
+                {formatDate(closeStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Solar loans mature</Typography>
+              <Typography variant='body2'>Lock Stakes</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
-                {formatDate(solarLoansMature)}
+                {formatDate(lockStakesDate)}
+              </Typography>
+            </Box>
+            <Box className={classes.details}>
+              <Typography variant='body2'>Release Rewards</Typography>
+              <Typography variant='body2' fontWeight={'bold'}>
+                {formatDate(releaseRewardsDate)}
               </Typography>
             </Box>
             <Box className={classes.disclaimer}>
@@ -88,15 +96,23 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
-              <Button
-                variant='contained'
-                type='submit'
-                color='primary'
-                disabled={!!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED}
-                style={{ minWidth: '200px' }}
-              >
-                Lend
-              </Button>
+              {smartContractLoading ? (
+                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Button
+                  variant='contained'
+                  type='submit'
+                  color='primary'
+                  disabled={
+                    !!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED || isStackingDisabled
+                  }
+                  style={{ minWidth: '200px' }}
+                >
+                  Lend
+                </Button>
+              )}
             </Box>
           </form>
         </Box>
@@ -126,21 +142,27 @@ export const LendingDetails: FC = () => {
         <Divider className={classes.separator} />
         <Box className={classes.redeem}>
           <Box className={classes.progressBarItem}>
-            <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='EWT Personal Limit' />
+            <ProgressBar value={userContribution} limit={tokenLimit} description='EWT Personal Limit' />
           </Box>
           <Box className={classes.progressBarItem}>
-            <ProgressBar value={tokensRedeemed} limit={tokenLimit} description='Timeline' />
+            <ProgressBar value={solarLoanTokenBalance} limit={tokenLimit} description='SLT Timeline' />
           </Box>
           <Box className={classes.redeemAction}>
-            <Button
-              disabled={isRedeemDisabled}
-              variant='outlined'
-              color='primary'
-              style={{ minWidth: '200px' }}
-              onClick={onRedeemSlt}
-            >
-              Redeem SLT
-            </Button>
+            {smartContractLoading ? (
+              <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              <Button
+                disabled={isRedeemDisabled}
+                variant='outlined'
+                color='primary'
+                style={{ minWidth: '200px' }}
+                onClick={onRedeemSlt}
+              >
+                Redeem SLT
+              </Button>
+            )}
           </Box>
         </Box>
       </Box>

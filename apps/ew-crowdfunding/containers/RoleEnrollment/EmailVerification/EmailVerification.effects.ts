@@ -3,7 +3,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useEffect, useState } from 'react';
 import domains from 'disposable-email-domains';
-import { RoleEnrollmentStatus, selectAddress, selectClaimsService, Web3ActionTypes } from '../../../redux-store';
+import {
+  RoleEnrollmentStatus,
+  selectAddress,
+  selectClaimsService,
+  selectContributionDeadline,
+  Web3ActionTypes,
+} from '../../../redux-store';
 import { useDispatch, useSelector } from 'react-redux';
 import { RegistrationTypes } from 'iam-client-lib';
 
@@ -17,6 +23,9 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   const [errorMessage, setErrorMessage] = useState(null);
 
   const address = useSelector(selectAddress);
+  const closeStackingDate = useSelector(selectContributionDeadline);
+
+  const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
 
   const validationSchema = yup
     .object({
@@ -101,5 +110,6 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
     acknowledged,
     setAcknowledge,
     isLoading,
+    isEnrollmentDisabled,
   };
 };
