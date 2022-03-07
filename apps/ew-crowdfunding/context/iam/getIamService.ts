@@ -58,7 +58,10 @@ export const getIamService = async (providerType: ProviderType) => {
       role,
     };
   } catch (error) {
-    console.log('Error: ', error);
+    const env = process.env.NODE_ENV;
+    if (env == 'development') {
+      console.log('Error: ', error);
+    }
     // throw new Error('No ethereum object');
     console.log('No ethereum object! Please connect your wallet!');
     return;
