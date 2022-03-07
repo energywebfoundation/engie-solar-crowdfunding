@@ -27,11 +27,9 @@ let stakingContract: Staking;
 const tokenSymbol = 'SLT';
 const defaultRoleVersion = 1;
 const tokenName = 'SOLAR TOKEN';
-const patronRole = utils.namehash('email.roles.verification.apps.energyweb.iam.ewc'); // 0xd83104a5ca54632eb1cb11c562631db005434d589ddd5945399e64672b7d944e (volta)
-
-// 0xf38d9dea0045e3374755be597c94e71e067bc00d8cd8c6bb2e556e3ae1ad573c (dev)
-
-const serviceProviderRole = utils.namehash('email.roles.eea.apps.florin.engietestvolta.iam.ewc'); //0xe00e224c60394052a994978cde84b44e76076341daafc2a0194b1a8d06a1e453
+const serviceProviderRole = utils.namehash("email.roles.verification.apps.energyweb.iam.ewc"); // 0x7309fb6c9050c8da31473134bb210fe29586cbd6fe98004193a8b25d6689e29e (volta)
+                                                                                 
+const patronRole = utils.namehash("email.roles.eea.apps.florin.engietestvolta.iam.ewc"); //0xc698f14ed8d60937e445046f6dea1406c03e7e0adce8d7a2a43a5ffaa35f7621
 
 const timeTravel = async (provider: MockProvider, seconds: number) => {
   await provider.send('evm_increaseTime', [seconds]);

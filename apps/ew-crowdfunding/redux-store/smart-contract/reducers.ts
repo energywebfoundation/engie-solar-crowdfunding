@@ -9,13 +9,14 @@ const initialState: SmartContractReducerState = {
   userContribution: null,
   solarLoanTokenBalance: null,
   redeemableReward: null,
-  tokensRedeemed: null,
   interestRate: null,
-  contributionDeadline: null,
-  solarLoansDistributed: null,
-  solarLoansMature: null,
   totalLentAmount: null,
   error: null,
+  // Dates
+  activateStakingDate: null,
+  closeStackingDate: null,
+  lockStakesDate: null,
+  releaseRewardsDate: null,
 };
 
 const smartContractReducer: Reducer<SmartContractReducerState> = (
@@ -23,6 +24,11 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
   { type, payload, error },
 ) => {
   switch (type) {
+    case SmartContractActionTypes.SET_LOADING:
+      return {
+        ...state,
+        loading: payload,
+      };
     case SmartContractActionTypes.SET_ACCOUNT_BALANCE:
       return {
         ...state,
@@ -53,35 +59,35 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
         ...state,
         redeemableReward: payload,
       };
-    case SmartContractActionTypes.SET_TOKENS_REDEEMED:
-      return {
-        ...state,
-        tokensRedeemed: payload,
-      };
     case SmartContractActionTypes.SET_INTEREST_RATE:
       return {
         ...state,
         interestRate: payload,
       };
-    case SmartContractActionTypes.SET_CONTRIBUTION_DEADLINE:
+    case SmartContractActionTypes.SET_CLOSE_STACKING_DATE:
       return {
         ...state,
-        contributionDeadline: payload,
+        closeStackingDate: payload,
       };
-    case SmartContractActionTypes.SET_SOLAR_LOANS_DISTRIBUTED:
+    case SmartContractActionTypes.SET_LOCK_STAKES_DATE:
       return {
         ...state,
-        solarLoansDistributed: payload,
+        lockStakesDate: payload,
       };
-    case SmartContractActionTypes.SET_SOLAR_LOANS_MATURE:
+    case SmartContractActionTypes.SET_RELEASE_REWARDS_DATE:
       return {
         ...state,
-        solarLoansMature: payload,
+        releaseRewardsDate: payload,
       };
     case SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT:
       return {
         ...state,
         totalLentAmount: payload,
+      };
+    case SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE:
+      return {
+        ...state,
+        activateStakingDate: payload,
       };
     default:
       return state;

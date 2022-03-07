@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
-import { Container, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 import { Footer, InfoContainer, InfoPane, Lending, Navigation, Welcome } from '../containers';
 import { theme } from '../dsla-theme';
-import { useDispatch, useSelector } from 'react-redux';
-import { getWeb3, selectAuthenticated } from '../redux-store';
+import { useDispatch } from 'react-redux';
+import { getWeb3 } from '../redux-store';
 import { useEffect } from 'react';
 import { useDSLAModalsDispatch } from '../context';
 import { AppContainer } from '../components';
@@ -11,7 +11,6 @@ import { AppContainer } from '../components';
 const WalletPage: NextPage = () => {
   const dispatch = useDispatch();
   const dispatchModals = useDSLAModalsDispatch();
-  const authenticated = useSelector(selectAuthenticated);
 
   useEffect(() => {
     dispatch(getWeb3(dispatchModals));
@@ -28,7 +27,7 @@ const WalletPage: NextPage = () => {
           style={{ width: '100%', marginTop: '40px', marginBottom: '40px', borderColor: theme.palette.primary.dark }}
           light={false}
         />
-        {authenticated && <Lending />}
+         <Lending />
       </AppContainer>
       <Footer />
     </div>

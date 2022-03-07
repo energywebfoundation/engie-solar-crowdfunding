@@ -70,7 +70,7 @@ export const getWeb3 =
     const initialStorageValues: UpdateWeb3Payload = getLocalStorageAccount();
     const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
     const isConnectedToRightNetwork =
-      process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
+      (process.env.NEXT_PUBLIC_CHAIN_ID || 73799).toString() === parseInt(`${browserChainId}`, 16)?.toString();
 
     if (providerType) {
       try {
@@ -147,7 +147,7 @@ export const requestLogin =
       );
       const { isMetamaskPresent, chainId: browserChainId } = await isMetamaskExtensionPresent();
       const isConnectedChainId =
-        process.env.NEXT_PUBLIC_CHAIN_ID.toString() === parseInt(`${browserChainId}`, 16)?.toString();
+        (process.env.NEXT_PUBLIC_CHAIN_ID || 73799).toString() === parseInt(`${browserChainId}`, 16)?.toString();
       if (signerService && signerService?.signer && signerService?.address) {
         const publicKey = await signerService.publicKey();
         dispatch(handleWeb3Listeners(signerService, dispatchModals));

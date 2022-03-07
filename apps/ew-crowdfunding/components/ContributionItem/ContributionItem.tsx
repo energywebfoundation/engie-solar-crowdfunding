@@ -18,6 +18,7 @@ export const ContributionItem: FC<IContributionItemProps> = ({
   titleClass,
 }: IContributionItemProps) => {
   const classes = useStyles();
+  const displayedValue = Number(value).toPrecision(2);
 
   return (
     <Box className={`${classes.wrapper} ${className}`}>
@@ -26,7 +27,7 @@ export const ContributionItem: FC<IContributionItemProps> = ({
       </Typography>
       <Box className={classes.valueContainer}>
         <Typography variant='h4' fontWeight={'bold'}>
-          {value}
+          {displayedValue}
         </Typography>
         <Typography variant='body2'>{type}</Typography>
       </Box>

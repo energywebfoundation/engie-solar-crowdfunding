@@ -7,32 +7,31 @@ import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getAccountBalance,
-  getContributionDeadline,
+  getActivateStackingDate,
+  getCloseStackingDate,
   getGlobalTokenLimit,
-  getInterestRate,
   getRedeemableReward,
-  getSolarLoansDistributed,
-  getSolarLoansMature,
+  getLockStakesDate,
+  getReleaseRewardsDate,
   getSolarLoanTokenBalance,
   getTokenLimit,
-  getTokensRedeemed,
   getUserContribution,
   lend,
   redeemSlt,
   selectAccountBalance,
+  selectActivateStackingDate,
   selectAddress,
   selectAuthenticated,
   selectContributionDeadline,
   selectGlobalTokenLimit,
-  selectInterestRate,
   selectProvider,
   selectRedeemableReward,
   selectRoleEnrollmentStatus,
+  selectSmartContractLoading,
   selectSolarLoansDistributed,
   selectSolarLoansMature,
   selectSolarLoanTokenBalance,
   selectTokenLimit,
-  selectTokensRedeemed,
   selectUserContribution,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
@@ -46,26 +45,24 @@ export const useLendingDetailsEffects = () => {
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
 
+  const smartContractLoading = useSelector(selectSmartContractLoading);
+
   const [errorMessage, setErrorMessage] = useState(null);
 
   const dispatchModals = useDSLAModalsDispatch();
 
   useEffect(() => {
-    dispatch(getTokenLimit());
-    dispatch(getGlobalTokenLimit());
-    dispatch(getUserContribution());
-    dispatch(getSolarLoanTokenBalance());
-    dispatch(getRedeemableReward());
-    dispatch(getTokensRedeemed());
-    dispatch(getInterestRate());
-    dispatch(getContributionDeadline());
-    dispatch(getSolarLoansDistributed());
-    dispatch(getSolarLoansMature());
-  });
-
-  useEffect(() => {
     if (propertyExists(provider) && propertyExists(currentAddress)) {
       dispatch(getAccountBalance(provider, currentAddress));
+      dispatch(getGlobalTokenLimit(provider));
+      dispatch(getTokenLimit(provider));
+      dispatch(getActivateStackingDate(provider));
+      dispatch(getCloseStackingDate(provider));
+      dispatch(getLockStakesDate(provider));
+      dispatch(getReleaseRewardsDate(provider));
+      dispatch(getUserContribution(provider));
+      dispatch(getSolarLoanTokenBalance(provider, currentAddress));
+      dispatch(getRedeemableReward(provider));
     }
   }, [dispatch, authenticated, provider, currentAddress]);
 
@@ -75,12 +72,12 @@ export const useLendingDetailsEffects = () => {
   const userContribution = useSelector(selectUserContribution);
   const solarLoanTokenBalance = useSelector(selectSolarLoanTokenBalance);
   const redeemableReward = useSelector(selectRedeemableReward);
-  const tokensRedeemed = useSelector(selectTokensRedeemed);
 
-  const interestRate = useSelector(selectInterestRate);
-  const contributionDeadline = useSelector(selectContributionDeadline);
-  const solarLoansDistributed = useSelector(selectSolarLoansDistributed);
-  const solarLoansMature = useSelector(selectSolarLoansMature);
+  const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
+  const activateStackingDate = useSelector(selectActivateStackingDate);
+  const closeStackingDate = useSelector(selectContributionDeadline);
+  const lockStakesDate = useSelector(selectSolarLoansDistributed);
+  const releaseRewardsDate = useSelector(selectSolarLoansMature);
 
   useEffect(() => {
     if (propertyExists(accountBalance)) {
@@ -88,26 +85,29 @@ export const useLendingDetailsEffects = () => {
     }
   }, [accountBalance]);
 
-  const isRedeemDisabled = new Date() >= new Date(contributionDeadline);
+  const isStackingDisabled = new Date() < new Date(activateStackingDate) || new Date() >= new Date(closeStackingDate);
+  const isRedeemDisabled =
+    new Date() < new Date(activateStackingDate) ||
+    (new Date() >= new Date(closeStackingDate) && new Date() < new Date(releaseRewardsDate));
 
   const formatDate = (date: string) => {
     if (!date) {
       return;
     }
-    return DateTime.fromJSDate(new Date(date)).toFormat('dd LLL yy');
+    return DateTime.fromJSDate(new Date(date)).toFormat('dd LLL yy HH:MM');
   };
 
   const validationSchema = yup
     .object({
       loan: yup
         .number()
-        .typeError('EWT Loan Amount is required')
-        .min(0)
+        .typeError('EWT Stake Amount is required')
+        .min(0.51)
         .max(200)
-        .required('EWT Loan Amount is required')
-        .label('EWT Loan Amount'),
+        .required('EWT Stake Amount is required')
+        .label('EWT Stake Amount'),
     })
-    .required('EWT Loan Amount is required');
+    .required('EWT Stake Amount is required');
 
   const {
     handleSubmit,
@@ -126,14 +126,17 @@ export const useLendingDetailsEffects = () => {
   }, [isSubmitSuccessful, reset]);
 
   const onLendEwt = (loan: number) => {
-    dispatch(lend(loan, dispatchModals));
+    if (!loan || !provider || !currentAddress) {
+      return;
+    }
+    dispatch(lend(loan, dispatchModals, provider, currentAddress));
   };
 
   const onSubmit = async (data: { loan: number }) => {
     if (errorMessage) {
       return;
     }
-    
+
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_LEND,
       payload: {
@@ -145,7 +148,10 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeem = (amount: number) => {
-    dispatch(redeemSlt(amount));
+    if (!provider || !amount || !currentAddress) {
+      return;
+    }
+    dispatch(redeemSlt(amount, provider, currentAddress));
   };
 
   const onRedeemSlt = () => {
@@ -165,14 +171,17 @@ export const useLendingDetailsEffects = () => {
   };
 
   const getErrorMessage = (loanValue: number) => {
-    /* EWT Loan Amount” box greater than */
-    if (loanValue > accountBalance) {
+    console.log('Loan value: ', loanValue);
+    console.log('solarLoanTokenBalance value: ', solarLoanTokenBalance);
+    console.log('globalTokenLimit: ', globalTokenLimit);
+    /* EWT Stake Amount” box greater than */
+    if (loanValue > Number(accountBalance)) {
       /* their account balance */
       return 'Amount exceeds account balance';
-    } else if (loanValue > tokenLimit) {
+    } else if (loanValue > Number(tokenLimit)) {
       /* their personal limit of 200 EWT */
       return 'Amount exceeds personal limit';
-    } else if (loanValue + solarLoanTokenBalance > globalTokenLimit) {
+    } else if (loanValue + Number(solarLoanTokenBalance) > Number(globalTokenLimit)) {
       /* an amount that makes the total contribution exceed the global limit (10,000 EWT) */ // This needs to be checked
       return 'Amount exceeds global limit';
     } else {
@@ -183,9 +192,9 @@ export const useLendingDetailsEffects = () => {
   return {
     globalTokenLimit,
     interestRate,
-    contributionDeadline,
-    solarLoansDistributed,
-    solarLoansMature,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
     userContribution,
     solarLoanTokenBalance,
     redeemableReward,
@@ -196,12 +205,14 @@ export const useLendingDetailsEffects = () => {
     errors,
     onRedeemSlt,
     accountBalance,
-    tokensRedeemed,
     tokenLimit,
     onLoanChange,
     errorMessage,
     isRedeemDisabled,
     isReady,
     roleEnrolmentStatus,
+    smartContractLoading,
+    activateStackingDate,
+    isStackingDisabled,
   };
 };

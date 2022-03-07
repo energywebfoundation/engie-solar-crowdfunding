@@ -82,10 +82,10 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
     console.log(
       `\n\t\tInit params:
 
-            Signup start = ${signupStart} (unix timestamp)
-            Signup end = ${signupEnd} (unix timestamp)
-            Start Date = ${startDate} (unix timestamp)
-            End Date = ${endDate} (unix timestamp)
+            Signup start = ${new Date(signupStart * 1000)} (unix timestamp)
+            Signup end = ${new Date(signupStart * 1000)} (unix timestamp)
+            Start Date = ${new Date(signupStart * 1000)} (unix timestamp)
+            End Date = ${new Date(signupStart * 1000)} (unix timestamp)
             HardCap = ${hardCap} wei
             Contribution Limit = ${contributionLimit} wei
             Minimum required stake = ${minRequiredStake} wei

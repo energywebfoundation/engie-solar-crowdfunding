@@ -18,6 +18,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
     acknowledged,
     setAcknowledge,
     isLoading,
+    isEnrollmentDisabled,
   } = useEmailVerificationEffects(roleEnrolmentStatus);
 
   return (
@@ -71,7 +72,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
               type='submit'
               color='primary'
               style={{ width: '100%' }}
-              disabled={!!errorMessage}
+              disabled={!!errorMessage || isEnrollmentDisabled}
             >
               Submit
             </Button>

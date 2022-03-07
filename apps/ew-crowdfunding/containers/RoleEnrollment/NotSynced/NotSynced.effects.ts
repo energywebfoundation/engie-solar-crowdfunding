@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RoleEnrollmentStatus, selectClaimsService, selectRole, Web3ActionTypes } from '../../../redux-store';
+import { RoleEnrollmentStatus, selectClaimsService, selectContributionDeadline, selectRole, Web3ActionTypes } from '../../../redux-store';
 
 export const useNotSyncedEffects = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const role = useSelector(selectRole);
   const claimsService = useSelector(selectClaimsService);
+  const closeStackingDate = useSelector(selectContributionDeadline);
+
+  const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
 
   const onAddRole = async () => {
     if (!role) {
@@ -37,5 +40,5 @@ export const useNotSyncedEffects = () => {
     }
   };
 
-  return { onAddRole, isLoading };
+  return { onAddRole, isLoading, isEnrollmentDisabled };
 };
