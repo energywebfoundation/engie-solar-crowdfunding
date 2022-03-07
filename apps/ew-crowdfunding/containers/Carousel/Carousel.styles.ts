@@ -31,5 +31,11 @@ export const useStyles = makeStyles(() => {
         padding: '0',
       },
     },
+    socialWrapper: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'end',
+    }
   };
 });

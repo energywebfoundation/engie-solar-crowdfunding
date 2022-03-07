@@ -9,7 +9,7 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      borderRadius: '16px',
+      borderRadius: '0',
     },
     divider: {
       position: 'absolute',
@@ -43,7 +43,7 @@ export const useStyles = makeStyles(() => {
     },
     lendingTitle: {
       background: 'linear-gradient(253.88deg, #0F1E29 -348.29%, #B5F9FE -262.61%, #0F1E29 81.26%)',
-      borderRadius: '16px 16px 0px 0px',
+      borderRadius: '0',
       color: theme.palette.common.white,
       padding: '40px',
       minWidth: '320px',
@@ -66,7 +66,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       gap: '28px',
       background: 'linear-gradient(135deg, #00AAFF 0.89%, #23D2B5 94.05%)',
-      borderRadius: '0px 0px 16px 16px',
+      borderRadius: '0',
       color: theme.palette.common.black,
       padding: '40px 0px 40px 40px',
       minWidth: '320px',
@@ -77,7 +77,7 @@ export const useStyles = makeStyles(() => {
     contributionItem: {
       background: 'rgba(196, 196, 196, 0.16)',
       border: '1px solid rgba(0, 0, 0, 0.16)',
-      borderRadius: '16px 0px 0px 16px',
+      borderRadius: '0',
       padding: '16px',
       height: '86px',
     },
@@ -135,7 +135,7 @@ export const useStyles = makeStyles(() => {
     progressBarItem: {
       background: 'rgba(196, 196, 196, 0.16)',
       border: '1px solid rgba(0, 0, 0, 0.16)',
-      borderRadius: '0px 16px 16px 0px',
+      borderRadius: '0',
       padding: '16px',
       paddingLeft: '100px',
       height: '86px',

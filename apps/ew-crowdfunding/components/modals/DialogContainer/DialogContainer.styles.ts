@@ -5,7 +5,7 @@ export const useStyles = makeStyles(() => {
   return {
     dialog: {
       '& .MuiDialog-paper': {
-        borderRadius: '16px',
+        borderRadius: '0',
         minWidth: '370px',
         maxWidth: '450px',
       },

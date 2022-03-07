@@ -57,75 +57,18 @@ input[type='number']::-webkit-outer-spin-button {
   margin: 0;
 }
 
-.backgroundImage {
-  background-image: url('/Vector.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100%;
-  min-height: 100%;
-  z-index: 5;
-  top: 0;
-}
-
-.gradientBorder {
-  position: relative;
-  border: 1px solid transparent;
-  border-radius: 4px;
-  background-clip: padding-box;
-  padding: 10px;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
-.gradientBorder::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 4px;
-  padding: 1px;
-  background: linear-gradient(
-    314.24deg,
-    #00aaff 1.72%,
-    rgba(83, 134, 245, 0.16) 33.86%,
-    rgba(98, 104, 249, 0.16) 62.17%,
-    #a566ff 97.07%
-  );
-  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  -webkit-mask-composite: destination-out;
-}
-
-.warningBorder {
-  position: relative;
-  border-radius: 4px;
-  background: linear-gradient(276.95deg, rgba(253, 139, 24, 0.2) -198.51%, rgba(13, 10, 25, 0) 157.75%);
-  background-clip: padding-box;
-  border: 1px solid #fd8b18;
-  padding: 1px;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
-.successBorder {
-  position: relative;
-  border-radius: 4px;
-  background: linear-gradient(276.95deg, rgba(24, 253, 138, 0.2) -198.51%, rgba(13, 10, 25, 0) 157.75%);
-  background-clip: padding-box;
-  border: 1px solid #009688;
-  padding: 1px;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-}
-
 .bg-warning {
-  background-color: #FBDB3C;
+  background-color: #fbdb3c;
 }
 
 .bg-success {
-  background-color: #6ED2B1;
+  background-color: #23D2B5;
+}
+
+.gradient-text {
+  background-image: linear-gradient(135deg, #0af 0%, #23d2b5 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  background-position: center center;
+  -webkit-text-fill-color: transparent;
 }

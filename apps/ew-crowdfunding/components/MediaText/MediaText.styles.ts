@@ -26,7 +26,7 @@ export const useStyles = makeStyles(() => {
     },
     mediaWrapper: {
       flex: '1 0 auto',
-      borderRadius: '16px',
+      borderRadius: '0',
       position: 'relative',
       zIndex: 10,
       [theme.breakpoints.down(1200)]: {
@@ -36,7 +36,7 @@ export const useStyles = makeStyles(() => {
       boxShadow: '-40px 4px 40px rgba(0, 0, 0, 0.24)',
     },
     player: {
-      borderRadius: '16px',
+      borderRadius: '0',
       zIndex: 6,
     },
     textWrapper: {

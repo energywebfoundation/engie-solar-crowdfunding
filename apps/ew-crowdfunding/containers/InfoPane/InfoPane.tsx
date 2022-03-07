@@ -11,7 +11,7 @@ export const InfoPane: FC = () => {
     <Box className={classes.wrapper}>
       {selected && (
         <Paper className={classes.paper}>
-          <Typography variant='h3'>{selected.title}</Typography>
+          <Typography variant='h3' className='gradient-text'>{selected.title}</Typography>
           {selected.paragraphs.map((paragraph: string) => {
             return (
               <Typography variant='h5' key={paragraph}>

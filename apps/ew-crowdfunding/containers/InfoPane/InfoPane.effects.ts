@@ -9,7 +9,7 @@ export type Info = {
 export const useInfoPaneEffects = () => {
   const infoList: Info[] = [
     {
-      name: 'How it Works',
+      name: 'How Solar Crowdfunding Works',
       title: 'How Solar Crowdfunding Works',
       paragraphs: [
         'By supporting the Solar Crowdfunding Pilot with your EWT, you are directly supporting expanding renewable energy access in the developing world. Use this site to lend your EWT and receive Solar Loan Tokens (SLT) as proof of participation. Engie Energy Access will use the EWT you lent to fund small-scale solar + storage systems for people living in rural areas.',

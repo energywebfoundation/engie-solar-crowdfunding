@@ -3,7 +3,7 @@ export type SocialLink = {
   icon: string;
   url: string;
 };
-export const useFooterEffects = () => {
+export const useSocialLinksEffects = () => {
   const socialLinks: SocialLink[] = [
     {
       name: 'Medium',
