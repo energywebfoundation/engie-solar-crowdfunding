@@ -13,7 +13,7 @@ const Home: NextPage = () => {
         <ImageText
           imagePath='/WomenMarket.png'
           title='Who We Are'
-          text='EEA is a leading off-grid, Pay-As-You-Go (PAYGo) solar and mini-grid solutions provider in Africa, delivering clean energy solutions to the most remote households on the world`s fastest growing continent. EEA has transformed 6.5 million lives in 9 countries and aims to reach 20 million by 2025. Learn more'
+          text='EEA is a leading off-grid, Pay-As-You-Go (PAYGo) solar and mini-grid solutions provider in Africa, delivering clean energy solutions to the most remote households on the world`s fastest growing continent. EEA has transformed 6.5 million lives in 9 countries and aims to reach 20 million by 2025.'
           link='https://engie-energyaccess.com/'
           linkText='ENGIE Energy Access'
           gradientText={true}
@@ -41,7 +41,7 @@ const Home: NextPage = () => {
           <ImageText
             imagePath='/Store2.png'
             title='How does this platform work?'
-            text='This DeFi platform uses the open-source Energy Web technology stack and runs on the Energy Web Chain. Micro-investors can finance the installation of clean energy assets by staking their Energy Web Tokens (EWT), the native token of the Energy Web Chain. In this first proof of concept, the target goal is to collect $100,000 worth of EWT within the stacking period.'
+            text='This DeFi platform uses the open-source Energy Web technology stack and runs on the Energy Web Chain. Micro-investors can finance the installation of clean energy assets by staking their Energy Web Tokens (EWT), the native token of the Energy Web Chain. In this first proof of concept, the target goal is to collect $100,000 worth of EWT within START_DATE and END_DATE.'
             gradientText={true}
           />
         </AppContainer>
@@ -57,7 +57,7 @@ const Home: NextPage = () => {
       </Paper>
       <AppContainer>
         <ImageText
-          imagePath='/MountMeru.jpg'
+          imagePath='/Worker.png'
           title='Empowering Communities'
           text='Funds raised will contribute to financing different types of projects including solar for homes, small businesses, and schools. Crypto investments will be translated into fair pricing plans paid back in installments by project owners via mobile money.'
           shadow={false}

@@ -22,7 +22,7 @@ export const useStyles = makeStyles(() => {
       width: '100%',
       height: '1px',
       background: 'rgba(0, 0, 0, 0.64)',
-      bottom: '160px',
+      bottom: '120px',
       [theme.breakpoints.down('sm')]: {
         bottom: '120px',
       },
@@ -68,7 +68,7 @@ export const useStyles = makeStyles(() => {
       background: 'linear-gradient(135deg, #00AAFF 0.89%, #23D2B5 94.05%)',
       borderRadius: '0',
       color: theme.palette.common.black,
-      padding: '40px 0px 40px 40px',
+      padding: '40px 0px 0px 40px',
       minWidth: '320px',
       [theme.breakpoints.down('sm')]: {
         width: '100%',
@@ -91,6 +91,11 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
+      [theme.breakpoints.between(1052, 1220)]: {
+        flexDirection: 'column',
+        gap: '10px',
+        alignItems: 'start',
+      },
       [theme.breakpoints.down('sm')]: {
         flexDirection: 'column',
         gap: '10px',
@@ -122,11 +127,17 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       gap: '28px',
-      padding: '40px 40px 40px 0px',
+      padding: '40px 40px 0px 0px',
+    },
+    balance: {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start',
+      gap: '20px',
     },
     redeemableReward: {
       marginTop: '50px',
-      padding: '16px',
+      padding: '0px 16px',
       height: '86px',
       [theme.breakpoints.down('sm')]: {
         marginTop: 0,
@@ -159,7 +170,6 @@ export const useStyles = makeStyles(() => {
       width: '100%',
       display: 'flex',
       justifyContent: 'flex-end',
-      paddingTop: '16px',
       [theme.breakpoints.down('sm')]: {
         marginTop: 0,
       },

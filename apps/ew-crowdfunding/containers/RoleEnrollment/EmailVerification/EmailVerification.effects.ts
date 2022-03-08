@@ -50,7 +50,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   }, [isSubmitSuccessful, reset]);
 
   const onSubmit = async (data: { email: string }) => {
-    if (errorMessage) {
+    if (errorMessage || isEnrollmentDisabled) {
       return;
     }
     setIsLoading(true);

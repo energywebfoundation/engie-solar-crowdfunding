@@ -12,7 +12,6 @@ export const useStyles = makeStyles(() => {
       gap: '20px',
       borderRadius: '0',
       padding: '40px',
-      maxWidth: '700px',
       [theme.breakpoints.down(1052)]: {
         maxWidth: '100%',
       },
@@ -24,7 +23,6 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'start',
       gap: '10px',
-      padding: '20px',
     },
     listItem: {
       justifyContent: 'start',

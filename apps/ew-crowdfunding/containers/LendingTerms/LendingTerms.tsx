@@ -10,9 +10,7 @@ export const LendingTerms: FC = () => {
 
   return (
     <Paper className={classes.wrapper}>
-      <Typography style={{ paddingLeft: '20px', paddingTop: '20px' }} variant='h4'>
-        Lending Terms
-      </Typography>
+      <Typography variant='h4'>Staking Terms</Typography>
       <List className={classes.listWrapper}>
         {listItems.map((listItem: string) => {
           return (

@@ -24,14 +24,14 @@ export const LendingStats = () => {
         <>
           <ContributionItem
             titleClass={classes.titleClass}
-            title='Solar lending stats'
+            title='Clean Energy Fund at a Glance'
             value={totalLentAmount}
             type='EWT'
           />
           <ProgressBar
             value={totalLentAmount}
             limit={globalTokenLimit}
-            description='EWT Lending Limit'
+            description='EWT Staking Pool Limit'
             className={classes.barColorPrimary}
           />
         </>
