@@ -195,14 +195,14 @@ contract Staking is ERC20Burnable {
                 stakes[msg.sender] += finalMint;
                 _mint(msg.sender, finalMint);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit + overFlow_hardCap);
-                refund(overFlow_limit + overFlow_hardCap);
                 totalStaked += finalMint;
+                refund(overFlow_limit + overFlow_hardCap);
             } else {
                 stakes[msg.sender] += toMint_limit;
                 _mint(msg.sender, toMint_limit);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit);
-                refund(overFlow_limit);
                 totalStaked += toMint_limit;
+                refund(overFlow_limit);
             }
         } else { 
             if (totalStaked + msg.value >= hardCap){
@@ -213,8 +213,8 @@ contract Staking is ERC20Burnable {
                 stakes[msg.sender] += finalMint;
                 _mint(msg.sender, finalMint);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_hardCap);
-                refund(overFlow_hardCap);
                 totalStaked += finalMint;
+                refund(overFlow_hardCap);
             } else {   
                 stakes[msg.sender] += msg.value;
                 _mint(msg.sender, msg.value);
