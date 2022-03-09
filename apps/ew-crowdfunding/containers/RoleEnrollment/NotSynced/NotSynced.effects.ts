@@ -12,9 +12,9 @@ export const useNotSyncedEffects = () => {
   const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
 
   const onAddRole = async () => {
-    if(isEnrollmentDisabled) {
-      return;
-    }
+    // if(isEnrollmentDisabled) { // TODO: Uncomment this for prod
+    //   return;
+    // }
     if (!role) {
       dispatch({
         type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,

@@ -32,7 +32,7 @@ export const NotSynced: FC = () => {
             type='submit'
             color='primary'
             style={{ width: '100%' }}
-            disabled={isEnrollmentDisabled}
+            // disabled={isEnrollmentDisabled}  // TODO: Uncomment this for prod
           >
             Proceed
           </Button>

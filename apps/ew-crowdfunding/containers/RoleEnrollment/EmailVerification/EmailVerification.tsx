@@ -72,7 +72,8 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
               type='submit'
               color='primary'
               style={{ width: '100%' }}
-              disabled={!!errorMessage || isEnrollmentDisabled}
+              // disabled={!!errorMessage || isEnrollmentDisabled} // TODO: Uncomment this for prod
+              disabled={!!errorMessage}
             >
               Submit
             </Button>
