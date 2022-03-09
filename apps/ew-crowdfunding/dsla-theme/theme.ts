@@ -32,8 +32,11 @@ const lightTheme: ThemeOptions = {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: '32px',
-          padding: '12.5px 25px',
+          borderRadius: '0',
+          padding: '8px 24px',
+          fontSize: '15px',
+          lineHeight: '34px',
+          width: 'auto'
         },
       },
     },

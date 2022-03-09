@@ -19,7 +19,7 @@ export const useStyles = makeStyles(() => {
       boxShadow:
         'inset -10.05px -10.05px 30.15px rgba(0, 170, 255, 0.08), inset 10.05px 10.05px 30.15px rgba(0, 170, 255, 0.08)',
       backdropFilter: 'blur(15.7031px)',
-      borderRadius: '16px',
+      borderRadius: '0',
       [theme.breakpoints.down('sm')]: {
         padding: '40px',
       },

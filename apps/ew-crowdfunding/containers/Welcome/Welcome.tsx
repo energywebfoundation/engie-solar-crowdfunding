@@ -19,7 +19,7 @@ export const Welcome: FC = () => {
       <AppContainer>
         <Box className={classes.wrapper}>
           <Paper className={classes.paper}>
-            <Typography variant='h3' color='common.black'>
+            <Typography variant='h3' color='common.black' className='gradient-text'>
               Stake your Energy Web Tokens to provide Energy Access
             </Typography>
             <Typography variant='h5' color='common.black'>

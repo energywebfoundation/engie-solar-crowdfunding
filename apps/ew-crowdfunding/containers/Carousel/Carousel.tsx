@@ -3,7 +3,7 @@ import { FC } from 'react';
 import { Box, Button, Typography, AppBar, Toolbar } from '@mui/material';
 import { useStyles } from './Carousel.styles';
 import Link from 'next/link';
-import { AppContainer } from '../../components';
+import { AppContainer, SocialLinks } from '../../components';
 
 export const Carousel: FC = () => {
   const classes = useStyles();
@@ -36,6 +36,9 @@ export const Carousel: FC = () => {
               </Button>
             </a>
           </Link>
+        </Box>
+        <Box className={classes.socialWrapper}>
+          <SocialLinks />
         </Box>
       </AppContainer>
     </Box>

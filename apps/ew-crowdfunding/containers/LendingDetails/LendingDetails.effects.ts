@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useEffect, useState } from 'react';
-import { DateTime } from 'luxon';
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch } from '../../context';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -28,8 +27,8 @@ import {
   selectRedeemableReward,
   selectRoleEnrollmentStatus,
   selectSmartContractLoading,
-  selectSolarLoansDistributed,
-  selectSolarLoansMature,
+  selectLockStakesDate,
+  selectReleaseRewardsDate,
   selectSolarLoanTokenBalance,
   selectTokenLimit,
   selectUserContribution,
@@ -74,10 +73,11 @@ export const useLendingDetailsEffects = () => {
   const redeemableReward = useSelector(selectRedeemableReward);
 
   const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
-  const activateStackingDate = useSelector(selectActivateStackingDate);
-  const closeStackingDate = useSelector(selectContributionDeadline);
-  const lockStakesDate = useSelector(selectSolarLoansDistributed);
-  const releaseRewardsDate = useSelector(selectSolarLoansMature);
+
+  const activateStackingDate = new Date(useSelector(selectActivateStackingDate));
+  const closeStackingDate = new Date(useSelector(selectContributionDeadline));
+  const lockStakesDate = new Date(useSelector(selectLockStakesDate));
+  const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
 
   useEffect(() => {
     if (propertyExists(accountBalance)) {
@@ -85,17 +85,10 @@ export const useLendingDetailsEffects = () => {
     }
   }, [accountBalance]);
 
-  const isStackingDisabled = new Date() < new Date(activateStackingDate) || new Date() >= new Date(closeStackingDate);
+  const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < new Date(activateStackingDate) ||
-    (new Date() >= new Date(closeStackingDate) && new Date() < new Date(releaseRewardsDate));
-
-  const formatDate = (date: string) => {
-    if (!date) {
-      return;
-    }
-    return DateTime.fromJSDate(new Date(date)).toFormat('dd LLL yy HH:MM');
-  };
+    new Date() < activateStackingDate ||
+    (new Date() >= closeStackingDate && new Date() < releaseRewardsDate);
 
   const validationSchema = yup
     .object({
@@ -198,7 +191,6 @@ export const useLendingDetailsEffects = () => {
     userContribution,
     solarLoanTokenBalance,
     redeemableReward,
-    formatDate,
     control,
     handleSubmit,
     onSubmit,

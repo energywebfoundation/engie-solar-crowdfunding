@@ -39,8 +39,6 @@ export const Contact: FC = () => {
           </Link>
         </Box>
       </AppContainer>
-      <img className={classes.topBubble} src='/Bubbles1.png' alt='Engie bubble' />
-      <img className={classes.ellipse} src='/ContactEllipse.svg' alt='Engie bubble' />
     </Box>
   );
 };

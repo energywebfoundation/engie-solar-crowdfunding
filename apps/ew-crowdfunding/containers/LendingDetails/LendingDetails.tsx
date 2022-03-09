@@ -3,6 +3,7 @@ import { Box, Paper, Button, CircularProgress, Link, Typography, Divider } from 
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { RoleEnrollmentStatus } from '../../redux-store';
+import { formatDate } from '../../utils';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
 import { useStyles } from './LendingDetails.styles';
 
@@ -16,7 +17,6 @@ export const LendingDetails: FC = () => {
     userContribution,
     solarLoanTokenBalance,
     redeemableReward,
-    formatDate,
     control,
     handleSubmit,
     onSubmit,
@@ -38,12 +38,15 @@ export const LendingDetails: FC = () => {
       <Box className={classes.lendingContainer}>
         <Box className={classes.lendingTitle}>
           <Typography mb={2} variant='h3'>
-            Lending Details
+            Staking Details
           </Typography>
           {!isReady ? (
             <CircularProgress />
           ) : (
-            <ContributionItem title='Your account balance' value={accountBalance} type='EWT' />
+            <Box className={classes.balance}>
+              <ContributionItem title='Your connected wallet balance' value={accountBalance} type='EWT' />
+              <ContributionItem title='Solar loan token balance' value={solarLoanTokenBalance} type='SLT' />
+            </Box>
           )}
         </Box>
         <Box className={classes.formContainer}>
@@ -58,7 +61,7 @@ export const LendingDetails: FC = () => {
               valueChanged={onLoanChange}
             />
             <Box mt={2} className={classes.details}>
-              <Typography variant='body2'>Expected simple interest rate</Typography>
+              <Typography variant='body2'>Expected annual interest rate</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
                 {interestRate}
               </Typography>
@@ -70,26 +73,26 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Close Stacking</Typography>
+              <Typography variant='body2'>Stake until</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
                 {formatDate(closeStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Lock Stakes</Typography>
+              <Typography variant='body2'>Stakes locked from</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
                 {formatDate(lockStakesDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Release Rewards</Typography>
+              <Typography variant='body2'>Release rewards after</Typography>
               <Typography variant='body2' fontWeight={'bold'}>
                 {formatDate(releaseRewardsDate)}
               </Typography>
             </Box>
             <Box className={classes.disclaimer}>
               <Typography variant='body2'>
-                By clicking &quot;LEND&quot;, you acknowledge{' '}
+                By clicking &quot;STAKE&quot;, you acknowledge{' '}
                 <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
                   this disclaimer
                 </Link>
@@ -110,7 +113,7 @@ export const LendingDetails: FC = () => {
                   }
                   style={{ minWidth: '200px' }}
                 >
-                  Lend
+                  STAKE
                 </Button>
               )}
             </Box>
@@ -126,12 +129,6 @@ export const LendingDetails: FC = () => {
             type='EWT'
           />
           <ContributionItem
-            className={classes.contributionItem}
-            title='Solar loan token balance'
-            value={solarLoanTokenBalance}
-            type='SLT'
-          />
-          <ContributionItem
             className={classes.redeemableReward}
             title='Redeemable reward'
             value={redeemableReward}
@@ -143,9 +140,6 @@ export const LendingDetails: FC = () => {
         <Box className={classes.redeem}>
           <Box className={classes.progressBarItem}>
             <ProgressBar value={userContribution} limit={tokenLimit} description='EWT Personal Limit' />
-          </Box>
-          <Box className={classes.progressBarItem}>
-            <ProgressBar value={solarLoanTokenBalance} limit={tokenLimit} description='SLT Timeline' />
           </Box>
           <Box className={classes.redeemAction}>
             {smartContractLoading ? (
@@ -160,7 +154,7 @@ export const LendingDetails: FC = () => {
                 style={{ minWidth: '200px' }}
                 onClick={onRedeemSlt}
               >
-                Redeem SLT
+                Redeem SLT for EWT
               </Button>
             )}
           </Box>
