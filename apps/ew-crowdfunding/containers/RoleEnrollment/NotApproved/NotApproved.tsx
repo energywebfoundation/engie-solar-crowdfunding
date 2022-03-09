@@ -12,19 +12,19 @@ export const NotApproved: FC = () => {
   return (
     <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
       <Box>
-        <Typography align='center' variant='body2'>
+        <Typography align='center' variant='h5'>
           You haven`t verified your email for the current wallet <strong>{shortenAddress(address)}</strong>
         </Typography>
-        <Typography align='center' variant='body2'>
+        <Typography align='center' variant='h5'>
           If this is not your lending wallet, change wallets in Metamask and refresh the page
         </Typography>
       </Box>
       <Box>
-        <Typography align='center' variant='body2'>
+        <Typography align='center' variant='h5'>
           You have 24 hours to click the confirmation link in your inbox. Return to this page after you confirm your
           email.
         </Typography>
-        <Typography align='center' variant='body2'>
+        <Typography align='center' variant='h5'>
           If you accidentally entered the wrong email or ran out of time, click “Cancel” and try again.
         </Typography>
       </Box>

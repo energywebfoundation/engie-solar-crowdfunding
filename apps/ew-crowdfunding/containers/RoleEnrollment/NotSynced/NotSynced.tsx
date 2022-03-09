@@ -10,14 +10,14 @@ export const NotSynced: FC = () => {
 
   return (
     <WalletCard icon='/IdentificationBadge.png' colorClass='bg-warning' step='step 3'>
-      <Typography align='center' variant='body2'>
+      <Typography align='center' variant='h5'>
         Your email has been approved
       </Typography>
-      <Typography align='center' variant='body2'>
+      <Typography align='center' variant='h5'>
         To complete your staking authorization, you must add an on-chain role to your EW Chain staking wallet.
       </Typography>
       <TextField disabled={true} label='Role' defaultValue='Community' style={{ width: '100%' }} />
-      <Typography align='center' variant='body2'>
+      <Typography align='center' variant='h5'>
         We respect your privacy, adding this role does not expose your email on-chain.
       </Typography>
       <Box className={classes.buttonWrapper}>
