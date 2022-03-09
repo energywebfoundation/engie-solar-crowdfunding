@@ -11,10 +11,11 @@ export const ApprovedSynced: FC = () => {
     <Box className={classes.wrapper}>
       <WalletCard icon='/ShieldCheck.png' colorClass='bg-success' step='step 4'>
         <Typography align='center' variant='h5' style={{ fontWeight: 500 }}>
-          Congratulations
+          Congratulations!
         </Typography>
         <Typography align='center' variant='h5'>
-          You have verified your email and are authorized to stake
+          You have a verified email and an on-chain patron role for the connect wallet - you are now authorized to
+          stake!
         </Typography>
       </WalletCard>
 
@@ -26,7 +27,7 @@ export const ApprovedSynced: FC = () => {
             color='secondary'
             endIcon={<KeyboardDoubleArrowDownIcon />}
           >
-            Go to lending
+            Go to staking
           </Button>
         </a>
       </Link>
