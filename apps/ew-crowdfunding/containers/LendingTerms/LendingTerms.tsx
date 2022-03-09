@@ -1,8 +1,8 @@
-import { Paper, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useLendingTermsEffects } from './LendingTerms.effects';
 import { useStyles } from './LendingTerms.styles';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { ListComponent } from '../../components';
 
 export const LendingTerms: FC = () => {
   const listItems = useLendingTermsEffects();
@@ -11,18 +11,7 @@ export const LendingTerms: FC = () => {
   return (
     <Paper className={classes.wrapper}>
       <Typography variant='h4'>Staking Terms</Typography>
-      <List className={classes.listWrapper}>
-        {listItems.map((listItem: string) => {
-          return (
-            <ListItem key={`${listItem}`} className={classes.listItem}>
-              <ListItemIcon>
-                <ArrowForwardIosIcon />
-              </ListItemIcon>
-              <ListItemText style={{ margin: 0 }} primary={listItem} />
-            </ListItem>
-          );
-        })}
-      </List>
+      <ListComponent listItems={listItems} />
     </Paper>
   );
 };

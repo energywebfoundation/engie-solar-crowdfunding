@@ -1,7 +1,8 @@
 import { FC } from 'react';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Link, Paper, Typography } from '@mui/material';
 import { useStyles } from './InfoPane.styles';
 import { Info, useInfoPaneEffects } from './InfoPane.effects';
+import { ListComponent } from '../../components';
 
 export const InfoPane: FC = () => {
   const classes = useStyles();
@@ -11,14 +12,28 @@ export const InfoPane: FC = () => {
     <Box className={classes.wrapper}>
       {selected && (
         <Paper className={classes.paper}>
-          <Typography variant='h3' className='gradient-text'>{selected.title}</Typography>
-          {selected.paragraphs.map((paragraph: string) => {
-            return (
-              <Typography variant='h5' key={paragraph}>
-                {paragraph}
-              </Typography>
-            );
-          })}
+          <Typography variant='h3' className='gradient-text'>
+            {selected.title}
+          </Typography>
+          {selected.paragraphs?.length &&
+            selected.paragraphs.map((paragraph: { text: string; list?: string[] }) => {
+              return (
+                <Box key={paragraph.text} className={classes.paragraphWrapper}>
+                  <Typography variant='h5'>{paragraph.text}</Typography>
+                  {paragraph.list && <ListComponent listItems={paragraph.list} />}
+                </Box>
+              );
+            })}
+          {selected.hyperlinks?.length &&
+            selected.hyperlinks.map((hyperlink: { name: string; link: string }) => {
+              return (
+                <Box key={hyperlink.name} className={classes.paragraphWrapper}>
+                  <Link href={hyperlink.link} target='_blank'>
+                    {hyperlink.name || hyperlink.link}
+                  </Link>
+                </Box>
+              );
+            })}
         </Paper>
       )}
       <Box className={classes.buttonWrapper}>
