@@ -40,7 +40,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'center',
       alignItems: 'start',
       gap: '30px',
-      borderRadius: '16px',
+      borderRadius: '0',
       padding: '40px',
       [theme.breakpoints.down('md')]: {
         width: '100%',

@@ -22,7 +22,7 @@ export const useStyles = makeStyles(() => {
     },
     image: {
       width: '100%',
-      borderRadius: '16px',
+      borderRadius: '0',
     },
     textWrapper: {
       display: 'flex',

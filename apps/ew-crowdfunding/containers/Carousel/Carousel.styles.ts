@@ -4,10 +4,10 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     carousel: {
-      backgroundImage: `linear-gradient(360deg, #0F1E29 0%, rgba(15, 30, 41, 0) 100%), url('./LandingCover.png')`,
+      backgroundImage: `linear-gradient(360deg, #0F1E29 0%, rgba(15, 30, 41, 0) 100%), url('./MountMeru.jpg')`,
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center',
+      backgroundPosition: 'center center',
       width: '100%',
       display: 'flex',
       flexDirection: 'column',
@@ -31,5 +31,11 @@ export const useStyles = makeStyles(() => {
         padding: '0',
       },
     },
+    socialWrapper: {
+      width: '100%',
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'end',
+    }
   };
 });

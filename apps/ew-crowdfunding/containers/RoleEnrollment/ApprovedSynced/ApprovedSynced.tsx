@@ -27,7 +27,7 @@ export const ApprovedSynced: FC = () => {
 
       <Link href='/wallet#lendingApp'>
         <a style={{ width: '100%' }}>
-          <Button style={{ width: '100%', backgroundColor: 'white' }} variant='outlined' endIcon={<KeyboardDoubleArrowDownIcon />}>
+          <Button style={{ width: '100%' }} variant='contained' color='secondary' endIcon={<KeyboardDoubleArrowDownIcon />}>
             Go to lending
           </Button>
         </a>

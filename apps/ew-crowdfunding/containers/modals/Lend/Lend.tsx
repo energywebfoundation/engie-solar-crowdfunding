@@ -5,8 +5,8 @@ export const Lend = () => {
   const { open, amount, onLend, closeModal } = useLendEffects();
   const titleProps: DialogTitleProps = {
     id: 'lend-dialog-title',
-    title: 'Lending process',
-    subtitle: `Do you want to lend ${amount} EWT?`,
+    title: 'Staking process',
+    subtitle: `Do you want to stake ${amount} EWT?`,
   };
 
   const dialogAction: DialogAction = {

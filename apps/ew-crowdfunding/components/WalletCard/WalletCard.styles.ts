@@ -8,7 +8,6 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'start',
-      borderRadius: '16px !important',
       [theme.breakpoints.down('md')]: {
         width: '100%',
       },
@@ -19,7 +18,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'space-between',
       alignItems: 'center',
       padding: '12px 24px',
-      borderRadius: '16px 16px 0 0',
+      borderRadius: '9',
     },
     iconWrapper: {
       display: 'flex',
