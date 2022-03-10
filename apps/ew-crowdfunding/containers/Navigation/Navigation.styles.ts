@@ -7,6 +7,16 @@ export const useStyles = makeStyles(() => {
       backgroundColor: theme.palette.common.white,
       boxShadow: 'none',
     },
+    toolbar: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    toolbarMessage: {
+      [theme.breakpoints.down(897)]: {
+        display: 'none',
+      },
+    },
     didContainer: {
       display: 'flex',
       alignItems: 'center',

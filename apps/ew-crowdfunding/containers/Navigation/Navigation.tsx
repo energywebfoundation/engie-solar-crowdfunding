@@ -6,22 +6,35 @@ import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { shortenDid } from '../../utils';
 import Link from 'next/link';
+import useStakingStatus from '../../context/hooks/useStakingStatus';
 
 export const Navigation = () => {
   const classes = useStyles();
 
   const { authenticated, did, avatar, logout } = useNavigationEffects();
+  const stakingMessage = useStakingStatus();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' className={classes.appBar}>
-        <Toolbar>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
+        <Toolbar className={classes.toolbar}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
             <Link href='/'>
               <a>
                 <img src='/EngieLogo.png' alt='Lab icon' />
               </a>
             </Link>
           </Box>
+          {stakingMessage && (
+            <Typography
+              className={`${classes.toolbarMessage} gradient-text`}
+              variant='h5'
+              style={{ fontWeight: '600', textTransform: 'uppercase' }}
+              align='center'
+            >
+              {stakingMessage}
+            </Typography>
+          )}
           {authenticated && (
             <Box
               sx={{

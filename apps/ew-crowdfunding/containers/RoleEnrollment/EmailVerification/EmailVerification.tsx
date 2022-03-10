@@ -39,6 +39,19 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
       )}
 
       <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+        <Divider className={classes.divider} />
+        <FormControlLabel
+          control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
+          label={
+            <Typography variant='h5'>
+              I accept and acknowledge{' '}
+              <Link href='#' variant='h5' target='_blank' color='primary' underline='hover'>
+                this disclaimer
+              </Link>
+            </Typography>
+          }
+        />
+        <Divider className={classes.divider} style={{ marginBottom: '20px' }} />
         <FormInputText
           name='email'
           control={control}
@@ -48,19 +61,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
           valueChanged={onEmailChange}
           errorMessage={errorMessage}
         />
-        <Divider className={classes.divider} style={{ marginTop: '20px' }} />
-        <FormControlLabel
-          control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
-          label={
-            <Typography variant='h5'>
-              I  accept and acknowledge{' '}
-              <Link href='#' variant='h5' target='_blank' color='primary' underline='hover'>
-                this disclaimer
-              </Link>
-            </Typography>
-          }
-        />
-        <Divider className={classes.divider} style={{ marginBottom: '20px' }} />
+        <Divider className={classes.divider} style={{ marginTop: '20px', marginBottom: '20px' }} />
         <Box className={classes.buttonWrapper}>
           {isLoading ? (
             <Box sx={{ display: 'flex' }}>

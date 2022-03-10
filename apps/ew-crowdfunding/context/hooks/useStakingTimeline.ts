@@ -1,18 +1,15 @@
-import { useSelector } from 'react-redux';
-import {
-  selectContributionDeadline,
-  selectLockStakesDate,
-  selectReleaseRewardsDate,
-  selectActivateStackingDate,
-} from '../../redux-store';
 import StakingTimelineEnum from './StakingTimelineEnum';
 
-const useStakingTimeline = (): StakingTimelineEnum => {
+const useStakingTimeline = (
+  activateStakingDate: Date,
+  closeStackingDate: Date,
+  lockStakesDate: Date,
+  releaseRewardsDate: Date,
+): StakingTimelineEnum => {
+  if (!activateStakingDate || !closeStackingDate || !lockStakesDate || !releaseRewardsDate) {
+    return;
+  }
   const currentDate = new Date();
-  const activateStakingDate = new Date(useSelector(selectActivateStackingDate));
-  const closeStackingDate = new Date(useSelector(selectContributionDeadline));
-  const lockStakesDate = new Date(useSelector(selectLockStakesDate));
-  const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
 
   if (currentDate < activateStakingDate) {
     return StakingTimelineEnum.BEFORE_STAKING;

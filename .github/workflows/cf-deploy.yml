@@ -113,10 +113,10 @@ jobs:
           NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT: ${{ steps.env_vars.outputs.next_public_global_token_limit }}
           NEXT_PUBLIC_INTEREST_RATE: ${{ steps.env_vars.outputs.next_public_interest_rate }}
           NEXT_PUBLIC_BLOCK_EXPLORER_URL: ${{ steps.env_vars.outputs.next_public_block_explorer_url }}
-          NEXT_ACTIVATE_STAKING_DATE: ${{ steps.env_vars.outputs.next_public_activate_staking_date }}
-          NEXT_CLOSE_STAKING_DATE: ${{ steps.env_vars.outputs.next_public_close_staking_date }}
-          NEXT_LOCK_STAKES_DATE: ${{ steps.env_vars.outputs.next_public_lock_stakes_date }}
-          NEXT_RELEASE_REWARDS_DATE: ${{ steps.env_vars.outputs.next_public_release_rewards_date }}
+          NEXT_PUBLIC_ACTIVATE_STAKING_DATE: ${{ steps.env_vars.outputs.next_public_activate_staking_date }}
+          NEXT_PUBLIC_CLOSE_STAKING_DATE: ${{ steps.env_vars.outputs.next_public_close_staking_date }}
+          NEXT_PUBLIC_LOCK_STAKES_DATE: ${{ steps.env_vars.outputs.next_public_lock_stakes_date }}
+          NEXT_PUBLIC_RELEASE_REWARDS_DATE: ${{ steps.env_vars.outputs.next_public_release_rewards_date }}
       - name: Ensure dist is present
         run: |
           test -d "dist/apps/ew-crowdfunding/exported" && echo OK || exit 1

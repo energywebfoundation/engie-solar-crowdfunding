@@ -16,28 +16,34 @@ export type StakeTimeline = {
 };
 
 export const useStakingTimelineEffects = () => {
-  const stakingPeriod: StakingTimelineEnum = useStakingTimeline();
+  const activateStakingDate = new Date(useSelector(selectActivateStackingDate));
+  const closeStackingDate = new Date(useSelector(selectContributionDeadline));
+  const lockStakesDate = new Date(useSelector(selectLockStakesDate));
+  const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+
+  const stakingPeriod: StakingTimelineEnum = useStakingTimeline(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+  );
   let currentStakingPeriod: string;
 
-  const activateStakingDate = formatDate(new Date(useSelector(selectActivateStackingDate)));
-  const closeStackingDate = formatDate(new Date(useSelector(selectContributionDeadline)));
-  const lockStakesDate = formatDate(new Date(useSelector(selectLockStakesDate)));
-  const releaseRewardsDate = formatDate(new Date(useSelector(selectReleaseRewardsDate)));
   const timelines: StakeTimeline[] = [
     {
-      date: activateStakingDate,
+      date: formatDate(activateStakingDate),
       name: StakingTimelineEnum.ACTIVATE_STAKING,
     },
     {
-      date: closeStackingDate,
+      date: formatDate(closeStackingDate),
       name: StakingTimelineEnum.CLOSE_STAKING,
     },
     {
-      date: lockStakesDate,
+      date: formatDate(lockStakesDate),
       name: StakingTimelineEnum.LOCK_STAKES,
     },
     {
-      date: releaseRewardsDate,
+      date: formatDate(releaseRewardsDate),
       name: StakingTimelineEnum.RELEASE_REWARDS,
     },
   ];

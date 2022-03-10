@@ -14,10 +14,10 @@ export type Info = {
 };
 
 export const useInfoPaneEffects = () => {
-  const activateStakingDate = new Date(process.env.NEXT_ACTIVATE_STAKING_DATE);
-  const closeStackingDate = new Date(process.env.NEXT_CLOSE_STAKING_DATE);
-  const lockStakesDate = new Date(process.env.NEXT_LOCK_STAKES_DATE);
-  const releaseRewardsDate = new Date(process.env.NEXT_RELEASE_REWARDS_DATE);
+  const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
 
   const infoList: Info[] = [
     {
@@ -28,7 +28,7 @@ export const useInfoPaneEffects = () => {
           text: 'By joining the The Clean Energy Fund with your EWT, you are increasing renewable energy access in the developing world. Engie Energy Access will use your EWT to fund small-scale solar and storage systems for people needing reliable energy access in Benin, Rwanda and Zambia.',
         },
         {
-          text: 'The recipients (e.g., school, households, small businesses) will be paying for these solar systems in frequent and affordable intervals. These repayments will then be used to cover the staked EWT and 10% rewards to everyone who participated in this pilot on [RELEASE REWARDS] date. In this pilot, the Community Fund will cover all the risks in case of default or the recipients needing more time for repayment. So your stakes and rewards are guaranteed.',
+          text: `The recipients (e.g., school, households, small businesses) will be paying for these solar systems in frequent and affordable intervals. These repayments will then be used to cover the staked EWT and 10% rewards to everyone who participated in this pilot on ${releaseRewardsDate} date. In this pilot, the Community Fund will cover all the risks in case of default or the recipients needing more time for repayment. So your stakes and rewards are guaranteed.`,
         },
         {
           text: 'The pilot aims at collecting $100,000 worth of EWT, which will be locked for 1 year from the initiation.',

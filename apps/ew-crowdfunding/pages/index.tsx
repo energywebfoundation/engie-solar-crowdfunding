@@ -1,9 +1,7 @@
 import type { NextPage } from 'next';
-import { Carousel, Contact, Footer } from '../containers';
+import { Carousel, Contact, Footer, HowTo } from '../containers';
 import { AppContainer, ImageText, MediaText } from '../components';
-import { theme } from '../dsla-theme';
-import { Box, Button, Paper } from '@mui/material';
-import Link from 'next/link';
+import { Box } from '@mui/material';
 
 const Home: NextPage = () => {
   return (
@@ -36,25 +34,7 @@ const Home: NextPage = () => {
           />
         </AppContainer>
       </Box>
-      <Paper style={{ background: theme.palette.primary.dark, paddingBottom: '80px', paddingTop: '30px' }}>
-        <AppContainer darkBackground={true}>
-          <ImageText
-            imagePath='/Store2.png'
-            title='How does this platform work?'
-            text='This DeFi platform uses the open-source Energy Web technology stack and runs on the Energy Web Chain. Micro-investors can finance the installation of clean energy assets by staking their Energy Web Tokens (EWT), the native token of the Energy Web Chain. In this first proof of concept, the target goal is to collect $100,000 worth of EWT within START_DATE and END_DATE.'
-            gradientText={true}
-          />
-        </AppContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-          <Link href='/wallet'>
-            <a>
-              <Button style={{ width: '200px' }} variant='contained' color='primary'>
-                Fund solar
-              </Button>
-            </a>
-          </Link>
-        </Box>
-      </Paper>
+      <HowTo />
       <AppContainer>
         <ImageText
           imagePath='/Worker.png'
