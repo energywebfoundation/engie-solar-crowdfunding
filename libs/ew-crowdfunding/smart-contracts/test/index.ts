@@ -453,8 +453,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       });
 
       it("should correctly retrieve contract status", async () => {
-        const contractStatus =  await asOwner.getContractStatus();
-        expect(contractStatus).to.eqls([true, true, false]);
+        const [_isContractInitialized, _isContractPaused, _isContractAborted] =  await asOwner.getContractStatus();
+        expect([_isContractInitialized, _isContractPaused, _isContractAborted]).to.eqls([true, true, false]);
       });
   
       it("fails when staking on paused contract", async () => {
@@ -480,6 +480,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   
       it("Can unPause contract", async () => {
         await expect(asOwner.unPause()).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
+        const [_isContractInitialized, _isContractPaused, _isContractAborted] =  await asOwner.getContractStatus();
+        expect([_isContractInitialized, _isContractPaused, _isContractAborted]).to.eqls([true, false, false]);
+
       });
   
       it("Can stake after unpause", async () => {
