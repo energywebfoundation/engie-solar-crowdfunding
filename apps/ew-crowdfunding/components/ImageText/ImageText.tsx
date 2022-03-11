@@ -23,7 +23,7 @@ export const ImageText: FC<ImageTextProps> = ({
   shadow = true,
   link,
   linkText,
-  gradientText
+  gradientText,
 }: ImageTextProps) => {
   const classes = useStyles();
 
@@ -37,7 +37,9 @@ export const ImageText: FC<ImageTextProps> = ({
         />
       </Box>
       <Box className={classes.textWrapper}>
-        <Typography variant='h3' className={gradientText && 'gradient-text'}>{title}</Typography>
+        <Typography variant='h3' className={gradientText && 'gradient-text'}>
+          {title}
+        </Typography>
         <Typography variant='h5'>{text}</Typography>
         {link && (
           <Typography variant='h5'>

@@ -23,22 +23,35 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
 
   return (
     <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
-      <Typography align='center' variant='body2' style={{ fontWeight: 500 }}>
-        You must verify your email to lend
+      <Typography align='center' variant='h5' style={{ fontWeight: 500 }}>
+        You must verify your email to stake EWT in The Clean Energy Fund
       </Typography>
 
       {address && (
         <Box>
-          <Typography align='center' variant='body2'>
-            You haven`t verified your email for the current wallet <strong>{shortenAddress(address)}</strong>.
+          <Typography align='center' variant='h5'>
+            You have not verified your email for the connected wallet <strong>{shortenAddress(address)}</strong>.
           </Typography>
-          <Typography align='center' variant='body2'>
-            If this is not your lending wallet, change wallets in Metamask and refresh the page
+          <Typography align='center' variant='h5' mt={2}>
+            If this is not your staking wallet, change to the correct wallet in MetaMask and refresh the page
           </Typography>
         </Box>
       )}
 
       <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
+        <Divider className={classes.divider} />
+        <FormControlLabel
+          control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
+          label={
+            <Typography variant='h5'>
+              I accept and acknowledge{' '}
+              <Link href='#' variant='h5' target='_blank' color='primary' underline='hover'>
+                this disclaimer
+              </Link>
+            </Typography>
+          }
+        />
+        <Divider className={classes.divider} style={{ marginBottom: '20px' }} />
         <FormInputText
           name='email'
           control={control}
@@ -48,19 +61,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
           valueChanged={onEmailChange}
           errorMessage={errorMessage}
         />
-        <Divider className={classes.divider} style={{ marginTop: '20px' }} />
-        <FormControlLabel
-          control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
-          label={
-            <Typography variant='body2'>
-              I acknowledge{' '}
-              <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
-                this disclaimer
-              </Link>
-            </Typography>
-          }
-        />
-        <Divider className={classes.divider} style={{ marginBottom: '20px' }} />
+        <Divider className={classes.divider} style={{ marginTop: '20px', marginBottom: '20px' }} />
         <Box className={classes.buttonWrapper}>
           {isLoading ? (
             <Box sx={{ display: 'flex' }}>

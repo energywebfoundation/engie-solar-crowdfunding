@@ -8,27 +8,28 @@ import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrow
 export const ApprovedSynced: FC = () => {
   const classes = useStyles();
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        gap: '20px',
-      }}
-    >
+    <Box className={classes.wrapper}>
       <WalletCard icon='/ShieldCheck.png' colorClass='bg-success' step='step 4'>
-        <Typography align='center' variant='body2' style={{ fontWeight: 500 }}>
-          Congratulations
+        <Typography align='center' variant='h5' style={{ fontWeight: 500 }}>
+          Congratulations!
         </Typography>
-        <Typography align='center' variant='body2'>
-          You have verified your email and are authorized to stake
+        <Typography align='center' variant='h5'>
+          You have a verified email and an on-chain patron role for the connected wallet.
+        </Typography>
+        <Typography align='center' variant='h5'>
+          You are now authorized to stake!
         </Typography>
       </WalletCard>
 
       <Link href='/wallet#lendingApp'>
         <a style={{ width: '100%' }}>
-          <Button style={{ width: '100%' }} variant='contained' color='secondary' endIcon={<KeyboardDoubleArrowDownIcon />}>
-            Go to lending
+          <Button
+            style={{ width: '100%' }}
+            variant='contained'
+            color='secondary'
+            endIcon={<KeyboardDoubleArrowDownIcon />}
+          >
+            Go to staking
           </Button>
         </a>
       </Link>

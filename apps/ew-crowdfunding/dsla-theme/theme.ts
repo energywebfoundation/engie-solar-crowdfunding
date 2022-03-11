@@ -71,7 +71,7 @@ const lightTheme: ThemeOptions = {
         },
         h5: {
           fontWeight: 400,
-          fontSize: '1.1rem',
+          fontSize: '1rem',
         },
       },
     },
