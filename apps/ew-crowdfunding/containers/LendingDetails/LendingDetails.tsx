@@ -100,8 +100,9 @@ export const LendingDetails: FC = () => {
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
               {smartContractLoading ? (
-                <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                   <CircularProgress />
+                  <Typography className='gradient-text'>This will take a minute, please do not refresh</Typography>
                 </Box>
               ) : (
                 <Button
@@ -143,8 +144,9 @@ export const LendingDetails: FC = () => {
           </Box>
           <Box className={classes.redeemAction}>
             {smartContractLoading ? (
-              <Box sx={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <CircularProgress />
+                <Typography className='gradient-text'>This will take a minute, please do not refresh</Typography>
               </Box>
             ) : (
               <Button

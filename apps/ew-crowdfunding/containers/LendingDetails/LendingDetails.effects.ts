@@ -34,7 +34,7 @@ import {
   selectUserContribution,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
-import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+// import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -45,16 +45,16 @@ export const useLendingDetailsEffects = () => {
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
 
-  const listenToContractEvents = async () => {
-    const signer = provider?.getSigner();
-    const stakingContract = Staking__factory.connect(deployedAddress, signer);
-    const events = stakingContract.filters.RewardSent(null, null, null);
-    console.log('RewardSent events: ', events);
-  };
+  // const listenToContractEvents = async () => {
+  //   const signer = provider?.getSigner();
+  //   const stakingContract = Staking__factory.connect(deployedAddress, signer);
+  //   const events = stakingContract.filters.RewardSent(null, null, null);
+  //   console.log('RewardSent events: ', events);
+  // };
 
-  useEffect(() => {
-    listenToContractEvents();
-  });
+  // useEffect(() => {
+  //   listenToContractEvents();
+  // });
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 
@@ -107,7 +107,7 @@ export const useLendingDetailsEffects = () => {
         .number()
         .typeError('EWT Stake Amount is required')
         .min(0.51)
-        .max(200)
+        .max(tokenLimit || 400)
         .required('EWT Stake Amount is required')
         .label('EWT Stake Amount'),
     })
@@ -175,6 +175,9 @@ export const useLendingDetailsEffects = () => {
   };
 
   const getErrorMessage = (loanValue: number) => {
+    if (loanValue?.toString().length > 7) {
+      return 'You reached the maximum digits';
+    }
     /* EWT Stake Amount” box greater than */
     if (loanValue > Number(accountBalance)) {
       /* their account balance */
