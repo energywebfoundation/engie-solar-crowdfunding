@@ -451,6 +451,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
         tx = await asOwner.pause();
         await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
       });
+
+      it("should correctly retrieve contract status", async () => {
+        const contractStatus =  await asOwner.getContractStatus();
+        expect(contractStatus).to.eqls([true, true, false]);
+      });
   
       it("fails when staking on paused contract", async () => {
         await expect(asPatron3.stake({

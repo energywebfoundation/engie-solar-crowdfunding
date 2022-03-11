@@ -177,6 +177,12 @@ contract Staking is ERC20Burnable {
         emit CampaignAborted(block.timestamp);
     }
 
+    function getContractStatus() external view returns(bool _isContractInitialized, bool _isContractPaused, bool _isContractAborted){
+        _isContractInitialized = isContractInitialized;
+        _isContractPaused = isContractPaused;
+        _isContractAborted = aborted;
+    }
+
     function refund(uint256 _amount) internal {
         payable(msg.sender).transfer(_amount);
     }

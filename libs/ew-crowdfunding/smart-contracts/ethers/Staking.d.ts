@@ -33,6 +33,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositRewards()": FunctionFragment;
     "endDate()": FunctionFragment;
+    "getContractStatus()": FunctionFragment;
     "getDeposit()": FunctionFragment;
     "getRewards()": FunctionFragment;
     "hardCap()": FunctionFragment;
@@ -92,6 +93,10 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "endDate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getContractStatus",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getDeposit",
     values?: undefined
@@ -194,6 +199,10 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "endDate", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getContractStatus",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getDeposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRewards", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hardCap", data: BytesLike): Result;
@@ -424,6 +433,16 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getContractStatus(
+      overrides?: CallOverrides
+    ): Promise<
+      [boolean, boolean, boolean] & {
+        _isContractInitialized: boolean;
+        _isContractPaused: boolean;
+        _isContractAborted: boolean;
+      }
+    >;
+
     getDeposit(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -557,6 +576,16 @@ export class Staking extends BaseContract {
 
   endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getContractStatus(
+    overrides?: CallOverrides
+  ): Promise<
+    [boolean, boolean, boolean] & {
+      _isContractInitialized: boolean;
+      _isContractPaused: boolean;
+      _isContractAborted: boolean;
+    }
+  >;
+
   getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
   getRewards(overrides?: CallOverrides): Promise<BigNumber>;
@@ -684,6 +713,16 @@ export class Staking extends BaseContract {
     depositRewards(overrides?: CallOverrides): Promise<void>;
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getContractStatus(
+      overrides?: CallOverrides
+    ): Promise<
+      [boolean, boolean, boolean] & {
+        _isContractInitialized: boolean;
+        _isContractPaused: boolean;
+        _isContractAborted: boolean;
+      }
+    >;
 
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -976,6 +1015,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getContractStatus(overrides?: CallOverrides): Promise<BigNumber>;
+
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRewards(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1114,6 +1155,8 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     endDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getContractStatus(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
