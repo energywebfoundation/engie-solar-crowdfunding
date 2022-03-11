@@ -54,7 +54,7 @@ export const lend =
       dispatch(getUserContribution(provider));
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
-      dispatch(getGlobalTokenLimit(provider));
+      dispatch(getTotalLentAmount(provider));
 
       dispatchModals({
         type: DSLAModalsActionsEnum.SHOW_CONGRATS,
@@ -94,7 +94,7 @@ export const redeemSlt =
       dispatch(getUserContribution(provider));
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
-      dispatch(getGlobalTokenLimit(provider));
+      dispatch(getTotalLentAmount(provider));
 
     } catch (error) {
       console.log('Error while redeeming: ', error);
