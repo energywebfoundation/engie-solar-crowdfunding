@@ -4,7 +4,7 @@ import { theme } from '../../dsla-theme';
 export const useStyles = makeStyles(() => {
   return {
     wrapper: {
-      maxWidth: '400px',
+      maxWidth: '450px',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'start',

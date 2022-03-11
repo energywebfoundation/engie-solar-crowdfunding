@@ -30,6 +30,11 @@ export const useStyles = makeStyles(() => {
         maxWidth: '100%',
       },
     },
+    paragraphWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px',
+    },
     buttonWrapper: {
       display: 'flex',
       minWidth: '445px',
