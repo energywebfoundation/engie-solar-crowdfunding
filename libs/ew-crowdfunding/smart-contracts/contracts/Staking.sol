@@ -29,9 +29,9 @@ contract Staking is ERC20Burnable {
     
     event CampaignAborted(uint256 _timestamp);
     event StatusChanged(string statusType, uint256 date);
-    event Funded(address _user, uint256 _amout, uint256 _timestamp);
+    event NewStake(address indexed _user, uint256 indexed _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
-    event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
+    event Withdrawn(address indexed _user, uint256 indexed _amout, uint256 _timestamp);
     event TokenBurnt(address _user, uint256 _amout, uint256 _timestamp);
     event RefundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
@@ -200,12 +200,14 @@ contract Staking is ERC20Burnable {
                 
                 stakes[msg.sender] += finalMint;
                 _mint(msg.sender, finalMint);
+                emit NewStake(msg.sender, finalMint, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit + overFlow_hardCap);
                 refund(overFlow_limit + overFlow_hardCap);
                 totalStaked += finalMint;
             } else {
                 stakes[msg.sender] += toMint_limit;
                 _mint(msg.sender, toMint_limit);
+                emit NewStake(msg.sender, toMint_limit, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit);
                 refund(overFlow_limit);
                 totalStaked += toMint_limit;
@@ -218,11 +220,13 @@ contract Staking is ERC20Burnable {
                 
                 stakes[msg.sender] += finalMint;
                 _mint(msg.sender, finalMint);
+                emit NewStake(msg.sender, finalMint, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_hardCap);
                 refund(overFlow_hardCap);
                 totalStaked += finalMint;
             } else {   
                 stakes[msg.sender] += msg.value;
+                emit NewStake(msg.sender, msg.value, block.timestamp);
                 _mint(msg.sender, msg.value);
                 totalStaked += msg.value;
             }

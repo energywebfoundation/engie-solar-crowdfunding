@@ -256,7 +256,7 @@ interface StakingInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "CampaignAborted(uint256)": EventFragment;
-    "Funded(address,uint256,uint256)": EventFragment;
+    "NewStake(address,uint256,uint256)": EventFragment;
     "RefundExceeded(address,uint256,uint256)": EventFragment;
     "RewardSent(address,uint256,uint256)": EventFragment;
     "StakingPoolInitialized(uint256,uint256,uint256)": EventFragment;
@@ -268,7 +268,7 @@ interface StakingInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CampaignAborted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Funded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NewStake"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RefundExceeded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RewardSent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakingPoolInitialized"): EventFragment;
@@ -290,7 +290,7 @@ export type CampaignAbortedEvent = TypedEvent<
   [BigNumber] & { _timestamp: BigNumber }
 >;
 
-export type FundedEvent = TypedEvent<
+export type NewStakeEvent = TypedEvent<
   [string, BigNumber, BigNumber] & {
     _user: string;
     _amout: BigNumber;
@@ -828,18 +828,18 @@ export class Staking extends BaseContract {
       _timestamp?: null
     ): TypedEventFilter<[BigNumber], { _timestamp: BigNumber }>;
 
-    "Funded(address,uint256,uint256)"(
-      _user?: null,
-      _amout?: null,
+    "NewStake(address,uint256,uint256)"(
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
       { _user: string; _amout: BigNumber; _timestamp: BigNumber }
     >;
 
-    Funded(
-      _user?: null,
-      _amout?: null,
+    NewStake(
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
@@ -953,8 +953,8 @@ export class Staking extends BaseContract {
     >;
 
     "Withdrawn(address,uint256,uint256)"(
-      _user?: null,
-      _amout?: null,
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
@@ -962,8 +962,8 @@ export class Staking extends BaseContract {
     >;
 
     Withdrawn(
-      _user?: null,
-      _amout?: null,
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],

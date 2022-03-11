@@ -340,6 +340,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       ).changeEtherBalance(asPatron, oneEWT.mul(3));
       expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(3));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
+      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(3), timeStamp);
     });
 
     it('fails when not enrolled user tries to stake', async () => {
