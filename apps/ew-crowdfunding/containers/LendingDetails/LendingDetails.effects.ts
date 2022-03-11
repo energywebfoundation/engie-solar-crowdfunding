@@ -34,6 +34,7 @@ import {
   selectUserContribution,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
+import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,17 @@ export const useLendingDetailsEffects = () => {
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
+
+  const listenToContractEvents = async () => {
+    const signer = provider?.getSigner();
+    const stakingContract = Staking__factory.connect(deployedAddress, signer);
+    const events = stakingContract.filters.RewardSent(null, null, null);
+    console.log('RewardSent events: ', events);
+  };
+
+  useEffect(() => {
+    listenToContractEvents();
+  });
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 
@@ -87,8 +99,7 @@ export const useLendingDetailsEffects = () => {
 
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < activateStackingDate ||
-    (new Date() >= closeStackingDate && new Date() < releaseRewardsDate);
+    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate);
 
   const validationSchema = yup
     .object({
@@ -164,9 +175,6 @@ export const useLendingDetailsEffects = () => {
   };
 
   const getErrorMessage = (loanValue: number) => {
-    console.log('Loan value: ', loanValue);
-    console.log('solarLoanTokenBalance value: ', solarLoanTokenBalance);
-    console.log('globalTokenLimit: ', globalTokenLimit);
     /* EWT Stake Amount” box greater than */
     if (loanValue > Number(accountBalance)) {
       /* their account balance */

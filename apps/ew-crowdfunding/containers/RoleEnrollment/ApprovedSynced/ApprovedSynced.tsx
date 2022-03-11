@@ -14,7 +14,7 @@ export const ApprovedSynced: FC = () => {
           Congratulations!
         </Typography>
         <Typography align='center' variant='h5'>
-          You have a verified email and an on-chain patron role for the connect wallet.
+          You have a verified email and an on-chain patron role for the connected wallet.
         </Typography>
         <Typography align='center' variant='h5'>
           You are now authorized to stake!
