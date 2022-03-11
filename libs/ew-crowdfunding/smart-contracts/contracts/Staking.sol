@@ -48,6 +48,7 @@ contract Staking is ERC20Burnable {
    
     constructor(
         address _claimManager,
+        address _rewardProvider,
         bytes32 _serviceRole,
         bytes32 _patronRole,
         string memory tokenName,
@@ -57,6 +58,7 @@ contract Staking is ERC20Burnable {
         claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;
         patronRole = _patronRole;
+        rewardProvider = _rewardProvider;
     }
 
     modifier onlyOwner() {
@@ -112,9 +114,8 @@ contract Staking is ERC20Burnable {
 
     function depositRewards() external payable notAborted activated notfunded {
         require(msg.value > 0, "Not rewards provided");
-        require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
+        require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not enrolled as service provider");
         totalRewards += msg.value;
-        rewardProvider = msg.sender;
         contractFunded = true;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
     }

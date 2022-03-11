@@ -98,8 +98,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     console.log('[ MOCKED ClaimManager address ] >> ', claimManagerMocked.address);
     console.log('Patron Role >> ', patronRole);
     console.log('Service Provider Role >> ', serviceProviderRole);
+    const rewardProvider = owner.address;
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
+      rewardProvider,
       serviceProviderRole,
       patronRole,
       tokenName,
