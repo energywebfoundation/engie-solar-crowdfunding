@@ -71,7 +71,7 @@ describe('[ Rewards calculation ] ', () => {
 
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
-      owner.address,
+      rewardProvider,
       serviceProviderRole,
       patronRole,
       tokenName,
