@@ -414,6 +414,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(tx = await asPatron.redeem(oneEWT.mul(40))).changeEtherBalance(asPatron2, (oneEWT.mul(-40)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
+      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(7));
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(40), timestamp);
     });
 

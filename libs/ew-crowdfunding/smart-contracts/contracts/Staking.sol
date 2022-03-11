@@ -238,6 +238,7 @@ contract Staking is ERC20Burnable {
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
         totalStaked -= _amount;
+        stakes[msg.sender] -= _amount;
     }
 
     function hasRole(address _provider, bytes32 _role) public view returns (bool){
