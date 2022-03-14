@@ -29,9 +29,9 @@ contract Staking is ERC20Burnable {
     
     event CampaignAborted(uint256 _timestamp);
     event StatusChanged(string statusType, uint256 date);
-    event Funded(address _user, uint256 _amout, uint256 _timestamp);
+    event NewStake(address indexed _user, uint256 indexed _amout, uint256 _timestamp);
     event RewardSent(address provider, uint256 amount, uint256 time);
-    event Withdrawn(address _user, uint256 _amout, uint256 _timestamp);
+    event Withdrawn(address indexed _user, uint256 indexed _amout, uint256 _timestamp);
     event TokenBurnt(address _user, uint256 _amout, uint256 _timestamp);
     event RefundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
@@ -48,6 +48,7 @@ contract Staking is ERC20Burnable {
    
     constructor(
         address _claimManager,
+        address _rewardProvider,
         bytes32 _serviceRole,
         bytes32 _patronRole,
         string memory tokenName,
@@ -57,6 +58,7 @@ contract Staking is ERC20Burnable {
         claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;
         patronRole = _patronRole;
+        rewardProvider = _rewardProvider;
     }
 
     modifier onlyOwner() {
@@ -112,9 +114,8 @@ contract Staking is ERC20Burnable {
 
     function depositRewards() external payable notAborted activated notfunded {
         require(msg.value > 0, "Not rewards provided");
-        require(hasRole(msg.sender, serviceRole) || (msg.sender == owner), "Not enrolled as service provider");
+        require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not enrolled as service provider");
         totalRewards += msg.value;
-        rewardProvider = msg.sender;
         contractFunded = true;
         emit RewardSent(msg.sender, msg.value, block.timestamp);
     }
@@ -177,6 +178,12 @@ contract Staking is ERC20Burnable {
         emit CampaignAborted(block.timestamp);
     }
 
+    function getContractStatus() external view returns(bool _isContractInitialized, bool _isContractPaused, bool _isContractAborted){
+        _isContractInitialized = isContractInitialized;
+        _isContractPaused = isContractPaused;
+        _isContractAborted = aborted;
+    }
+
     function refund(uint256 _amount) internal {
         payable(msg.sender).transfer(_amount);
     }
@@ -194,12 +201,14 @@ contract Staking is ERC20Burnable {
                 
                 stakes[msg.sender] += finalMint;
                 _mint(msg.sender, finalMint);
+                emit NewStake(msg.sender, finalMint, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit + overFlow_hardCap);
                 refund(overFlow_limit + overFlow_hardCap);
                 totalStaked += finalMint;
             } else {
                 stakes[msg.sender] += toMint_limit;
                 _mint(msg.sender, toMint_limit);
+                emit NewStake(msg.sender, toMint_limit, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit);
                 refund(overFlow_limit);
                 totalStaked += toMint_limit;
@@ -212,11 +221,13 @@ contract Staking is ERC20Burnable {
                 
                 stakes[msg.sender] += finalMint;
                 _mint(msg.sender, finalMint);
+                emit NewStake(msg.sender, finalMint, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_hardCap);
                 refund(overFlow_hardCap);
                 totalStaked += finalMint;
             } else {   
                 stakes[msg.sender] += msg.value;
+                emit NewStake(msg.sender, msg.value, block.timestamp);
                 _mint(msg.sender, msg.value);
                 totalStaked += msg.value;
             }
@@ -238,6 +249,7 @@ contract Staking is ERC20Burnable {
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
         totalStaked -= _amount;
+        stakes[msg.sender] -= _amount;
     }
 
     function hasRole(address _provider, bytes32 _role) public view returns (bool){
