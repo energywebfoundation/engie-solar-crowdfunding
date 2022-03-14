@@ -67,9 +67,11 @@ describe('[ Rewards calculation ] ', () => {
     //set endDate 1 year ahead
     const end = Number(DateTime.fromSeconds(start).plus({ year: 1 }).toSeconds().toFixed(0));
     const claimManagerMocked = await deployMockContract(owner, claimManagerABI);
+    const rewardProvider = owner.address;
 
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
+      rewardProvider,
       serviceProviderRole,
       patronRole,
       tokenName,

@@ -8,3 +8,5 @@ export * from './WalletCard';
 export * from './ImageText';
 export * from './AppContainer';
 export * from './MediaText';
+export * from './SocialLinks';
+export * from './ListComponent';

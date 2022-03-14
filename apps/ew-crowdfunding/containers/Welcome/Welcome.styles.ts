@@ -34,13 +34,13 @@ export const useStyles = makeStyles(() => {
     },
     paper: {
       width: '100%',
-      maxWidth: '700px',
+      maxWidth: '900px',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'start',
       gap: '30px',
-      borderRadius: '16px',
+      borderRadius: '0',
       padding: '40px',
       [theme.breakpoints.down('md')]: {
         width: '100%',

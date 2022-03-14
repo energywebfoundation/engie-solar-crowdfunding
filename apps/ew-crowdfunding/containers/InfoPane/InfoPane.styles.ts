@@ -22,13 +22,18 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'center',
       alignItems: 'start',
       gap: '30px',
-      borderRadius: '16px',
+      borderRadius: '0',
       padding: '40px',
       height: '100%',
       [theme.breakpoints.down('md')]: {
         width: '100%',
         maxWidth: '100%',
       },
+    },
+    paragraphWrapper: {
+      display: 'flex',
+      flexDirection: 'column',
+      gap: '10px',
     },
     buttonWrapper: {
       display: 'flex',
@@ -44,7 +49,7 @@ export const useStyles = makeStyles(() => {
     },
     button: {
       cursor: 'pointer',
-      borderRadius: '16px',
+      borderRadius: '0',
       padding: '20px',
       width: '100%',
     },

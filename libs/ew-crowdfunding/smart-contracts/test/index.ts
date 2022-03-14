@@ -98,8 +98,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     console.log('[ MOCKED ClaimManager address ] >> ', claimManagerMocked.address);
     console.log('Patron Role >> ', patronRole);
     console.log('Service Provider Role >> ', serviceProviderRole);
+    const rewardProvider = owner.address;
     const stakingContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
+      rewardProvider,
       serviceProviderRole,
       patronRole,
       tokenName,
@@ -340,6 +342,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       ).changeEtherBalance(asPatron, oneEWT.mul(3));
       expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(3));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
+      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(3), timeStamp);
     });
 
     it('fails when not enrolled user tries to stake', async () => {
@@ -414,6 +417,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(tx = await asPatron.redeem(oneEWT.mul(40))).changeEtherBalance(asPatron2, (oneEWT.mul(-40)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
+      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(7));
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(40), timestamp);
     });
 
@@ -450,6 +454,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
         tx = await asOwner.pause();
         await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
       });
+
+      it("should correctly retrieve contract status", async () => {
+        const [_isContractInitialized, _isContractPaused, _isContractAborted] =  await asOwner.getContractStatus();
+        expect([_isContractInitialized, _isContractPaused, _isContractAborted]).to.eqls([true, true, false]);
+      });
   
       it("fails when staking on paused contract", async () => {
         await expect(asPatron3.stake({
@@ -474,6 +483,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   
       it("Can unPause contract", async () => {
         await expect(asOwner.unPause()).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
+        const [_isContractInitialized, _isContractPaused, _isContractAborted] =  await asOwner.getContractStatus();
+        expect([_isContractInitialized, _isContractPaused, _isContractAborted]).to.eqls([true, false, false]);
+
       });
   
       it("Can stake after unpause", async () => {

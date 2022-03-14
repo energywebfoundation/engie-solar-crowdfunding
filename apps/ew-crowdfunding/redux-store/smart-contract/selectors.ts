@@ -41,12 +41,12 @@ export const selectContributionDeadline = createSelector(
   (smartContract) => smartContract.closeStackingDate,
 );
 
-export const selectSolarLoansDistributed = createSelector(
+export const selectLockStakesDate = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.lockStakesDate,
 );
 
-export const selectSolarLoansMature = createSelector(
+export const selectReleaseRewardsDate = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.releaseRewardsDate,
 );

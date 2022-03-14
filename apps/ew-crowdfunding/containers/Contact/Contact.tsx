@@ -5,9 +5,11 @@ import { FC } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
+import useStakingStatus from '../../context/hooks/useStakingStatus';
 
 export const Contact: FC = () => {
   const classes = useStyles();
+  const stakingMessage = useStakingStatus();
 
   return (
     <Box py={5} className={classes.container}>
@@ -30,6 +32,11 @@ export const Contact: FC = () => {
               stefan.zelazny@engie.com.
             </a>
           </Typography>
+          {stakingMessage && (
+            <Typography variant='h5' style={{ fontWeight: '600' }} mb={5} align='center'>
+              {stakingMessage}
+            </Typography>
+          )}
           <Link href='/wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
@@ -39,8 +46,6 @@ export const Contact: FC = () => {
           </Link>
         </Box>
       </AppContainer>
-      <img className={classes.topBubble} src='/Bubbles1.png' alt='Engie bubble' />
-      <img className={classes.ellipse} src='/ContactEllipse.svg' alt='Engie bubble' />
     </Box>
   );
 };

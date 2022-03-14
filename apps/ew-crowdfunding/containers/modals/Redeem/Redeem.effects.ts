@@ -52,12 +52,16 @@ export const useRedeemEffects = () => {
   }, [isSubmitSuccessful, reset]);
 
   const handleRedeemPartial = (amount: number) => {
-    const redeemValue = (tokenBalance * amount) / 100;
+    let redeemValue;
+    if (amount === 100) {
+      redeemValue = tokenBalance;
+    } else {
+      redeemValue = (tokenBalance * amount) / 100;
+    }
     setValue('amount', redeemValue);
   };
 
   const onSubmit = async (data: { amount: number }) => {
-    console.log('On submit redeem: ', data)
     onRedeem(data.amount);
     onReset();
   };

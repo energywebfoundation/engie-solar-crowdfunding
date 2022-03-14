@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Paper, Typography } from '@mui/material';
-import { Box } from '@mui/material/node_modules/@mui/system';
+import { Paper, Box, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useStyles } from './WalletCard.styles';
 

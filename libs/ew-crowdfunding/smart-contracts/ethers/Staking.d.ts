@@ -33,6 +33,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositRewards()": FunctionFragment;
     "endDate()": FunctionFragment;
+    "getContractStatus()": FunctionFragment;
     "getDeposit()": FunctionFragment;
     "getRewards()": FunctionFragment;
     "hardCap()": FunctionFragment;
@@ -92,6 +93,10 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "endDate", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "getContractStatus",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "getDeposit",
     values?: undefined
@@ -194,6 +199,10 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "endDate", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getContractStatus",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "getDeposit", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRewards", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hardCap", data: BytesLike): Result;
@@ -247,7 +256,7 @@ interface StakingInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "CampaignAborted(uint256)": EventFragment;
-    "Funded(address,uint256,uint256)": EventFragment;
+    "NewStake(address,uint256,uint256)": EventFragment;
     "RefundExceeded(address,uint256,uint256)": EventFragment;
     "RewardSent(address,uint256,uint256)": EventFragment;
     "StakingPoolInitialized(uint256,uint256,uint256)": EventFragment;
@@ -259,7 +268,7 @@ interface StakingInterface extends ethers.utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CampaignAborted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Funded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "NewStake"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RefundExceeded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RewardSent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakingPoolInitialized"): EventFragment;
@@ -281,7 +290,7 @@ export type CampaignAbortedEvent = TypedEvent<
   [BigNumber] & { _timestamp: BigNumber }
 >;
 
-export type FundedEvent = TypedEvent<
+export type NewStakeEvent = TypedEvent<
   [string, BigNumber, BigNumber] & {
     _user: string;
     _amout: BigNumber;
@@ -424,6 +433,16 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getContractStatus(
+      overrides?: CallOverrides
+    ): Promise<
+      [boolean, boolean, boolean] & {
+        _isContractInitialized: boolean;
+        _isContractPaused: boolean;
+        _isContractAborted: boolean;
+      }
+    >;
+
     getDeposit(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -557,6 +576,16 @@ export class Staking extends BaseContract {
 
   endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getContractStatus(
+    overrides?: CallOverrides
+  ): Promise<
+    [boolean, boolean, boolean] & {
+      _isContractInitialized: boolean;
+      _isContractPaused: boolean;
+      _isContractAborted: boolean;
+    }
+  >;
+
   getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
   getRewards(overrides?: CallOverrides): Promise<BigNumber>;
@@ -685,6 +714,16 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getContractStatus(
+      overrides?: CallOverrides
+    ): Promise<
+      [boolean, boolean, boolean] & {
+        _isContractInitialized: boolean;
+        _isContractPaused: boolean;
+        _isContractAborted: boolean;
+      }
+    >;
+
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
     getRewards(overrides?: CallOverrides): Promise<BigNumber>;
@@ -789,18 +828,18 @@ export class Staking extends BaseContract {
       _timestamp?: null
     ): TypedEventFilter<[BigNumber], { _timestamp: BigNumber }>;
 
-    "Funded(address,uint256,uint256)"(
-      _user?: null,
-      _amout?: null,
+    "NewStake(address,uint256,uint256)"(
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
       { _user: string; _amout: BigNumber; _timestamp: BigNumber }
     >;
 
-    Funded(
-      _user?: null,
-      _amout?: null,
+    NewStake(
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
@@ -914,8 +953,8 @@ export class Staking extends BaseContract {
     >;
 
     "Withdrawn(address,uint256,uint256)"(
-      _user?: null,
-      _amout?: null,
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
@@ -923,8 +962,8 @@ export class Staking extends BaseContract {
     >;
 
     Withdrawn(
-      _user?: null,
-      _amout?: null,
+      _user?: string | null,
+      _amout?: BigNumberish | null,
       _timestamp?: null
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
@@ -975,6 +1014,8 @@ export class Staking extends BaseContract {
     ): Promise<BigNumber>;
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getContractStatus(overrides?: CallOverrides): Promise<BigNumber>;
 
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1114,6 +1155,8 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     endDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getContractStatus(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

@@ -11,3 +11,5 @@ export * from './RoleEnrollment';
 export * from './Navigation';
 export * from './Carousel';
 export * from './Contact';
+export * from './StakingTimeline';
+export * from './HowTo';

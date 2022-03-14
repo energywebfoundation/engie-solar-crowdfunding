@@ -7,6 +7,13 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       justifyContent: 'start',
       alignItems: 'start',
+      flexDirection: 'column',
+      gap: '30px',
+    },
+    stakeContainer: {
+      display: 'flex',
+      justifyContent: 'start',
+      alignItems: 'start',
       flexDirection: 'row',
       gap: '30px',
       width: '100%',
@@ -20,6 +27,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'start',
       alignItems: 'start',
       gap: '30px',
+      minWidth: '450px',
       [theme.breakpoints.down(1052)]: {
         width: '100%',
       },

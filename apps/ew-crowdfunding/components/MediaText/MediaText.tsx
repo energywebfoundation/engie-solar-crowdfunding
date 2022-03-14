@@ -11,18 +11,30 @@ export interface MediaTextProps {
   title?: string;
   text?: string;
   reverse?: boolean;
+  gradientText?: boolean;
 }
 
-export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, reverse = false }: MediaTextProps) => {
+export const MediaText: FC<MediaTextProps> = ({
+  videoUrl,
+  heading,
+  title,
+  text,
+  reverse = false,
+  gradientText,
+}: MediaTextProps) => {
   const classes = useStyles();
 
   return (
     <Box my={3} className={classes.mainWrapper}>
-      {heading && <Typography variant='h3'>{heading}</Typography>}
+      {heading && (
+        <Typography variant='h3' className={gradientText && 'gradient-text'}>
+          {heading}
+        </Typography>
+      )}
       <Box className={classes.wrapper} sx={{ flexDirection: reverse ? 'row-reverse' : 'row' }}>
         <Box className={classes.mediaWrapper}>
           <ReactPlayer
-            style={{ borderRadius: '16px', overflow: 'hidden', width: '100%' }}
+            style={{ borderRadius: '0', overflow: 'hidden', width: '100%' }}
             url={videoUrl}
             controls={true}
             width='100%'
@@ -33,7 +45,6 @@ export const MediaText: FC<MediaTextProps> = ({ videoUrl, heading, title, text, 
           {text && <Typography variant='h5'>{text}</Typography>}
         </Box>
       </Box>
-      <img className={classes.ellipse} src='/EllipseMedia.png' alt='Engie bubble' />
     </Box>
   );
 };
