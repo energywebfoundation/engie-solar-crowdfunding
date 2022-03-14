@@ -168,13 +168,13 @@ contract Staking is ERC20Burnable {
     }
 
     function terminate() external onlyOwner {
-        require(aborted == false , "Already terminated");
+        require(aborted == false, "Already terminated");
 		uint256 payout = totalRewards;
+        aborted = true;
         if (payout != 0){
 		    payable(rewardProvider).transfer(payout);
         }
         deleteParameters();
-        aborted = true;
         emit CampaignAborted(block.timestamp);
     }
 
@@ -203,15 +203,15 @@ contract Staking is ERC20Burnable {
                 _mint(msg.sender, finalMint);
                 emit NewStake(msg.sender, finalMint, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit + overFlow_hardCap);
-                refund(overFlow_limit + overFlow_hardCap);
                 totalStaked += finalMint;
+                refund(overFlow_limit + overFlow_hardCap);
             } else {
                 stakes[msg.sender] += toMint_limit;
                 _mint(msg.sender, toMint_limit);
                 emit NewStake(msg.sender, toMint_limit, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit);
-                refund(overFlow_limit);
                 totalStaked += toMint_limit;
+                refund(overFlow_limit);
             }
         } else { 
             if (totalStaked + msg.value >= hardCap){
@@ -223,8 +223,8 @@ contract Staking is ERC20Burnable {
                 _mint(msg.sender, finalMint);
                 emit NewStake(msg.sender, finalMint, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_hardCap);
-                refund(overFlow_hardCap);
                 totalStaked += finalMint;
+                refund(overFlow_hardCap);
             } else {   
                 stakes[msg.sender] += msg.value;
                 emit NewStake(msg.sender, msg.value, block.timestamp);
@@ -245,6 +245,8 @@ contract Staking is ERC20Burnable {
     function redeem(uint256 _amount) public notPaused withdrawsAllowed sufficientBalance(_amount) {
         uint256 toWithdraw = _getRewards(_amount);
         _burn(_msgSender(), _amount);
+        totalStaked -= _amount;
+        stakes[msg.sender] -= _amount;
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
