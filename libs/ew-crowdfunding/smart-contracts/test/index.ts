@@ -367,7 +367,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
               value: oneEWT.mul(4)
           }),
       ).changeEtherBalance(asPatron, oneEWT.mul(4));
-  
       expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
     });
@@ -439,12 +438,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(tx = await asPatron.redeemAll()).changeEtherBalance(asPatron, (oneEWT.mul(-7)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
-  
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(7), timestamp);
     });
   
     it('fails when service provider sends reward before startDate', async () => {
-      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
+      await expect(asOwner.depositRewards({value: rewards})).revertedWith('Contract not activated');
     });
   })
 
@@ -519,7 +517,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
     
     it('fails when non service provider sends reward on inactive contract', async () => {
-      await expect(asPatron.depositRewards({value: oneEWT.mul(10)})).revertedWith('Not enrolled as service provider');
+      await expect(asPatron.depositRewards({value: rewards})).revertedWith('Not enrolled as service provider');
+    });
+
+    it('fails when providing not enough rewards on inactive contract', async () => {
+      await expect(asOwner.depositRewards({value: oneEWT.mul(100)})).revertedWith('Not Enough rewards');
     });
     
     it('can receive rewards when contract is activated', async () => {
@@ -535,7 +537,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
     
     it('fails when depositing reward more than once', async () => {
-      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Already funded');
+      await expect(asOwner.depositRewards({value: rewards})).revertedWith('Already funded');
     })
 
     it('can check rewards of users', async () => {
@@ -592,7 +594,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
 
     it('fails when service provider sends reward after endDate', async () => {
-      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Contract not activated');
+      await expect(asOwner.depositRewards({value: rewards})).revertedWith('Contract not activated');
     });
   });
 
@@ -611,7 +613,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     })
 
     it('fails when service provider sends reward after campaign abortion', async () => {
-      await expect(asOwner.depositRewards({value: oneEWT.mul(10)})).revertedWith('Campaign aborted');
+      await expect(asOwner.depositRewards({value: rewards})).revertedWith('Campaign aborted');
     });
 
     it ('should accept freezing on a cancelled contract', async () => {
