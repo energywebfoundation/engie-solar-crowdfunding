@@ -15,7 +15,7 @@ export const HowTo = () => {
         <ImageText imagePath='/Store2.png' title='How does this platform work?' text={text} gradientText={true} />
       </AppContainer>
       <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-        <Link href='/wallet'>
+        <Link href='wallet'>
           <a>
             <Button style={{ width: '200px' }} variant='contained' color='primary'>
               Fund solar

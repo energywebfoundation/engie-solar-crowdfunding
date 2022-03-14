@@ -29,7 +29,7 @@ export const Carousel: FC = () => {
             funding: crypto-based decentralized finance. This pilot platform is the initial proof of concept leveraging
             decentralized finance (DeFi) to accelerate clean and affordable energy access for all.
           </Typography>
-          <Link href='/wallet'>
+          <Link href='wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
                 Fund solar

@@ -37,7 +37,7 @@ export const Contact: FC = () => {
               {stakingMessage}
             </Typography>
           )}
-          <Link href='/wallet'>
+          <Link href='wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
                 Fund solar
