@@ -59,6 +59,7 @@ export const LendingDetails: FC = () => {
               hint={`Max. ${tokenLimit} EWT per user`}
               errorMessage={errorMessage}
               valueChanged={onLoanChange}
+              disabled={isStackingDisabled}
             />
             <Box mt={2} className={classes.details}>
               <Typography variant='body2'>Expected annual interest rate</Typography>
