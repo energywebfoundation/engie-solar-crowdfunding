@@ -252,7 +252,6 @@ contract Staking is ERC20Burnable {
         uint256 toWithdraw = _getRewards(_amount);
         _burn(_msgSender(), _amount);
         totalStaked -= _amount;
-        stakes[msg.sender] -= _amount;
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);

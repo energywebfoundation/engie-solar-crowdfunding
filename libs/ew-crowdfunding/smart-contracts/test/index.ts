@@ -367,7 +367,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
               value: oneEWT.mul(4)
           }),
       ).changeEtherBalance(asPatron, oneEWT.mul(4));
-  
       expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
     });
@@ -522,7 +521,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
 
     it('fails when providing not enough rewards on inactive contract', async () => {
-      await expect(asPatron.depositRewards({value: oneEWT.mul(200)})).revertedWith('Not Enough rewards');
+      await expect(asOwner.depositRewards({value: oneEWT.mul(100)})).revertedWith('Not Enough rewards');
     });
     
     it('can receive rewards when contract is activated', async () => {
