@@ -112,8 +112,14 @@ contract Staking is ERC20Burnable {
         _;
     }
 
-    function depositRewards() external payable notAborted activated notfunded {
-        require(msg.value > 0, "Not rewards provided");
+    modifier sufficientReward(){
+        uint256 TWELVE_PERCENT = totalStaked * (12 * 1e3 / 100);
+        require(msg.value >= totalStaked + TWELVE_PERCENT / 1e3, "Not Enough rewards");
+        _;
+    }
+
+    function depositRewards() external payable sufficientReward notAborted activated notfunded {
+        require(msg.value > 0, "No rewards provided");
         require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not enrolled as service provider");
         totalRewards += msg.value;
         contractFunded = true;
@@ -246,7 +252,6 @@ contract Staking is ERC20Burnable {
         uint256 toWithdraw = _getRewards(_amount);
         _burn(_msgSender(), _amount);
         totalStaked -= _amount;
-        stakes[msg.sender] -= _amount;
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
