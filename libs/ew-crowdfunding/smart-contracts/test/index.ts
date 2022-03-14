@@ -69,8 +69,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   const claimManagerABI = abi;
   const oneEWT = utils.parseUnits("1", "ether");
   const hardCap = oneEWT.mul(247);
-  // const rewards = oneEWT.mul(1000);
-  const rewards = oneEWT.mul(229);
+  const rewards = oneEWT.mul(1000);
   const contributionLimit = oneEWT.mul(200);
   const minRequiredStake = oneEWT.div(2);
 
@@ -520,6 +519,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     
     it('fails when non service provider sends reward on inactive contract', async () => {
       await expect(asPatron.depositRewards({value: rewards})).revertedWith('Not enrolled as service provider');
+    });
+
+    it('fails when providing not enough rewards on inactive contract', async () => {
+      await expect(asPatron.depositRewards({value: oneEWT.mul(200)})).revertedWith('Not Enough rewards');
     });
     
     it('can receive rewards when contract is activated', async () => {
