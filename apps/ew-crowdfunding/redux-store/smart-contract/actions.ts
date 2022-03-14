@@ -95,7 +95,6 @@ export const redeemSlt =
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
       dispatch(getTotalLentAmount(provider));
-
     } catch (error) {
       console.log('Error while redeeming: ', error);
     }
@@ -247,5 +246,21 @@ export const getTotalLentAmount =
     dispatch({
       type: SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT,
       payload: totalLentAmount,
+    });
+  };
+
+export const getContractStatus =
+  (provider: any): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const contractStatus = await stakingContract.getContractStatus();
+
+    dispatch({
+      type: SmartContractActionTypes.SET_CONTRACT_STATUS,
+      payload: {
+        isInitialized: contractStatus._isContractInitialized,
+        isPaused: contractStatus._isContractPaused,
+        isTerminated: contractStatus._isContractAborted,
+      },
     });
   };
