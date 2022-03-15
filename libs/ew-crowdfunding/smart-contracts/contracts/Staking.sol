@@ -9,9 +9,11 @@ contract Staking is ERC20Burnable {
     uint256 public hardCap;
     uint256 public endDate;
     uint256 public totalRewards;
+    uint256 public remainingRewards;
     uint256 public signupEnd;
     uint256 public startDate;
     uint256 public signupStart;
+    uint256 public fullStopDate;
     uint256 public totalStaked;
     bytes32 public serviceRole;
     bytes32 public patronRole;
@@ -19,6 +21,7 @@ contract Staking is ERC20Burnable {
     address private rewardProvider;
     uint256 public contributionLimit;
     bool private aborted;
+    bool public sweeped;
     bool private contractFunded;
     bool private isContractPaused;
     bool private isContractInitialized;
@@ -135,6 +138,7 @@ contract Staking is ERC20Burnable {
         uint256 _signupEnd,
         uint256 _startDate,
         uint256 _endDate,
+        uint256 _fullStopDate,
         uint256 _hardCap,
         uint256 _contributionLimit,
         uint256 _minRequiredStake
@@ -152,6 +156,7 @@ contract Staking is ERC20Burnable {
         isContractInitialized = true;
         contributionLimit = _contributionLimit;
         minRequiredStake = _minRequiredStake;
+        fullStopDate = _fullStopDate;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
@@ -175,6 +180,7 @@ contract Staking is ERC20Burnable {
 
     function terminate() external onlyOwner {
         require(aborted == false, "Already terminated");
+        require(block.timestamp <= endDate, "Error: canceling after campaign");
 		uint256 payout = totalRewards;
         aborted = true;
         if (payout != 0){
@@ -182,6 +188,18 @@ contract Staking is ERC20Burnable {
         }
         deleteParameters();
         emit CampaignAborted(block.timestamp);
+    }
+
+    function sweep() external {
+        require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not allowed to sweep");
+        require(!sweeped, "Already sweeped");
+		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
+
+		uint256 payout = remainingRewards;
+
+		sweeped = true;
+
+		payable(rewardProvider).transfer(payout);
     }
 
     function getContractStatus() external view returns(bool _isContractInitialized, bool _isContractPaused, bool _isContractAborted){
@@ -252,11 +270,10 @@ contract Staking is ERC20Burnable {
         uint256 toWithdraw = _getRewards(_amount);
         _burn(_msgSender(), _amount);
         totalStaked -= _amount;
+        stakes[msg.sender] -= _amount;
         payable(msg.sender).transfer(toWithdraw);
         emit Withdrawn(msg.sender, toWithdraw, block.timestamp);
         emit TokenBurnt(msg.sender, _amount, block.timestamp);
-        totalStaked -= _amount;
-        stakes[msg.sender] -= _amount;
     }
 
     function hasRole(address _provider, bytes32 _role) public view returns (bool){
@@ -264,19 +281,20 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function _getRewards(uint256 _amount) internal sufficientBalance(_amount) view returns(uint256 reward){
+    function _getRewards(uint256 _amount) internal sufficientBalance(_amount) returns(uint256 reward){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0){ 
             uint256 interests = _amount * 1e2;
             reward = interests / 1e3 + _amount;
+            remainingRewards = totalRewards - interests;
         } else {
             reward = _amount;
         }
         
     }
 
-    function getRewards() external notPaused view returns (uint256){
+    function getRewards() external notPaused returns (uint256){
         return _getRewards(balanceOf(msg.sender));
     }
 }

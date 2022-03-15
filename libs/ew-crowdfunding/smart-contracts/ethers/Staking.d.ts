@@ -33,24 +33,28 @@ interface StakingInterface extends ethers.utils.Interface {
     "decreaseAllowance(address,uint256)": FunctionFragment;
     "depositRewards()": FunctionFragment;
     "endDate()": FunctionFragment;
+    "fullStopDate()": FunctionFragment;
     "getContractStatus()": FunctionFragment;
     "getDeposit()": FunctionFragment;
     "getRewards()": FunctionFragment;
     "hardCap()": FunctionFragment;
     "hasRole(address,bytes32)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
-    "init(uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "init(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "minRequiredStake()": FunctionFragment;
     "name()": FunctionFragment;
     "patronRole()": FunctionFragment;
     "pause()": FunctionFragment;
     "redeem(uint256)": FunctionFragment;
     "redeemAll()": FunctionFragment;
+    "remainingRewards()": FunctionFragment;
     "serviceRole()": FunctionFragment;
     "signupEnd()": FunctionFragment;
     "signupStart()": FunctionFragment;
     "stake()": FunctionFragment;
     "startDate()": FunctionFragment;
+    "sweep()": FunctionFragment;
+    "sweeped()": FunctionFragment;
     "symbol()": FunctionFragment;
     "terminate()": FunctionFragment;
     "totalRewards()": FunctionFragment;
@@ -94,6 +98,10 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "endDate", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "fullStopDate",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "getContractStatus",
     values?: undefined
   ): string;
@@ -123,6 +131,7 @@ interface StakingInterface extends ethers.utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
@@ -142,6 +151,10 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "redeemAll", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "remainingRewards",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "serviceRole",
     values?: undefined
   ): string;
@@ -152,6 +165,8 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "stake", values?: undefined): string;
   encodeFunctionData(functionFragment: "startDate", values?: undefined): string;
+  encodeFunctionData(functionFragment: "sweep", values?: undefined): string;
+  encodeFunctionData(functionFragment: "sweeped", values?: undefined): string;
   encodeFunctionData(functionFragment: "symbol", values?: undefined): string;
   encodeFunctionData(functionFragment: "terminate", values?: undefined): string;
   encodeFunctionData(
@@ -200,6 +215,10 @@ interface StakingInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "endDate", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "fullStopDate",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getContractStatus",
     data: BytesLike
   ): Result;
@@ -222,6 +241,10 @@ interface StakingInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "redeem", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "redeemAll", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "remainingRewards",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "serviceRole",
     data: BytesLike
   ): Result;
@@ -232,6 +255,8 @@ interface StakingInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "stake", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "startDate", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "sweep", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "sweeped", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "symbol", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "terminate", data: BytesLike): Result;
   decodeFunctionResult(
@@ -433,6 +458,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    fullStopDate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     getContractStatus(
       overrides?: CallOverrides
     ): Promise<
@@ -445,7 +472,9 @@ export class Staking extends BaseContract {
 
     getDeposit(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
+    getRewards(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     hardCap(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -466,6 +495,7 @@ export class Staking extends BaseContract {
       _signupEnd: BigNumberish,
       _startDate: BigNumberish,
       _endDate: BigNumberish,
+      _fullStopDate: BigNumberish,
       _hardCap: BigNumberish,
       _contributionLimit: BigNumberish,
       _minRequiredStake: BigNumberish,
@@ -491,6 +521,8 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    remainingRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     serviceRole(overrides?: CallOverrides): Promise<[string]>;
 
     signupEnd(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -502,6 +534,12 @@ export class Staking extends BaseContract {
     ): Promise<ContractTransaction>;
 
     startDate(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    sweep(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    sweeped(overrides?: CallOverrides): Promise<[boolean]>;
 
     symbol(overrides?: CallOverrides): Promise<[string]>;
 
@@ -576,6 +614,8 @@ export class Staking extends BaseContract {
 
   endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+  fullStopDate(overrides?: CallOverrides): Promise<BigNumber>;
+
   getContractStatus(
     overrides?: CallOverrides
   ): Promise<
@@ -588,7 +628,9 @@ export class Staking extends BaseContract {
 
   getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getRewards(overrides?: CallOverrides): Promise<BigNumber>;
+  getRewards(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   hardCap(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -609,6 +651,7 @@ export class Staking extends BaseContract {
     _signupEnd: BigNumberish,
     _startDate: BigNumberish,
     _endDate: BigNumberish,
+    _fullStopDate: BigNumberish,
     _hardCap: BigNumberish,
     _contributionLimit: BigNumberish,
     _minRequiredStake: BigNumberish,
@@ -634,6 +677,8 @@ export class Staking extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  remainingRewards(overrides?: CallOverrides): Promise<BigNumber>;
+
   serviceRole(overrides?: CallOverrides): Promise<string>;
 
   signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
@@ -645,6 +690,12 @@ export class Staking extends BaseContract {
   ): Promise<ContractTransaction>;
 
   startDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  sweep(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  sweeped(overrides?: CallOverrides): Promise<boolean>;
 
   symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -714,6 +765,8 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    fullStopDate(overrides?: CallOverrides): Promise<BigNumber>;
+
     getContractStatus(
       overrides?: CallOverrides
     ): Promise<
@@ -747,6 +800,7 @@ export class Staking extends BaseContract {
       _signupEnd: BigNumberish,
       _startDate: BigNumberish,
       _endDate: BigNumberish,
+      _fullStopDate: BigNumberish,
       _hardCap: BigNumberish,
       _contributionLimit: BigNumberish,
       _minRequiredStake: BigNumberish,
@@ -765,6 +819,8 @@ export class Staking extends BaseContract {
 
     redeemAll(overrides?: CallOverrides): Promise<void>;
 
+    remainingRewards(overrides?: CallOverrides): Promise<BigNumber>;
+
     serviceRole(overrides?: CallOverrides): Promise<string>;
 
     signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
@@ -774,6 +830,10 @@ export class Staking extends BaseContract {
     stake(overrides?: CallOverrides): Promise<void>;
 
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    sweep(overrides?: CallOverrides): Promise<void>;
+
+    sweeped(overrides?: CallOverrides): Promise<boolean>;
 
     symbol(overrides?: CallOverrides): Promise<string>;
 
@@ -1015,11 +1075,15 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<BigNumber>;
 
+    fullStopDate(overrides?: CallOverrides): Promise<BigNumber>;
+
     getContractStatus(overrides?: CallOverrides): Promise<BigNumber>;
 
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRewards(overrides?: CallOverrides): Promise<BigNumber>;
+    getRewards(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     hardCap(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1040,6 +1104,7 @@ export class Staking extends BaseContract {
       _signupEnd: BigNumberish,
       _startDate: BigNumberish,
       _endDate: BigNumberish,
+      _fullStopDate: BigNumberish,
       _hardCap: BigNumberish,
       _contributionLimit: BigNumberish,
       _minRequiredStake: BigNumberish,
@@ -1065,6 +1130,8 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    remainingRewards(overrides?: CallOverrides): Promise<BigNumber>;
+
     serviceRole(overrides?: CallOverrides): Promise<BigNumber>;
 
     signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1076,6 +1143,12 @@ export class Staking extends BaseContract {
     ): Promise<BigNumber>;
 
     startDate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    sweep(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    sweeped(overrides?: CallOverrides): Promise<BigNumber>;
 
     symbol(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1156,11 +1229,15 @@ export class Staking extends BaseContract {
 
     endDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    fullStopDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getContractStatus(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getRewards(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     hardCap(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1181,6 +1258,7 @@ export class Staking extends BaseContract {
       _signupEnd: BigNumberish,
       _startDate: BigNumberish,
       _endDate: BigNumberish,
+      _fullStopDate: BigNumberish,
       _hardCap: BigNumberish,
       _contributionLimit: BigNumberish,
       _minRequiredStake: BigNumberish,
@@ -1206,6 +1284,8 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    remainingRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     serviceRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     signupEnd(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1217,6 +1297,12 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     startDate(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    sweep(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    sweeped(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     symbol(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
