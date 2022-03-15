@@ -14,7 +14,7 @@ export const Carousel: FC = () => {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1}>
             <Link href='/'>
               <a>
-                <img src='/EngieLogoWhite.png' alt='Lab icon' />
+                <img className={classes.logo} src='/EeaLogoWhite.png' alt='EEA Logo White' />
               </a>
             </Link>
           </Box>
@@ -29,7 +29,7 @@ export const Carousel: FC = () => {
             funding: crypto-based decentralized finance. This pilot platform is the initial proof of concept leveraging
             decentralized finance (DeFi) to accelerate clean and affordable energy access for all.
           </Typography>
-          <Link href='wallet'>
+          <Link href='/wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
                 Fund solar

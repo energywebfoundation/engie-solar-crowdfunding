@@ -6,12 +6,14 @@ const useStakingStatus = () => {
   const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
   const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
   const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
 
   const stakingPeriod: StakingTimelineEnum = useStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,
     releaseRewardsDate,
+    finalStopDate,
   );
   let currentStakingPeriod: string;
   switch (stakingPeriod) {
@@ -26,6 +28,9 @@ const useStakingStatus = () => {
       break;
     case StakingTimelineEnum.RELEASE_REWARDS:
       currentStakingPeriod = 'Rewards have been released and solar loans realized.';
+      break;
+    case StakingTimelineEnum.FINAL_STOP:
+      currentStakingPeriod = 'The campaign is complete.';
       break;
   }
   return currentStakingPeriod;

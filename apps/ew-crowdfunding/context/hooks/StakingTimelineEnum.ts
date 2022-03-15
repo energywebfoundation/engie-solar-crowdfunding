@@ -4,6 +4,7 @@ enum StakingTimelineEnum {
   CLOSE_STAKING = 'Close staking',
   LOCK_STAKES = 'Lock stakes',
   RELEASE_REWARDS = 'Release rewards',
+  FINAL_STOP = 'Campaign is complete',
 }
 
 export default StakingTimelineEnum;

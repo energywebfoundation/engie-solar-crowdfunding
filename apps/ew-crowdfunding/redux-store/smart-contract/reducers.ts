@@ -20,6 +20,7 @@ const initialState: SmartContractReducerState = {
   closeStackingDate: null,
   lockStakesDate: null,
   releaseRewardsDate: null,
+  finalStopDate: null,
 };
 
 const smartContractReducer: Reducer<SmartContractReducerState> = (
@@ -91,6 +92,11 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
       return {
         ...state,
         activateStakingDate: payload,
+      };
+    case SmartContractActionTypes.SET_FINAL_STOP_DATE:
+      return {
+        ...state,
+        finalStopDate: payload,
       };
     case SmartContractActionTypes.SET_CONTRACT_STATUS:
       return {

@@ -5,8 +5,9 @@ const useStakingTimeline = (
   closeStackingDate: Date,
   lockStakesDate: Date,
   releaseRewardsDate: Date,
+  finalStopDate: Date,
 ): StakingTimelineEnum => {
-  if (!activateStakingDate || !closeStackingDate || !lockStakesDate || !releaseRewardsDate) {
+  if (!activateStakingDate || !closeStackingDate || !lockStakesDate || !releaseRewardsDate || !finalStopDate) {
     return;
   }
   const currentDate = new Date();
@@ -19,8 +20,10 @@ const useStakingTimeline = (
     return StakingTimelineEnum.CLOSE_STAKING;
   } else if (currentDate >= lockStakesDate && currentDate < releaseRewardsDate) {
     return StakingTimelineEnum.LOCK_STAKES;
-  } else if (currentDate >= releaseRewardsDate) {
+  } else if (currentDate >= releaseRewardsDate && currentDate < finalStopDate) {
     return StakingTimelineEnum.RELEASE_REWARDS;
+  } else if (currentDate >= finalStopDate) {
+    return StakingTimelineEnum.FINAL_STOP;
   }
 };
 

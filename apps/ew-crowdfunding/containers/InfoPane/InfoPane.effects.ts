@@ -19,6 +19,7 @@ export const useInfoPaneEffects = () => {
   const closeStackingDate = formatDate(new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE));
   const lockStakesDate = formatDate(new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE));
   const releaseRewardsDate = formatDate(new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE));
+  const finalStopDate = formatDate(new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE));
 
   const infoList: Info[] = [
     {

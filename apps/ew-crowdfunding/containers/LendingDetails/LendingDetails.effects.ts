@@ -35,6 +35,7 @@ import {
   getContractStatus,
   selectIsPaused,
   selectIsTerminated,
+  getFinalStopDate,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
 import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
@@ -75,6 +76,7 @@ export const useLendingDetailsEffects = () => {
       dispatch(getCloseStackingDate(provider));
       dispatch(getLockStakesDate(provider));
       dispatch(getReleaseRewardsDate(provider));
+      dispatch(getFinalStopDate(provider));
       dispatch(getUserContribution(provider));
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));

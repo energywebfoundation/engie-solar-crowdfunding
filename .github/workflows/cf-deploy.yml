@@ -42,10 +42,11 @@ jobs:
             echo "::set-output name=next_public_global_token_limit::10000"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://volta-explorer.energyweb.org"
-            echo "::set-output name=next_public_activate_staking_date::2022-03-11 12:00"
-            echo "::set-output name=next_public_close_staking_date::2022-03-11 14:00"
-            echo "::set-output name=next_public_lock_stakes_date::2022-03-11 14:01"
-            echo "::set-output name=next_public_release_rewards_date::2023-03-11 17:01"
+            echo "::set-output name=next_public_activate_staking_date::2022-03-16 11:30"
+            echo "::set-output name=next_public_close_staking_date::2022-03-16 12:00"
+            echo "::set-output name=next_public_lock_stakes_date::2022-03-16 12:01"
+            echo "::set-output name=next_public_release_rewards_date::2022-03-16 12:06"
+            echo "::set-output name=next_public_full_stop_date::2022-03-16 12:30"
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
             echo "::set-output name=aws_access_key_id::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=aws_secret_key::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
@@ -66,10 +67,11 @@ jobs:
             echo "::set-output name=next_public_global_token_limit::10000"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://explorer.energyweb.org"
-            echo "::set-output name=next_public_activate_staking_date::2022-02-28 12:32"
-            echo "::set-output name=next_public_close_staking_date::2022-03-08 12:32"
-            echo "::set-output name=next_public_lock_stakes_date::2022-03-08 12:42"
-            echo "::set-output name=next_public_release_rewards_date::2023-03-08 12:42"
+            echo "::set-output name=next_public_activate_staking_date::2022-03-16 11:30"
+            echo "::set-output name=next_public_close_staking_date::2022-03-16 12:00"
+            echo "::set-output name=next_public_lock_stakes_date::2022-03-16 12:01"
+            echo "::set-output name=next_public_release_rewards_date::2022-03-16 12:06"
+            echo "::set-output name=next_public_full_stop_date::2022-03-16 12:30"
           else
             echo "Branch ${{ github.ref }} is not configured for deployment"
             exit 1
@@ -117,6 +119,7 @@ jobs:
           NEXT_PUBLIC_CLOSE_STAKING_DATE: ${{ steps.env_vars.outputs.next_public_close_staking_date }}
           NEXT_PUBLIC_LOCK_STAKES_DATE: ${{ steps.env_vars.outputs.next_public_lock_stakes_date }}
           NEXT_PUBLIC_RELEASE_REWARDS_DATE: ${{ steps.env_vars.outputs.next_public_release_rewards_date }}
+          NEXT_PUBLIC_FULL_STOP_DATE: ${{ steps.env_vars.outputs.next_public_full_stop_date }}
       - name: Ensure dist is present
         run: |
           test -d "dist/apps/ew-crowdfunding/exported" && echo OK || exit 1
