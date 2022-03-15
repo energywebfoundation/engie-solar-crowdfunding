@@ -38,7 +38,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'end',
     },
     logo: {
-      height: '2.7rem'
+      height: '2.5rem'
     }
   };
 });

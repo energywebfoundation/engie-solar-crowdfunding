@@ -179,6 +179,7 @@ export const getRedeemableReward =
         payload: redeemableReward,
       });
     } catch (err) {
+      // console.log(`An Error Occurred : ${JSON.stringify(err)}`);
       dispatch({
         type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
         payload: 0,

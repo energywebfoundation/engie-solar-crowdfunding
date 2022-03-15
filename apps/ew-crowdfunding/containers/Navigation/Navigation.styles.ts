@@ -33,7 +33,7 @@ export const useStyles = makeStyles(() => {
       padding: '3px',
     },
     logo: {
-      height: '2.7rem',
+      height: '2.5rem',
     },
   };
 });

@@ -14,7 +14,7 @@ export const useStyles = makeStyles(() => {
       padding: '40px 0',
     },
     background: {
-      backgroundImage: `url('./Cover.png')`,
+      backgroundImage: `url('/Cover.png')`,
       minHeight: '590px',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
