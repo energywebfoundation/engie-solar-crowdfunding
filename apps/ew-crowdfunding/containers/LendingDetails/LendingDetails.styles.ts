@@ -24,7 +24,7 @@ export const useStyles = makeStyles(() => {
       background: 'rgba(0, 0, 0, 0.64)',
       bottom: '120px',
       [theme.breakpoints.down('sm')]: {
-        bottom: '120px',
+        bottom: '230px',
       },
     },
     lendingContainer: {
@@ -72,6 +72,9 @@ export const useStyles = makeStyles(() => {
       minWidth: '320px',
       [theme.breakpoints.down('sm')]: {
         width: '100%',
+      },
+      [theme.breakpoints.down('md')]: {
+        minWidth: '200px',
       },
     },
     contributionItem: {
@@ -172,6 +175,7 @@ export const useStyles = makeStyles(() => {
       justifyContent: 'flex-end',
       [theme.breakpoints.down('sm')]: {
         marginTop: 0,
+        marginBottom: '30px'
       },
     },
   };
