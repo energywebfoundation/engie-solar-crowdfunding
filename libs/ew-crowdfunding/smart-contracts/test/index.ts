@@ -548,8 +548,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(patronReward).to.equal(expectedReward);
     });
 
-    it('fails if user checks rewards without shares', async () => {
-      expect(asPatron.getRewards()).to.be.revertedWith('error: withdraw 0 EWT');
+    it('Should return 0 if user checks rewards without shares', async () => {
+      expect(await asPatron.getRewards()).to.eq(0);
     });
 
     it('fails when trying to withdraw partially after startDate and before end', async () => {
