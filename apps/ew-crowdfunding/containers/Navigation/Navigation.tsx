@@ -21,7 +21,7 @@ export const Navigation = () => {
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
             <Link href='/'>
               <a>
-                <img src='/EngieLogo.png' alt='Lab icon' />
+                <img className={classes.logo} src='/EeaLogo.png' alt='Lab icon' />
               </a>
             </Link>
           </Box>

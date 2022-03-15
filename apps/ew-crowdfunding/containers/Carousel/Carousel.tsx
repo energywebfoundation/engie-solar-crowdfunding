@@ -14,7 +14,7 @@ export const Carousel: FC = () => {
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1}>
             <Link href='/'>
               <a>
-                <img src='/EngieLogoWhite.png' alt='Lab icon' />
+                <img className={classes.logo} src='/EeaLogoWhite.png' alt='EEA Logo White' />
               </a>
             </Link>
           </Box>

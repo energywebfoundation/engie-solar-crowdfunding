@@ -60,3 +60,23 @@ export const selectActivateStackingDate = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.activateStakingDate,
 );
+
+export const selectFinalStopDate = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.finalStopDate,
+);
+
+export const selectIsInitialized = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.isInitialized,
+);
+
+export const selectIsPaused = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.isPaused,
+);
+
+export const selectIsTerminated = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.isTerminated,
+);
