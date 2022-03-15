@@ -61,6 +61,9 @@ export const useInfoPaneEffects = () => {
             'The rewards are 10% of the redeemed SLT.',
           ],
         },
+        {
+          text: `You should withdraw your rewards anytime after ${releaseRewardsDate} and before ${finalStopDate}`
+        }
       ],
     },
     {
