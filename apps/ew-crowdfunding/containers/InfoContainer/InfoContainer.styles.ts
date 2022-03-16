@@ -27,6 +27,9 @@ export const useStyles = makeStyles(() => {
       position: 'absolute',
       left: 0,
       bottom: 10,
+      [theme.breakpoints.down('sm')]: {
+        left: 20,
+      },
     },
     downLeftBubble2: {
       position: 'absolute',

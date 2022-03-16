@@ -4,6 +4,7 @@ import useStakingTimeline from '../../context/hooks/useStakingTimeline';
 import {
   selectActivateStackingDate,
   selectContributionDeadline,
+  selectFinalStopDate,
   selectLockStakesDate,
   selectReleaseRewardsDate,
 } from '../../redux-store';
@@ -20,12 +21,14 @@ export const useStakingTimelineEffects = () => {
   const closeStackingDate = new Date(useSelector(selectContributionDeadline));
   const lockStakesDate = new Date(useSelector(selectLockStakesDate));
   const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+  const finalStopDate = new Date(useSelector(selectFinalStopDate));
 
   const stakingPeriod: StakingTimelineEnum = useStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,
     releaseRewardsDate,
+    finalStopDate,
   );
   let currentStakingPeriod: string;
 
@@ -46,6 +49,10 @@ export const useStakingTimelineEffects = () => {
       date: formatDate(releaseRewardsDate),
       name: StakingTimelineEnum.RELEASE_REWARDS,
     },
+    {
+      date: formatDate(finalStopDate),
+      name: StakingTimelineEnum.FINAL_STOP,
+    },
   ];
 
   switch (stakingPeriod) {
@@ -63,6 +70,9 @@ export const useStakingTimelineEffects = () => {
       break;
     case StakingTimelineEnum.RELEASE_REWARDS:
       currentStakingPeriod = 'Rewards are released';
+      break;
+    case StakingTimelineEnum.FINAL_STOP:
+      currentStakingPeriod = 'The campaign is complete';
       break;
   }
 

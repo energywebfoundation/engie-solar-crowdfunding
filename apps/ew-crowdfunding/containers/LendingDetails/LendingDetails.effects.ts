@@ -32,9 +32,13 @@ import {
   selectSolarLoanTokenBalance,
   selectTokenLimit,
   selectUserContribution,
+  getContractStatus,
+  selectIsPaused,
+  selectIsTerminated,
+  getFinalStopDate,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
-// import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -45,16 +49,17 @@ export const useLendingDetailsEffects = () => {
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
 
-  // const listenToContractEvents = async () => {
-  //   const signer = provider?.getSigner();
-  //   const stakingContract = Staking__factory.connect(deployedAddress, signer);
-  //   const events = stakingContract.filters.RewardSent(null, null, null);
-  //   console.log('RewardSent events: ', events);
-  // };
-
-  // useEffect(() => {
-  //   listenToContractEvents();
-  // });
+  useEffect(() => {
+    if (propertyExists(provider)) {
+      const signer = provider?.getSigner();
+      const stakingContract = Staking__factory.connect(deployedAddress, signer);
+      const eventsStatusChanged = stakingContract.filters.StatusChanged(null, null);
+      const eventsCampaignAborted = stakingContract.filters.CampaignAborted(null);
+      if (eventsStatusChanged || eventsCampaignAborted) {
+        dispatch(getContractStatus(provider));
+      }
+    }
+  }, [provider, dispatch]);
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 
@@ -71,9 +76,11 @@ export const useLendingDetailsEffects = () => {
       dispatch(getCloseStackingDate(provider));
       dispatch(getLockStakesDate(provider));
       dispatch(getReleaseRewardsDate(provider));
+      dispatch(getFinalStopDate(provider));
       dispatch(getUserContribution(provider));
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
+      dispatch(getContractStatus(provider));
     }
   }, [dispatch, authenticated, provider, currentAddress]);
 
@@ -90,6 +97,10 @@ export const useLendingDetailsEffects = () => {
   const closeStackingDate = new Date(useSelector(selectContributionDeadline));
   const lockStakesDate = new Date(useSelector(selectLockStakesDate));
   const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+
+  // Contract status
+  const isContractPaused = useSelector(selectIsPaused);
+  const isContractTerminated = useSelector(selectIsTerminated);
 
   useEffect(() => {
     if (propertyExists(accountBalance)) {
@@ -217,5 +228,7 @@ export const useLendingDetailsEffects = () => {
     smartContractLoading,
     activateStackingDate,
     isStackingDisabled,
+    isContractPaused,
+    isContractTerminated,
   };
 };

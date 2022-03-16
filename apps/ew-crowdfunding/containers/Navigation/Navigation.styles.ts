@@ -10,7 +10,7 @@ export const useStyles = makeStyles(() => {
     toolbar: {
       display: 'flex',
       justifyContent: 'space-between',
-      alignItems: 'center'
+      alignItems: 'center',
     },
     toolbarMessage: {
       [theme.breakpoints.down(897)]: {
@@ -33,7 +33,7 @@ export const useStyles = makeStyles(() => {
       padding: '3px',
     },
     logo: {
-      cursor: 'pointer',
+      height: '2.5rem',
     },
   };
 });

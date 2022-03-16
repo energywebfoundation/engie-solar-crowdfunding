@@ -9,11 +9,15 @@ export interface SmartContractReducerState {
   interestRate: string;
   totalLentAmount: number;
   error: string;
+  isPaused: boolean;
+  isTerminated: boolean;
+  isInitialized: boolean;
   // Dates
   activateStakingDate: string; // Sign up start from Smart Contract (users can stake, still enroll and withdraw EWT without rewards)
   closeStackingDate: string; // Signup end from Smart Contract (users cannot stake, enroll or withdraw EWT/SLT)
   lockStakesDate: string; // Start Date from Smart Contract (people cannot withdraw for 1 year, rewards are starting to get calculated)
   releaseRewardsDate: string; // End Date from Smart Contract  (people can withdraw EWT + rewards but NOT stake or receive SLTs)
+  finalStopDate: string; // Final Stop Date from Smart Contract (people cannot redeem their rewards anymore)
 }
 
 export const SmartContractActionTypes = {
@@ -30,6 +34,8 @@ export const SmartContractActionTypes = {
   SET_LOCK_STAKES_DATE: 'SET_LOCK_STAKES_DATE',
   SET_ACTIVATE_STACKING_DATE: 'SET_ACTIVATE_STACKING_DATE',
   SET_RELEASE_REWARDS_DATE: 'SET_RELEASE_REWARDS_DATE',
+  SET_FINAL_STOP_DATE: 'SET_FINAL_STOP_DATE',
   SET_TOTAL_LENT_AMOUNT: 'SET_TOTAL_LENT_AMOUNT',
+  SET_CONTRACT_STATUS: 'SET_CONTRACT_STATUS',
   GET_ROLE: 'GET_ROLE',
 };

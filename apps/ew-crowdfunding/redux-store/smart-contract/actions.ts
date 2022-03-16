@@ -95,7 +95,6 @@ export const redeemSlt =
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
       dispatch(getTotalLentAmount(provider));
-
     } catch (error) {
       console.log('Error while redeeming: ', error);
     }
@@ -180,7 +179,7 @@ export const getRedeemableReward =
         payload: redeemableReward,
       });
     } catch (err) {
-      console.log(`An Error Occurred : ${err}`);
+      console.log(`An Error Occurred : ${JSON.stringify(err)}`);
       dispatch({
         type: SmartContractActionTypes.SET_REDEEMABLE_REWARD,
         payload: 0,
@@ -206,7 +205,6 @@ export const getCloseStackingDate =
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const signupEnd: number = +(await stakingContract.signupEnd()).toString();
     const closeStackingDate = new Date(signupEnd * 1000);
-    // const closeStackingDate = new Date('2022-03-04 12:32')
     dispatch({
       type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
       payload: closeStackingDate,
@@ -238,6 +236,21 @@ export const getReleaseRewardsDate =
     });
   };
 
+export const getFinalStopDate =
+  (provider: any): AppThunk =>
+  async (dispatch): Promise<void> => {
+    // const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    // CHANGE THIS TO FINAL STOP DATE AFTER IT IS IMPLEMENTED IN THE SMART CONTRACT
+    // const stopDate: number = +(await stakingContract.endDate()).toString();
+    // const finalStopDate = new Date(stopDate * 1000);
+    const finalStopDate =new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
+
+    dispatch({
+      type: SmartContractActionTypes.SET_FINAL_STOP_DATE,
+      payload: finalStopDate,
+    });
+  };
+
 export const getTotalLentAmount =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -247,5 +260,21 @@ export const getTotalLentAmount =
     dispatch({
       type: SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT,
       payload: totalLentAmount,
+    });
+  };
+
+export const getContractStatus =
+  (provider: any): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const contractStatus = await stakingContract.getContractStatus();
+
+    dispatch({
+      type: SmartContractActionTypes.SET_CONTRACT_STATUS,
+      payload: {
+        isInitialized: contractStatus._isContractInitialized,
+        isPaused: contractStatus._isContractPaused,
+        isTerminated: contractStatus._isContractAborted,
+      },
     });
   };

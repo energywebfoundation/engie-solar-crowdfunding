@@ -31,6 +31,8 @@ export const LendingDetails: FC = () => {
     smartContractLoading,
     activateStackingDate,
     isStackingDisabled,
+    isContractPaused,
+    isContractTerminated,
   } = useLendingDetailsEffects();
 
   return (
@@ -101,7 +103,15 @@ export const LendingDetails: FC = () => {
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
               {smartContractLoading ? (
-                <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
+                >
                   <CircularProgress />
                   <Typography className='gradient-text'>This will take a minute, please do not refresh</Typography>
                 </Box>
@@ -111,7 +121,11 @@ export const LendingDetails: FC = () => {
                   type='submit'
                   color='primary'
                   disabled={
-                    !!errorMessage || roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED || isStackingDisabled
+                    !!errorMessage ||
+                    roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED ||
+                    isStackingDisabled ||
+                    !isContractPaused ||
+                    !isContractTerminated
                   }
                   style={{ minWidth: '200px' }}
                 >
@@ -145,13 +159,21 @@ export const LendingDetails: FC = () => {
           </Box>
           <Box className={classes.redeemAction}>
             {smartContractLoading ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
                 <CircularProgress />
                 <Typography className='gradient-text'>This will take a minute, please do not refresh</Typography>
               </Box>
             ) : (
               <Button
-                disabled={isRedeemDisabled}
+                disabled={isRedeemDisabled || isContractPaused}
                 variant='outlined'
                 color='primary'
                 style={{ minWidth: '200px' }}
