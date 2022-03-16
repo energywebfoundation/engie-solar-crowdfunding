@@ -61,6 +61,9 @@ export const useStyles = makeStyles(() => {
       [theme.breakpoints.down(750)]: {
         marginRight: 0,
       },
+      [theme.breakpoints.down(450)]: {
+       display: 'none'
+      },
     },
     powerLogo: {
       display: 'flex',
