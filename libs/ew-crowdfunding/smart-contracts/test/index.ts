@@ -578,8 +578,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const patronReward = (await asPatron2.getRewards());
       const patronBalance = await asPatron2.getDeposit();
       const allRedeemedRewards = await asPatron2.allRedeemedRewards();
-      const bonus = ethers.utils.parseEther(patronBalance.toString) / 10;
-      console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString))
+      const bonus = ethers.utils.parseEther(patronBalance.toString()) / 10;
+      console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString()))
       console.log("bonus >> ", bonus)
       expect(patronReward).to.equal(expectedReward);
       expect(allRedeemedRewards).to.equal(expectedReward);
@@ -618,9 +618,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
 
       const patronBalance = await asPatron2.getDeposit();
-      const bonus = ethers.utils.parseEther(Number(patronBalance.toString()) / 10);
+      const bonus = ethers.utils.parseEther(patronBalance.toString()) / 10;
 
-      expect(allRedeemedRewardsAfter).to.equal(allRedeemedRewardsBefore + bonus);
+      expect(allRedeemedRewardsAfter).to.equal(allRedeemedRewardsBefore.add(BigNumber.from(bonus)));
 
     });
     
