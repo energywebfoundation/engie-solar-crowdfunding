@@ -577,13 +577,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const expectedReward = await getReward(asPatron2, balance);
       const patronReward = (await asPatron2.getRewards());
       const patronBalance = await asPatron2.getDeposit();
-      // console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString()));
-      // const allRedeemedRewards = await asPatron2.allRedeemedRewards();
-      // console.log("allRedeemedRewards >> ", ethers.utils.parseEther(allRedeemedRewards.toString()));
-      // const bonus = ethers.utils.parseEther(patronBalance.toString()) / 10;
-      // console.log("bonus >> ", bonus);
       expect(patronReward).to.equal(expectedReward);
-      // expect(allRedeemedRewards).to.equal(expectedReward);
     });
 
     it('Should return 0 if user checks rewards without shares', async () => {
@@ -643,77 +637,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('fails when service provider sends reward after endDate', async () => {
       await expect(asOwner.depositRewards({value: rewards})).revertedWith('Contract not activated');
-    });
-  });
-
-  describe("\n + Testing campaign cancellation ", () => {
-    
-    it('should initialize cancelledContract', async () => {
-      // const {
-      //   end,
-      //   start,
-      //   asOwner2,
-      //   hardCap,
-      //   provider,
-      //   cancelledContract,
-      //   contributionLimit,
-      //   minRequiredStake
-      // } = await loadFixture(
-      //   defaultFixture,
-      // );
-      const newStart = Number(DateTime.now().plus({days: 14}).toSeconds().toFixed(0));
-      const newEnd = Number(DateTime.fromSeconds(newStart).plus({year: 1}).toSeconds().toFixed(0));
-      const stakingPeriod =  Number(DateTime.now().toSeconds().toFixed(0));
-      const lockPeriod = Number(DateTime.fromSeconds(newStart).minus({day: 1}).toSeconds().toFixed(0));
-
-      /*==  newContract initialization ==*/
-      tx = await initializeContract(asOwner2, newStart, newEnd, hardCap, contributionLimit, stakingPeriod, lockPeriod, minRequiredStake);
-      const { blockNumber } = await tx.wait();
-      const { timestamp } = await provider.getBlock(blockNumber);
-  
-      await expect(tx).to.emit(cancelledContract, 'StakingPoolInitialized').withArgs(timestamp, newStart, newEnd);
-
-
-    //   await expect(
-    //     tx = await asPatron5.stake({
-    //          value: oneEWT.mul(4)
-    //      }),
-    //  ).changeEtherBalance(asPatron5, oneEWT.mul(4));
-    
-    });
-
-    it("fails terminating campaign if non owner tries to terminate", async () => {
-      await expect(asPatron5.terminate()).to.be.revertedWith("Must be the admin");
-    });
-
-    it("Can terminate campaign", async () => {
-      await expect(asOwner2.terminate()).to.emit(cancelledContract, "CampaignAborted").withArgs(timeStamp);
-    });
-
-    it('fails when patron tries to stake after campaign abortion', async () => {
-      await expect(asPatron5.stake({value: oneEWT})).to.be.revertedWith('Campaign aborted');
-    })
-
-    it('fails when service provider sends reward after campaign abortion', async () => {
-      await expect(asOwner2.depositRewards({value: rewards})).revertedWith('Campaign aborted');
-    });
-
-    it ('should accept freezing on a cancelled contract', async () => {
-      tx = await asOwner2.pause();
-      await expect(tx).to.emit(cancelledContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
-    });
-
-    it ('should fail on tokens withdrawals if a cancelled contract is frozen', async () => {
-      await expect(asPatron4.redeemAll()).to.be.revertedWith("Contract is frozen");
-    });
-
-    it ('should accept unfreezing on a cancelled contract', async () => {
-      await expect(asOwner.unPause()).to.emit(cancelledContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
-    });
-
-    it ('should allow tokens withdrawals if a cancelled contract is unfrozen', async () => {
-      expect(await asPatron4.balanceOf(patron4.address)).to.equal(oneEWT.mul(2))
-      expect(tx = await asPatron4.redeemAll()).changeEtherBalance(asPatron, (oneEWT.mul(-2)));
     });
   });
 });
