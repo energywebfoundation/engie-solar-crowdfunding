@@ -618,9 +618,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
 
       const patronBalance = await asPatron2.getDeposit();
-      const bonus = ethers.utils.parseEther(patronBalance.toString()) / 10;
+      const bonus = patronBalance.div(10);
 
-      expect(allRedeemedRewardsAfter).to.equal(allRedeemedRewardsBefore.add(BigNumber.from(bonus)));
+      expect(allRedeemedRewardsAfter).to.equal(allRedeemedRewardsBefore.add(bonus));
 
     });
     
