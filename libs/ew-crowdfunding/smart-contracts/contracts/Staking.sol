@@ -288,7 +288,7 @@ contract Staking is ERC20Burnable {
         if (!aborted && totalRewards != 0 && _amount != 0){ 
             uint256 interests = _amount * 1e2;
             bonus = interests / 1e3;
-            reward = interests / 1e3 + _amount;
+            reward = _amount + bonus;
         } else {
             reward = _amount;
         }
