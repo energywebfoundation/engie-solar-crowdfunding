@@ -22,6 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface StakingInterface extends ethers.utils.Interface {
   functions: {
+    "allRedeemedRewards()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -47,7 +48,6 @@ interface StakingInterface extends ethers.utils.Interface {
     "pause()": FunctionFragment;
     "redeem(uint256)": FunctionFragment;
     "redeemAll()": FunctionFragment;
-    "remainingRewards()": FunctionFragment;
     "serviceRole()": FunctionFragment;
     "signupEnd()": FunctionFragment;
     "signupStart()": FunctionFragment;
@@ -65,6 +65,10 @@ interface StakingInterface extends ethers.utils.Interface {
     "unPause()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "allRedeemedRewards",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
@@ -151,10 +155,6 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "redeemAll", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "remainingRewards",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "serviceRole",
     values?: undefined
   ): string;
@@ -191,6 +191,10 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "unPause", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "allRedeemedRewards",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -240,10 +244,6 @@ interface StakingInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "redeem", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "redeemAll", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "remainingRewards",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "serviceRole",
     data: BytesLike
@@ -415,6 +415,8 @@ export class Staking extends BaseContract {
   interface: StakingInterface;
 
   functions: {
+    allRedeemedRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     allowance(
       owner: string,
       spender: string,
@@ -472,9 +474,7 @@ export class Staking extends BaseContract {
 
     getDeposit(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getRewards(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     hardCap(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -520,8 +520,6 @@ export class Staking extends BaseContract {
     redeemAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
-
-    remainingRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     serviceRole(overrides?: CallOverrides): Promise<[string]>;
 
@@ -570,6 +568,8 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  allRedeemedRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
   allowance(
     owner: string,
@@ -628,9 +628,7 @@ export class Staking extends BaseContract {
 
   getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getRewards(
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
   hardCap(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -676,8 +674,6 @@ export class Staking extends BaseContract {
   redeemAll(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
-
-  remainingRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
   serviceRole(overrides?: CallOverrides): Promise<string>;
 
@@ -727,6 +723,8 @@ export class Staking extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    allRedeemedRewards(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -818,8 +816,6 @@ export class Staking extends BaseContract {
     redeem(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     redeemAll(overrides?: CallOverrides): Promise<void>;
-
-    remainingRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     serviceRole(overrides?: CallOverrides): Promise<string>;
 
@@ -1032,6 +1028,8 @@ export class Staking extends BaseContract {
   };
 
   estimateGas: {
+    allRedeemedRewards(overrides?: CallOverrides): Promise<BigNumber>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1081,9 +1079,7 @@ export class Staking extends BaseContract {
 
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRewards(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     hardCap(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1129,8 +1125,6 @@ export class Staking extends BaseContract {
     redeemAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
-
-    remainingRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     serviceRole(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1181,6 +1175,10 @@ export class Staking extends BaseContract {
   };
 
   populateTransaction: {
+    allRedeemedRewards(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     allowance(
       owner: string,
       spender: string,
@@ -1235,9 +1233,7 @@ export class Staking extends BaseContract {
 
     getDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getRewards(
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
+    getRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     hardCap(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1283,8 +1279,6 @@ export class Staking extends BaseContract {
     redeemAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
-
-    remainingRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     serviceRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

@@ -575,8 +575,15 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const balance = await asPatron2.balanceOf(patron2.address);
       const totalStaked = await asPatron2.totalStaked()
       const expectedReward = await getReward(balance, totalStaked);
-      const patronReward = await asPatron2.getRewards();
+      const patronReward = (await asPatron2.getRewards());
+      const patronBalance = await asPatron2.getDeposit();
+      const allRedeemedRewards = await asPatron2.allRedeemedRewards();
+      const bonus = ethers.utils.parseEther(patronBalance.toString) / 10;
+      console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString))
+      console.log("bonus >> ", bonus)
       expect(patronReward).to.equal(expectedReward);
+      expect(allRedeemedRewards).to.equal(expectedReward);
+
     });
 
     it('Should return 0 if user checks rewards without shares', async () => {
@@ -598,13 +605,23 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     it('Can partially withdraw funds after end date', async () => {
       //Moving to endDate
       await timeTravel(provider, end);
+      const allRedeemedRewardsBefore = await asPatron2.allRedeemedRewards();
       let tx;
       const totalStaked = await asPatron2.totalStaked()
       const expectedReward = await getReward(oneEWT.mul(1), totalStaked);
       expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
+
+      const allRedeemedRewardsAfter = await asPatron2.allRedeemedRewards();
+
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
+
+      const patronBalance = await asPatron2.getDeposit();
+      const bonus = ethers.utils.parseEther(Number(patronBalance.toString()) / 10);
+
+      expect(allRedeemedRewardsAfter).to.equal(allRedeemedRewardsBefore + bonus);
+
     });
     
     it('Can withdraw all funds after end date', async () => {
@@ -644,11 +661,25 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       // } = await loadFixture(
       //   defaultFixture,
       // );
-      tx = await initializeContract(asOwner2, start, end, hardCap, contributionLimit, signupStart, signupEnd, minRequiredStake);
+      const newStart = Number(DateTime.now().plus({days: 14}).toSeconds().toFixed(0));
+      const newEnd = Number(DateTime.fromSeconds(newStart).plus({year: 1}).toSeconds().toFixed(0));
+      const stakingPeriod =  Number(DateTime.now().toSeconds().toFixed(0));
+      const lockPeriod = Number(DateTime.fromSeconds(newStart).minus({day: 1}).toSeconds().toFixed(0));
+
+      /*==  newContract initialization ==*/
+      tx = await initializeContract(asOwner2, newStart, newEnd, hardCap, contributionLimit, stakingPeriod, lockPeriod, minRequiredStake);
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
   
-      await expect(tx).to.emit(cancelledContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
+      await expect(tx).to.emit(cancelledContract, 'StakingPoolInitialized').withArgs(timestamp, newStart, newEnd);
+
+
+    //   await expect(
+    //     tx = await asPatron5.stake({
+    //          value: oneEWT.mul(4)
+    //      }),
+    //  ).changeEtherBalance(asPatron5, oneEWT.mul(4));
+    
     });
 
     it("fails terminating campaign if non owner tries to terminate", async () => {

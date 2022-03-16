@@ -266,7 +266,9 @@ contract Staking is ERC20Burnable {
     }
     
     function redeem(uint256 _amount) public notPaused withdrawsAllowed sufficientBalance(_amount) {
-        uint256 toWithdraw = _getRewards(_amount);
+        (uint256 toWithdraw, uint256 bonus) = _getRewards(_amount);
+        allRedeemedRewards += bonus;
+
         _burn(_msgSender(), _amount);
         totalStaked -= _amount;
         stakes[msg.sender] -= _amount;
@@ -280,20 +282,21 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function _getRewards(uint256 _amount) internal returns(uint256 reward){
+    function _getRewards(uint256 _amount) internal view returns(uint256 reward, uint256 bonus){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0 && _amount != 0){ 
             uint256 interests = _amount * 1e2;
+            bonus = interests / 1e3;
             reward = interests / 1e3 + _amount;
-            allRedeemedRewards += interests / 1e3;
         } else {
             reward = _amount;
         }
         
     }
 
-    function getRewards() external notPaused returns (uint256){
-        return _getRewards(balanceOf(msg.sender));
+    function getRewards() external view notPaused returns (uint256){
+        (uint256 rewards, ) = _getRewards(balanceOf(msg.sender));
+        return rewards;
     }
 }
