@@ -9,7 +9,7 @@ contract Staking is ERC20Burnable {
     uint256 public hardCap;
     uint256 public endDate;
     uint256 public totalRewards;
-    uint256 public remainingRewards;
+    uint256 public allRedeemedRewards;
     uint256 public signupEnd;
     uint256 public startDate;
     uint256 public signupStart;
@@ -194,12 +194,11 @@ contract Staking is ERC20Burnable {
         require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not allowed to sweep");
         require(!sweeped, "Already sweeped");
 		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
-
-		uint256 payout = remainingRewards;
+		uint256 remainingRewards = totalStaked - allRedeemedRewards;
 
 		sweeped = true;
 
-		payable(rewardProvider).transfer(payout);
+		payable(rewardProvider).transfer(remainingRewards);
     }
 
     function getContractStatus() external view returns(bool _isContractInitialized, bool _isContractPaused, bool _isContractAborted){
@@ -287,7 +286,7 @@ contract Staking is ERC20Burnable {
         if (!aborted && totalRewards != 0 && _amount != 0){ 
             uint256 interests = _amount * 1e2;
             reward = interests / 1e3 + _amount;
-            remainingRewards = totalRewards - interests;
+            allRedeemedRewards += interests / 1e3;
         } else {
             reward = _amount;
         }
