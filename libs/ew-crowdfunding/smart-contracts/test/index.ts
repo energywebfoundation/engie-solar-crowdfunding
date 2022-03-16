@@ -573,11 +573,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('can check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
-      const totalStaked = await asPatron2.totalStaked();
       const expectedReward = await getReward(asPatron2, balance);
       const patronReward = (await asPatron2.getRewards());
-      const patronBalance = await asPatron2.getDeposit();
-      // console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString()));
       // const allRedeemedRewards = await asPatron2.allRedeemedRewards();
       // console.log("allRedeemedRewards >> ", ethers.utils.parseEther(allRedeemedRewards.toString()));
       // const bonus = ethers.utils.parseEther(patronBalance.toString()) / 10;
@@ -607,7 +604,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await timeTravel(provider, end);
       const allRedeemedRewardsBefore = await asPatron2.allRedeemedRewards();
       let tx;
-      const totalStaked = await asPatron2.totalStaked()
       const expectedReward = await getReward(asPatron2, oneEWT.mul(1));
       expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
 
@@ -618,21 +614,24 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
 
       const patronBalance = await asPatron2.getDeposit();
-      const bonus = ethers.utils.parseEther(Number(patronBalance.toString()) / 10);
-
-      expect(allRedeemedRewardsAfter).to.equal(allRedeemedRewardsBefore + bonus);
-
+      const bonus = patronBalance.div(10);
+      const calculatedReward = allRedeemedRewardsBefore.add(bonus)
+      expect(allRedeemedRewardsAfter).to.equal(calculatedReward);
     });
     
     it('Can withdraw all funds after end date', async () => {
       let tx;
       const patronBalance = await asPatron2.balanceOf(patron2.address);
-      const totalStaked = await asPatron2.totalStaked()
       const expectedReward = await getReward(asPatron2, patronBalance);
+      const allRedeemedRewardsBefore = await asPatron2.allRedeemedRewards();
       expect(tx = await asPatron2.redeemAll()).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
+      const allRedeemedRewardsAfter = await asPatron2.allRedeemedRewards();
+      const bonus = patronBalance.div(10);
+      const calculatedReward = allRedeemedRewardsBefore.add(bonus)
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
+      expect(allRedeemedRewardsAfter).to.equal(calculatedReward);
     });
 
     it('fails when not enrolled user tries to withdraw', async () => {
