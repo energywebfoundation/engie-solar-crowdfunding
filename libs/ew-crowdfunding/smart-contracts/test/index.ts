@@ -78,9 +78,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   const contributionLimit = oneEWT.mul(200);
   const minRequiredStake = oneEWT.div(2);
 
-  const getReward = async (amount : BigNumber, totalStaked : BigNumber) => {
+  const getReward = async (patron: Staking, amount : BigNumber) => {
     let finalReward: BigNumber;
-    const totalRewards = await asPatron.totalRewards()
+    const totalRewards = await patron.totalRewards()
 
     if (totalRewards){
       const interests = (amount.mul(10).div(100));
@@ -573,17 +573,17 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('can check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
-      const totalStaked = await asPatron2.totalStaked()
-      const expectedReward = await getReward(balance, totalStaked);
+      const totalStaked = await asPatron2.totalStaked();
+      const expectedReward = await getReward(asPatron2, balance);
       const patronReward = (await asPatron2.getRewards());
       const patronBalance = await asPatron2.getDeposit();
-      const allRedeemedRewards = await asPatron2.allRedeemedRewards();
-      const bonus = ethers.utils.parseEther(patronBalance.toString) / 10;
-      console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString))
-      console.log("bonus >> ", bonus)
+      // console.log("Formated Balance >> ", ethers.utils.parseEther(patronBalance.toString()));
+      // const allRedeemedRewards = await asPatron2.allRedeemedRewards();
+      // console.log("allRedeemedRewards >> ", ethers.utils.parseEther(allRedeemedRewards.toString()));
+      // const bonus = ethers.utils.parseEther(patronBalance.toString()) / 10;
+      // console.log("bonus >> ", bonus);
       expect(patronReward).to.equal(expectedReward);
-      expect(allRedeemedRewards).to.equal(expectedReward);
-
+      // expect(allRedeemedRewards).to.equal(expectedReward);
     });
 
     it('Should return 0 if user checks rewards without shares', async () => {
@@ -608,7 +608,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const allRedeemedRewardsBefore = await asPatron2.allRedeemedRewards();
       let tx;
       const totalStaked = await asPatron2.totalStaked()
-      const expectedReward = await getReward(oneEWT.mul(1), totalStaked);
+      const expectedReward = await getReward(asPatron2, oneEWT.mul(1));
       expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
 
       const allRedeemedRewardsAfter = await asPatron2.allRedeemedRewards();
@@ -628,7 +628,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       let tx;
       const patronBalance = await asPatron2.balanceOf(patron2.address);
       const totalStaked = await asPatron2.totalStaked()
-      const expectedReward = await getReward(patronBalance, totalStaked);
+      const expectedReward = await getReward(asPatron2, patronBalance);
       expect(tx = await asPatron2.redeemAll()).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
