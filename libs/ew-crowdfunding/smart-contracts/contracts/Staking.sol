@@ -183,10 +183,10 @@ contract Staking is ERC20Burnable {
         require(block.timestamp <= endDate, "Error: canceling after campaign");
 		uint256 payout = totalRewards;
         aborted = true;
+        deleteParameters();
         if (payout != 0){
 		    payable(rewardProvider).transfer(payout);
         }
-        deleteParameters();
         emit CampaignAborted(block.timestamp);
     }
 
@@ -281,7 +281,7 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function _getRewards(uint256 _amount) internal view returns(uint256 reward){
+    function _getRewards(uint256 _amount) internal returns(uint256 reward){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0 && _amount != 0){ 
