@@ -30,6 +30,7 @@ let contractAddress: string;
 let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
+let cancelledContract : Staking;
 
 const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
@@ -54,19 +55,17 @@ const initializeContract = async (
     signupEnd : number,
     minRequiredStake: BigNumber,
   ) : Promise<ContractTransaction> => {
-
-    const duration = 3600 * 24 * 30;
-    const fullStop = Number(DateTime.fromSeconds(end).plus({months: 3}).toSeconds().toFixed(0));
-   const transaction =  await contract.init(
-    signupStart,
-    signupEnd,
-    start,
-    end,
-    fullStop,
-    hardCap,
-    contributionLimit,
-    minRequiredStake
-    );
+const fullStop = Number(DateTime.fromSeconds(end).plus({months: 3}).toSeconds().toFixed(0));
+const transaction =  await contract.init(
+  signupStart,
+  signupEnd,
+  start,
+  end,
+  fullStop,
+  hardCap,
+  contributionLimit,
+  minRequiredStake
+);
 
     return transaction;
 }
@@ -226,6 +225,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     signupStart = params.signupStart;
     notEnrolled = params.notEnrolled;
     asNotEnrolled = params.asNotEnrolled;
+    cancelledContract = params.cancelledContract;
     contractAddress = params.contractAddress;
     stakingContract = params.stakingContract;
   })

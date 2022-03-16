@@ -46,7 +46,18 @@ const initializeContract = async (
   signupEnd: number,
   minRequiredStake: BigNumber,
 ): Promise<ContractTransaction> => {
-  const transaction = await contract.init(signupStart, signupEnd, start, end, hardCap, contributionLimit, minRequiredStake);
+  const fullStop = Number(DateTime.fromSeconds(end).plus({months: 3}).toSeconds().toFixed(0));
+
+  const transaction = await contract.init(
+    signupStart,
+    signupEnd,
+    start,
+    end,
+    fullStop,
+    hardCap,
+    contributionLimit,
+    minRequiredStake
+  );
 
   return transaction;
 };
