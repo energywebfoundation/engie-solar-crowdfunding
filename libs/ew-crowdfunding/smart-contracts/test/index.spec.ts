@@ -591,18 +591,24 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
 
     it('Should partially withdraw funds after end date', async () => {
+      // let tx = await asOwner.getDeposit();
+
       //Moving to endDate
-      await timeTravel(provider, end);
+      console.log("Time Traveling to end:: ", end)
+      const { blockNumber } = await tx.wait();
+      const { timestamp } = await provider.getBlock(blockNumber);
+      const afterEnd = end - timestamp + 42000;
+      await timeTravel(provider, afterEnd);
       const allRedeemedRewardsBefore = await asPatron2.allRedeemedRewards();
-      let tx;
       const expectedReward = await getReward(asPatron2, oneEWT.mul(1));
       expect(tx = await asPatron2.redeem(oneEWT)).changeEtherBalance(asPatron2, (expectedReward.mul(-1)));
 
       const allRedeemedRewardsAfter = await asPatron2.allRedeemedRewards();
 
-      const { blockNumber } = await tx.wait();
-      const { timestamp } = await provider.getBlock(blockNumber);
-      await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
+      const _blockNumber = (await tx.wait()).blockNumber;
+      const  _timestamp = (await provider.getBlock(_blockNumber)).timestamp;
+      console.log("Date on End :: ", _timestamp);
+      await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, _timestamp);
       const patronBalance = await asPatron2.getDeposit();
       const bonus = patronBalance.div(10);
       const calculatedReward = allRedeemedRewardsBefore.add(bonus)
@@ -648,17 +654,16 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("[Before Sweeping] Release Date >> ", endDate, new Date(endDate).toLocaleString());
       
       expect(endDate).to.be.lessThan(StopDate);
-      
-      await expect(tx = await asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
-      await expect(asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
-      const { blockNumber } = await tx.wait();
-      const { timestamp } = await provider.getBlock(blockNumber);
-      console.log("Block Number >> ", blockNumber);
-      console.log(" [Before Sweeping] : Time ", timestamp);
-      
+      // tx = await 
+      // await tx.wait();
+      expect(asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
     });
     
     it('Should fail when not allowed user tries to sweep contract after FullStop Date ', async () => {
+      const { blockNumber } = await tx.wait();
+      const { timestamp } = await provider.getBlock(blockNumber);
+      const afterFullstop = fullStop - timestamp + 42000;
+      await timeTravel(provider, afterFullstop);
       expect(asPatron.sweep()).to.be.revertedWith("Not allowed to sweep");
     });
 
@@ -666,7 +671,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("Total staked : ", ethers.utils.formatEther(await asOwner.totalStaked()))
       const beforSweap = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance Before sweep : ", beforSweap);
-      await expect(tx = await asOwner.sweep()).to.emit(stakingContract, "Swept");
+      expect(tx = await asOwner.sweep()).to.emit(stakingContract, "Swept");
       const {blockNumber} = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber)
       console.log("Sweep Time : ", timestamp);
