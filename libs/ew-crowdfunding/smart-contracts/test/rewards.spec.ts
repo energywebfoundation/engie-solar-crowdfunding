@@ -231,19 +231,19 @@ describe('[ Rewards calculation ] ', () => {
     });
 
     describe("\n + Testing campaign cancellation ", () => {
-      it("fails terminating campaign if non owner tries to terminate", async () => {
+      it("Should fail terminating campaign if non owner tries to terminate", async () => {
         await expect(asPatron.terminate()).to.be.revertedWith("Must be the admin");
       });
   
-      it("Can terminate campaign", async () => {
+      it("Should terminate campaign", async () => {
         await expect(asOwner.terminate()).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
       });
   
-      it('fails when patron tries to stake after campaign abortion', async () => {
+      it('Should fail when patron tries to stake after campaign abortion', async () => {
         await expect(asPatron.stake({value: oneEWT})).to.be.revertedWith('Campaign aborted');
       })
   
-      it('fails when service provider sends reward after campaign abortion', async () => {
+      it('Should fail when service provider sends reward after campaign abortion', async () => {
         await expect(asOwner.depositRewards({value: rewards})).revertedWith('Campaign aborted');
       });
   

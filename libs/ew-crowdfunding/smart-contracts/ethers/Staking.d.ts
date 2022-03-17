@@ -286,6 +286,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "RewardSent(address,uint256,uint256)": EventFragment;
     "StakingPoolInitialized(uint256,uint256,uint256)": EventFragment;
     "StatusChanged(string,uint256)": EventFragment;
+    "Swept(uint256,uint256)": EventFragment;
     "TokenBurnt(address,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "Withdrawn(address,uint256,uint256)": EventFragment;
@@ -298,6 +299,7 @@ interface StakingInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "RewardSent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakingPoolInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StatusChanged"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Swept"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "TokenBurnt"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Withdrawn"): EventFragment;
@@ -349,6 +351,10 @@ export type StakingPoolInitializedEvent = TypedEvent<
 
 export type StatusChangedEvent = TypedEvent<
   [string, BigNumber] & { statusType: string; date: BigNumber }
+>;
+
+export type SweptEvent = TypedEvent<
+  [BigNumber, BigNumber] & { _amount: BigNumber; _date: BigNumber }
 >;
 
 export type TokenBurntEvent = TypedEvent<
@@ -970,6 +976,22 @@ export class Staking extends BaseContract {
     ): TypedEventFilter<
       [string, BigNumber],
       { statusType: string; date: BigNumber }
+    >;
+
+    "Swept(uint256,uint256)"(
+      _amount?: null,
+      _date?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber],
+      { _amount: BigNumber; _date: BigNumber }
+    >;
+
+    Swept(
+      _amount?: null,
+      _date?: null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber],
+      { _amount: BigNumber; _date: BigNumber }
     >;
 
     "TokenBurnt(address,uint256,uint256)"(

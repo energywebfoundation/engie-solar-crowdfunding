@@ -5,7 +5,6 @@ import StakingContract from "../artifacts/contracts/Staking.sol/Staking.json";
 import { Wallet, utils, BigNumber, ContractTransaction } from "ethers";
 import { DateTime } from "luxon";
 import { abi } from '../artifacts/contracts/interfaces/IClaimManager.sol/IClaimManager.json';
-import { timeStamp } from "console";
 
 use(solidity);
 let end : number;
@@ -15,13 +14,12 @@ let owner : Wallet;
 let patron2: Wallet;
 let patron3: Wallet;
 let patron4: Wallet;
+let fullStop : number;
 let asOwner : Staking;
-let asOwner2 : Staking;
 let asPatron : Staking;
 let asPatron2: Staking;
 let asPatron3: Staking;
 let asPatron4: Staking;
-let asPatron5: Staking;
 let signupEnd : number;
 let notEnrolled: Wallet;
 let signupStart : number;
@@ -30,7 +28,6 @@ let contractAddress: string;
 let provider : MockProvider;
 let tx: ContractTransaction;
 let stakingContract: Staking;
-let cancelledContract : Staking;
 
 const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
@@ -45,18 +42,24 @@ const timeTravel = async (provider: MockProvider, seconds: number) => {
   await provider.send("evm_mine", []);
 };
 
+const getTimestamp = async (transaction : ContractTransaction) => {
+  const { blockNumber } = await transaction.wait();
+  const { timestamp } = await provider.getBlock(blockNumber);
+  return timestamp;
+}
+
 const initializeContract = async (
     contract : Staking,
     start : number,
     end : number,
+    fullStop : number,
     hardCap : BigNumber,
     contributionLimit : BigNumber,
     signupStart : number,
     signupEnd : number,
     minRequiredStake: BigNumber,
   ) : Promise<ContractTransaction> => {
-const fullStop = Number(DateTime.fromSeconds(end).plus({months: 3}).toSeconds().toFixed(0));
-const transaction =  await contract.init(
+ const transaction =  await contract.init(
   signupStart,
   signupEnd,
   start,
@@ -99,21 +102,13 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   ) {
     //set endDate 1 year ahead
     const end = Number(DateTime.fromSeconds(start).plus({year: 1}).toSeconds().toFixed(0));
+    const fullStop = Number(DateTime.fromSeconds(end).plus({months: 6}).toSeconds().toFixed(0));
     const claimManagerMocked = await deployMockContract(owner, claimManagerABI);
     console.log('[ MOCKED ClaimManager address ] >> ', claimManagerMocked.address);
     console.log('Patron Role >> ', patronRole);
     console.log('Service Provider Role >> ', serviceProviderRole);
     const rewardProvider = owner.address;
     const stakingContract = (await deployContract(owner, StakingContract, [
-      claimManagerMocked.address,
-      rewardProvider,
-      serviceProviderRole,
-      patronRole,
-      tokenName,
-      tokenSymbol
-    ])) as Staking;
-
-    const cancelledContract = (await deployContract(owner, StakingContract, [
       claimManagerMocked.address,
       rewardProvider,
       serviceProviderRole,
@@ -172,22 +167,20 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       patron4,
       provider,
       hardCap,
+      fullStop,
       signupEnd,
       signupStart,
       notEnrolled,
       stakingContract,
-      cancelledContract,
       contributionLimit,
       claimManagerMocked,
       minRequiredStake,
       asOwner: stakingContract.connect(owner),
-      asOwner2: cancelledContract.connect(owner),
       contractAddress: stakingContract.address,
       asPatron: stakingContract.connect(patron),
       asPatron2: stakingContract.connect(patron2),
       asPatron3: stakingContract.connect(patron3),
       asPatron4: stakingContract.connect(patron4),
-      asPatron5: cancelledContract.connect(patron5),
       asNotEnrolled: stakingContract.connect(notEnrolled),
     };
   }
@@ -197,12 +190,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     return fixture(start, wallets, provider);
   }
-
-  // async function cancellationFixture(wallets: Wallet[], provider: MockProvider) {
-  //   const start = Number(DateTime.now().plus({days: 14}).toSeconds().toFixed(0));
-
-  //   return fixture(start, wallets, provider);
-  // }
 
   before(async () => {
     const params = await loadFixture(defaultFixture);
@@ -214,18 +201,16 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     patron3 = params.patron3;
     patron4 = params.patron4;
     asOwner = params.asOwner;
-    asOwner2 = params.asOwner2;
+    fullStop = params.fullStop;
     asPatron = params.asPatron;
     provider = params.provider;
     asPatron2 = params.asPatron2;
     asPatron3 = params.asPatron3;
     asPatron4 = params.asPatron4;
-    asPatron5 = params.asPatron5;
     signupEnd = params.signupEnd;
     signupStart = params.signupStart;
     notEnrolled = params.notEnrolled;
     asNotEnrolled = params.asNotEnrolled;
-    cancelledContract = params.cancelledContract;
     contractAddress = params.contractAddress;
     stakingContract = params.stakingContract;
   })
@@ -238,6 +223,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           asPatron,
           start,
           end,
+          fullStop,
           hardCap,
           contributionLimit,
           signupStart,
@@ -257,6 +243,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
             asOwner,
             wrongStart,
             end,
+            fullStop,
             hardCap,
             contributionLimit,
             signupStart,
@@ -273,6 +260,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           asOwner,
           start,
           end,
+          fullStop,
           hardCap,
           contributionLimit,
           signupEnd, // Inversion of signup End and signup start (end < start)
@@ -284,6 +272,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           asOwner,
           start,
           end,
+          fullStop,
           hardCap,
           contributionLimit,
           signupStart,
@@ -306,6 +295,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           asOwner,
           start,
           end,
+          fullStop,
           wrongHardCap,
           wrongContributionLimit,
           signupStart,
@@ -322,13 +312,22 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           hardCap,
           provider,
           stakingContract,
-          cancelledContract,
           contributionLimit,
           minRequiredStake
         } = await loadFixture(
           defaultFixture,
         );
-        tx = await initializeContract(asOwner, start, end, hardCap, contributionLimit, signupStart, signupEnd, minRequiredStake);
+        tx = await initializeContract(
+          asOwner,
+          start,
+          end,
+          fullStop,
+          hardCap,
+          contributionLimit,
+          signupStart,
+          signupEnd,
+          minRequiredStake
+        );
         const { blockNumber } = await tx.wait();
         const { timestamp } = await provider.getBlock(blockNumber);
     
@@ -373,7 +372,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       ).changeEtherBalance(asPatron, oneEWT.mul(3));
       expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(3));
       await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
-      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(3), timeStamp);
+      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(3), await getTimestamp(_tx));
     });
 
     it('fails when not enrolled user tries to stake', async () => {
@@ -481,7 +480,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
       it("Can Pause contract", async () => {
         tx = await asOwner.pause();
-        await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
+        await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', await getTimestamp(tx));
       });
 
       it("should correctly retrieve contract status", async () => {
@@ -511,7 +510,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       });
   
       it("Can unPause contract", async () => {
-        await expect(asOwner.unPause()).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
+        tx = await asOwner.unPause();
+        await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', await getTimestamp(tx));
         const [_isContractInitialized, _isContractPaused, _isContractAborted] =  await asOwner.getContractStatus();
         expect([_isContractInitialized, _isContractPaused, _isContractAborted]).to.eqls([true, false, false]);
 
@@ -537,7 +537,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   })
 
   describe("\n+ Testing interactions on activated contract (after startDate and before endDate)", () => {
-    it('fails when trying to stake after startDate', async () => {
+    it('Should fail when trying to stake after startDate', async () => {
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
       const afterStart = start - timestamp + 42000;
@@ -547,31 +547,27 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       ).to.be.revertedWith('Signup Ended');
     });
     
-    it('fails when non service provider sends reward on inactive contract', async () => {
+    it('Should fail when non service provider sends reward on inactive contract', async () => {
       await expect(asPatron.depositRewards({value: rewards})).revertedWith('Not enrolled as service provider');
     });
 
-    it('fails when providing not enough rewards on inactive contract', async () => {
+    it('Should fail when providing not enough rewards on inactive contract', async () => {
       await expect(asOwner.depositRewards({value: oneEWT.mul(100)})).revertedWith('Not Enough rewards');
     });
     
-    it('can receive rewards when contract is activated', async () => {
-      const getTimestamp = async (transaction : ContractTransaction) => {
-        const { blockNumber } = await transaction.wait();
-        const { timestamp } = await provider.getBlock(blockNumber);
-        return timestamp;
-      }
+    it('Should receive rewards when contract is activated', async () => {
+      
       expect(tx = await asOwner.depositRewards({
         value: rewards
       })).to.emit(stakingContract, 'RewardSent').withArgs(owner.address, rewards, await getTimestamp(tx));
       await expect(tx).changeEtherBalance(asOwner, rewards);
     });
     
-    it('fails when depositing reward more than once', async () => {
+    it('Should fail when depositing reward more than once', async () => {
       await expect(asOwner.depositRewards({value: rewards})).revertedWith('Already funded');
     })
 
-    it('can check rewards of users', async () => {
+    it('Should check rewards of users', async () => {
       const balance = await asPatron2.balanceOf(patron2.address);
       const expectedReward = await getReward(asPatron2, balance);
       const patronReward = (await asPatron2.getRewards());
@@ -582,19 +578,19 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(await asPatron.getRewards()).to.eq(0);
     });
 
-    it('fails when trying to withdraw partially after startDate and before end', async () => {
+    it('Should fail when trying to withdraw partially after startDate and before end', async () => {
       await expect(
         asPatron2.redeem(oneEWT.mul(1))
       ).to.be.revertedWith('Withdraws not allowed');
     });
 
-    it('fails when trying to unstake all funds after startDate and before end', async () => {
+    it('Should fail when trying to unstake all funds after startDate and before end', async () => {
       await expect(
         asPatron2.redeemAll()
       ).to.be.revertedWith('Withdraws not allowed');
     });
 
-    it('Can partially withdraw funds after end date', async () => {
+    it('Should partially withdraw funds after end date', async () => {
       //Moving to endDate
       await timeTravel(provider, end);
       const allRedeemedRewardsBefore = await asPatron2.allRedeemedRewards();
@@ -607,14 +603,13 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron2.address, expectedReward, timestamp);
-
       const patronBalance = await asPatron2.getDeposit();
       const bonus = patronBalance.div(10);
       const calculatedReward = allRedeemedRewardsBefore.add(bonus)
       expect(allRedeemedRewardsAfter).to.equal(calculatedReward);
     });
     
-    it('Can withdraw all funds after end date', async () => {
+    it('Should withdraw all funds after end date', async () => {
       let tx;
       const patronBalance = await asPatron2.balanceOf(patron2.address);
       const expectedReward = await getReward(asPatron2, patronBalance);
@@ -629,14 +624,63 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(allRedeemedRewardsAfter).to.equal(calculatedReward);
     });
 
-    it('fails when not enrolled user tries to withdraw', async () => {
+    it('Should fail when not enrolled user tries to withdraw', async () => {
       await asPatron3.approve(owner.address, oneEWT)
       await asOwner.transferFrom(patron3.address, notEnrolled.address, oneEWT.div(2));
       await expect(asNotEnrolled.redeemAll()).to.be.revertedWith('No patron role');
     });
 
-    it('fails when service provider sends reward after endDate', async () => {
+    it('Should fail when service provider sends reward after endDate', async () => {
       await expect(asOwner.depositRewards({value: rewards})).revertedWith('Contract not activated');
     });
+
+    it("Should fail when trying to terminate campaign after release date", async () => {
+      await expect(asOwner.terminate()).revertedWith('Error: canceling after campaign');
+    });
   });
+
+  describe("\n+ Testing sweeping", () => {
+    
+    it('Should fail when trying to sweep before FullStop Date ', async () => {
+      const endDate = (await asOwner.endDate()).toNumber() * 1000
+      const StopDate = (await asOwner.fullStopDate()).toNumber() * 1000
+      console.log("[Before Sweeping] FullStop Date >> ", StopDate, new Date(StopDate).toLocaleString());
+      console.log("[Before Sweeping] Release Date >> ", endDate, new Date(endDate).toLocaleString());
+      
+      expect(endDate).to.be.lessThan(StopDate);
+      
+      await expect(tx = await asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
+      await expect(asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
+      const { blockNumber } = await tx.wait();
+      const { timestamp } = await provider.getBlock(blockNumber);
+      console.log("Block Number >> ", blockNumber);
+      console.log(" [Before Sweeping] : Time ", timestamp);
+      
+    });
+    
+    it('Should fail when not allowed user tries to sweep contract after FullStop Date ', async () => {
+      expect(asPatron.sweep()).to.be.revertedWith("Not allowed to sweep");
+    });
+
+    it('Should sweep remaining funds', async () => {
+      console.log("Total staked : ", ethers.utils.formatEther(await asOwner.totalStaked()))
+      const beforSweap = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
+      console.log("Balance Before sweep : ", beforSweap);
+      await expect(tx = await asOwner.sweep()).to.emit(stakingContract, "Swept");
+      const {blockNumber} = await tx.wait();
+      const { timestamp } = await provider.getBlock(blockNumber)
+      console.log("Sweep Time : ", timestamp);
+      const afterSweap = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
+      console.log("Balance After sweep : ", afterSweap);
+      const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
+      console.log("Swept >> ", remainingReward);
+      expect(afterSweap).to.be.greaterThan(beforSweap);
+      expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);
+    })
+
+    it('Should fail when trying to sweep more than once', async () => {
+      expect(asOwner.sweep()).to.be.revertedWith("Already sweeped");
+    })
+
+  })
 });

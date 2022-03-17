@@ -38,6 +38,7 @@ contract Staking is ERC20Burnable {
     event TokenBurnt(address _user, uint256 _amout, uint256 _timestamp);
     event RefundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
+    event Swept(uint256 _amount, uint256 _date);
 
     modifier initialized(){
         require(isContractInitialized, "Not initialized");
@@ -193,12 +194,13 @@ contract Staking is ERC20Burnable {
     function sweep() external {
         require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not allowed to sweep");
         require(!sweeped, "Already sweeped");
-		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
+		// require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
 		uint256 remainingRewards = totalStaked - allRedeemedRewards;
 
 		sweeped = true;
 
 		payable(rewardProvider).transfer(remainingRewards);
+        emit Swept(remainingRewards, block.timestamp);
     }
 
     function getContractStatus() external view returns(bool _isContractInitialized, bool _isContractPaused, bool _isContractAborted){
