@@ -38,7 +38,7 @@ import {
   getFinalStopDate,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
-import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { useContractStatus } from '../../context/hooks';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -48,18 +48,13 @@ export const useLendingDetailsEffects = () => {
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
+  const contractStatus = useContractStatus();
 
   useEffect(() => {
     if (propertyExists(provider)) {
-      const signer = provider?.getSigner();
-      const stakingContract = Staking__factory.connect(deployedAddress, signer);
-      const eventsStatusChanged = stakingContract.filters.StatusChanged(null, null);
-      const eventsCampaignAborted = stakingContract.filters.CampaignAborted(null);
-      if (eventsStatusChanged || eventsCampaignAborted) {
-        dispatch(getContractStatus(provider));
-      }
+      dispatch(getContractStatus(provider));
     }
-  }, [provider, dispatch]);
+  }, [contractStatus, provider, dispatch]);
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 

@@ -52,6 +52,7 @@ const getInitParams = async (_deployedContract : typeof Contract) => {
     const signupEnd = (formatDate(process.env.SIGNUP_END) || getDate("signupEnd")) as number;
     const startDate = (formatDate(process.env.START_DATE) || getDate("Start")) as number;
     const endDate = (formatDate(process.env.END_DATE) || getDate("End")) as number;
+    const fullStopDate = (formatDate(process.env.FULL_STOP) || getDate("fullStopDate")) as number;
     const hardCap = (process.env.HARDCAP || getEWTAmount("hardCap", ":moneybag:")) as number;
     const contributionLimit = (process.env.CONTRIBUTION_LIMIT || getEWTAmount("contributionLimit", ":lock:")) as number;
     const minRequiredStake = (process.env.MIN_REQUIRED_STAKE || getEWTAmount("minRequiredStake", ":arrow_heading_up:")) as number;
@@ -61,6 +62,7 @@ const getInitParams = async (_deployedContract : typeof Contract) => {
         startDate,
         signupEnd,
         signupStart,
+        fullStopDate,
         minRequiredStake,
         contributionLimit,
     }
@@ -75,6 +77,7 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
         startDate,
         signupEnd,
         signupStart,
+        fullStopDate,
         minRequiredStake,
         contributionLimit,
     } = await getInitParams(_deployedContract);
@@ -86,6 +89,7 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
             Signup end = ${new Date(signupStart * 1000)} (unix timestamp)
             Start Date = ${new Date(signupStart * 1000)} (unix timestamp)
             End Date = ${new Date(signupStart * 1000)} (unix timestamp)
+            Full Stop Date = ${new Date(fullStopDate * 1000)} (unix timestamp)
             HardCap = ${hardCap} wei
             Contribution Limit = ${contributionLimit} wei
             Minimum required stake = ${minRequiredStake} wei
@@ -106,6 +110,7 @@ const initializeContract = async (_deployedContract : typeof Contract) => {
         signupEnd,
         startDate,
         endDate,
+        fullStopDate,
         hardCap,
         contributionLimit,
         minRequiredStake,

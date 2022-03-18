@@ -188,6 +188,7 @@ contract Staking is ERC20Burnable {
         if (payout != 0){
 		    payable(rewardProvider).transfer(payout);
         }
+        emit StatusChanged("campaignAborted", block.timestamp);
         emit CampaignAborted(block.timestamp);
     }
 
@@ -297,7 +298,7 @@ contract Staking is ERC20Burnable {
         
     }
 
-    function getRewards() external view notPaused returns (uint256){
+    function getRewards() external view returns (uint256){
         (uint256 rewards, ) = _getRewards(balanceOf(msg.sender));
         return rewards;
     }
