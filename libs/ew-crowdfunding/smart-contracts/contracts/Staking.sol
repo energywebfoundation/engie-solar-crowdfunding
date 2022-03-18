@@ -6,24 +6,24 @@ import "./interfaces/IClaimManager.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 contract Staking is ERC20Burnable {
+    bool public sweeped;
+    bool private aborted;
+    address private owner;
     uint256 public hardCap;
     uint256 public endDate;
-    uint256 public totalRewards;
-    uint256 public allRedeemedRewards;
     uint256 public signupEnd;
     uint256 public startDate;
+    bytes32 public patronRole;
     uint256 public signupStart;
-    uint256 public fullStopDate;
     uint256 public totalStaked;
     bytes32 public serviceRole;
-    bytes32 public patronRole;
-    address private owner;
-    address private rewardProvider;
-    uint256 public contributionLimit;
-    bool private aborted;
-    bool public sweeped;
+    uint256 public totalRewards;
+    uint256 public fullStopDate;
     bool private contractFunded;
     bool private isContractPaused;
+    address private rewardProvider;
+    uint256 public contributionLimit;
+    uint256 public allRedeemedRewards;
     bool private isContractInitialized;
     address public claimManagerAddress;
     uint256 public minRequiredStake;
@@ -46,7 +46,7 @@ contract Staking is ERC20Burnable {
     }
 
     modifier activated(){
-        require(block.timestamp > startDate && block.timestamp < endDate, "Contract not activated");
+        require(block.timestamp >= startDate && block.timestamp < endDate, "Contract not activated");
         _;
     }
    
