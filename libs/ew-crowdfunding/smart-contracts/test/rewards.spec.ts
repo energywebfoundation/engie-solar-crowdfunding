@@ -236,7 +236,9 @@ describe('[ Rewards calculation ] ', () => {
       });
   
       it("Should terminate campaign", async () => {
-        await expect(asOwner.terminate()).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
+        const tx = await asOwner.terminate();
+        await expect(tx).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
+        await expect(tx).to.emit(stakingContract, "StatusChanged").withArgs("campaignAborted", timeStamp);
       });
   
       it('Should fail when patron tries to stake after campaign abortion', async () => {
