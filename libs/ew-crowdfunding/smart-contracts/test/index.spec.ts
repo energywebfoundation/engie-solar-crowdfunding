@@ -591,7 +591,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
 
     it('Should partially withdraw funds after end date', async () => {
-      // let tx = await asOwner.getDeposit();
 
       //Moving to endDate
       console.log("Time Traveling to end:: ", new Date(end * 1000))
@@ -654,7 +653,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("[Before Sweeping] FullStop Date >> ", fullStopDate, new Date(fullStopDate * 1000));
       
       expect(endDate).to.be.lessThan(fullStopDate);
-      expect(asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
+      await expect(asOwner.sweep()).to.be.revertedWith("Cannot sweep before expiry");
     });
     
     it('Should fail when not allowed user tries to sweep contract after FullStop Date ', async () => {
@@ -662,14 +661,14 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const { timestamp } = await provider.getBlock(blockNumber);
       const afterFullstop = fullStop - timestamp + 42000;
       await timeTravel(provider, afterFullstop);
-      expect(asPatron.sweep()).to.be.revertedWith("Not allowed to sweep");
+      await expect(asPatron.sweep()).to.be.revertedWith("Not allowed to sweep");
     });
 
     it('Should sweep remaining funds', async () => {
       console.log("Total staked : ", ethers.utils.formatEther(await asOwner.totalStaked()))
       const beforeSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance Before sweep : ", beforeSweep);
-      expect(tx = await asOwner.sweep()).to.emit(stakingContract, "Swept");
+      tx = await asOwner.sweep()
       const {blockNumber} = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber)
       console.log("Sweep Time : ", timestamp);
@@ -678,7 +677,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
       console.log("Swept >> ", remainingReward);
       expect(afterSweep).to.be.greaterThan(beforeSweep);
-      expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);
+      await expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);
     })
 
     it('Should fail when trying to sweep more than once', async () => {
