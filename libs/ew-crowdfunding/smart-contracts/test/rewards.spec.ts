@@ -4,6 +4,7 @@ import { MockProvider, solidity, deployContract, loadFixture, deployMockContract
 import StakingContract from '../artifacts/contracts/Staking.sol/Staking.json';
 import { Wallet, utils, BigNumber, ContractTransaction } from 'ethers';
 import { DateTime } from 'luxon';
+import { timeStamp } from "console";
 import { abi } from '../artifacts/contracts/interfaces/IClaimManager.sol/IClaimManager.json';
 
 use(solidity);
@@ -46,7 +47,18 @@ const initializeContract = async (
   signupEnd: number,
   minRequiredStake: BigNumber,
 ): Promise<ContractTransaction> => {
-  const transaction = await contract.init(signupStart, signupEnd, start, end, hardCap, contributionLimit, minRequiredStake);
+  const fullStop = Number(DateTime.fromSeconds(end).plus({months: 3}).toSeconds().toFixed(0));
+
+  const transaction = await contract.init(
+    signupStart,
+    signupEnd,
+    start,
+    end,
+    fullStop,
+    hardCap,
+    contributionLimit,
+    minRequiredStake
+  );
 
   return transaction;
 };
@@ -193,7 +205,7 @@ describe('[ Rewards calculation ] ', () => {
              value: rewards,
            });
        
-           await timeTravel(provider, end);
+          //  await timeTravel(provider, end);
        
            const expectedReward = await asPatron.getRewards();
        
@@ -216,6 +228,44 @@ describe('[ Rewards calculation ] ', () => {
              return parseFloat((reward).toString());
            };
            expect(ethers.utils.formatEther(expectedReward)).to.eq(calculateReward().toString());
+    });
+
+    describe("\n + Testing campaign cancellation ", () => {
+      it("Should fail terminating campaign if non owner tries to terminate", async () => {
+        await expect(asPatron.terminate()).to.be.revertedWith("Must be the admin");
+      });
+  
+      it("Should terminate campaign", async () => {
+        const tx = await asOwner.terminate();
+        await expect(tx).to.emit(stakingContract, "CampaignAborted").withArgs(timeStamp);
+        await expect(tx).to.emit(stakingContract, "StatusChanged").withArgs("campaignAborted", timeStamp);
+      });
+  
+      it('Should fail when patron tries to stake after campaign abortion', async () => {
+        await expect(asPatron.stake({value: oneEWT})).to.be.revertedWith('Campaign aborted');
+      })
+  
+      it('Should fail when service provider sends reward after campaign abortion', async () => {
+        await expect(asOwner.depositRewards({value: rewards})).revertedWith('Campaign aborted');
+      });
+  
+      it ('should accept freezing on a cancelled contract', async () => {
+        const tx = await asOwner.pause();
+        await expect(tx).to.emit(stakingContract, 'StatusChanged').withArgs('contractPaused', timeStamp);
+      });
+  
+      it ('should fail on tokens withdrawals if a cancelled contract is frozen', async () => {
+        await expect(asPatron2.redeemAll()).to.be.revertedWith("Contract is frozen");
+      });
+  
+      it ('should accept unfreezing on a cancelled contract', async () => {
+        await expect(asOwner.unPause()).to.emit(stakingContract, 'StatusChanged').withArgs('contractUnpaused', timeStamp);
+      });
+  
+      it ('should allow tokens withdrawals if a cancelled contract is unfrozen', async () => {
+        expect(await asPatron2.balanceOf(patron2.address)).to.equal(oneEWT.mul(5))
+        expect(await asPatron2.redeemAll()).changeEtherBalance(asPatron2, (oneEWT.mul(-5)));
+      });
     });
 
   });

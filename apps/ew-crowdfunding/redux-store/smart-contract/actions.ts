@@ -239,12 +239,10 @@ export const getReleaseRewardsDate =
 export const getFinalStopDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    // const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    // CHANGE THIS TO FINAL STOP DATE AFTER IT IS IMPLEMENTED IN THE SMART CONTRACT
-    // const stopDate: number = +(await stakingContract.endDate()).toString();
-    // const finalStopDate = new Date(stopDate * 1000);
-    const finalStopDate =new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
-
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    const fullStopDate: number = +(await stakingContract.fullStopDate()).toString();
+    const finalStopDate = new Date(fullStopDate * 1000);
+    
     dispatch({
       type: SmartContractActionTypes.SET_FINAL_STOP_DATE,
       payload: finalStopDate,
