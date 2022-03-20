@@ -285,17 +285,17 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function _getRewards(uint256 _amount) internal view returns(uint256 reward, uint256 bonus){
+    function _getRewards(uint256 _amount) internal view returns(uint256, uint256){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0 && _amount != 0){ 
-            uint256 interests = _amount * 1e2;
-            bonus = interests / 1e3;
-            reward = _amount + bonus;
-        } else {
-            reward = _amount;
+            
+            //Bonus calculation
+            //Bonus = (_amount * 1e2) / 1e3 --> Bonus = _amount / 10
+            // we return (reward, bonus)
+            return (_amount + _amount / 10, _amount / 10);
         }
-        
+        return (_amount, 0);
     }
 
     function getRewards() external view returns (uint256){
