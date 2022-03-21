@@ -221,7 +221,7 @@ contract Staking is ERC20Burnable {
             uint256 overFlow_limit = msg.value - (contributionLimit - stakes[msg.sender]);
             uint256 toMint_limit = msg.value - overFlow_limit;
             //Check if we overflow from hardCap
-            if ((totalStaked + toMint_limit) >= hardCap){
+            if ((totalStaked + toMint_limit) > hardCap){
                 uint256 overFlow_hardCap = toMint_limit - (hardCap - totalStaked);
                 uint256 finalMint = toMint_limit - overFlow_hardCap;
                 
@@ -290,9 +290,10 @@ contract Staking is ERC20Burnable {
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0 && _amount != 0){ 
             
-            //Bonus calculation
-            //Bonus = (_amount * 1e2) / 1e3 --> Bonus = _amount / 10
-            // we return (reward, bonus)
+            /* Bonus calculation
+            *   Bonus = (_amount * 1e2) / 1e3 --> Bonus = _amount / 10
+            *  returns (reward, bonus)
+            */
             return (_amount + _amount / 10, _amount / 10);
         }
         return (_amount, 0);
