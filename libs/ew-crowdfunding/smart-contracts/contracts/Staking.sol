@@ -218,8 +218,9 @@ contract Staking is ERC20Burnable {
         require(hasRole(msg.sender, patronRole), "No patron role");
 
         if ((stakes[msg.sender] + msg.value >= contributionLimit)){
-            uint256 overFlow_limit = msg.value - (contributionLimit - stakes[msg.sender]);
-            uint256 toMint_limit = msg.value - overFlow_limit;
+
+            uint256 toMint_limit = contributionLimit - stakes[msg.sender];
+            uint256 overFlow_limit = msg.value - toMint_limit;
             //Check if we overflow from hardCap
             if ((totalStaked + toMint_limit) > hardCap){
                 uint256 overFlow_hardCap = toMint_limit - (hardCap - totalStaked);
@@ -240,7 +241,7 @@ contract Staking is ERC20Burnable {
                 refund(overFlow_limit);
             }
         } else { 
-            if (totalStaked + msg.value >= hardCap){
+            if (totalStaked + msg.value > hardCap){
 
                 uint256 overFlow_hardCap = msg.value - (hardCap - totalStaked);
                 uint256 finalMint = msg.value - overFlow_hardCap;
