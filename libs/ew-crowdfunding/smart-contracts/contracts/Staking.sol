@@ -218,10 +218,11 @@ contract Staking is ERC20Burnable {
         require(hasRole(msg.sender, patronRole), "No patron role");
 
         if ((stakes[msg.sender] + msg.value >= contributionLimit)){
-            uint256 overFlow_limit = msg.value - (contributionLimit - stakes[msg.sender]);
-            uint256 toMint_limit = msg.value - overFlow_limit;
+
+            uint256 toMint_limit = contributionLimit - stakes[msg.sender];
+            uint256 overFlow_limit = msg.value - toMint_limit;
             //Check if we overflow from hardCap
-            if ((totalStaked + toMint_limit) >= hardCap){
+            if ((totalStaked + toMint_limit) > hardCap){
                 uint256 overFlow_hardCap = toMint_limit - (hardCap - totalStaked);
                 uint256 finalMint = toMint_limit - overFlow_hardCap;
                 
@@ -240,7 +241,7 @@ contract Staking is ERC20Burnable {
                 refund(overFlow_limit);
             }
         } else { 
-            if (totalStaked + msg.value >= hardCap){
+            if (totalStaked + msg.value > hardCap){
 
                 uint256 overFlow_hardCap = msg.value - (hardCap - totalStaked);
                 uint256 finalMint = msg.value - overFlow_hardCap;
@@ -285,17 +286,18 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function _getRewards(uint256 _amount) internal view returns(uint256 reward, uint256 bonus){
+    function _getRewards(uint256 _amount) internal view returns(uint256, uint256){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0 && _amount != 0){ 
-            uint256 interests = _amount * 1e2;
-            bonus = interests / 1e3;
-            reward = _amount + bonus;
-        } else {
-            reward = _amount;
+            
+            /* Bonus calculation
+            *   Bonus = (_amount * 1e2) / 1e3 --> Bonus = _amount / 10
+            *  returns (reward, bonus)
+            */
+            return (_amount + _amount / 10, _amount / 10);
         }
-        
+        return (_amount, 0);
     }
 
     function getRewards() external view returns (uint256){

@@ -547,11 +547,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       ).to.be.revertedWith('Signup Ended');
     });
     
-    it('Should fail when non service provider sends reward on inactive contract', async () => {
+    it('Should fail when non service provider sends reward on active contract', async () => {
       await expect(asPatron.depositRewards({value: rewards})).revertedWith('Not enrolled as service provider');
     });
 
-    it('Should fail when providing not enough rewards on inactive contract', async () => {
+    it('Should fail when providing not enough rewards on active contract', async () => {
       await expect(asOwner.depositRewards({value: oneEWT.mul(100)})).revertedWith('Not Enough rewards');
     });
     
