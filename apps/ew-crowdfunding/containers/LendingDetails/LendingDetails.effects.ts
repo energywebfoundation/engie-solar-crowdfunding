@@ -56,7 +56,7 @@ export const useLendingDetailsEffects = () => {
     if (propertyExists(provider)) {
       dispatch(getContractStatus(provider));
     }
-  }, [contractStatus, provider, dispatch]);
+  }, [contractStatus, dispatch]);
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 
@@ -79,7 +79,7 @@ export const useLendingDetailsEffects = () => {
       dispatch(getRedeemableReward(provider));
       dispatch(getContractStatus(provider));
     }
-  }, [dispatch, authenticated, provider, currentAddress]);
+  }, []);
 
   const accountBalance = useSelector(selectAccountBalance);
   const tokenLimit = useSelector(selectTokenLimit);

@@ -16,11 +16,13 @@ export const useContractStatus = () => {
   const [contractState, setContractState] = useState<ContractState>();
   const stakingContract = Staking__factory.connect(deployedAddress, signer);
 
-  stakingContract.on('StatusChanged', (eventState: ContractState) => {
-    if (eventState !== contractState) {
-      setContractState(eventState);
-    }
-  });
+  if (provider && stakingContract) {
+    stakingContract?.on('StatusChanged', (eventState: ContractState) => {
+      if (eventState !== contractState) {
+        setContractState(eventState);
+      }
+    });
+  }
 
   return contractState;
 };

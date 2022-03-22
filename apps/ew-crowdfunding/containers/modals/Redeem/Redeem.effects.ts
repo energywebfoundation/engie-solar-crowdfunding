@@ -67,7 +67,6 @@ export const useRedeemEffects = () => {
 
   const onSubmit = async (data: { amount: number }) => {
     if (isRedeemAll) {
-      console.log('Calling redeem all');
       onRedeemAll();
     } else {
       onRedeem(data.amount);

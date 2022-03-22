@@ -24,8 +24,6 @@ export const Contact: FC = () => {
     finalStopDate,
   );
 
-  console.log('stakingMessage: ', stakingMessage)
-
   return (
     <Box py={5} className={classes.container}>
       <AppContainer>
