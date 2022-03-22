@@ -25,7 +25,7 @@ export const ProgressBar: FC<ProgressBardProps> = ({ value, limit, description, 
         color='primary'
       />
       <Typography variant='body2'>
-        {displayedProgress}% of {Number(limit)?.toLocaleString()} {description}
+        {displayedProgress?.toLocaleString()}% of {Number(limit)?.toLocaleString()} {description}
       </Typography>
     </Box>
   );

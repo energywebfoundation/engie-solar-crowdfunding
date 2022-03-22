@@ -1,16 +1,17 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from '../../../context';
 
 export const useRedeemEffects = () => {
   const {
-    redeem: { open, tokenBalance, onRedeem },
+    redeem: { open, tokenBalance, onRedeem, onRedeemAll },
   } = useDSLAModalsStore();
   const dispatchModals = useDSLAModalsDispatch();
 
   const amountWithdrawals = [25, 50, 75, 100];
+  const [isRedeemAll, setIsRedeemAll] = useState(false);
 
   const closeModal = () => {
     dispatchModals({
@@ -19,6 +20,7 @@ export const useRedeemEffects = () => {
         open: false,
         tokenBalance: null,
         onRedeem,
+        onRedeemAll,
       },
     });
   };
@@ -55,14 +57,21 @@ export const useRedeemEffects = () => {
     let redeemValue;
     if (amount === 100) {
       redeemValue = tokenBalance;
+      setIsRedeemAll(true);
     } else {
+      setIsRedeemAll(false);
       redeemValue = (tokenBalance * amount) / 100;
     }
     setValue('amount', redeemValue);
   };
 
   const onSubmit = async (data: { amount: number }) => {
-    onRedeem(data.amount);
+    if (isRedeemAll) {
+      console.log('Calling redeem all');
+      onRedeemAll();
+    } else {
+      onRedeem(data.amount);
+    }
     onReset();
   };
 

@@ -31,6 +31,9 @@ export const dslaModalsInitialState: IDSLAModalsStore = {
     onRedeem: (amount: number) => {
       return;
     },
+    onRedeemAll: () => {
+      return;
+    },
   },
   confirm: {
     open: false,
