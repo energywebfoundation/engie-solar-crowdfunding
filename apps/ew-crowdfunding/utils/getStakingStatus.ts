@@ -1,14 +1,14 @@
 import { StakingTimelineEnum } from './StakingTimelineEnum';
-import { useStakingTimeline } from './useStakingTimeline';
+import { getStakingTimeline } from './getStakingTimeline';
 
-export const useStakingStatus = () => {
-  const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
-  const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
-  const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
-  const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
-  const finalStopDate = new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
-
-  const stakingPeriod: StakingTimelineEnum = useStakingTimeline(
+export const getStakingStatus = (
+  activateStakingDate: Date,
+  closeStackingDate: Date,
+  lockStakesDate: Date,
+  releaseRewardsDate: Date,
+  finalStopDate: Date,
+) => {
+  const stakingPeriod: StakingTimelineEnum = getStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,

@@ -1,6 +1,6 @@
 import { StakingTimelineEnum } from './StakingTimelineEnum';
 
-export const useStakingTimeline = (
+export const getStakingTimeline = (
   activateStakingDate: Date,
   closeStackingDate: Date,
   lockStakesDate: Date,

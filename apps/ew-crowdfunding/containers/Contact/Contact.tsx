@@ -5,16 +5,26 @@ import { FC, useEffect, useState } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
-import { useStakingStatus } from '../../hooks';
+import { getStakingStatus } from '../../utils';
 
 export const Contact: FC = () => {
   const classes = useStyles();
-  const stakingMessage = useStakingStatus();
-  const [stackingStatus, setStackingStatus] = useState<string>(stakingMessage);
+  
+  const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
 
-  useEffect(() => {
-    setStackingStatus(stakingMessage);
-  }, [stakingMessage]);
+  const stakingMessage = getStakingStatus(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+    finalStopDate,
+  );
+
+  console.log('stakingMessage: ', stakingMessage)
 
   return (
     <Box py={5} className={classes.container}>
@@ -37,9 +47,9 @@ export const Contact: FC = () => {
               stefan.zelazny@engie.com.
             </a>
           </Typography>
-          {stackingStatus && (
+          {stakingMessage && (
             <Typography variant='h5' style={{ fontWeight: '600' }} mb={5} align='center'>
-              {stackingStatus}
+              {stakingMessage}
             </Typography>
           )}
           <Link href='/wallet'>

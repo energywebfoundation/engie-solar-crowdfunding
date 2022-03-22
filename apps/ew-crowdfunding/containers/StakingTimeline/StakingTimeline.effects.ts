@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux';
-import { useStakingTimeline, StakingTimelineEnum } from '../../hooks';
+import { getStakingTimeline, StakingTimelineEnum } from '../../utils';
 import {
   selectActivateStackingDate,
   selectContributionDeadline,
@@ -22,7 +22,7 @@ export const useStakingTimelineEffects = () => {
   const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
   const finalStopDate = new Date(useSelector(selectFinalStopDate));
 
-  const stakingPeriod: StakingTimelineEnum = useStakingTimeline(
+  const stakingPeriod: StakingTimelineEnum = getStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,

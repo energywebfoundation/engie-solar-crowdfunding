@@ -7,18 +7,25 @@ import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { shortenDid } from '../../utils';
 import Link from 'next/link';
-import { useStakingStatus } from '../../hooks';
+import { getStakingStatus } from '../../utils';
 
 export const Navigation = () => {
   const classes = useStyles();
-
   const { authenticated, did, avatar, logout } = useNavigationEffects();
-  const stakingMessage = useStakingStatus();
-  const [stackingStatus, setStackingStatus] = useState<string>(stakingMessage);
 
-  useEffect(() => {
-    setStackingStatus(stakingMessage);
-  }, [stakingMessage]);
+  const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
+
+  const stakingMessage = getStakingStatus(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+    finalStopDate,
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -31,14 +38,14 @@ export const Navigation = () => {
               </a>
             </Link>
           </Box>
-          {stackingStatus && (
+          {stakingMessage && (
             <Typography
               className={`${classes.toolbarMessage} gradient-text`}
               variant='h5'
               style={{ fontWeight: '600', textTransform: 'uppercase' }}
               align='center'
             >
-              {stackingStatus}
+              {stakingMessage}
             </Typography>
           )}
           {authenticated && (
