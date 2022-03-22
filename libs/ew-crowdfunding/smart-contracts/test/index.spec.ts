@@ -666,6 +666,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
 
     it('Should sweep remaining funds', async () => {
       console.log("Total staked : ", ethers.utils.formatEther(await asOwner.totalStaked()))
+      console.log("Total rewards : ", ethers.utils.formatEther(await asOwner.totalRewards()))
       const beforeSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance Before sweep : ", beforeSweep);
       tx = await asOwner.sweep()
@@ -674,7 +675,8 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("Sweep Time : ", timestamp);
       const afterSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance After sweep : ", afterSweep);
-      const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
+      // const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
+      const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
       console.log("Swept >> ", remainingReward);
       expect(afterSweep).to.be.greaterThan(beforeSweep);
       await expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);

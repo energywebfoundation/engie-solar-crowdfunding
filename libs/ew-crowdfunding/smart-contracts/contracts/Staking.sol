@@ -96,7 +96,7 @@ contract Staking is ERC20Burnable {
     }
 
     modifier withdrawsAllowed(){
-        require(aborted || block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
+        require(aborted || block.timestamp < startDate || (block.timestamp >= endDate && block.timestamp < fullStopDate), "Withdraws not allowed");
         require(hasRole(msg.sender, patronRole), "No patron role");
         _;
     }
@@ -196,7 +196,7 @@ contract Staking is ERC20Burnable {
         require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not allowed to sweep");
         require(!sweeped, "Already sweeped");
 		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
-		uint256 remainingRewards = totalStaked - allRedeemedRewards;
+        uint256 remainingRewards = totalRewards - allRedeemedRewards;
 
 		sweeped = true;
 
@@ -265,7 +265,7 @@ contract Staking is ERC20Burnable {
         return stakes[msg.sender];
     }
 
-    function redeemAll() external notPaused {
+    function redeemAll() external notPaused withdrawsAllowed {
         redeem(balanceOf(msg.sender));
     }
     
