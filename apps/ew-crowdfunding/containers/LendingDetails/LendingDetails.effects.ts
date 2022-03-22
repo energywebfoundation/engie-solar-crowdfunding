@@ -37,6 +37,7 @@ import {
   selectIsTerminated,
   getFinalStopDate,
   redeemAllSlt,
+  selectFinalStopDate,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
 import { useContractStatus } from '../../hooks';
@@ -93,6 +94,7 @@ export const useLendingDetailsEffects = () => {
   const closeStackingDate = new Date(useSelector(selectContributionDeadline));
   const lockStakesDate = new Date(useSelector(selectLockStakesDate));
   const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+  const fullStopDate = new Date(useSelector(selectFinalStopDate));
 
   // Contract status
   const isContractPaused = useSelector(selectIsPaused);
@@ -106,7 +108,7 @@ export const useLendingDetailsEffects = () => {
 
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < activateStackingDate || new Date() >= closeStackingDate || new Date() < releaseRewardsDate;
+    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) || new Date() > fullStopDate;
 
   const validationSchema = yup
     .object({
