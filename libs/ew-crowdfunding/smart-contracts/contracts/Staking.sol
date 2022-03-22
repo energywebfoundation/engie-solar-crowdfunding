@@ -200,7 +200,7 @@ contract Staking is ERC20Burnable {
 
 		sweeped = true;
 
-		payable(rewardProvider).transfer(remainingRewards);
+		payable(rewardProvider).transfer(remainingRewards + totalStaked);
         emit Swept(remainingRewards, block.timestamp);
     }
 

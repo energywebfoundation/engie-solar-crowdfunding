@@ -677,9 +677,16 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("Balance After sweep : ", afterSweep);
       // const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
       const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
+      console.log("Total staked II : ", ethers.utils.formatEther(await asOwner.totalStaked()))
+
       console.log("Swept >> ", remainingReward);
       expect(afterSweep).to.be.greaterThan(beforeSweep);
       await expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);
+      //Checking that we send to the rewardProvider wallet remainingRewards + remainingFunds staked (i.e totalStaked)
+      await expect(tx).changeEtherBalance(owner, (remainingReward.add(await asOwner.totalStaked())));
+      //Checking that we remove from the contract remainingRewards + remainingFunds staked (i.e totalStaked)
+      await expect(tx).changeEtherBalance(asOwner, (remainingReward.add(await asOwner.totalStaked()).mul(-1)));
+      
     })
 
     it('Should fail when trying to sweep more than once', async () => {
