@@ -67,11 +67,11 @@ jobs:
             echo "::set-output name=next_public_global_token_limit::10000"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://explorer.energyweb.org"
-            echo "::set-output name=next_public_activate_staking_date::2022-03-16 11:30"
-            echo "::set-output name=next_public_close_staking_date::2022-03-16 12:00"
-            echo "::set-output name=next_public_lock_stakes_date::2022-03-16 12:01"
-            echo "::set-output name=next_public_release_rewards_date::2022-03-16 12:06"
-            echo "::set-output name=next_public_full_stop_date::2022-03-16 12:30"
+            echo "::set-output name=next_public_activate_staking_date::2022-03-22 13:15"
+            echo "::set-output name=next_public_close_staking_date::2022-03-22 13:20"
+            echo "::set-output name=next_public_lock_stakes_date::2022-03-22 13:31"
+            echo "::set-output name=next_public_release_rewards_date::2022-03-22 13:46"
+            echo "::set-output name=next_public_full_stop_date::2022-03-22 13:50"
           else
             echo "Branch ${{ github.ref }} is not configured for deployment"
             exit 1
