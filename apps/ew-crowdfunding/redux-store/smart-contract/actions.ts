@@ -242,7 +242,7 @@ export const getFinalStopDate =
     const stakingContract = Staking__factory.connect(deployedAddress, provider);
     const fullStopDate: number = +(await stakingContract.fullStopDate()).toString();
     const finalStopDate = new Date(fullStopDate * 1000);
-    
+
     dispatch({
       type: SmartContractActionTypes.SET_FINAL_STOP_DATE,
       payload: finalStopDate,
