@@ -196,7 +196,7 @@ contract Staking is ERC20Burnable {
         require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not allowed to sweep");
         require(!sweeped, "Already sweeped");
 		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
-		uint256 remainingRewards = totalStaked - allRedeemedRewards;
+        uint256 remainingRewards = totalRewards - allRedeemedRewards;
 
 		sweeped = true;
 
