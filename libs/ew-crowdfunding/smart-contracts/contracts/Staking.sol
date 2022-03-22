@@ -265,7 +265,7 @@ contract Staking is ERC20Burnable {
         return stakes[msg.sender];
     }
 
-    function redeemAll() external notPaused {
+    function redeemAll() external notPaused withdrawsAllowed {
         redeem(balanceOf(msg.sender));
     }
     
