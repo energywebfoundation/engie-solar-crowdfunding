@@ -1,15 +1,20 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { Box, Typography, Button } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
-import useStakingStatus from '../../context/hooks/useStakingStatus';
+import { useStakingStatus } from '../../hooks';
 
 export const Contact: FC = () => {
   const classes = useStyles();
   const stakingMessage = useStakingStatus();
+  const [stackingStatus, setStackingStatus] = useState<string>(stakingMessage);
+
+  useEffect(() => {
+    setStackingStatus(stakingMessage);
+  }, [stakingMessage]);
 
   return (
     <Box py={5} className={classes.container}>
@@ -32,9 +37,9 @@ export const Contact: FC = () => {
               stefan.zelazny@engie.com.
             </a>
           </Typography>
-          {stakingMessage && (
+          {stackingStatus && (
             <Typography variant='h5' style={{ fontWeight: '600' }} mb={5} align='center'>
-              {stakingMessage}
+              {stackingStatus}
             </Typography>
           )}
           <Link href='/wallet'>

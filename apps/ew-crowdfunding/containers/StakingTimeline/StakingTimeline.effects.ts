@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
-import StakingTimelineEnum from '../../context/hooks/StakingTimelineEnum';
-import useStakingTimeline from '../../context/hooks/useStakingTimeline';
+import { useStakingTimeline, StakingTimelineEnum } from '../../hooks';
 import {
   selectActivateStackingDate,
   selectContributionDeadline,

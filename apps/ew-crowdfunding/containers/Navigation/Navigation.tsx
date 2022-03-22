@@ -1,18 +1,24 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import { useState, useEffect } from 'react';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { useNavigationEffects } from './Navigation.effects';
 import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { shortenDid } from '../../utils';
 import Link from 'next/link';
-import useStakingStatus from '../../context/hooks/useStakingStatus';
+import { useStakingStatus } from '../../hooks';
 
 export const Navigation = () => {
   const classes = useStyles();
 
   const { authenticated, did, avatar, logout } = useNavigationEffects();
   const stakingMessage = useStakingStatus();
+  const [stackingStatus, setStackingStatus] = useState<string>(stakingMessage);
+
+  useEffect(() => {
+    setStackingStatus(stakingMessage);
+  }, [stakingMessage]);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -25,14 +31,14 @@ export const Navigation = () => {
               </a>
             </Link>
           </Box>
-          {stakingMessage && (
+          {stackingStatus && (
             <Typography
               className={`${classes.toolbarMessage} gradient-text`}
               variant='h5'
               style={{ fontWeight: '600', textTransform: 'uppercase' }}
               align='center'
             >
-              {stakingMessage}
+              {stackingStatus}
             </Typography>
           )}
           {authenticated && (

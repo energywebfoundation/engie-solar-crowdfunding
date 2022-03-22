@@ -1,6 +1,6 @@
-import StakingTimelineEnum from './StakingTimelineEnum';
+import { StakingTimelineEnum } from './StakingTimelineEnum';
 
-const useStakingTimeline = (
+export const useStakingTimeline = (
   activateStakingDate: Date,
   closeStackingDate: Date,
   lockStakesDate: Date,
@@ -26,5 +26,3 @@ const useStakingTimeline = (
     return StakingTimelineEnum.FINAL_STOP;
   }
 };
-
-export default useStakingTimeline;

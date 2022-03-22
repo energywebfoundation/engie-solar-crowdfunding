@@ -36,9 +36,10 @@ import {
   selectIsPaused,
   selectIsTerminated,
   getFinalStopDate,
+  redeemAllSlt,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
-import { useContractStatus } from '../../context/hooks';
+import { useContractStatus } from '../../hooks';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -105,7 +106,7 @@ export const useLendingDetailsEffects = () => {
 
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate);
+    new Date() < activateStackingDate || new Date() >= closeStackingDate || new Date() < releaseRewardsDate;
 
   const validationSchema = yup
     .object({
@@ -143,7 +144,7 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onSubmit = async (data: { loan: number }) => {
-    if (errorMessage) {
+    if (errorMessage || isStackingDisabled || isContractPaused || isContractTerminated) {
       return;
     }
 
@@ -158,19 +159,27 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeem = (amount: number) => {
-    if (!provider || !amount || !currentAddress) {
+    if (!provider || !amount || !currentAddress || isRedeemDisabled) {
       return;
     }
     dispatch(redeemSlt(amount, provider, currentAddress));
   };
 
+  const onRedeemAll = () => {
+    dispatch(redeemAllSlt(provider, currentAddress));
+  }
+
   const onRedeemSlt = () => {
+    if (isRedeemDisabled) {
+      return;
+    }
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_REDEEM,
       payload: {
         open: true,
         tokenBalance: solarLoanTokenBalance,
         onRedeem,
+        onRedeemAll,
       },
     });
   };

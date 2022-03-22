@@ -1,7 +1,7 @@
-import StakingTimelineEnum from './StakingTimelineEnum';
-import useStakingTimeline from './useStakingTimeline';
+import { StakingTimelineEnum } from './StakingTimelineEnum';
+import { useStakingTimeline } from './useStakingTimeline';
 
-const useStakingStatus = () => {
+export const useStakingStatus = () => {
   const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
   const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
   const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
@@ -35,5 +35,3 @@ const useStakingStatus = () => {
   }
   return currentStakingPeriod;
 };
-
-export default useStakingStatus;

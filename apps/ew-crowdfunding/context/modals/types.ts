@@ -22,6 +22,7 @@ export type IRedeem = {
   open: boolean;
   tokenBalance: number;
   onRedeem: (amount: number) => void;
+  onRedeemAll: () => void;
 };
 
 export type IConfirm = {

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useSelector } from 'react-redux';
-import { selectProvider } from '../../redux-store';
+import { selectProvider } from '../redux-store';
 import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
 import { useState } from 'react';
 

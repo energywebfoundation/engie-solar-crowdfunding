@@ -100,6 +100,34 @@ export const redeemSlt =
     }
   };
 
+export const redeemAllSlt =
+  (provider: any, currentAddress: string): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const signer = provider?.getSigner();
+    const stakingContract = Staking__factory.connect(deployedAddress, signer);
+    try {
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: true,
+      });
+      const redeemTx = await stakingContract.redeemAll();
+      await redeemTx.wait();
+
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: false,
+      });
+
+      dispatch(getAccountBalance(provider, currentAddress));
+      dispatch(getUserContribution(provider));
+      dispatch(getSolarLoanTokenBalance(provider, currentAddress));
+      dispatch(getRedeemableReward(provider));
+      dispatch(getTotalLentAmount(provider));
+    } catch (error) {
+      console.log('Error while redeeming: ', error);
+    }
+  };
+
 export const getAccountBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -149,6 +177,7 @@ export const getUserContribution =
     const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
     const contribution = (await stakingContract.getDeposit()).toString();
     const userContribution = ethers.utils.formatEther(contribution);
+    console.log('userContribution: ', userContribution);
     dispatch({
       type: SmartContractActionTypes.SET_CONTRIBUTION,
       payload: userContribution,
