@@ -126,6 +126,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           .returns(true);
 
     await claimManagerMocked.mock.hasRole
+    .withArgs(owner.address, patronRole, defaultRoleVersion)
+    .returns(true);
+
+    await claimManagerMocked.mock.hasRole
     .withArgs(patron.address, serviceProviderRole, defaultRoleVersion)
     .returns(false);
 
@@ -367,12 +371,12 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       let _tx;
       await expect(
          _tx = await asPatron.stake({
-              value: oneEWT.mul(3)
+              value: oneEWT.mul(7)
           }),
-      ).changeEtherBalance(asPatron, oneEWT.mul(3));
-      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(3));
-      await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(3));
-      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(3), await getTimestamp(_tx));
+      ).changeEtherBalance(asPatron, oneEWT.mul(7));
+      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(7));
+      await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(7));
+      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(7), await getTimestamp(_tx));
     });
 
     it('fails when not enrolled user tries to stake', async () => {
@@ -387,18 +391,33 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
 
     it('Checks SLT Token mining on staking', async () => {
-      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(3));
+      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
+    });
+
+    it('Should verify that Deposit of user who will receive SLT is initially null', async () => {
+      expect(await asOwner.getDeposit()).to.equal(oneEWT.mul(0));
+    });
+    
+    it('Should transfer SLT to another user', async () => {
+      tx = await asPatron.transfer(owner.address, oneEWT.mul(4));
+      await expect(tx).to.emit(asPatron, 'Transfer').withArgs(patron.address, owner.address, oneEWT.mul(4));
+    });
+
+    it('Should increase Deposit of user who received SLT', async () => {
+      expect(await asOwner.getDeposit()).to.equal(oneEWT.mul(4));
     });
 
     it("Can stake several times before startDate", async () => {
       let _tx;
       await expect(
-         _tx = await asPatron.stake({
-              value: oneEWT.mul(4)
-          }),
-      ).changeEtherBalance(asPatron, oneEWT.mul(4));
+        _tx = await asPatron.stake({
+          value: oneEWT.mul(4)
+        }),
+        ).changeEtherBalance(asPatron, oneEWT.mul(4));
+        const { blockNumber } = await _tx.wait();
+      const { timestamp } = await provider.getBlock(blockNumber);
       expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
-      await expect(_tx).to.emit(asPatron, 'Transfer').withArgs(nullAddress, patron.address, oneEWT.mul(4));
+      await expect(_tx).to.emit(asPatron, 'NewStake').withArgs(patron.address, oneEWT.mul(4), timestamp);
     });
 
     it('Refunds when added stake exceeds HardCap & ContributionLimit', async () => {
@@ -414,15 +433,15 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       +                                                                                       +
       \* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-      const overflow = oneEWT.mul(202);
+      const overflow = oneEWT.mul(206);
       await expect(tx = await asPatron.stake({
               value: oneEWT.mul(242)
           }),
       ).to.emit(asPatron, 'RefundExceeded').withArgs(patron.address, oneEWT.mul(242), overflow);
-      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(47));
+      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(43));
       
       //Checking that wallet is correctly refunded (i.e only 40 EWTs have been consumed instead of 242)
-      expect(tx).changeEtherBalance(patron, (oneEWT.mul(-40)));
+      await expect(tx).changeEtherBalance(patron, (oneEWT.mul(-36)));
     });
 
     it('fails when trying to stake more than Hardcap', async () => {
@@ -446,7 +465,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(tx = await asPatron.redeem(oneEWT.mul(40))).changeEtherBalance(asPatron2, (oneEWT.mul(-40)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
-      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(7));
+      expect(await asPatron.getDeposit()).to.equal(oneEWT.mul(3));
       await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(40), timestamp);
     });
 
@@ -454,7 +473,17 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
       await expect(tx).to.emit(stakingContract, 'TokenBurnt').withArgs(patron.address, oneEWT.mul(40), timestamp);
-      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(7));
+      expect(await asPatron.balanceOf(patron.address)).equals(oneEWT.mul(3));
+    });
+
+    it('Should allow user who did not stake to partially redeem received SLT', async () => {
+
+      //Verify that redeemed token decreases on smartContract user's balance of the redeemed amount
+      await expect(tx = await asOwner.redeem(oneEWT)).changeEtherBalance(asOwner, oneEWT.mul(-1));
+
+      //Verify that redeemed token increases user wallet's balance of the redeemed amount
+      await expect(tx).changeEtherBalance(owner, oneEWT.mul(1));
+      console.log("Owner balance after first partial redeem: ", await asOwner.balanceOf(owner.address));
     });
 
     it('fails when trying to withdraw more funds than staked', async () => {
@@ -465,10 +494,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
   
     it('Can withdraw all funds before start date', async () => {
       let tx;
-      expect(tx = await asPatron.redeemAll()).changeEtherBalance(asPatron, (oneEWT.mul(-7)));
+      await expect(tx = await asPatron.redeemAll()).changeEtherBalance(asPatron, (oneEWT.mul(-3)));
       const { blockNumber } = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber);
-      await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(7), timestamp);
+      await expect(tx).to.emit(stakingContract, 'Withdrawn').withArgs(patron.address, oneEWT.mul(3), timestamp);
     });
   
     it('fails when service provider sends reward before startDate', async () => {
@@ -629,6 +658,16 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(allRedeemedRewardsAfter).to.equal(calculatedReward);
     });
 
+    it('Should allow user who did not stake to redeem all received SLT', async () => {
+      //Verifying that a user who did not stake but received SLT can redeem all SLT and get the 10%
+      //Here, "owner" received 3 SLT hence, should receive 3 EWT + 10% of 3 --> 3.3 EWT
+
+      //Verification on smartContract
+      await expect(tx = await asOwner.redeemAll()).changeEtherBalance(asOwner, (utils.parseUnits("3.3", "ether")).mul(-1));
+      //Verification on wallet
+      await expect(tx).changeEtherBalance(owner, utils.parseUnits("3.3", "ether"));
+    });
+
     it('Should fail when not enrolled user tries to withdraw', async () => {
       await asPatron3.approve(owner.address, oneEWT)
       await asOwner.transferFrom(patron3.address, notEnrolled.address, oneEWT.div(2));
@@ -677,7 +716,6 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("Balance After sweep : ", afterSweep);
       // const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
       const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
-      console.log("Total staked II : ", ethers.utils.formatEther(await asOwner.totalStaked()))
 
       console.log("Swept >> ", remainingReward);
       expect(afterSweep).to.be.greaterThan(beforeSweep);

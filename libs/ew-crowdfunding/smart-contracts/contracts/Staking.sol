@@ -134,6 +134,17 @@ contract Staking is ERC20Burnable {
         redeem(_amount);
     }
 
+    //Overriding ERC20 transfer function
+    function transfer(address _recipient, uint256 _amount) public override returns (bool) {
+        //we need to keep track of this to avoid negative values on redeem call
+        stakes[_recipient] += _amount;
+        unchecked {
+            stakes[_msgSender()] -= _amount;
+        }
+        _transfer(_msgSender(), _recipient, _amount);
+        return true;
+    }
+
     function init(
         uint256 _signupStart,
         uint256 _signupEnd,
