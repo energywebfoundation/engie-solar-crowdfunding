@@ -712,14 +712,13 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       console.log("Total rewards : ", ethers.utils.formatEther(await asOwner.totalRewards()))
       const beforeSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance Before sweep : ", beforeSweep);
+      const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
       tx = await asOwner.sweep()
       const {blockNumber} = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber)
       console.log("Sweep Time : ", timestamp);
       const afterSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance After sweep : ", afterSweep);
-      // const remainingReward = (await asOwner.totalStaked()).sub(await asOwner.allRedeemedRewards());
-      const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
 
       console.log("Swept >> ", remainingReward);
       expect(afterSweep).to.be.greaterThan(beforeSweep);
@@ -730,6 +729,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       await expect(tx).changeEtherBalance(asOwner, (remainingReward.add(await asOwner.totalStaked()).mul(-1)));
       
     })
+
+    it('Should reset totalStaked', async () => {
+      expect(await asOwner.totalStaked()).to.equal(0);
+    });
 
     it('Should fail when trying to sweep more than once', async () => {
       expect(asOwner.sweep()).to.be.revertedWith("Already sweeped");
