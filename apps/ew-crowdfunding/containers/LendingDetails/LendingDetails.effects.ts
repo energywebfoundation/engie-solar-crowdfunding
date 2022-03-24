@@ -179,7 +179,7 @@ export const useLendingDetailsEffects = () => {
       type: DSLAModalsActionsEnum.SHOW_REDEEM,
       payload: {
         open: true,
-        tokenBalance: solarLoanTokenBalance,
+        tokenBalance: redeemableReward,
         onRedeem,
         onRedeemAll,
       },
