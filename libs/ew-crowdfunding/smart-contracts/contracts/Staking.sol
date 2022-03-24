@@ -118,7 +118,7 @@ contract Staking is ERC20Burnable {
 
     modifier sufficientReward(){
         uint256 TWELVE_PERCENT = totalStaked * (12 * 1e3 / 100);
-        require(msg.value >= totalStaked + TWELVE_PERCENT / 1e3, "Not Enough rewards");
+        require(msg.value >= TWELVE_PERCENT / 1e3, "Not Enough rewards");
         _;
     }
 

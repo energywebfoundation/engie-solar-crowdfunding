@@ -581,7 +581,11 @@ describe("[ Crowdfunding Staking contract ] ", () => {
     });
 
     it('Should fail when providing not enough rewards on active contract', async () => {
-      await expect(asOwner.depositRewards({value: oneEWT.mul(100)})).revertedWith('Not Enough rewards');
+      //Providing less than 12% of totalStaked
+      const totalStaked = await asOwner.totalStaked();
+      const twelvePercents = totalStaked.mul(oneEWT.mul(12)).div(oneEWT.mul(100));
+      console.log("TWELVE PERCENTS of TotalStaked : ", twelvePercents)
+      await expect(asOwner.depositRewards({value: oneEWT.mul(23)})).revertedWith('Not Enough rewards');
     });
     
     it('Should receive rewards when contract is activated', async () => {
