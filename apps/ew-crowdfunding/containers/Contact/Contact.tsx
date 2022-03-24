@@ -1,15 +1,28 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { Box, Typography, Button } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
-import useStakingStatus from '../../context/hooks/useStakingStatus';
+import { getStakingStatus } from '../../utils';
 
 export const Contact: FC = () => {
   const classes = useStyles();
-  const stakingMessage = useStakingStatus();
+  
+  const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
+
+  const stakingMessage = getStakingStatus(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+    finalStopDate,
+  );
 
   return (
     <Box py={5} className={classes.container}>

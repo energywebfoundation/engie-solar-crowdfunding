@@ -11,7 +11,7 @@ export interface ProgressBardProps {
 
 export const ProgressBar: FC<ProgressBardProps> = ({ value, limit, description, className }: ProgressBardProps) => {
   const classes = useStyles();
-  const displayedProgress = Number((value / limit) * 100).toPrecision(2);
+  const displayedProgress = Number((value / limit) * 100);
   return (
     <Box className={classes.wrapper}>
       <LinearProgress
@@ -20,12 +20,12 @@ export const ProgressBar: FC<ProgressBardProps> = ({ value, limit, description, 
           colorPrimary: classes.colorPrimary,
           barColorPrimary: className ? className : classes.barColorPrimary,
         }}
-        value={(value / limit) * 100}
+        value={(Number(value) / Number(limit)) * 100}
         variant='determinate'
         color='primary'
       />
       <Typography variant='body2'>
-        {displayedProgress}% of {Number(limit)?.toLocaleString()} {description}
+        {displayedProgress?.toLocaleString('en-US')}% of {Number(limit)?.toLocaleString('en-US')} {description}
       </Typography>
     </Box>
   );

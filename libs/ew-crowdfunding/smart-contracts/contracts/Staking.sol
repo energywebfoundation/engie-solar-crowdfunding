@@ -6,21 +6,24 @@ import "./interfaces/IClaimManager.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 contract Staking is ERC20Burnable {
+    bool public sweeped;
+    bool private aborted;
+    address private owner;
     uint256 public hardCap;
     uint256 public endDate;
-    uint256 public totalRewards;
     uint256 public signupEnd;
     uint256 public startDate;
+    bytes32 public patronRole;
     uint256 public signupStart;
     uint256 public totalStaked;
     bytes32 public serviceRole;
-    bytes32 public patronRole;
-    address private owner;
-    address private rewardProvider;
-    uint256 public contributionLimit;
-    bool private aborted;
+    uint256 public totalRewards;
+    uint256 public fullStopDate;
     bool private contractFunded;
     bool private isContractPaused;
+    address private rewardProvider;
+    uint256 public contributionLimit;
+    uint256 public allRedeemedRewards;
     bool private isContractInitialized;
     address public claimManagerAddress;
     uint256 public minRequiredStake;
@@ -35,6 +38,7 @@ contract Staking is ERC20Burnable {
     event TokenBurnt(address _user, uint256 _amout, uint256 _timestamp);
     event RefundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
+    event Swept(uint256 _amount, uint256 _date);
 
     modifier initialized(){
         require(isContractInitialized, "Not initialized");
@@ -42,7 +46,7 @@ contract Staking is ERC20Burnable {
     }
 
     modifier activated(){
-        require(block.timestamp > startDate && block.timestamp < endDate, "Contract not activated");
+        require(block.timestamp >= startDate && block.timestamp < endDate, "Contract not activated");
         _;
     }
    
@@ -92,7 +96,7 @@ contract Staking is ERC20Burnable {
     }
 
     modifier withdrawsAllowed(){
-        require(aborted || block.timestamp < startDate || block.timestamp > endDate, "Withdraws not allowed");
+        require(aborted || block.timestamp < startDate || (block.timestamp >= endDate && block.timestamp < fullStopDate), "Withdraws not allowed");
         require(hasRole(msg.sender, patronRole), "No patron role");
         _;
     }
@@ -114,7 +118,7 @@ contract Staking is ERC20Burnable {
 
     modifier sufficientReward(){
         uint256 TWELVE_PERCENT = totalStaked * (12 * 1e3 / 100);
-        require(msg.value >= totalStaked + TWELVE_PERCENT / 1e3, "Not Enough rewards");
+        require(msg.value >= TWELVE_PERCENT / 1e3, "Not Enough rewards");
         _;
     }
 
@@ -130,11 +134,23 @@ contract Staking is ERC20Burnable {
         redeem(_amount);
     }
 
+    //Overriding ERC20 transfer function
+    function transfer(address _recipient, uint256 _amount) public override returns (bool) {
+        //we need to keep track of this to avoid negative values on redeem call
+        stakes[_recipient] += _amount;
+        unchecked {
+            stakes[_msgSender()] -= _amount;
+        }
+        _transfer(_msgSender(), _recipient, _amount);
+        return true;
+    }
+
     function init(
         uint256 _signupStart,
         uint256 _signupEnd,
         uint256 _startDate,
         uint256 _endDate,
+        uint256 _fullStopDate,
         uint256 _hardCap,
         uint256 _contributionLimit,
         uint256 _minRequiredStake
@@ -152,6 +168,7 @@ contract Staking is ERC20Burnable {
         isContractInitialized = true;
         contributionLimit = _contributionLimit;
         minRequiredStake = _minRequiredStake;
+        fullStopDate = _fullStopDate;
 		emit StakingPoolInitialized(block.timestamp, _startDate, _endDate);
     }
 
@@ -175,13 +192,28 @@ contract Staking is ERC20Burnable {
 
     function terminate() external onlyOwner {
         require(aborted == false, "Already terminated");
+        require(block.timestamp <= endDate, "Error: canceling after campaign");
 		uint256 payout = totalRewards;
         aborted = true;
+        deleteParameters();
         if (payout != 0){
 		    payable(rewardProvider).transfer(payout);
         }
-        deleteParameters();
+        emit StatusChanged("campaignAborted", block.timestamp);
         emit CampaignAborted(block.timestamp);
+    }
+
+    function sweep() external {
+        require(hasRole(msg.sender, serviceRole) || (msg.sender == rewardProvider), "Not allowed to sweep");
+        require(!sweeped, "Already sweeped");
+		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
+        uint256 remainingRewards = totalRewards - allRedeemedRewards;
+
+		sweeped = true;
+        deleteParameters();
+        delete totalStaked;
+		payable(rewardProvider).transfer(remainingRewards + totalStaked);
+        emit Swept(remainingRewards, block.timestamp);
     }
 
     function getContractStatus() external view returns(bool _isContractInitialized, bool _isContractPaused, bool _isContractAborted){
@@ -198,10 +230,11 @@ contract Staking is ERC20Burnable {
         require(hasRole(msg.sender, patronRole), "No patron role");
 
         if ((stakes[msg.sender] + msg.value >= contributionLimit)){
-            uint256 overFlow_limit = msg.value - (contributionLimit - stakes[msg.sender]);
-            uint256 toMint_limit = msg.value - overFlow_limit;
+
+            uint256 toMint_limit = contributionLimit - stakes[msg.sender];
+            uint256 overFlow_limit = msg.value - toMint_limit;
             //Check if we overflow from hardCap
-            if ((totalStaked + toMint_limit) >= hardCap){
+            if ((totalStaked + toMint_limit) > hardCap){
                 uint256 overFlow_hardCap = toMint_limit - (hardCap - totalStaked);
                 uint256 finalMint = toMint_limit - overFlow_hardCap;
                 
@@ -220,7 +253,7 @@ contract Staking is ERC20Burnable {
                 refund(overFlow_limit);
             }
         } else { 
-            if (totalStaked + msg.value >= hardCap){
+            if (totalStaked + msg.value > hardCap){
 
                 uint256 overFlow_hardCap = msg.value - (hardCap - totalStaked);
                 uint256 finalMint = msg.value - overFlow_hardCap;
@@ -249,7 +282,9 @@ contract Staking is ERC20Burnable {
     }
     
     function redeem(uint256 _amount) public notPaused withdrawsAllowed sufficientBalance(_amount) {
-        uint256 toWithdraw = _getRewards(_amount);
+        (uint256 toWithdraw, uint256 bonus) = _getRewards(_amount);
+        allRedeemedRewards += bonus;
+
         _burn(_msgSender(), _amount);
         totalStaked -= _amount;
         stakes[msg.sender] -= _amount;
@@ -263,19 +298,22 @@ contract Staking is ERC20Burnable {
         return (claimManager.hasRole(_provider, _role, 1));
     }
 
-    function _getRewards(uint256 _amount) internal view returns(uint256 reward){
+    function _getRewards(uint256 _amount) internal view returns(uint256, uint256){
 
         // Preventing funds loss if redemption occurs before the campaign start (we don't have to pay 10% before the end of the campaign)
         if (!aborted && totalRewards != 0 && _amount != 0){ 
-            uint256 interests = _amount * 1e2;
-            reward = interests / 1e3 + _amount;
-        } else {
-            reward = _amount;
+            
+            /* Bonus calculation
+            *   Bonus = (_amount * 1e2) / 1e3 --> Bonus = _amount / 10
+            *  returns (reward, bonus)
+            */
+            return (_amount + _amount / 10, _amount / 10);
         }
-        
+        return (_amount, 0);
     }
 
-    function getRewards() external notPaused view returns (uint256){
-        return _getRewards(balanceOf(msg.sender));
+    function getRewards() external view returns (uint256){
+        (uint256 rewards, ) = _getRewards(balanceOf(msg.sender));
+        return rewards;
     }
 }

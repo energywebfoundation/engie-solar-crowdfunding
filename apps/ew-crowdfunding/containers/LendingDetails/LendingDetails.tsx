@@ -124,8 +124,8 @@ export const LendingDetails: FC = () => {
                     !!errorMessage ||
                     roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED ||
                     isStackingDisabled ||
-                    !isContractPaused ||
-                    !isContractTerminated
+                    isContractPaused ||
+                    isContractTerminated
                   }
                   style={{ minWidth: '200px' }}
                 >

@@ -100,6 +100,34 @@ export const redeemSlt =
     }
   };
 
+export const redeemAllSlt =
+  (provider: any, currentAddress: string): AppThunk =>
+  async (dispatch): Promise<void> => {
+    const signer = provider?.getSigner();
+    const stakingContract = Staking__factory.connect(deployedAddress, signer);
+    try {
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: true,
+      });
+      const redeemTx = await stakingContract.redeemAll();
+      await redeemTx.wait();
+
+      dispatch({
+        type: SmartContractActionTypes.SET_LOADING,
+        payload: false,
+      });
+
+      dispatch(getAccountBalance(provider, currentAddress));
+      dispatch(getUserContribution(provider));
+      dispatch(getSolarLoanTokenBalance(provider, currentAddress));
+      dispatch(getRedeemableReward(provider));
+      dispatch(getTotalLentAmount(provider));
+    } catch (error) {
+      console.log('Error while redeeming: ', error);
+    }
+  };
+
 export const getAccountBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
@@ -120,58 +148,74 @@ export const getAccountBalance =
 export const getTokenLimit =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const contributionLimit = (await stakingContract.contributionLimit()).toString();
-    const tokenLimit = ethers.utils.formatEther(contributionLimit);
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const contributionLimit = (await stakingContract.contributionLimit()).toString();
+      const tokenLimit = ethers.utils.formatEther(contributionLimit);
 
-    dispatch({
-      type: SmartContractActionTypes.SET_TOKEN_LIMIT,
-      payload: tokenLimit,
-    });
+      dispatch({
+        type: SmartContractActionTypes.SET_TOKEN_LIMIT,
+        payload: tokenLimit,
+      });
+    } catch (error) {
+      console.log('getTokenLimit: ', error);
+    }
   };
 
 export const getGlobalTokenLimit =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const hardCap = (await stakingContract.hardCap()).toString();
-    const globalTokenLimit = ethers.utils.formatEther(hardCap);
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const hardCap = (await stakingContract.hardCap()).toString();
+      const globalTokenLimit = ethers.utils.formatEther(hardCap);
 
-    dispatch({
-      type: SmartContractActionTypes.SET_GLOBAL_TOKEN_LIMIT,
-      payload: globalTokenLimit,
-    });
+      dispatch({
+        type: SmartContractActionTypes.SET_GLOBAL_TOKEN_LIMIT,
+        payload: globalTokenLimit,
+      });
+    } catch (error) {
+      console.log('getGlobalTokenLimit: ', error);
+    }
   };
 
 export const getUserContribution =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
-    const contribution = (await stakingContract.getDeposit()).toString();
-    const userContribution = ethers.utils.formatEther(contribution);
-    dispatch({
-      type: SmartContractActionTypes.SET_CONTRIBUTION,
-      payload: userContribution,
-    });
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
+      const contribution = (await stakingContract.getDeposit()).toString();
+      const userContribution = ethers.utils.formatEther(contribution);
+      dispatch({
+        type: SmartContractActionTypes.SET_CONTRIBUTION,
+        payload: userContribution,
+      });
+    } catch (error) {
+      console.log('getUserContribution: ', error);
+    }
   };
 
 export const getSolarLoanTokenBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
-    const balanceOf = (await stakingContract.balanceOf(currentAddress)).toString();
-    const solarLoanTokenBalance = ethers.utils.formatEther(balanceOf);
-    dispatch({
-      type: SmartContractActionTypes.SET_SOLAR_LOANS_TOKEN_BALANCE,
-      payload: solarLoanTokenBalance,
-    });
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
+      const balanceOf = (await stakingContract.balanceOf(currentAddress)).toString();
+      const solarLoanTokenBalance = ethers.utils.formatEther(balanceOf);
+      dispatch({
+        type: SmartContractActionTypes.SET_SOLAR_LOANS_TOKEN_BALANCE,
+        payload: solarLoanTokenBalance,
+      });
+    } catch (error) {
+      console.log('getSolarLoanTokenBalance: ', error);
+    }
   };
 
 export const getRedeemableReward =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = await Staking__factory.connect(deployedAddress, provider?.getSigner());
     try {
+      const stakingContract = await Staking__factory.connect(deployedAddress, provider?.getSigner());
       const rewards = await stakingContract.getRewards();
       const redeemableReward = ethers.utils.formatEther(rewards);
       dispatch({
@@ -190,91 +234,117 @@ export const getRedeemableReward =
 export const getActivateStackingDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const signupStart: number = +(await stakingContract.signupStart()).toString();
-    const activateStackingDate = new Date(signupStart * 1000);
-    dispatch({
-      type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
-      payload: activateStackingDate,
-    });
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const signupStart: number = +(await stakingContract.signupStart()).toString();
+      const activateStackingDate = new Date(signupStart * 1000);
+      dispatch({
+        type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
+        payload: activateStackingDate,
+      });
+    } catch (error) {
+      console.log('getActivateStackingDate: ', error);
+    }
   };
 
 export const getCloseStackingDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const signupEnd: number = +(await stakingContract.signupEnd()).toString();
-    const closeStackingDate = new Date(signupEnd * 1000);
-    dispatch({
-      type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
-      payload: closeStackingDate,
-    });
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const signupEnd: number = +(await stakingContract.signupEnd()).toString();
+      const closeStackingDate = new Date(signupEnd * 1000);
+      dispatch({
+        type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
+        payload: closeStackingDate,
+      });
+    } catch (error) {
+      console.log('getCloseStackingDate: ', error);
+    }
   };
 
 export const getLockStakesDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const startDate: number = +(await stakingContract.startDate()).toString();
-    const lockStakesDate = new Date(startDate * 1000);
-    dispatch({
-      type: SmartContractActionTypes.SET_LOCK_STAKES_DATE,
-      payload: lockStakesDate,
-    });
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const startDate: number = +(await stakingContract.startDate()).toString();
+      const lockStakesDate = new Date(startDate * 1000);
+      dispatch({
+        type: SmartContractActionTypes.SET_LOCK_STAKES_DATE,
+        payload: lockStakesDate,
+      });
+    } catch (error) {
+      console.log('getLockStakesDate: ', error);
+    }
   };
 
 export const getReleaseRewardsDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const endDate: number = +(await stakingContract.endDate()).toString();
-    const releaseRewardsDate = new Date(endDate * 1000);
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const endDate: number = +(await stakingContract.endDate()).toString();
+      const releaseRewardsDate = new Date(endDate * 1000);
 
-    dispatch({
-      type: SmartContractActionTypes.SET_RELEASE_REWARDS_DATE,
-      payload: releaseRewardsDate,
-    });
+      dispatch({
+        type: SmartContractActionTypes.SET_RELEASE_REWARDS_DATE,
+        payload: releaseRewardsDate,
+      });
+    } catch (error) {
+      console.log('getReleaseRewardsDate: ', error);
+    }
   };
 
 export const getFinalStopDate =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    // const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    // CHANGE THIS TO FINAL STOP DATE AFTER IT IS IMPLEMENTED IN THE SMART CONTRACT
-    // const stopDate: number = +(await stakingContract.endDate()).toString();
-    // const finalStopDate = new Date(stopDate * 1000);
-    const finalStopDate =new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const fullStopDate: number = +(await stakingContract.fullStopDate()).toString();
+      const finalStopDate = new Date(fullStopDate * 1000);
 
-    dispatch({
-      type: SmartContractActionTypes.SET_FINAL_STOP_DATE,
-      payload: finalStopDate,
-    });
+      dispatch({
+        type: SmartContractActionTypes.SET_FINAL_STOP_DATE,
+        payload: finalStopDate,
+      });
+    } catch (error) {
+      console.log('getFinalStopDate: ', error);
+    }
   };
 
 export const getTotalLentAmount =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
-    const lentAmount = await (await stakingContract.totalStaked()).toString();
-    const totalLentAmount = ethers.utils.formatEther(lentAmount);
-    dispatch({
-      type: SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT,
-      payload: totalLentAmount,
-    });
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
+      const lentAmount = await (await stakingContract.totalStaked()).toString();
+      const totalLentAmount = ethers.utils.formatEther(lentAmount);
+      dispatch({
+        type: SmartContractActionTypes.SET_TOTAL_LENT_AMOUNT,
+        payload: totalLentAmount,
+      });
+    } catch (error) {
+      console.log('getTotalLentAmount: ', error);
+    }
   };
 
 export const getContractStatus =
   (provider: any): AppThunk =>
   async (dispatch): Promise<void> => {
-    const stakingContract = Staking__factory.connect(deployedAddress, provider);
-    const contractStatus = await stakingContract.getContractStatus();
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider);
+      const contractStatus = await stakingContract.getContractStatus();
 
-    dispatch({
-      type: SmartContractActionTypes.SET_CONTRACT_STATUS,
-      payload: {
-        isInitialized: contractStatus._isContractInitialized,
-        isPaused: contractStatus._isContractPaused,
-        isTerminated: contractStatus._isContractAborted,
-      },
-    });
+      dispatch({
+        type: SmartContractActionTypes.SET_CONTRACT_STATUS,
+        payload: {
+          isInitialized: contractStatus._isContractInitialized,
+          isPaused: contractStatus._isContractPaused,
+          isTerminated: contractStatus._isContractAborted,
+        },
+      });
+    } catch (error) {
+      console.log('getContractStatus: ', error);
+    }
   };

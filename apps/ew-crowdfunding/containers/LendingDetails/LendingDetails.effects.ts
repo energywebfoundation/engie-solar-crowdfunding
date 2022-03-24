@@ -36,9 +36,11 @@ import {
   selectIsPaused,
   selectIsTerminated,
   getFinalStopDate,
+  redeemAllSlt,
+  selectFinalStopDate,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
-import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { useContractStatus } from '../../hooks';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -48,18 +50,13 @@ export const useLendingDetailsEffects = () => {
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
+  const contractStatus = useContractStatus();
 
   useEffect(() => {
     if (propertyExists(provider)) {
-      const signer = provider?.getSigner();
-      const stakingContract = Staking__factory.connect(deployedAddress, signer);
-      const eventsStatusChanged = stakingContract.filters.StatusChanged(null, null);
-      const eventsCampaignAborted = stakingContract.filters.CampaignAborted(null);
-      if (eventsStatusChanged || eventsCampaignAborted) {
-        dispatch(getContractStatus(provider));
-      }
+      dispatch(getContractStatus(provider));
     }
-  }, [provider, dispatch]);
+  }, [contractStatus, dispatch]);
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 
@@ -82,7 +79,7 @@ export const useLendingDetailsEffects = () => {
       dispatch(getRedeemableReward(provider));
       dispatch(getContractStatus(provider));
     }
-  }, [dispatch, authenticated, provider, currentAddress]);
+  }, []);
 
   const accountBalance = useSelector(selectAccountBalance);
   const tokenLimit = useSelector(selectTokenLimit);
@@ -97,6 +94,7 @@ export const useLendingDetailsEffects = () => {
   const closeStackingDate = new Date(useSelector(selectContributionDeadline));
   const lockStakesDate = new Date(useSelector(selectLockStakesDate));
   const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+  const fullStopDate = new Date(useSelector(selectFinalStopDate));
 
   // Contract status
   const isContractPaused = useSelector(selectIsPaused);
@@ -110,7 +108,7 @@ export const useLendingDetailsEffects = () => {
 
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate);
+    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) || new Date() > fullStopDate;
 
   const validationSchema = yup
     .object({
@@ -148,7 +146,7 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onSubmit = async (data: { loan: number }) => {
-    if (errorMessage) {
+    if (errorMessage || isStackingDisabled || isContractPaused || isContractTerminated) {
       return;
     }
 
@@ -163,19 +161,27 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeem = (amount: number) => {
-    if (!provider || !amount || !currentAddress) {
+    if (!provider || !amount || !currentAddress || isRedeemDisabled) {
       return;
     }
     dispatch(redeemSlt(amount, provider, currentAddress));
   };
 
+  const onRedeemAll = () => {
+    dispatch(redeemAllSlt(provider, currentAddress));
+  }
+
   const onRedeemSlt = () => {
+    if (isRedeemDisabled) {
+      return;
+    }
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_REDEEM,
       payload: {
         open: true,
-        tokenBalance: solarLoanTokenBalance,
+        tokenBalance: redeemableReward,
         onRedeem,
+        onRedeemAll,
       },
     });
   };

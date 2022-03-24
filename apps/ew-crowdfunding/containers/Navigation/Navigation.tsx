@@ -1,18 +1,31 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import { useState, useEffect } from 'react';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { useNavigationEffects } from './Navigation.effects';
 import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { shortenDid } from '../../utils';
 import Link from 'next/link';
-import useStakingStatus from '../../context/hooks/useStakingStatus';
+import { getStakingStatus } from '../../utils';
 
 export const Navigation = () => {
   const classes = useStyles();
-
   const { authenticated, did, avatar, logout } = useNavigationEffects();
-  const stakingMessage = useStakingStatus();
+
+  const activateStakingDate = new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
+
+  const stakingMessage = getStakingStatus(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+    finalStopDate,
+  );
 
   return (
     <Box sx={{ flexGrow: 1 }}>

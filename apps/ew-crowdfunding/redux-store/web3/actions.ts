@@ -72,7 +72,7 @@ export const getWeb3 =
     const isConnectedToRightNetwork =
       (process.env.NEXT_PUBLIC_CHAIN_ID || 73799).toString() === parseInt(`${browserChainId}`, 16)?.toString();
 
-      if (providerType) {
+    if (providerType) {
       try {
         dispatch({
           type: Web3ActionTypes.SET_IS_LOADING,
