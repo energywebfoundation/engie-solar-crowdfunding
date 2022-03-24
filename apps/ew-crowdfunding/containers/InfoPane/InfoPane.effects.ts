@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { formatDate } from '../../utils';
+import { formatDate, formatUTCDate } from '../../utils';
 
 export type Info = {
   name: string;
@@ -15,11 +15,11 @@ export type Info = {
 };
 
 export const useInfoPaneEffects = () => {
-  const activateStakingDate = formatDate(new Date(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE));
-  const closeStackingDate = formatDate(new Date(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE));
-  const lockStakesDate = formatDate(new Date(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE));
-  const releaseRewardsDate = formatDate(new Date(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE));
-  const finalStopDate = formatDate(new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE));
+  const activateStakingDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE));
+  const closeStackingDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE));
+  const lockStakesDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE));
+  const releaseRewardsDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE));
+  const finalStopDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE));
 
   const infoList: Info[] = [
     {
