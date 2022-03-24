@@ -558,8 +558,8 @@ export class Staking extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     transfer(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -712,8 +712,8 @@ export class Staking extends BaseContract {
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
   transfer(
-    recipient: string,
-    amount: BigNumberish,
+    _recipient: string,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -848,8 +848,8 @@ export class Staking extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -1179,8 +1179,8 @@ export class Staking extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
 
     transfer(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1333,8 +1333,8 @@ export class Staking extends BaseContract {
     totalSupply(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     transfer(
-      recipient: string,
-      amount: BigNumberish,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

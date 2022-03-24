@@ -20,7 +20,7 @@ export const StakingTimeline: FC = () => {
         <Typography variant='body2' className={classes.title}>
           Campaign Status
         </Typography>
-        <Typography>{message}</Typography>
+        <Typography><strong>{message}</strong></Typography>
       </Box>
       <Box className={classes.timeline}>
         <Timeline position='alternate'>

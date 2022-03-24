@@ -118,7 +118,7 @@ contract Staking is ERC20Burnable {
 
     modifier sufficientReward(){
         uint256 TWELVE_PERCENT = totalStaked * (12 * 1e3 / 100);
-        require(msg.value >= totalStaked + TWELVE_PERCENT / 1e3, "Not Enough rewards");
+        require(msg.value >= TWELVE_PERCENT / 1e3, "Not Enough rewards");
         _;
     }
 
@@ -132,6 +132,17 @@ contract Staking is ERC20Burnable {
 
     function burn(uint256 _amount) public override {
         redeem(_amount);
+    }
+
+    //Overriding ERC20 transfer function
+    function transfer(address _recipient, uint256 _amount) public override returns (bool) {
+        //we need to keep track of this to avoid negative values on redeem call
+        stakes[_recipient] += _amount;
+        unchecked {
+            stakes[_msgSender()] -= _amount;
+        }
+        _transfer(_msgSender(), _recipient, _amount);
+        return true;
     }
 
     function init(
