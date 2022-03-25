@@ -1,11 +1,13 @@
 import { DateTime } from 'luxon';
 
-export const formatUTCTimestamp = (date: number): Date => {
+export const formatUTCTimestamp = (date: number): DateTime => {
   if (!date) {
     return;
   }
-  const formattedDate = DateTime.fromSeconds(date).toISO({
-    includeOffset: false,
-  });
-  return DateTime.fromISO(formattedDate, { zone: 'utc' }).toLocal().toJSDate();
+  const formattedDate = DateTime.fromSeconds(date, {
+    zone: 'utc',
+  })
+    .toFormat('yyyy-MM-dd HH:mm')
+    .replace(' ', 'T');
+  return DateTime.fromISO(formattedDate, { zone: 'utc' }).toLocal();
 };
