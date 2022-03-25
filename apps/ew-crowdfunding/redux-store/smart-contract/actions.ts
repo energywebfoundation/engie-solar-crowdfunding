@@ -6,6 +6,7 @@ import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
 import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { formatUTCTimestamp } from '../../utils';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
@@ -237,7 +238,7 @@ export const getActivateStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupStart: number = +(await stakingContract.signupStart()).toString();
-      const activateStackingDate = new Date(signupStart * 1000);
+      const activateStackingDate = formatUTCTimestamp(signupStart);
       dispatch({
         type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
         payload: activateStackingDate,
@@ -253,7 +254,7 @@ export const getCloseStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupEnd: number = +(await stakingContract.signupEnd()).toString();
-      const closeStackingDate = new Date(signupEnd * 1000);
+      const closeStackingDate = formatUTCTimestamp(signupEnd);
       dispatch({
         type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
         payload: closeStackingDate,
@@ -269,7 +270,7 @@ export const getLockStakesDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const startDate: number = +(await stakingContract.startDate()).toString();
-      const lockStakesDate = new Date(startDate * 1000);
+      const lockStakesDate = formatUTCTimestamp(startDate);
       dispatch({
         type: SmartContractActionTypes.SET_LOCK_STAKES_DATE,
         payload: lockStakesDate,
@@ -285,7 +286,7 @@ export const getReleaseRewardsDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const endDate: number = +(await stakingContract.endDate()).toString();
-      const releaseRewardsDate = new Date(endDate * 1000);
+      const releaseRewardsDate = formatUTCTimestamp(endDate);
 
       dispatch({
         type: SmartContractActionTypes.SET_RELEASE_REWARDS_DATE,
@@ -302,7 +303,7 @@ export const getFinalStopDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const fullStopDate: number = +(await stakingContract.fullStopDate()).toString();
-      const finalStopDate = new Date(fullStopDate * 1000);
+      const finalStopDate = formatUTCTimestamp(fullStopDate);
 
       dispatch({
         type: SmartContractActionTypes.SET_FINAL_STOP_DATE,

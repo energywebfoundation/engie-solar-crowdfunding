@@ -6,3 +6,4 @@ export * from './getStakingStatus';
 export * from './getStakingTimeline';
 export * from './StakingTimelineEnum';
 export * from './formatUTCDate';
+export * from './formatUTCTimestamp';
