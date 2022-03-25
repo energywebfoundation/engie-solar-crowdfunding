@@ -73,7 +73,7 @@ export const Login = () => {
               You are not connected to {process.env.NEXT_PUBLIC_NETWORK_NAME}
             </Typography>
             <Button variant='text' onClick={importMetamaskConf}>
-              Import configuration
+              Import configuration to connect
             </Button>
           </Box>
         )}

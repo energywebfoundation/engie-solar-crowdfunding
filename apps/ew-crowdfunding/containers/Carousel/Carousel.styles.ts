@@ -36,6 +36,9 @@ export const useStyles = makeStyles(() => {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'end',
+    },
+    logo: {
+      height: '2.5rem'
     }
   };
 });

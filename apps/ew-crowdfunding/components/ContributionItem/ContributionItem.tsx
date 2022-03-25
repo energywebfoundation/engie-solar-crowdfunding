@@ -18,7 +18,14 @@ export const ContributionItem: FC<IContributionItemProps> = ({
   titleClass,
 }: IContributionItemProps) => {
   const classes = useStyles();
-  const displayedValue = Number(value).toPrecision(2);
+  const displayedValue = Number(value).toPrecision(6).replace(/0+$/, '');
+  let formmatedDisplayedValue: string;
+
+  if (displayedValue?.toString()[displayedValue.toString().length - 1] === '.') {
+    formmatedDisplayedValue = displayedValue.slice(0, -1);
+  } else {
+    formmatedDisplayedValue = displayedValue;
+  }
 
   return (
     <Box className={`${classes.wrapper} ${className}`}>
@@ -27,7 +34,7 @@ export const ContributionItem: FC<IContributionItemProps> = ({
       </Typography>
       <Box className={classes.valueContainer}>
         <Typography variant='h4' fontWeight={'bold'}>
-          {displayedValue}
+          {formmatedDisplayedValue}
         </Typography>
         <Typography variant='body2'>{type}</Typography>
       </Box>

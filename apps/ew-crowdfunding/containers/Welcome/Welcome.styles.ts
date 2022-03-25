@@ -14,7 +14,7 @@ export const useStyles = makeStyles(() => {
       padding: '40px 0',
     },
     background: {
-      backgroundImage: `url('./Cover.png')`,
+      backgroundImage: `url('/Cover.png')`,
       minHeight: '590px',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
@@ -34,7 +34,7 @@ export const useStyles = makeStyles(() => {
     },
     paper: {
       width: '100%',
-      maxWidth: '700px',
+      maxWidth: '900px',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
@@ -60,6 +60,9 @@ export const useStyles = makeStyles(() => {
       },
       [theme.breakpoints.down(750)]: {
         marginRight: 0,
+      },
+      [theme.breakpoints.down(450)]: {
+       display: 'none'
       },
     },
     powerLogo: {

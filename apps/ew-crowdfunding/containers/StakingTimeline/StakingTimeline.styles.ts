@@ -12,7 +12,6 @@ export const useStyles = makeStyles(() => {
       gap: '20px',
       borderRadius: '0',
       padding: '40px',
-      paddingBottom: '52px',
       [theme.breakpoints.down('md')]: {
         maxWidth: '100%',
       },
@@ -34,6 +33,9 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    bold: {
+      fontWeight: 600,
     }
   };
 });

@@ -20,7 +20,7 @@ export const StakingTimeline: FC = () => {
         <Typography variant='body2' className={classes.title}>
           Campaign Status
         </Typography>
-        <Typography>{message}</Typography>
+        <Typography><strong>{message}</strong></Typography>
       </Box>
       <Box className={classes.timeline}>
         <Timeline position='alternate'>
@@ -28,12 +28,12 @@ export const StakingTimeline: FC = () => {
             timelines.map((timeline: StakeTimeline) => {
               return (
                 <TimelineItem key={`${timeline.date}_${timeline.name}`}>
-                  <TimelineOppositeContent color='info'>{timeline.date}</TimelineOppositeContent>
+                  <TimelineOppositeContent color='info' className={stakingPeriod === timeline.name ? `gradient-text ${classes.bold}` : ''}>{timeline.date}</TimelineOppositeContent>
                   <TimelineSeparator>
                     <TimelineDot color={stakingPeriod === timeline.name ? 'secondary' : 'info'} />
                     <TimelineConnector />
                   </TimelineSeparator>
-                  <TimelineContent>{timeline.name}</TimelineContent>
+                  <TimelineContent className={stakingPeriod === timeline.name ? `gradient-text ${classes.bold}` : ''}>{timeline.name}</TimelineContent>
                 </TimelineItem>
               );
             })}

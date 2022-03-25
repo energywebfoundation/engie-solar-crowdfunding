@@ -1,5 +1,7 @@
+
 const fs = require('fs');
 const path = require('path');
+const Wallet = require('ethers').Wallet;
 const Contract = require("ethers").Contract;
 const Staking = require("../ethers").Staking;
 const _prompt = require("prompt-sync")();
@@ -48,10 +50,13 @@ const deployContract = async (contractName : string) => {
   const Contract = await ethers.getContractFactory(contractName);
 
   const claimManagerAddress = getClaimManagerAddress(process.env.HARDHAT_NETWORK);
+  const deployer = new Wallet(process.env.DEPLOYER_PRIV_KEY as string);
+  const rewardProvider = process.env.REWARD_PROVIDER || deployer.address;
 
   try {
     const deployedContract = await Contract.deploy(
       claimManagerAddress,
+      rewardProvider,
       process.env.SERVICE_ROLE,
       process.env.PATRON_ROLE,
       process.env.TOKEN_NAME,

@@ -11,7 +11,7 @@ const nextConfig = {
     svgr: false,
     reactStrictMode: true,
   },
-  swcMinify: false
+  swcMinify: false,
 };
 
 module.exports = withNx(nextConfig);

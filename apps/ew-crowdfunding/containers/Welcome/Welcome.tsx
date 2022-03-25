@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Container, Paper, Typography } from '@mui/material';
+import { Box, Container, Link, Paper, Typography } from '@mui/material';
 import { FC } from 'react';
 import { useStyles } from './Welcome.styles';
 import { ConnectCard, AppContainer } from '../../components';
@@ -23,14 +23,23 @@ export const Welcome: FC = () => {
               Stake your Energy Web Tokens to provide Energy Access
             </Typography>
             <Typography variant='h5' color='common.black'>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ut lectus nec ante congue gravida. Nunc
-              ligula arcu, sodales commodo auctor eget, auctor vel tellus. Nunc egestas sem eu malesuada porta.
-              Phasellus mattis sagittis magna id commodo. Maecenas vulputate tortor vitae sapien vehicula varius.
+              This staking pool is operated by Energy Web on behalf of ENGIE Energy Access (EEA). The Clean Energy Fund
+              is EEA`s first Proof of Concept to test the potential of decentralized finance in bringing new solar
+              installations for energy-poor communities.
             </Typography>
             <Typography variant='h5' color='common.black'>
-              Sed tincidunt lorem ut ante feugiat, at vehicula nibh scelerisque. Suspendisse potenti. Vestibulum et
-              porta erat.
+              The Clean Energy Fund is powered by the Energy Web`s open-source technology stack, specifically the
+              Decentralized Identifiers (DID) and the Energy Web Chain (EWC). See the results of a successful
+              smart-contract audit here.
             </Typography>
+            <Typography variant='h5' color='common.black'>
+              The Energy Web Community Fund, dedicated entirely to enhancing Energy Web`s open-source technology stack
+              and expanding its real-world use, is supporting this Proof of Concept by covering the repayment risk and
+              guaranteeing the repayment of original stakes plus rewards.
+            </Typography>
+            <Link href='https://energy-web-foundation.gitbook.io/energy-web/token/staking' target='_blank'>
+              Learn How to Stake EWT
+            </Link>
             <Box className={classes.powerLogo}>
               <Typography mr={2} style={{ fontWeight: 700 }}>
                 Powered by Lab.EnergyWeb

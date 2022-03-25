@@ -32,8 +32,15 @@ import {
   selectSolarLoanTokenBalance,
   selectTokenLimit,
   selectUserContribution,
+  getContractStatus,
+  selectIsPaused,
+  selectIsTerminated,
+  getFinalStopDate,
+  redeemAllSlt,
+  selectFinalStopDate,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
+import { useContractStatus } from '../../hooks';
 
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
@@ -43,6 +50,13 @@ export const useLendingDetailsEffects = () => {
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);
+  const contractStatus = useContractStatus();
+
+  useEffect(() => {
+    if (propertyExists(provider)) {
+      dispatch(getContractStatus(provider));
+    }
+  }, [contractStatus, dispatch]);
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
 
@@ -59,11 +73,13 @@ export const useLendingDetailsEffects = () => {
       dispatch(getCloseStackingDate(provider));
       dispatch(getLockStakesDate(provider));
       dispatch(getReleaseRewardsDate(provider));
+      dispatch(getFinalStopDate(provider));
       dispatch(getUserContribution(provider));
       dispatch(getSolarLoanTokenBalance(provider, currentAddress));
       dispatch(getRedeemableReward(provider));
+      dispatch(getContractStatus(provider));
     }
-  }, [dispatch, authenticated, provider, currentAddress]);
+  }, []);
 
   const accountBalance = useSelector(selectAccountBalance);
   const tokenLimit = useSelector(selectTokenLimit);
@@ -78,6 +94,11 @@ export const useLendingDetailsEffects = () => {
   const closeStackingDate = new Date(useSelector(selectContributionDeadline));
   const lockStakesDate = new Date(useSelector(selectLockStakesDate));
   const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+  const fullStopDate = new Date(useSelector(selectFinalStopDate));
+
+  // Contract status
+  const isContractPaused = useSelector(selectIsPaused);
+  const isContractTerminated = useSelector(selectIsTerminated);
 
   useEffect(() => {
     if (propertyExists(accountBalance)) {
@@ -87,8 +108,7 @@ export const useLendingDetailsEffects = () => {
 
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < activateStackingDate ||
-    (new Date() >= closeStackingDate && new Date() < releaseRewardsDate);
+    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) || new Date() > fullStopDate;
 
   const validationSchema = yup
     .object({
@@ -96,7 +116,7 @@ export const useLendingDetailsEffects = () => {
         .number()
         .typeError('EWT Stake Amount is required')
         .min(0.51)
-        .max(200)
+        .max(tokenLimit || 400)
         .required('EWT Stake Amount is required')
         .label('EWT Stake Amount'),
     })
@@ -126,7 +146,7 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onSubmit = async (data: { loan: number }) => {
-    if (errorMessage) {
+    if (errorMessage || isStackingDisabled || isContractPaused || isContractTerminated) {
       return;
     }
 
@@ -141,19 +161,27 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeem = (amount: number) => {
-    if (!provider || !amount || !currentAddress) {
+    if (!provider || !amount || !currentAddress || isRedeemDisabled) {
       return;
     }
     dispatch(redeemSlt(amount, provider, currentAddress));
   };
 
+  const onRedeemAll = () => {
+    dispatch(redeemAllSlt(provider, currentAddress));
+  }
+
   const onRedeemSlt = () => {
+    if (isRedeemDisabled) {
+      return;
+    }
     dispatchModals({
       type: DSLAModalsActionsEnum.SHOW_REDEEM,
       payload: {
         open: true,
-        tokenBalance: solarLoanTokenBalance,
+        tokenBalance: redeemableReward,
         onRedeem,
+        onRedeemAll,
       },
     });
   };
@@ -164,9 +192,9 @@ export const useLendingDetailsEffects = () => {
   };
 
   const getErrorMessage = (loanValue: number) => {
-    console.log('Loan value: ', loanValue);
-    console.log('solarLoanTokenBalance value: ', solarLoanTokenBalance);
-    console.log('globalTokenLimit: ', globalTokenLimit);
+    if (loanValue?.toString().length > 7) {
+      return 'You reached the maximum digits';
+    }
     /* EWT Stake Amount” box greater than */
     if (loanValue > Number(accountBalance)) {
       /* their account balance */
@@ -206,5 +234,7 @@ export const useLendingDetailsEffects = () => {
     smartContractLoading,
     activateStackingDate,
     isStackingDisabled,
+    isContractPaused,
+    isContractTerminated,
   };
 };

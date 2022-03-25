@@ -1,27 +1,53 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
+import { useState, useEffect } from 'react';
 import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import { useNavigationEffects } from './Navigation.effects';
 import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { shortenDid } from '../../utils';
+import { formatUTCDate, shortenDid } from '../../utils';
 import Link from 'next/link';
+import { getStakingStatus } from '../../utils';
 
 export const Navigation = () => {
   const classes = useStyles();
-
   const { authenticated, did, avatar, logout } = useNavigationEffects();
+
+  const activateStakingDate = formatUTCDate(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = formatUTCDate(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
+
+  const stakingMessage = getStakingStatus(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+    finalStopDate,
+  );
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position='static' className={classes.appBar}>
-        <Toolbar>
-          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
+        <Toolbar className={classes.toolbar}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: '10px' }} mt={1} className={classes.logo}>
             <Link href='/'>
               <a>
-                <img src='/EngieLogo.png' alt='Lab icon' />
+                <img className={classes.logo} src='/EeaLogo.png' alt='Lab icon' />
               </a>
             </Link>
           </Box>
+          {stakingMessage && (
+            <Typography
+              className={`${classes.toolbarMessage} gradient-text`}
+              variant='h5'
+              style={{ fontWeight: '600', textTransform: 'uppercase' }}
+              align='center'
+            >
+              {stakingMessage}
+            </Typography>
+          )}
           {authenticated && (
             <Box
               sx={{

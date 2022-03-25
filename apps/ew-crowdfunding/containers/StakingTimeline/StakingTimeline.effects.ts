@@ -1,9 +1,9 @@
 import { useSelector } from 'react-redux';
-import StakingTimelineEnum from '../../context/hooks/StakingTimelineEnum';
-import useStakingTimeline from '../../context/hooks/useStakingTimeline';
+import { getStakingTimeline, StakingTimelineEnum } from '../../utils';
 import {
   selectActivateStackingDate,
   selectContributionDeadline,
+  selectFinalStopDate,
   selectLockStakesDate,
   selectReleaseRewardsDate,
 } from '../../redux-store';
@@ -16,51 +16,66 @@ export type StakeTimeline = {
 };
 
 export const useStakingTimelineEffects = () => {
-  const stakingPeriod: StakingTimelineEnum = useStakingTimeline();
+  const activateStakingDate = new Date(useSelector(selectActivateStackingDate));
+  const closeStackingDate = new Date(useSelector(selectContributionDeadline));
+  const lockStakesDate = new Date(useSelector(selectLockStakesDate));
+  const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
+  const finalStopDate = new Date(useSelector(selectFinalStopDate));
+
+  const stakingPeriod: StakingTimelineEnum = getStakingTimeline(
+    activateStakingDate,
+    closeStackingDate,
+    lockStakesDate,
+    releaseRewardsDate,
+    finalStopDate,
+  );
   let currentStakingPeriod: string;
 
-  const activateStakingDate = formatDate(new Date(useSelector(selectActivateStackingDate)));
-  const closeStackingDate = formatDate(new Date(useSelector(selectContributionDeadline)));
-  const lockStakesDate = formatDate(new Date(useSelector(selectLockStakesDate)));
-  const releaseRewardsDate = formatDate(new Date(useSelector(selectReleaseRewardsDate)));
   const timelines: StakeTimeline[] = [
     {
-      date: activateStakingDate,
+      date: formatDate(activateStakingDate),
       name: StakingTimelineEnum.ACTIVATE_STAKING,
     },
     {
-      date: closeStackingDate,
+      date: formatDate(closeStackingDate),
       name: StakingTimelineEnum.CLOSE_STAKING,
     },
     {
-      date: lockStakesDate,
+      date: formatDate(lockStakesDate),
       name: StakingTimelineEnum.LOCK_STAKES,
     },
     {
-      date: releaseRewardsDate,
+      date: formatDate(releaseRewardsDate),
       name: StakingTimelineEnum.RELEASE_REWARDS,
+    },
+    {
+      date: formatDate(finalStopDate),
+      name: StakingTimelineEnum.FINAL_STOP,
     },
   ];
 
   switch (stakingPeriod) {
     case StakingTimelineEnum.BEFORE_STAKING:
-      currentStakingPeriod = 'Staking has not started yet';
+      currentStakingPeriod = 'Staking has not started yet.';
       break;
     case StakingTimelineEnum.ACTIVATE_STAKING:
-      currentStakingPeriod = 'Staking is activated and in progress';
+      currentStakingPeriod = 'Staking is activated and in progress.';
       break;
     case StakingTimelineEnum.CLOSE_STAKING:
-      currentStakingPeriod = 'Staking is closed or the funding goal has been reached';
+      currentStakingPeriod = 'Staking is closed or the funding goal has been reached.';
       break;
     case StakingTimelineEnum.LOCK_STAKES:
-      currentStakingPeriod = 'Contributions are locked';
+      currentStakingPeriod = 'Contributions are locked.';
       break;
     case StakingTimelineEnum.RELEASE_REWARDS:
-      currentStakingPeriod = 'Rewards are released';
+      currentStakingPeriod = 'Rewards are released.';
+      break;
+    case StakingTimelineEnum.FINAL_STOP:
+      currentStakingPeriod = 'The campaign is complete.';
       break;
   }
 
-  const message = `Today ${DateTime.fromJSDate(new Date()).toFormat('dd LLL yy')}, ${currentStakingPeriod}`;
+  const message = `Today ${DateTime.fromJSDate(new Date()).toFormat('dd LLL yyyy')}: ${currentStakingPeriod}`;
 
   return {
     stakingPeriod,
