@@ -319,6 +319,7 @@ contract Staking is ERC20Burnable {
     }
 
     function setOwner(address _newOwner) external onlyOwner {
+        require(_newOwner != address(0), "Invalid address");
         emit OwnershipChanged(msg.sender, _newOwner, block.timestamp);
         owner = _newOwner;
     }

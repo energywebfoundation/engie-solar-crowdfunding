@@ -342,6 +342,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
         await expect(asPatron.setOwner(patron2.address)).to.be.revertedWith('Must be the admin');
       });
 
+      it('Should fail when owner tries to transfer ownership to null address', async () => {
+        await expect(asOwner.setOwner(nullAddress)).to.be.revertedWith('Invalid address');
+      });
+
       it('Should allow ownership trasnfer', async () => {
         tx = await asOwner.setOwner(patron2.address);
         const {blockNumber} = await tx.wait();
