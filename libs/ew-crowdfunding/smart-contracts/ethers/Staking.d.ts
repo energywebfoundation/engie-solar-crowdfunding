@@ -49,6 +49,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "redeem(uint256)": FunctionFragment;
     "redeemAll()": FunctionFragment;
     "serviceRole()": FunctionFragment;
+    "setOwner(address)": FunctionFragment;
     "signupEnd()": FunctionFragment;
     "signupStart()": FunctionFragment;
     "stake()": FunctionFragment;
@@ -158,6 +159,7 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "serviceRole",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "setOwner", values: [string]): string;
   encodeFunctionData(functionFragment: "signupEnd", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "signupStart",
@@ -248,6 +250,7 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "serviceRole",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "signupEnd", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "signupStart",
@@ -282,6 +285,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "Approval(address,address,uint256)": EventFragment;
     "CampaignAborted(uint256)": EventFragment;
     "NewStake(address,uint256,uint256)": EventFragment;
+    "OwnershipChanged(address,address,uint256)": EventFragment;
     "RefundExceeded(address,uint256,uint256)": EventFragment;
     "RewardSent(address,uint256,uint256)": EventFragment;
     "StakingPoolInitialized(uint256,uint256,uint256)": EventFragment;
@@ -295,6 +299,7 @@ interface StakingInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "CampaignAborted"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewStake"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RefundExceeded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RewardSent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "StakingPoolInitialized"): EventFragment;
@@ -322,6 +327,14 @@ export type NewStakeEvent = TypedEvent<
     _user: string;
     _amout: BigNumber;
     _timestamp: BigNumber;
+  }
+>;
+
+export type OwnershipChangedEvent = TypedEvent<
+  [string, string, BigNumber] & {
+    _oldOwner: string;
+    _newOwner: string;
+    _dateTime: BigNumber;
   }
 >;
 
@@ -529,6 +542,11 @@ export class Staking extends BaseContract {
 
     serviceRole(overrides?: CallOverrides): Promise<[string]>;
 
+    setOwner(
+      _newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     signupEnd(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     signupStart(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -683,6 +701,11 @@ export class Staking extends BaseContract {
 
   serviceRole(overrides?: CallOverrides): Promise<string>;
 
+  setOwner(
+    _newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
 
   signupStart(overrides?: CallOverrides): Promise<BigNumber>;
@@ -825,6 +848,8 @@ export class Staking extends BaseContract {
 
     serviceRole(overrides?: CallOverrides): Promise<string>;
 
+    setOwner(_newOwner: string, overrides?: CallOverrides): Promise<void>;
+
     signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
 
     signupStart(overrides?: CallOverrides): Promise<BigNumber>;
@@ -906,6 +931,24 @@ export class Staking extends BaseContract {
     ): TypedEventFilter<
       [string, BigNumber, BigNumber],
       { _user: string; _amout: BigNumber; _timestamp: BigNumber }
+    >;
+
+    "OwnershipChanged(address,address,uint256)"(
+      _oldOwner?: null,
+      _newOwner?: null,
+      _dateTime?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { _oldOwner: string; _newOwner: string; _dateTime: BigNumber }
+    >;
+
+    OwnershipChanged(
+      _oldOwner?: null,
+      _newOwner?: null,
+      _dateTime?: null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { _oldOwner: string; _newOwner: string; _dateTime: BigNumber }
     >;
 
     "RefundExceeded(address,uint256,uint256)"(
@@ -1150,6 +1193,11 @@ export class Staking extends BaseContract {
 
     serviceRole(overrides?: CallOverrides): Promise<BigNumber>;
 
+    setOwner(
+      _newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     signupEnd(overrides?: CallOverrides): Promise<BigNumber>;
 
     signupStart(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1303,6 +1351,11 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     serviceRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setOwner(
+      _newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     signupEnd(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

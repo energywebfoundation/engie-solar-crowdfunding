@@ -338,6 +338,21 @@ describe("[ Crowdfunding Staking contract ] ", () => {
         await expect(tx).to.emit(stakingContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
       });
 
+      it('Should fail when non owner tries to transfer ownership', async () => {
+        await expect(asPatron.setOwner(patron2.address)).to.be.revertedWith('Must be the admin');
+      });
+
+      it('Should allow ownership trasnfer', async () => {
+        tx = await asOwner.setOwner(patron2.address);
+        const {blockNumber} = await tx.wait();
+        const {timestamp} = await provider.getBlock(blockNumber)
+        await expect(tx).to.emit(asOwner, 'OwnershipChanged').withArgs(owner.address, patron2.address, timestamp);
+
+        //setting back old owner
+        await asPatron2.setOwner(owner.address);
+
+      });
+
   });
 
   describe("\n+ Testing Staking & Widthdrawal", () => {

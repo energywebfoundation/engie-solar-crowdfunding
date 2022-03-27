@@ -39,6 +39,7 @@ contract Staking is ERC20Burnable {
     event RefundExceeded(address _sender, uint256 amount, uint256 refunded);
     event StakingPoolInitialized(uint256 initDate, uint256 _startDate, uint256 _endDate);
     event Swept(uint256 _amount, uint256 _date);
+    event OwnershipChanged(address _oldOwner, address _newOwner, uint256 _dateTime);
 
     modifier initialized(){
         require(isContractInitialized, "Not initialized");
@@ -315,5 +316,10 @@ contract Staking is ERC20Burnable {
     function getRewards() external view returns (uint256){
         (uint256 rewards, ) = _getRewards(balanceOf(msg.sender));
         return rewards;
+    }
+
+    function setOwner(address _newOwner) external onlyOwner {
+        emit OwnershipChanged(msg.sender, _newOwner, block.timestamp);
+        owner = _newOwner;
     }
 }
