@@ -59,6 +59,7 @@ contract Staking is ERC20Burnable {
         string memory tokenName,
         string memory tokenSymbol
     ) ERC20(tokenName, tokenSymbol) {
+        require(_rewardProvider != address(0), "Wrong rewardProvider");
         owner = msg.sender;
         claimManagerAddress = _claimManager;
         serviceRole = _serviceRole;
