@@ -1,6 +1,7 @@
 const _emoji = require("node-emoji");
 const prompt_ = require("prompt-sync")();
 const deployedAddress = require('../src/lib/deployedAddress').deployedAddress;
+import { DateTime } from 'luxon';
 
 const throwError = (errorMessage : string) => {
   throw (`\n\x1b[31m${errorMessage}\x1b[0m\n`);
@@ -25,7 +26,7 @@ const _checkAnswer = (answer : string, promptMode = "noLoop") => {
 
 const getEWTAmount = (field: string, emoji?: string) => {
     console.log("\n");
-    const value = prompt_(`${emoji ? _emoji.emojify(emoji) : ""} Enter ${field} (in EWT) : `);
+    const value = prompt_(`${emoji ? _emoji.emojify(emoji) : ""} Enter ${field} (in EWT) : `);
     return ethers.utils.parseUnits(value, "ether");
 }
 
@@ -44,7 +45,8 @@ const formatDate = (date: string | undefined): number | undefined => {
   if (!date) {
     return;
   }
-  return Math.floor(new Date(date).getTime()) / 1000;
+  // return Math.floor(new Date(date).getTime()) / 1000;
+  return DateTime.fromISO(date, { zone: "utc" }).toSeconds();
 }
 
 const getInitParams = async (_deployedContract : typeof Contract) => {
