@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 
 const Home: NextPage = () => {
   return (
-    <div>
+    <>
       <Carousel />
       <AppContainer>
         <ImageText
@@ -47,7 +47,7 @@ const Home: NextPage = () => {
       </AppContainer>
       <Contact />
       <Footer />
-    </div>
+    </>
   );
 };
 

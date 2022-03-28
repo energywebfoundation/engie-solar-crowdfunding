@@ -20,7 +20,6 @@ import {
   selectAccountBalance,
   selectActivateStackingDate,
   selectAddress,
-  selectAuthenticated,
   selectContributionDeadline,
   selectGlobalTokenLimit,
   selectProvider,
@@ -46,7 +45,6 @@ export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
   const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
-  const authenticated = useSelector(selectAuthenticated);
 
   const provider = useSelector(selectProvider);
   const currentAddress = useSelector(selectAddress);

@@ -238,7 +238,6 @@ export const getActivateStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupStart: number = +(await stakingContract.signupStart()).toString();
-      console.log('ACTIVATE STACKING')
       const activateStackingDate = formatUTCTimestamp(signupStart);
       dispatch({
         type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
