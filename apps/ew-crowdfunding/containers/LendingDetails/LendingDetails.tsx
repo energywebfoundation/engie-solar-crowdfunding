@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Paper, Button, CircularProgress, Link, Typography, Divider } from '@mui/material';
+import { Box, Paper, Button, CircularProgress, Typography, Divider } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { RoleEnrollmentStatus } from '../../redux-store';
 import { formatDate } from '../../utils';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
 import { useStyles } from './LendingDetails.styles';
+import Link from 'next/link';
 
 export const LendingDetails: FC = () => {
   const classes = useStyles();
@@ -100,10 +101,14 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.disclaimer}>
-              <Typography variant='body2'>
+              <Typography variant='body2' sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                 By clicking &quot;STAKE&quot;, you acknowledge{' '}
-                <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
-                  this disclaimer
+                <Link href='/terms-and-conditions'>
+                  <a target='_blank'>
+                    <Typography ml={1} variant='body2' color='primary'>
+                      this disclaimer
+                    </Typography>
+                  </a>
                 </Link>
               </Typography>
             </Box>

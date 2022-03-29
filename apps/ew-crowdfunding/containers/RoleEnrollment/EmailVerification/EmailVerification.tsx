@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, Link, Typography } from '@mui/material';
+import { Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, Typography } from '@mui/material';
 import { useStyles } from './EmailVerification.styles';
 import { useEmailVerificationEffects } from './EmailVerification.effects';
 import { shortenAddress } from '../../../utils';
 import { FormInputText, WalletCard } from '../../../components';
 import { RoleEnrollmentStatus } from '../../../redux-store';
+import Link from 'next/link';
 
 export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }> = ({ roleEnrolmentStatus }) => {
   const classes = useStyles();
@@ -43,10 +44,14 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
         <FormControlLabel
           control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
           label={
-            <Typography variant='h5'>
+            <Typography variant='h5' sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
               I accept and acknowledge{' '}
-              <Link href='#' variant='h5' target='_blank' color='primary' underline='hover'>
-                this disclaimer
+              <Link href='/privacy-policy'>
+                <a target='_blank'>
+                  <Typography ml={1} variant='h5' color='primary'>
+                    this disclaimer
+                  </Typography>
+                </a>
               </Link>
             </Typography>
           }
