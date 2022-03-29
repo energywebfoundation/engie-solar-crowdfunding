@@ -338,6 +338,10 @@ describe("[ Crowdfunding Staking contract ] ", () => {
         await expect(tx).to.emit(stakingContract, 'StakingPoolInitialized').withArgs(timestamp, start, end);
       });
 
+      it('Should return the admin/owner of the contrat', async () => {
+        expect(await asOwner.getOwner()).to.be.equal(owner.address);
+      });
+
   });
 
   describe("\n+ Testing Staking & Widthdrawal", () => {

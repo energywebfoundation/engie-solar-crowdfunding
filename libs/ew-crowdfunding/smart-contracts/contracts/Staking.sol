@@ -316,4 +316,8 @@ contract Staking is ERC20Burnable {
         (uint256 rewards, ) = _getRewards(balanceOf(msg.sender));
         return rewards;
     }
+
+    function getOwner() external view returns(address){
+        return owner;
+    }
 }

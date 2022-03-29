@@ -37,6 +37,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "fullStopDate()": FunctionFragment;
     "getContractStatus()": FunctionFragment;
     "getDeposit()": FunctionFragment;
+    "getOwner()": FunctionFragment;
     "getRewards()": FunctionFragment;
     "hardCap()": FunctionFragment;
     "hasRole(address,bytes32)": FunctionFragment;
@@ -113,6 +114,7 @@ interface StakingInterface extends ethers.utils.Interface {
     functionFragment: "getDeposit",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "getOwner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getRewards",
     values?: undefined
@@ -227,6 +229,7 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getDeposit", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getOwner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getRewards", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hardCap", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
@@ -480,6 +483,8 @@ export class Staking extends BaseContract {
 
     getDeposit(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getOwner(overrides?: CallOverrides): Promise<[string]>;
+
     getRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     hardCap(overrides?: CallOverrides): Promise<[BigNumber]>;
@@ -634,6 +639,8 @@ export class Staking extends BaseContract {
 
   getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getOwner(overrides?: CallOverrides): Promise<string>;
+
   getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
   hardCap(overrides?: CallOverrides): Promise<BigNumber>;
@@ -782,6 +789,8 @@ export class Staking extends BaseContract {
     >;
 
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getOwner(overrides?: CallOverrides): Promise<string>;
 
     getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -1101,6 +1110,8 @@ export class Staking extends BaseContract {
 
     getDeposit(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getOwner(overrides?: CallOverrides): Promise<BigNumber>;
+
     getRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     hardCap(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1254,6 +1265,8 @@ export class Staking extends BaseContract {
     getContractStatus(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getDeposit(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getOwner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getRewards(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
