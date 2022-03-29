@@ -45,6 +45,7 @@ import { useContractStatus } from '../../hooks';
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
+  const [agreement, setAgreement] = useState<boolean>(false);
   const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
   const authenticated = useSelector(selectAuthenticated);
 
@@ -116,7 +117,7 @@ export const useLendingDetailsEffects = () => {
         .number()
         .typeError('EWT Stake Amount is required')
         .min(0.51)
-        .max(tokenLimit || 400)
+        // .max(tokenLimit || 400)
         .required('EWT Stake Amount is required')
         .label('EWT Stake Amount'),
     })
@@ -186,25 +187,68 @@ export const useLendingDetailsEffects = () => {
     });
   };
 
+  useEffect(() => {
+    console.log("OnConfirm agreement : ", agreement)
+    if (agreement)
+      setErrorMessage(''); 
+  }, [agreement]);
+
+  /** 
+   * This function opens a modal 
+   *  its purpose is to get user's aggreement in order to use the refund feature 
+   * */
+  const getRefundAgreement = (limitType : string) => {
+    setAgreement(false);
+    const error = (limitType === 'Pool limit' ? 'Amount exceeds global limit' : 'Amount exceeds personal limit');
+
+    let promptMessage = '';
+
+    switch(limitType){
+      case 'Pool limit':
+        promptMessage = `${limitType} exceeded ! On stake, the exceedant funds will be returned to your wallet. Do you agree ?`;
+        break;
+      case 'Contribution limit':
+        promptMessage = `${limitType} exceeded ! On stake, the exceedant funds will be returned to your wallet. Do you agree ?`;
+        break;
+    }
+    dispatchModals({
+      type: DSLAModalsActionsEnum.SHOW_CONFIRM,
+      payload: {
+        open: true,
+        title: `Refund Agreement`,
+        text: promptMessage,
+        onConfirm: () => { setAgreement(true)},
+      },
+    });
+    if (!agreement)
+      return error;
+    return ''
+  }
+
   const onLoanChange = () => {
     const loan = Number(getValues('loan'));
     setErrorMessage(getErrorMessage(loan));
+    setAgreement(false);
   };
 
   const getErrorMessage = (loanValue: number) => {
     if (loanValue?.toString().length > 7) {
       return 'You reached the maximum digits';
     }
+
+    if (loanValue > 0 && userContribution == Number(tokenLimit)){
+      return `You already staked ${userContribution} EWT. Your contribution cannot exceed this personal limit`;
+    }
     /* EWT Stake Amount” box greater than */
     if (loanValue > Number(accountBalance)) {
       /* their account balance */
       return 'Amount exceeds account balance';
     } else if (loanValue > Number(tokenLimit)) {
-      /* their personal limit of 200 EWT */
-      return 'Amount exceeds personal limit';
+      /* their personal limit of 400 EWT */
+      return getRefundAgreement('Contribution limit');
     } else if (loanValue + Number(solarLoanTokenBalance) > Number(globalTokenLimit)) {
       /* an amount that makes the total contribution exceed the global limit (10,000 EWT) */ // This needs to be checked
-      return 'Amount exceeds global limit';
+      return getRefundAgreement('Pool limit');
     } else {
       return;
     }
