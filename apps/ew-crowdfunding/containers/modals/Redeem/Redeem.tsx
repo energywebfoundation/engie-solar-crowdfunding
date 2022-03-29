@@ -6,8 +6,17 @@ import { DialogContainer, DialogTitleProps, DialogAction } from '../../../compon
 
 export const Redeem = () => {
   const classes = useStyles();
-  const { control, handleSubmit, onSubmit, open, tokenBalance, onReset, amountWithdrawals, handleRedeemPartial } =
-    useRedeemEffects();
+  const {
+    control,
+    handleSubmit,
+    onSubmit,
+    open,
+    tokenBalance,
+    onReset,
+    amountWithdrawals,
+    handleRedeemPartial,
+    releaseRewardsDate,
+  } = useRedeemEffects();
 
   const titleProps: DialogTitleProps = {
     id: 'redeem-dialog-title',
@@ -37,7 +46,13 @@ export const Redeem = () => {
         <Box className={classes.redeemButtons}>
           {amountWithdrawals.map((value: number) => {
             return (
-              <Button key={`key-${value}`} type='button' variant='outlined' onClick={() => handleRedeemPartial(value)}>
+              <Button
+                disabled={new Date() > releaseRewardsDate && value !== 100}
+                key={`key-${value}`}
+                type='button'
+                variant='outlined'
+                onClick={() => handleRedeemPartial(value)}
+              >
                 {value}%
               </Button>
             );

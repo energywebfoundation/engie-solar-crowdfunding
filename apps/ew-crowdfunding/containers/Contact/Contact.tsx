@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { Box, Typography, Button } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
-import { formatUTCDate, getStakingStatus } from '../../utils';
+import { formatUTCDate, getStakingTimeline } from '../../utils';
 
 export const Contact: FC = () => {
   const classes = useStyles();
@@ -16,7 +16,7 @@ export const Contact: FC = () => {
   const releaseRewardsDate = formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
   const finalStopDate = formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
 
-  const stakingMessage = getStakingStatus(
+  const stakingMessage = getStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,

@@ -37,6 +37,7 @@ import {
   getFinalStopDate,
   redeemAllSlt,
   selectFinalStopDate,
+  selectTotalLentAmount,
 } from '../../redux-store';
 import { propertyExists } from '../../utils';
 import { useContractStatus } from '../../hooks';
@@ -44,6 +45,7 @@ import { useContractStatus } from '../../hooks';
 export const useLendingDetailsEffects = () => {
   const dispatch = useDispatch();
   const [isReady, setIsReady] = useState<boolean>(undefined);
+  const [isPoolReached, setIsPoolReached] = useState<boolean>(false);
   const roleEnrolmentStatus = useSelector(selectRoleEnrollmentStatus);
 
   const provider = useSelector(selectProvider);
@@ -85,6 +87,7 @@ export const useLendingDetailsEffects = () => {
   const userContribution = useSelector(selectUserContribution);
   const solarLoanTokenBalance = useSelector(selectSolarLoanTokenBalance);
   const redeemableReward = useSelector(selectRedeemableReward);
+  const totalLentAmount = useSelector(selectTotalLentAmount);
 
   const interestRate = process.env.NEXT_PUBLIC_INTEREST_RATE;
 
@@ -99,6 +102,12 @@ export const useLendingDetailsEffects = () => {
   const isContractTerminated = useSelector(selectIsTerminated);
 
   useEffect(() => {
+    if (totalLentAmount === globalTokenLimit) {
+      setIsPoolReached(true);
+    }
+  }, [globalTokenLimit, totalLentAmount]);
+
+  useEffect(() => {
     if (propertyExists(accountBalance)) {
       setIsReady(true);
     }
@@ -106,7 +115,11 @@ export const useLendingDetailsEffects = () => {
 
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
-    new Date() < activateStackingDate || (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) || new Date() > fullStopDate || redeemableReward === 0;
+    new Date() < activateStackingDate ||
+    (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) ||
+    new Date() > fullStopDate ||
+    redeemableReward === 0 ||
+    !redeemableReward;
 
   const validationSchema = yup
     .object({
@@ -167,7 +180,7 @@ export const useLendingDetailsEffects = () => {
 
   const onRedeemAll = () => {
     dispatch(redeemAllSlt(provider, currentAddress));
-  }
+  };
 
   const onRedeemSlt = () => {
     if (isRedeemDisabled) {
@@ -178,6 +191,7 @@ export const useLendingDetailsEffects = () => {
       payload: {
         open: true,
         tokenBalance: redeemableReward,
+        releaseRewardsDate,
         onRedeem,
         onRedeemAll,
       },
@@ -234,5 +248,6 @@ export const useLendingDetailsEffects = () => {
     isStackingDisabled,
     isContractPaused,
     isContractTerminated,
+    isPoolReached,
   };
 };

@@ -29,7 +29,6 @@ export const useStakingTimelineEffects = () => {
     releaseRewardsDate,
     finalStopDate,
   );
-  let currentStakingPeriod: string;
 
   const timelines: StakeTimeline[] = [
     {
@@ -54,28 +53,7 @@ export const useStakingTimelineEffects = () => {
     },
   ];
 
-  switch (stakingPeriod) {
-    case StakingTimelineEnum.BEFORE_STAKING:
-      currentStakingPeriod = 'Staking has not started yet.';
-      break;
-    case StakingTimelineEnum.ACTIVATE_STAKING:
-      currentStakingPeriod = 'Staking is activated and in progress.';
-      break;
-    case StakingTimelineEnum.CLOSE_STAKING:
-      currentStakingPeriod = 'Staking is closed or the funding goal has been reached.';
-      break;
-    case StakingTimelineEnum.LOCK_STAKES:
-      currentStakingPeriod = 'Contributions are locked.';
-      break;
-    case StakingTimelineEnum.RELEASE_REWARDS:
-      currentStakingPeriod = 'Rewards are released.';
-      break;
-    case StakingTimelineEnum.FINAL_STOP:
-      currentStakingPeriod = 'The campaign is complete.';
-      break;
-  }
-
-  const message = `Today ${DateTime.fromJSDate(new Date()).toFormat('dd LLL yyyy')}: ${currentStakingPeriod}`;
+  const message = `Today ${DateTime.fromJSDate(new Date()).toFormat('dd LLL yyyy')}: ${stakingPeriod}`;
 
   return {
     stakingPeriod,

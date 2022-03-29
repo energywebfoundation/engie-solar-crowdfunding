@@ -33,6 +33,7 @@ export const LendingDetails: FC = () => {
     isStackingDisabled,
     isContractPaused,
     isContractTerminated,
+    isPoolReached,
   } = useLendingDetailsEffects();
 
   return (
@@ -52,6 +53,11 @@ export const LendingDetails: FC = () => {
           )}
         </Box>
         <Box className={classes.formContainer}>
+          {(isStackingDisabled || isPoolReached) && (
+            <Typography mb={2} align='center' variant='h4' color='error'>
+              You can not longer stake
+            </Typography>
+          )}
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <FormInputText
               name='loan'
@@ -65,31 +71,31 @@ export const LendingDetails: FC = () => {
             />
             <Box mt={2} className={classes.details}>
               <Typography variant='body2'>Expected annual interest rate</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {interestRate}
               </Typography>
             </Box>
             <Box className={classes.details}>
               <Typography variant='body2'>Activate staking</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(activateStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
               <Typography variant='body2'>Stake until</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(closeStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
               <Typography variant='body2'>Stakes locked from</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(lockStakesDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
               <Typography variant='body2'>Release rewards after</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(releaseRewardsDate)}
               </Typography>
             </Box>
@@ -102,7 +108,9 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.infoMessage}>
-              <Typography fontStyle='italic' variant='body2'>All times are displayed in the timezone of your browser.</Typography>
+              <Typography fontStyle='italic' variant='body2'>
+                All times are displayed in the timezone of your browser.
+              </Typography>
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
               {smartContractLoading ? (
@@ -122,7 +130,7 @@ export const LendingDetails: FC = () => {
                 <Button
                   variant='contained'
                   type='submit'
-                  color='primary'
+                  color='secondary'
                   disabled={
                     !!errorMessage ||
                     roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED ||
