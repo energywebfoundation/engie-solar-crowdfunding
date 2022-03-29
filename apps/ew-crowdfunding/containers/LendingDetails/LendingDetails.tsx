@@ -101,6 +101,9 @@ export const LendingDetails: FC = () => {
                 </Link>
               </Typography>
             </Box>
+            <Box className={classes.infoMessage}>
+              <Typography fontStyle='italic' variant='body2'>All times are displayed in the timezone of your browser.</Typography>
+            </Box>
             <Box className={classes.buttonWrapper} mt={2}>
               {smartContractLoading ? (
                 <Box
@@ -174,7 +177,7 @@ export const LendingDetails: FC = () => {
             ) : (
               <Button
                 disabled={isRedeemDisabled || isContractPaused}
-                variant='outlined'
+                variant='contained'
                 color='primary'
                 style={{ minWidth: '200px' }}
                 onClick={onRedeemSlt}

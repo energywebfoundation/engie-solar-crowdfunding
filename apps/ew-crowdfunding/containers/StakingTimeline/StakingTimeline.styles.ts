@@ -36,6 +36,11 @@ export const useStyles = makeStyles(() => {
     },
     bold: {
       fontWeight: 600,
-    }
+    },
+    infoMessage: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
   };
 });

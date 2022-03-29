@@ -115,6 +115,11 @@ export const useStyles = makeStyles(() => {
         alignItems: 'start',
       },
     },
+    infoMessage: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
     buttonWrapper: {
       width: '100%',
       display: 'flex',
