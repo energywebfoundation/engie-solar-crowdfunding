@@ -50,10 +50,8 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
             >
               I accept and acknowledge{' '}
               <Link href='/privacy-policy'>
-                <a target='_blank'>
-                  <Typography ml={1} variant='h5' color='primary'>
-                    this privacy policy
-                  </Typography>
+                <a className={classes.link} target='_blank'>
+                  this privacy policy.
                 </a>
               </Link>
             </Typography>

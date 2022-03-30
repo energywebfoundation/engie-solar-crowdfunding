@@ -183,5 +183,12 @@ export const useStyles = makeStyles(() => {
         marginBottom: '30px'
       },
     },
+    link: {
+      color: theme.palette.primary.main,
+      marginLeft: '5px',
+      '&:hover': {
+        textDecoration: 'underline'
+      }
+    }
   };
 });

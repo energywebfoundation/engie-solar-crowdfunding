@@ -32,6 +32,13 @@ export const useStyles = makeStyles(() => {
     divider: {
       marginRight: '-40px',
       marginLeft: '-40px'
+    },
+    link: {
+      color: theme.palette.primary.main,
+      marginLeft: '5px',
+      '&:hover': {
+        textDecoration: 'underline'
+      }
     }
   };
 });

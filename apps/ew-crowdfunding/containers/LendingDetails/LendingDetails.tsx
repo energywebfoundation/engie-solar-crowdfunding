@@ -104,11 +104,7 @@ export const LendingDetails: FC = () => {
               <Typography variant='body2' sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                 By clicking &quot;STAKE&quot;, you acknowledge{' '}
                 <Link href='/terms-and-conditions'>
-                  <a target='_blank'>
-                    <Typography ml={1} variant='body2' color='primary'>
-                      this disclaimer.
-                    </Typography>
-                  </a>
+                  <a className={classes.link} target='_blank'>this disclaimer.</a>
                 </Link>
               </Typography>
             </Box>
@@ -141,7 +137,7 @@ export const LendingDetails: FC = () => {
                     roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED ||
                     isStackingDisabled ||
                     isContractPaused ||
-                    isContractTerminated || 
+                    isContractTerminated ||
                     isPoolReached
                   }
                   style={{ minWidth: '200px' }}

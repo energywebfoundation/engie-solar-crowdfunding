@@ -6,7 +6,7 @@ import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
 import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
-import { formatUTCTimestamp } from '../../utils';
+import { formatUTCDate, formatUTCTimestamp } from '../../utils';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
@@ -252,7 +252,8 @@ export const getCloseStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupEnd: number = +(await stakingContract.signupEnd()).toString();
-      const closeStackingDate = formatUTCTimestamp(signupEnd);
+      const closeStackingDate =
+        signupEnd !== 0 ? formatUTCTimestamp(signupEnd) : formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
       dispatch({
         type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
         payload: closeStackingDate,
