@@ -32,5 +32,9 @@ export const useStyles = makeStyles(() => {
         width: '100%',
       },
     },
+    notification: {
+      width: '100%',
+      padding: '10px',
+    }
   };
 });

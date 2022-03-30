@@ -6,7 +6,7 @@ import { DSLAModalsActionsEnum, useDSLAModalsDispatch, useDSLAModalsStore } from
 
 export const useRedeemEffects = () => {
   const {
-    redeem: { open, tokenBalance, onRedeem, onRedeemAll },
+    redeem: { open, tokenBalance, onRedeem, onRedeemAll, releaseRewardsDate },
   } = useDSLAModalsStore();
   const dispatchModals = useDSLAModalsDispatch();
 
@@ -18,7 +18,8 @@ export const useRedeemEffects = () => {
       type: DSLAModalsActionsEnum.SHOW_REDEEM,
       payload: {
         open: false,
-        tokenBalance: null,
+        tokenBalance,
+        releaseRewardsDate,
         onRedeem,
         onRedeemAll,
       },
@@ -89,5 +90,6 @@ export const useRedeemEffects = () => {
     onReset,
     handleRedeemPartial,
     amountWithdrawals,
+    releaseRewardsDate,
   };
 };

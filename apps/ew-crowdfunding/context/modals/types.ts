@@ -21,6 +21,7 @@ export type ILogin = {
 export type IRedeem = {
   open: boolean;
   tokenBalance: number;
+  releaseRewardsDate: Date;
   onRedeem: (amount: number) => void;
   onRedeemAll: () => void;
 };

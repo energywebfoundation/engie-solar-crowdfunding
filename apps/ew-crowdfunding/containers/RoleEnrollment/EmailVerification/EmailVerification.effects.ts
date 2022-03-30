@@ -50,8 +50,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   }, [isSubmitSuccessful, reset]);
 
   const onSubmit = async (data: { email: string }) => {
-    // if (errorMessage || isEnrollmentDisabled) { // TODO: Uncomment this for prod
-    if (errorMessage) {
+    if (errorMessage || isEnrollmentDisabled) {
       return;
     }
     setIsLoading(true);

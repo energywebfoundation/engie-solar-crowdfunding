@@ -9,7 +9,7 @@ export const ConnectCard: FC = () => {
   return (
     <WalletCard icon='/LockKey.png' colorClass='bg-warning' step='step 1'>
       <Typography variant='h5'>
-        You need to connect your wallet to see your current balance and interact with The Clean Energy Fund.
+        You need to be connected to your wallet to see your current balance and interact with Crowdfund for Solar.
       </Typography>
       {isLoading ? (
         <Box sx={{ display: 'flex' }}>

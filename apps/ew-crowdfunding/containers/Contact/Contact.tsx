@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { Box, Typography, Button } from '@mui/material';
-import { FC, useEffect, useState } from 'react';
+import { FC } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
-import { formatUTCDate, getStakingStatus } from '../../utils';
+import { formatUTCDate, getStakingTimeline } from '../../utils';
 
 export const Contact: FC = () => {
   const classes = useStyles();
@@ -16,7 +16,7 @@ export const Contact: FC = () => {
   const releaseRewardsDate = formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
   const finalStopDate = formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
 
-  const stakingMessage = getStakingStatus(
+  const stakingMessage = getStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,
@@ -28,10 +28,10 @@ export const Contact: FC = () => {
     <Box py={5} className={classes.container}>
       <AppContainer>
         <Box className={classes.wrapper}>
-          <Typography variant='h3'>Invest today and help electrify X homes!</Typography>
+          <Typography variant='h3'>Invest today to electrify those in need!</Typography>
           <Typography variant='h5' mt={5} align='center'>
-            EEA and Energy Web are committed to identifying opportunities to further scale and improve this solution.
-            Interested in partnering or have feedback?
+            ENGIE Energy Access and Energy Web are committed to identifying opportunities to scale up and enhance this
+            solution. Interested in partnering with us or providing feedback?
           </Typography>
           <Typography variant='h5' mt={3} align='center'>
             Contact Energy Web at
@@ -40,7 +40,7 @@ export const Contact: FC = () => {
             </a>
           </Typography>
           <Typography variant='h5' mb={5} align='center'>
-            and EEA at
+            or ENGIE Energy Access at
             <a className={classes.link} href='mailto:stefan.zelazny@engie.com.'>
               stefan.zelazny@engie.com.
             </a>
@@ -53,7 +53,7 @@ export const Contact: FC = () => {
           <Link href='/wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
-                Fund solar
+                Fund Now
               </Button>
             </a>
           </Link>

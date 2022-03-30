@@ -7,7 +7,7 @@ import { useStyles } from './Navigation.styles';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { formatUTCDate, shortenDid } from '../../utils';
 import Link from 'next/link';
-import { getStakingStatus } from '../../utils';
+import { getStakingTimeline } from '../../utils';
 
 export const Navigation = () => {
   const classes = useStyles();
@@ -19,7 +19,7 @@ export const Navigation = () => {
   const releaseRewardsDate = formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
   const finalStopDate = formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
 
-  const stakingMessage = getStakingStatus(
+  const stakingMessage = getStakingTimeline(
     activateStakingDate,
     closeStackingDate,
     lockStakesDate,

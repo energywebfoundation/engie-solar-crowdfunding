@@ -9,7 +9,7 @@ const WalletPage: NextPage = () => {
   useFetching();
 
   return (
-    <div>
+    <>
       <Navigation />
       <Welcome />
       <InfoContainer />
@@ -22,7 +22,7 @@ const WalletPage: NextPage = () => {
         <Lending />
       </AppContainer>
       <Footer />
-    </div>
+    </>
   );
 };
 

@@ -6,7 +6,7 @@ import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
 import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
-import { formatUTCTimestamp } from '../../utils';
+import { formatUTCDate, formatUTCTimestamp } from '../../utils';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
@@ -132,14 +132,12 @@ export const redeemAllSlt =
 export const getAccountBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    let formattedAccountBalance = '0';
     try {
       const currentBalance = await provider.getBalance(currentAddress);
       const accountBalance = ethers.utils.formatEther(currentBalance);
-      formattedAccountBalance = `${Number(accountBalance).toPrecision(3)}`;
       dispatch({
         type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
-        payload: formattedAccountBalance,
+        payload: accountBalance,
       });
     } catch {
       console.log('Error getting account balance');
@@ -238,7 +236,6 @@ export const getActivateStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupStart: number = +(await stakingContract.signupStart()).toString();
-      console.log('ACTIVATE STACKING')
       const activateStackingDate = formatUTCTimestamp(signupStart);
       dispatch({
         type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
@@ -255,7 +252,8 @@ export const getCloseStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupEnd: number = +(await stakingContract.signupEnd()).toString();
-      const closeStackingDate = formatUTCTimestamp(signupEnd);
+      const closeStackingDate =
+        signupEnd !== 0 ? formatUTCTimestamp(signupEnd) : formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
       dispatch({
         type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
         payload: closeStackingDate,

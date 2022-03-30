@@ -717,6 +717,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const beforeSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance Before sweep : ", beforeSweep);
       const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
+      const remainingFunds = await asOwner.totalStaked();
       tx = await asOwner.sweep()
       const {blockNumber} = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber)
@@ -728,9 +729,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(afterSweep).to.be.greaterThan(beforeSweep);
       await expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);
       //Checking that we send to the rewardProvider wallet remainingRewards + remainingFunds staked (i.e totalStaked)
-      await expect(tx).changeEtherBalance(owner, (remainingReward.add(await asOwner.totalStaked())));
+      await expect(tx).changeEtherBalance(owner, (remainingReward.add(remainingFunds)));
       //Checking that we remove from the contract remainingRewards + remainingFunds staked (i.e totalStaked)
-      await expect(tx).changeEtherBalance(asOwner, (remainingReward.add(await asOwner.totalStaked()).mul(-1)));
+      await expect(tx).changeEtherBalance(asOwner, (remainingReward.add(remainingFunds).mul(-1)));
       
     })
 

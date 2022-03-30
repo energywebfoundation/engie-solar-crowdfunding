@@ -24,7 +24,9 @@ export const StakingTimeline: FC = () => {
         <Typography variant='body2' className={classes.title}>
           Campaign Status
         </Typography>
-        <Typography><strong>{message}</strong></Typography>
+        <Typography>
+          <strong>{message}</strong>
+        </Typography>
       </Box>
       <Box className={classes.timeline}>
         <Timeline position='alternate'>
@@ -32,12 +34,19 @@ export const StakingTimeline: FC = () => {
             timelines.map((timeline: StakeTimeline) => {
               return (
                 <TimelineItem key={`${timeline.date}_${timeline.name}`}>
-                  <TimelineOppositeContent color='info' className={stakingPeriod === timeline.name ? `gradient-text ${classes.bold}` : ''}>{timeline.date}</TimelineOppositeContent>
+                  <TimelineOppositeContent
+                    color='info'
+                    className={stakingPeriod === timeline.name ? `gradient-text ${classes.bold}` : ''}
+                  >
+                    {timeline.date}
+                  </TimelineOppositeContent>
                   <TimelineSeparator>
                     <TimelineDot color={stakingPeriod === timeline.name ? 'secondary' : 'info'} />
                     <TimelineConnector />
                   </TimelineSeparator>
-                  <TimelineContent className={stakingPeriod === timeline.name ? `gradient-text ${classes.bold}` : ''}>{timeline.name}</TimelineContent>
+                  <TimelineContent className={stakingPeriod === timeline.name ? `gradient-text ${classes.bold}` : ''}>
+                    {timeline.name}
+                  </TimelineContent>
                 </TimelineItem>
               );
             })}
@@ -50,6 +59,11 @@ export const StakingTimeline: FC = () => {
         >
           Pause Campaign
         </Button>
+      </Box>
+      <Box className={classes.infoMessage}>
+        <Typography fontStyle='italic' variant='body2'>
+          All times are displayed in the timezone of your browser.
+        </Typography>
       </Box>
     </Paper>
   );
