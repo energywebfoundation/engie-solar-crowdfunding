@@ -80,3 +80,8 @@ export const selectIsTerminated = createSelector(
   [selectSmartContract],
   (smartContract) => smartContract.isTerminated,
 );
+
+export const selectContractAdmin = createSelector(
+  [selectSmartContract],
+  (smartContract) => smartContract.owner
+)

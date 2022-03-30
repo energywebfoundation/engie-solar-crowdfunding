@@ -350,3 +350,18 @@ export const getContractStatus =
       console.log('getContractStatus: ', error);
     }
   };
+
+  export const getOwner =
+  (provider: any): AppThunk =>
+  async (dispatch): Promise<void> => {
+    try {
+      const stakingContract = Staking__factory.connect(deployedAddress, provider?.getSigner());
+      const owner = (await stakingContract.getOwner()).toString();
+      dispatch({
+        type: SmartContractActionTypes.GET_OWNER,
+        payload: {owner},
+      });
+    } catch (error) {
+      console.log('getOwnerError: ', error);
+    }
+  };

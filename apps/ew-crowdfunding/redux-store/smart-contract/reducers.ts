@@ -15,6 +15,7 @@ const initialState: SmartContractReducerState = {
   isPaused: false,
   isTerminated: false,
   isInitialized: false,
+  owner: null,
   // Dates
   activateStakingDate: null,
   closeStackingDate: null,
@@ -105,6 +106,11 @@ const smartContractReducer: Reducer<SmartContractReducerState> = (
         isTerminated: payload.isTerminated,
         isPaused: payload.isPaused,
       };
+    case SmartContractActionTypes.GET_OWNER:
+      return {
+        ...state,
+        owner: payload.owner
+      }
     default:
       return state;
   }

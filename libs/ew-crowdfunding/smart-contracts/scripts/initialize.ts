@@ -153,8 +153,10 @@ const init = async (contractAddress : string) => {
     throwError(` Contract address not found : \n\tPlease set contract address or make sure that ${contractName} contract is deployed`)
   }
 }
+const address = process.env.CONTRACT_ADDRESS || deployedAddress;
   
-init(deployedAddress)
+// init(deployedAddress)
+init(address)
   .then(() => process.exit(0))
   .catch((error) => {
     console.error(error);

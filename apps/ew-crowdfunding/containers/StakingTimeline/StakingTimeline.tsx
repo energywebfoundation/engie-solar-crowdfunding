@@ -7,8 +7,12 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { useStyles } from './StakingTimeline.styles';
-import { Box, Paper, Typography } from '@mui/material';
+import { Box, Paper, Typography, Button } from '@mui/material';
 import { useStakingTimelineEffects, StakeTimeline } from './StakingTimeline.effects';
+import { selectContractAdmin } from '../../redux-store';
+import { useDispatch, useSelector } from 'react-redux';
+
+
 
 export const StakingTimeline: FC = () => {
   const classes = useStyles();
@@ -38,6 +42,14 @@ export const StakingTimeline: FC = () => {
               );
             })}
         </Timeline>
+        <Button
+           variant='contained'
+           type='submit'
+           color='primary'
+
+        >
+          Pause Campaign
+        </Button>
       </Box>
     </Paper>
   );
