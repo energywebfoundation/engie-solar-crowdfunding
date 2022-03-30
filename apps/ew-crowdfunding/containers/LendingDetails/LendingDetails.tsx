@@ -56,7 +56,7 @@ export const LendingDetails: FC = () => {
         <Box className={classes.formContainer}>
           {(isStackingDisabled || isPoolReached) && (
             <Typography mb={2} align='center' variant='h4' color='error'>
-              You can not longer stake
+              You can no longer stake
             </Typography>
           )}
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>

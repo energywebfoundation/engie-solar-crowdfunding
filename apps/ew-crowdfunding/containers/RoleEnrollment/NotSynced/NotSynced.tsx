@@ -14,7 +14,7 @@ export const NotSynced: FC = () => {
         Your email has been verified.
       </Typography>
       <Typography align='center' variant='h5'>
-        To complete your authorization for staking in Crowdfund for Solar, it is necessary to add an on-chail role of a
+        To complete your authorization for staking in Crowdfund for Solar, it is necessary to add an on-chain role of a
         “Patron” to your EWT staking wallet. This action will create a Decentralized Identifier (DID) for the selected
         wallet on the Energy Web Chain.
       </Typography>
