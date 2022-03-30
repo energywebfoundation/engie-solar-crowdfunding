@@ -25,7 +25,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
   return (
     <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
       <Typography align='center' variant='h5' style={{ fontWeight: 500 }}>
-        You must verify your email to stake EWT in The Clean Energy Fund
+        You must verify your email to stake EWT in Crowdfund for Solar.
       </Typography>
 
       {address && (
@@ -44,12 +44,15 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
         <FormControlLabel
           control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
           label={
-            <Typography variant='h5' sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+            <Typography
+              variant='h5'
+              sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+            >
               I accept and acknowledge{' '}
               <Link href='/privacy-policy'>
                 <a target='_blank'>
                   <Typography ml={1} variant='h5' color='primary'>
-                    this disclaimer
+                    this privacy policy
                   </Typography>
                 </a>
               </Link>

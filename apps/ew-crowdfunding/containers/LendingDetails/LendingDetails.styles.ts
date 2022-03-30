@@ -22,7 +22,7 @@ export const useStyles = makeStyles(() => {
       width: '100%',
       height: '1px',
       background: 'rgba(0, 0, 0, 0.64)',
-      bottom: '120px',
+      bottom: '150px',
       [theme.breakpoints.down('sm')]: {
         bottom: '230px',
       },
@@ -146,7 +146,7 @@ export const useStyles = makeStyles(() => {
     redeemableReward: {
       marginTop: '50px',
       padding: '0px 16px',
-      height: '86px',
+      height: '120px',
       [theme.breakpoints.down('sm')]: {
         marginTop: 0,
       },
@@ -174,7 +174,7 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
     },
     redeemAction: {
-      marginTop: '50px',
+      marginTop: '70px',
       width: '100%',
       display: 'flex',
       justifyContent: 'flex-end',

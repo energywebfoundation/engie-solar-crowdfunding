@@ -21,7 +21,7 @@ export const Redeem = () => {
   const titleProps: DialogTitleProps = {
     id: 'redeem-dialog-title',
     title: 'Redeem your SLT tokens',
-    subtitle: 'EWT will be transferred to your account balance. You will be charged with gass fee.',
+    subtitle: 'SLTs will be burnt and EWT will be transferred to your account balance. You will be charged a small gas fee.',
   };
 
   const dialogAction: DialogAction = {
@@ -36,7 +36,7 @@ export const Redeem = () => {
         <FormInputText
           name='amount'
           control={control}
-          label='Withdraw Amount'
+          label='Withdraw amount SLT'
           type='number'
           hint={`Max. ${tokenBalance} SLT`}
           inputProps={{

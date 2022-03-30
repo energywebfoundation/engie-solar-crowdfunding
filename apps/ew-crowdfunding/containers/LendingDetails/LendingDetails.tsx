@@ -77,13 +77,13 @@ export const LendingDetails: FC = () => {
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Activate staking</Typography>
+              <Typography variant='body2'>Stake between</Typography>
               <Typography variant='body2' fontWeight='bold'>
                 {formatDate(activateStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Stake until</Typography>
+              <Typography variant='body2'>and</Typography>
               <Typography variant='body2' fontWeight='bold'>
                 {formatDate(closeStackingDate)}
               </Typography>
@@ -162,7 +162,7 @@ export const LendingDetails: FC = () => {
           />
           <ContributionItem
             className={classes.redeemableReward}
-            title='Redeemable reward'
+            title='Redeemable amount (principle + 10% reward based on available SLT)'
             value={redeemableReward}
             type='EWT'
           />

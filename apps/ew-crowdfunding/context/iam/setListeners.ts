@@ -16,12 +16,12 @@ const getConfigInfo = (type: ProviderEvent) => {
     case ProviderEvent.AccountChanged:
       return {
         title: 'Account Changed',
-        message: 'Account has changed.',
+        message: 'Your MetaMask account has been changed. Please select the desired account and connect again.',
       };
     case ProviderEvent.NetworkChanged:
       return {
         title: 'Network Changed',
-        message: 'Network has changed.',
+        message: 'Your MetaMask Network has been changed. Please select the correct Network and connect again.',
       };
     case ProviderEvent.Disconnected:
       return {
