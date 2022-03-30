@@ -56,6 +56,7 @@ export const useLendingDetailsEffects = () => {
     if (propertyExists(provider)) {
       dispatch(getContractStatus(provider));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contractStatus, dispatch]);
 
   const smartContractLoading = useSelector(selectSmartContractLoading);
@@ -79,6 +80,7 @@ export const useLendingDetailsEffects = () => {
       dispatch(getRedeemableReward(provider));
       dispatch(getContractStatus(provider));
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const accountBalance = useSelector(selectAccountBalance);
