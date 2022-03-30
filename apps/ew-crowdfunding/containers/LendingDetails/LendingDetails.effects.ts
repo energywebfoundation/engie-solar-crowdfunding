@@ -104,10 +104,10 @@ export const useLendingDetailsEffects = () => {
   const isContractTerminated = useSelector(selectIsTerminated);
 
   useEffect(() => {
-    if (totalLentAmount === globalTokenLimit) {
+    if (propertyExists(totalLentAmount) && propertyExists(globalTokenLimit) && (totalLentAmount === globalTokenLimit)) {
       setIsPoolReached(true);
     }
-  }, [globalTokenLimit, totalLentAmount]);
+  }, [totalLentAmount, globalTokenLimit]);
 
   useEffect(() => {
     if (propertyExists(accountBalance)) {
