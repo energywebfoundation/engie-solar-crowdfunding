@@ -28,6 +28,7 @@ export const dslaModalsInitialState: IDSLAModalsStore = {
   redeem: {
     open: false,
     tokenBalance: null,
+    releaseRewardsDate: null,
     onRedeem: (amount: number) => {
       return;
     },

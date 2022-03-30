@@ -3,34 +3,33 @@ import { InfoCardProps } from '../../components';
 export const useInfoContainerEffects = () => {
   const infoItems: InfoCardProps[] = [
     {
-      title: '~ 621',
+      title: '~ 759',
       type: 'million',
-      text: 'Two in every three people in Africa, around 621 million in total, have no access to electricity.',
+      text: 'Globally 759 million people - 1 out of 10 - do not have access to electricity.',
     },
     {
-      title: '90',
+      title: '75',
       type: '%',
-      text: 'In 11 countries in Africa, more than 90% of people go completely without electricity.',
+      text: 'Sub-Saharan Africa accounts for 75 percent of the world`s population without access to electricity.',
     },
     {
-      title: '79',
+      title: '20',
+      text: 'Among the 20 countries that comprise the smallest share of population with access to electricity, all are located in sub-Saharan Africa.',
+    },
+    {
+      title: '>50',
       type: '%',
-      text: '79% of people living in Third World African nations have no access to electricity.',
-    },
-    {
-      title: '3 - 5',
-      type: '%',
-      text: 'Only 3-5% of people have easy access to electric power, just in a few African countries.',
-    },
-    {
-      title: '518',
-      type: 'kWh',
-      text: 'Annual consumption is 518 KWh in Sub-Saharan Africa.',
+      text: 'Half of secondary schools in sub-Saharan Africa do not have power, which significantly restricts access to night time or evening classes, computers, internet, projectors and much more.',
     },
     {
       title: '4',
       type: '%',
-      text: 'The continent accounts for less than 4% of global electricity use.',
+      text: 'Despite being home to 17% of the world`s population, Africa currently accounts for just 4% of global power supply investment.',
+    },
+    {
+      title: '2.6',
+      type: 'billion',
+      text: 'Around 2.6 billion people have to rely on dirty biomass fuels such as charcoal, coal and animal waste for cooking.',
     },
   ];
 

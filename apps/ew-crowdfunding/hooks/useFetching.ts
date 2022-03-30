@@ -9,5 +9,6 @@ export const useFetching = () => {
 
   useEffect(() => {
     dispatch(getWeb3(dispatchModals));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

@@ -49,18 +49,22 @@ export const requestLogout =
 export const handleWeb3Listeners =
   (signerService: SignerService, dispatchModals: React.Dispatch<TDSLAModalsAction>): AppThunk =>
   async (dispatch): Promise<void> => {
-    const handleListeners = (config: Web3ModalConfig) => {
-      dispatchModals({
-        type: DSLAModalsActionsEnum.SHOW_NOTIFICATION,
-        payload: {
-          open: true,
-          config,
-        },
-      });
-      removeLocalStorageAccount();
-      dispatch({ type: Web3ActionTypes.RESET_WEB3 });
-    };
-    setListeners(signerService, (config) => handleListeners(config));
+    try {
+      const handleListeners = (config: Web3ModalConfig) => {
+        dispatchModals({
+          type: DSLAModalsActionsEnum.SHOW_NOTIFICATION,
+          payload: {
+            open: true,
+            config,
+          },
+        });
+        removeLocalStorageAccount();
+        dispatch({ type: Web3ActionTypes.RESET_WEB3 });
+      };
+      setListeners(signerService, (config) => handleListeners(config));
+    } catch (error) {
+      console.log('handleWeb3Listeners error: ', error);
+    }
   };
 
 export const getWeb3 =
@@ -112,6 +116,7 @@ export const getWeb3 =
           });
         }
       } catch (error) {
+        console.log('getWeb3 error: ', error);
         dispatch({
           type: Web3ActionTypes.SET_IS_LOADING,
           payload: false,
@@ -182,6 +187,7 @@ export const requestLogin =
         });
       }
     } catch (error) {
+      console.log('requestLogin error: ', error);
       removeLocalStorageAccount();
       dispatch({
         type: Web3ActionTypes.SET_IS_LOADING,

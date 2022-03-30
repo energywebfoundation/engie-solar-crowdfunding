@@ -22,17 +22,25 @@ export const Carousel: FC = () => {
       </AppBar>
       <AppContainer>
         <Box className={classes.wrapper}>
-          <Typography variant='h1'>Solar Crowdfunding Platform</Typography>
-          <Typography variant='h5'>
-            Over x% of people living in sub-Saharan Africa don`t have access to electricity. ENGIE EnergyAccess (EEA)
-            and Energy Web are partnering to deploy more solar to vulnerable populations by tapping in new sources of
-            funding: crypto-based decentralized finance. This pilot platform is the initial proof of concept leveraging
-            decentralized finance (DeFi) to accelerate clean and affordable energy access for all.
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <Typography variant='h1'>Crowdfund for Solar</Typography>
+            <Typography variant='h3'>Decentralized financing for decentralized energy</Typography>
+          </Box>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <Typography variant='h5'>
+              More than half of Sub-Saharan Africa lacks access to electricity. With this pilot platform, Energy Web and
+              ENGIE Energy Access have partnered to accelerate access to clean energy for all by tapping into a new
+              source of funding: crypto-based decentralized finance (DeFi).
+            </Typography>
+            <Typography variant='h5'>
+              Crowdfund for Solar is an initial proof of concept leveraging DeFi to accelerate clean and affordable
+              energy access for all.
+            </Typography>
+          </Box>
           <Link href='/wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
-                Fund solar
+                Fund Now
               </Button>
             </a>
           </Link>

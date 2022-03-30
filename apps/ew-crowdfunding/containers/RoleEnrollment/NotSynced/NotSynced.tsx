@@ -11,14 +11,15 @@ export const NotSynced: FC = () => {
   return (
     <WalletCard icon='/IdentificationBadge.png' colorClass='bg-warning' step='step 3'>
       <Typography align='center' variant='h5'>
-        Your email has been verified
+        Your email has been verified.
       </Typography>
       <Typography align='center' variant='h5'>
-        To complete your authorization for staking in The Clean Energy Fund, please add an on-chain role of a “Patron”
-        to your EWT staking wallet. This creates a Decentralized Identifier on the Energy Web Chain.
+        To complete your authorization for staking in Crowdfund for Solar, it is necessary to add an on-chain role of a
+        “Patron” to your EWT staking wallet. This action will create a Decentralized Identifier (DID) for the selected
+        wallet on the Energy Web Chain.
       </Typography>
-      <TextField disabled={true} label='Role' defaultValue='Community' style={{ width: '100%' }} />
-      <Typography align='center' variant='h5'>
+      <TextField disabled={true} label='Role' defaultValue='Patron' style={{ width: '100%' }} />
+      <Typography fontStyle='italic' align='center' variant='h5'>
         We respect your privacy: adding this role does not expose your email on-chain or off-chain
       </Typography>
       <Box className={classes.buttonWrapper}>
@@ -33,7 +34,7 @@ export const NotSynced: FC = () => {
             type='submit'
             color='primary'
             style={{ width: '100%' }}
-            // disabled={isEnrollmentDisabled}  // TODO: Uncomment this for prod
+            disabled={isEnrollmentDisabled}
           >
             Proceed as a Patron
           </Button>

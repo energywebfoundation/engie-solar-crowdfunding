@@ -132,14 +132,12 @@ export const redeemAllSlt =
 export const getAccountBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    let formattedAccountBalance = '0';
     try {
       const currentBalance = await provider.getBalance(currentAddress);
       const accountBalance = ethers.utils.formatEther(currentBalance);
-      formattedAccountBalance = `${Number(accountBalance).toPrecision(3)}`;
       dispatch({
         type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
-        payload: formattedAccountBalance,
+        payload: accountBalance,
       });
     } catch {
       console.log('Error getting account balance');
@@ -238,7 +236,6 @@ export const getActivateStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupStart: number = +(await stakingContract.signupStart()).toString();
-      console.log('ACTIVATE STACKING')
       const activateStackingDate = formatUTCTimestamp(signupStart);
       dispatch({
         type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,

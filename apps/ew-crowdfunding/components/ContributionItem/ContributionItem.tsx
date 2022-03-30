@@ -22,7 +22,7 @@ export const ContributionItem: FC<IContributionItemProps> = ({
   let formmatedDisplayedValue: string;
 
   if (displayedValue?.toString()[displayedValue.toString().length - 1] === '.') {
-    formmatedDisplayedValue = displayedValue.slice(0, -1);
+    formmatedDisplayedValue = `${displayedValue}0`;
   } else {
     formmatedDisplayedValue = displayedValue;
   }
