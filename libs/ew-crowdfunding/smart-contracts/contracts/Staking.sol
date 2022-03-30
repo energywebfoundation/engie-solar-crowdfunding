@@ -208,11 +208,12 @@ contract Staking is ERC20Burnable {
         require(!sweeped, "Already sweeped");
 		require(block.timestamp >= fullStopDate, "Cannot sweep before expiry");
         uint256 remainingRewards = totalRewards - allRedeemedRewards;
+        uint256 remainingFunds = totalStaked;
 
 		sweeped = true;
         deleteParameters();
         delete totalStaked;
-		payable(rewardProvider).transfer(remainingRewards + totalStaked);
+		payable(rewardProvider).transfer(remainingRewards + remainingFunds);
         emit Swept(remainingRewards, block.timestamp);
     }
 
