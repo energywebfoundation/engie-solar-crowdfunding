@@ -106,7 +106,7 @@ export const LendingDetails: FC = () => {
                 <Link href='/terms-and-conditions'>
                   <a target='_blank'>
                     <Typography ml={1} variant='body2' color='primary'>
-                      this disclaimer
+                      this disclaimer.
                     </Typography>
                   </a>
                 </Link>
@@ -141,7 +141,8 @@ export const LendingDetails: FC = () => {
                     roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED ||
                     isStackingDisabled ||
                     isContractPaused ||
-                    isContractTerminated
+                    isContractTerminated || 
+                    isPoolReached
                   }
                   style={{ minWidth: '200px' }}
                 >

@@ -159,7 +159,7 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onSubmit = async (data: { loan: number }) => {
-    if (errorMessage || isStackingDisabled || isContractPaused || isContractTerminated) {
+    if (errorMessage || isStackingDisabled || isContractPaused || isContractTerminated || isPoolReached) {
       return;
     }
 
@@ -185,7 +185,7 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeemSlt = () => {
-    if (isRedeemDisabled) {
+    if (isRedeemDisabled || !isContractPaused) {
       return;
     }
     dispatchModals({

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Paper, Box, Typography } from '@mui/material';
 import { FC } from 'react';
 import { LendingDetails, LendingStats, LendingTerms, StakingTimeline } from '..';
 import { useLendingEffects } from './Lending.effects';
@@ -12,14 +12,18 @@ export const Lending: FC = () => {
     isVisible && (
       <Box className={classes.wrapper}>
         {isContractPaused && (
-          <Typography align='center' variant='h3' style={{ width: '100%' }} className='gradient-text'>
-            Staking is paused until further notice due to an emergency event.
-          </Typography>
+          <Paper className={classes.notification}>
+            <Typography align='center' variant='h3' style={{ width: '100%' }} color='error'>
+              Staking is paused until further notice due to an emergency event!
+            </Typography>
+          </Paper>
         )}
         {isContractTerminated && (
-          <Typography align='center' variant='h3' style={{ width: '100%' }} className='gradient-text'>
-            Staking is canceled due to an emergency event - please withdraw your funds immediately.
-          </Typography>
+          <Paper className={classes.notification}>
+            <Typography align='center' variant='h3' style={{ width: '100%' }} color='error'>
+              Staking is canceled due to an emergency event - please withdraw your funds immediately!
+            </Typography>
+          </Paper>
         )}
         <Box className={classes.stakeContainer} id='lendingApp'>
           <LendingDetails />

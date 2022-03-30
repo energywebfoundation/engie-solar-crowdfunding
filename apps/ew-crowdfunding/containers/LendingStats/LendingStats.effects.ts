@@ -15,6 +15,7 @@ export const useLendingStatsEffects = () => {
   const totalLentAmount = useSelector(selectTotalLentAmount);
   const globalTokenLimit = useSelector(selectGlobalTokenLimit);
 
+  console.log('totalLentAmount: ', totalLentAmount)
   useEffect(() => {
     if (propertyExists(totalLentAmount) && propertyExists(globalTokenLimit)) {
       setIsReady(true);

@@ -39,6 +39,7 @@ export const Redeem = () => {
           label='Withdraw amount SLT'
           type='number'
           hint={`Max. ${tokenBalance} SLT`}
+          disabled={new Date() > releaseRewardsDate}
           inputProps={{
             endAdornment: <InputAdornment position='end'>SLT</InputAdornment>,
           }}
