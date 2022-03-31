@@ -27,6 +27,41 @@ export const setLoading: ActionCreator<Action> = (loading: boolean) => ({
   payload: loading,
 });
 
+export const setContractStatus = (
+    newStatus : string,
+    provider : any,
+    isOwner : boolean
+  ) : AppThunk => 
+  async (dispatch): Promise<void> => {
+    const signer = provider?.getSigner();
+    const stakingContract = Staking__factory.connect(deployedAddress, provider);
+    if (isOwner){
+      try {
+        dispatch({
+          type: SmartContractActionTypes.SET_LOADING,
+          payload: true,
+        });
+        const stackingTx = (
+          newStatus === 'pause' ?
+            await stakingContract.connect(signer).pause() :
+            await stakingContract.connect(signer).unPause()
+        );
+        await stackingTx.wait();
+  
+        dispatch({
+          type: SmartContractActionTypes.SET_LOADING,
+          payload: false,
+        });
+      } catch (error) {
+        dispatch({
+          type: SmartContractActionTypes.SET_LOADING,
+          payload: false,
+        });
+        console.log('Error while lending: ', error);
+      }
+    }
+  }
+
 export const lend =
   (
     amount: number,

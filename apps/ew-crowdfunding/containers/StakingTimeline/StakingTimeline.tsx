@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import Timeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
@@ -9,14 +9,54 @@ import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
 import { useStyles } from './StakingTimeline.styles';
 import { Box, Paper, Typography, Button } from '@mui/material';
 import { useStakingTimelineEffects, StakeTimeline } from './StakingTimeline.effects';
-import { selectContractAdmin } from '../../redux-store';
+import { getOwner, selectContractAdmin, selectProvider, selectAddress, selectIsPaused, setContractStatus } from '../../redux-store';
 import { useDispatch, useSelector } from 'react-redux';
 
 
 
 export const StakingTimeline: FC = () => {
   const classes = useStyles();
+  const dispatch  = useDispatch();
+  const provider = useSelector(selectProvider);
+  const admin = useSelector(selectContractAdmin);
+  const currentAddress = useSelector(selectAddress);
+  const isContractPaused = useSelector(selectIsPaused);
   const { stakingPeriod, timelines, message } = useStakingTimelineEffects();
+  
+  useEffect(() => {
+    console.log("Fetching Contract owner")
+    dispatch(getOwner(provider));
+  },[])
+
+  const handleContractStatus = () => {
+    const isOwner = admin === currentAddress;
+    if (isContractPaused){
+      //dispath Unpause Action
+      console.log("UnPausing contract..");
+      dispatch(setContractStatus('unPause', provider, isOwner))
+    } else {
+      //dispatch Pause action
+      console.log("Pausing contract..");
+      dispatch(setContractStatus('pause', provider, isOwner))
+    }
+  }
+
+  const renderAdminButton = () => {
+    return (
+    <Button
+      variant='contained'
+      type='submit'
+      color='primary'
+      onClick={handleContractStatus}
+    >
+      {!isContractPaused ? 'Pause Campaign' : 'Unpause Campaign'}
+    </Button>
+  )
+ }
+
+  const isCurrentUserAdmin = () => {
+    return currentAddress === admin;
+  }
 
   return (
     <Paper className={classes.wrapper}>
@@ -51,14 +91,7 @@ export const StakingTimeline: FC = () => {
               );
             })}
         </Timeline>
-        <Button
-           variant='contained'
-           type='submit'
-           color='primary'
-
-        >
-          Pause Campaign
-        </Button>
+        {isCurrentUserAdmin() && renderAdminButton()}
       </Box>
       <Box className={classes.infoMessage}>
         <Typography fontStyle='italic' variant='body2'>
