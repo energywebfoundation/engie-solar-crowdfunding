@@ -275,7 +275,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
             signupStart,
             signupEnd,
             minRequiredStake
-          )).to.be.revertedWith('FullStop febore endDate');
+          )).to.be.revertedWith('FullStop before endDate');
           //increment wrongStop to the next day
           wrongStop = Number(DateTime.fromSeconds(wrongStop).plus({day: 1}).toSeconds().toFixed(0));
         }

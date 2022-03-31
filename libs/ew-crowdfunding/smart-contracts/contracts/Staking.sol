@@ -160,7 +160,7 @@ contract Staking is ERC20Burnable {
         require(_hardCap >= _contributionLimit, "Hardcap Exceeded");
         require(_signupStart < _signupEnd, "Wrong signup config");
         require(_startDate > _signupEnd, "Start febore signup period");
-        require(_fullStopDate > _endDate, "FullStop febore endDate");
+        require(_fullStopDate > _endDate, "FullStop before endDate");
 		endDate = _endDate;
         hardCap = _hardCap;
 		startDate = _startDate;
