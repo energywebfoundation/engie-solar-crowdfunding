@@ -258,6 +258,28 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           wrongStart = Number(DateTime.fromSeconds(wrongStart).plus({day: 1}).toSeconds().toFixed(0));
         }
       });
+
+      it("Should fail if fullStopDate is set at any date before endDate",  async () => {
+      
+        let wrongStop = signupStart;
+    
+        //Checking initialization failure on each day until endDate
+        while (wrongStop <= end){
+          await expect(initializeContract(
+            asOwner,
+            start,
+            end,
+            wrongStop,
+            hardCap,
+            contributionLimit,
+            signupStart,
+            signupEnd,
+            minRequiredStake
+          )).to.be.revertedWith('FullStop febore endDate');
+          //increment wrongStop to the next day
+          wrongStop = Number(DateTime.fromSeconds(wrongStop).plus({day: 1}).toSeconds().toFixed(0));
+        }
+      });
       
       it('fails if signup period has wrong configuration', async () => {
         await expect(initializeContract(
