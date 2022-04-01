@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import {
   selectActivateStackingDate,
   selectContributionDeadline,
+  selectFinalStopDate,
   selectLockStakesDate,
   selectReleaseRewardsDate,
 } from '../../redux-store';
@@ -12,7 +13,7 @@ export const useLendingTermsEffects = () => {
   const closeStackingDate = formatDate(new Date(useSelector(selectContributionDeadline)));
   const lockStakesDate = formatDate(new Date(useSelector(selectLockStakesDate)));
   const releaseRewardsDate = formatDate(new Date(useSelector(selectReleaseRewardsDate)));
-  const finalStopDate = formatDate(new Date(process.env.NEXT_PUBLIC_FULL_STOP_DATE));
+  const finalStopDate = formatDate(new Date(useSelector(selectFinalStopDate)));
 
   const listItems: string[] = [
     'Anyone eligible can stake and join the Clean Energy Fund until the maximum pool limit is reached.',
