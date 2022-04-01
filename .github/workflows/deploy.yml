@@ -95,5 +95,5 @@ jobs:
         uses: clowdhaus/argo-cd-action/@v1.10.0
         id: argocd_image_tag_overwrite
         with:
-          command: app set rebeam
+          command: app set esc
           options: -p image.tag=${{ steps.tag_version.outputs.new_tag }}
