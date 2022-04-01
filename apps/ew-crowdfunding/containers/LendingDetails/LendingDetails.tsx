@@ -32,9 +32,11 @@ export const LendingDetails: FC = () => {
     smartContractLoading,
     activateStackingDate,
     isStackingDisabled,
+    isDateBeforeOpen,
     isContractPaused,
     isContractTerminated,
     isPoolReached,
+    getReason
   } = useLendingDetailsEffects();
 
   return (
@@ -56,7 +58,11 @@ export const LendingDetails: FC = () => {
         <Box className={classes.formContainer}>
           {(isStackingDisabled || isPoolReached) && (
             <Typography mb={2} align='center' variant='h4' color='error'>
-              You can no longer stake
+              {
+                isDateBeforeOpen ? 
+                "You can not stake yet - check the timeline."
+                : `You can no longer stake${getReason()}`
+              }
             </Typography>
           )}
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
