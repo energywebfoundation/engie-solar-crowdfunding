@@ -118,7 +118,7 @@ export const useLendingDetailsEffects = () => {
   const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
   const isRedeemDisabled =
     new Date() < activateStackingDate ||
-    (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) ||
+    (!isContractTerminated && new Date() >= closeStackingDate && new Date() < releaseRewardsDate) ||
     new Date() > fullStopDate ||
     redeemableReward == 0 ||
     !redeemableReward;
