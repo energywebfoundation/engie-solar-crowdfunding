@@ -52,7 +52,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: develop,DOI-1680_rebeam_cicd
+          release_branches: DOI-1823_engie
           custom_release_rules: major:major:Major Changes,minor:minor:Minor Changes,chore:patch:Chores
 
       - name: Create a GitHub release
