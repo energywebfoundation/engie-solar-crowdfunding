@@ -2,7 +2,7 @@ name: Deploy to bucket
 
 on:
   push:
-    branches: ['develop', 'master', 'release', 'ci/deployments']
+    branches: ['develop', 'master', 'release', 'ci/deployments', 'DOI-1823_engie']
 jobs:
   cancel-previous:
     name: 'Cancel Previous Runs'
@@ -42,11 +42,11 @@ jobs:
             echo "::set-output name=next_public_global_token_limit::10000"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://volta-explorer.energyweb.org"
-            echo "::set-output name=next_public_activate_staking_date::2022-03-30T12:00"
-            echo "::set-output name=next_public_close_staking_date::2022-03-30T12:15"
-            echo "::set-output name=next_public_lock_stakes_date::2022-03-30T12:20"
-            echo "::set-output name=next_public_release_rewards_date::2022-03-30T12:35"
-            echo "::set-output name=next_public_full_stop_date::2022-03-30T12:40"
+            echo "::set-output name=next_public_activate_staking_date::2022-04-01T15:30"
+            echo "::set-output name=next_public_close_staking_date::2022-04-02T15:05"
+            echo "::set-output name=next_public_lock_stakes_date::2022-04-02T15:10"
+            echo "::set-output name=next_public_release_rewards_date::2022-04-02T15:20"
+            echo "::set-output name=next_public_full_stop_date::2022-04-02T15:25"
           elif [ "${{ github.ref }}" = "refs/heads/DOI-1823_engie" ]; then
             echo "::set-output name=aws_access_key_id::${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=aws_secret_key::${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}"
@@ -67,11 +67,11 @@ jobs:
             echo "::set-output name=next_public_global_token_limit::10000"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://volta-explorer.energyweb.org"
-            echo "::set-output name=next_public_activate_staking_date::2022-03-30T12:00"
-            echo "::set-output name=next_public_close_staking_date::2022-03-30T12:15"
-            echo "::set-output name=next_public_lock_stakes_date::2022-03-30T12:20"
-            echo "::set-output name=next_public_release_rewards_date::2022-03-30T12:35"
-            echo "::set-output name=next_public_full_stop_date::2022-03-30T12:40"
+            echo "::set-output name=next_public_activate_staking_date::2022-04-01T15:30"
+            echo "::set-output name=next_public_close_staking_date::2022-04-02T15:05"
+            echo "::set-output name=next_public_lock_stakes_date::2022-04-02T15:10"
+            echo "::set-output name=next_public_release_rewards_date::2022-04-02T15:20"
+            echo "::set-output name=next_public_full_stop_date::2022-04-02T15:25"
           elif [ "${{ github.ref }}" = "refs/heads/master" ]; then
             echo "::set-output name=aws_access_key_id::${{ secrets.PROD_AWS_ACCESS_KEY_ID }}"
             echo "::set-output name=aws_secret_key::${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}"
@@ -92,11 +92,11 @@ jobs:
             echo "::set-output name=next_public_global_token_limit::10000"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://explorer.energyweb.org"
-            echo "::set-output name=next_public_activate_staking_date::2022-03-30T12:00"
-            echo "::set-output name=next_public_close_staking_date::2022-03-30T12:15"
-            echo "::set-output name=next_public_lock_stakes_date::2022-03-30T12:20"
-            echo "::set-output name=next_public_release_rewards_date::2022-03-30T12:35"
-            echo "::set-output name=next_public_full_stop_date::2022-03-30T12:40"
+            echo "::set-output name=next_public_activate_staking_date::2022-04-01T15:30"
+            echo "::set-output name=next_public_close_staking_date::2022-04-02T15:05"
+            echo "::set-output name=next_public_lock_stakes_date::2022-04-02T15:10"
+            echo "::set-output name=next_public_release_rewards_date::2022-04-02T15:20"
+            echo "::set-output name=next_public_full_stop_date::2022-04-02T15:25"
           else
             echo "Branch ${{ github.ref }} is not configured for deployment"
             exit 1

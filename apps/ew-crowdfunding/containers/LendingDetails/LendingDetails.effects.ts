@@ -120,7 +120,7 @@ export const useLendingDetailsEffects = () => {
     new Date() < activateStackingDate ||
     (new Date() >= closeStackingDate && new Date() < releaseRewardsDate) ||
     new Date() > fullStopDate ||
-    redeemableReward === 0 ||
+    redeemableReward == 0 ||
     !redeemableReward;
 
   const validationSchema = yup
@@ -185,7 +185,7 @@ export const useLendingDetailsEffects = () => {
   };
 
   const onRedeemSlt = () => {
-    if (isRedeemDisabled || !isContractPaused) {
+    if (isRedeemDisabled || isContractPaused) {
       return;
     }
     dispatchModals({
