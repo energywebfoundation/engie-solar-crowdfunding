@@ -9,13 +9,32 @@ A Helm chart for Kubernetes
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | affinity | object | `{}` |  |
+| appValues.NEXT_PUBLIC_ACTIVATE_STAKING_DATE | string | `"2022-03-30T12:00"` |  |
+| appValues.NEXT_PUBLIC_BLOCK_EXPLORER_URL | string | `"https://explorer.energyweb.org"` |  |
+| appValues.NEXT_PUBLIC_CACHE_SERVER | string | `"https://identitycache.energyweb.org/v1"` |  |
+| appValues.NEXT_PUBLIC_CHAIN_ID | int | `246` |  |
+| appValues.NEXT_PUBLIC_CLOSE_STAKING_DATE | string | `"2022-03-30T12:15"` |  |
+| appValues.NEXT_PUBLIC_CURRENCY_NAME | string | `"EWT"` |  |
+| appValues.NEXT_PUBLIC_CURRENCY_SYMBOL | string | `"EWC"` |  |
+| appValues.NEXT_PUBLIC_FULL_STOP_DATE | string | `"2022-03-30T12:40"` |  |
+| appValues.NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT | int | `10000` |  |
+| appValues.NEXT_PUBLIC_INTEREST_RATE | string | `"10%"` |  |
+| appValues.NEXT_PUBLIC_LOCK_STAKES_DATE | string | `"2022-03-30T12:20"` |  |
+| appValues.NEXT_PUBLIC_NETWORK_NAME | string | `"EWC"` |  |
+| appValues.NEXT_PUBLIC_ORG_NAMESPACE | string | `"iam.ewc"` |  |
+| appValues.NEXT_PUBLIC_PATRON_ROLE | string | `"eeaapproved.roles.eea.apps.engie.auth.ewc"` |  |
+| appValues.NEXT_PUBLIC_PATRON_ROLE_VERSION | int | `1` |  |
+| appValues.NEXT_PUBLIC_RELEASE_REWARDS_DATE | string | `"2022-03-30T12:35"` |  |
+| appValues.NEXT_PUBLIC_RPC_URL | string | `"https://rpc.energyweb.org"` |  |
+| appValues.NEXT_PUBLIC_TOKEN_LIMIT | int | `200` |  |
+| appValues.NEXT_PUBLIC_UI_BASE_URL | string | `"https://esc.energyweb.org"` |  |
 | autoscaling.enabled | bool | `false` |  |
 | autoscaling.maxReplicas | int | `100` |  |
 | autoscaling.minReplicas | int | `1` |  |
 | autoscaling.targetCPUUtilizationPercentage | int | `80` |  |
 | fullnameOverride | string | `"esc"` |  |
 | image.pullPolicy | string | `"IfNotPresent"` |  |
-| image.repository | string | `"arn:aws:ecr:us-west-2:124847487737:repository/esc"` |  |
+| image.repository | string | `"124847487737.dkr.ecr.us-west-2.amazonaws.com/esc"` |  |
 | image.tag | string | `"latest"` |  |
 | imagePullSecrets | list | `[]` |  |
 | ingress.annotations | object | `{}` |  |

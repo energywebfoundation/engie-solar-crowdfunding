@@ -53,7 +53,7 @@ jobs:
             echo "::set-output name=aws_region::${{ secrets.AWS_REGION }}"
             echo "::set-output name=bucket_name::${{ secrets.STAGING_BUCKET_NAME }}"
             echo "::set-output name=cloudfront_id::${{ secrets.STAGING_CLOUDFRONT_ID }}"
-            echo "::set-output name=next_public_ui_base_url::https://esc-STAGING.energyweb.org"
+            echo "::set-output name=next_public_ui_base_url::https://esc-staging.energyweb.org"
             echo "::set-output name=next_public_chain_id::73799"
             echo "::set-output name=next_public_rpc_url::https://volta-rpc-vkn5r5zx4ke71f9hcu0c.energyweb.org/"
             echo "::set-output name=next_public_cache_server::https://identitycache-dev.energyweb.org/v1"
