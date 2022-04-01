@@ -61,3 +61,5 @@ Thumbs.db
 .env.test.local
 .env.production
 .env.production.local
+
+docker-compose.yml
