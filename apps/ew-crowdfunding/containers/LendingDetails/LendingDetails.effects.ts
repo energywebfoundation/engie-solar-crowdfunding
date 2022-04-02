@@ -115,13 +115,24 @@ export const useLendingDetailsEffects = () => {
     }
   }, [accountBalance]);
 
-  const isStackingDisabled = new Date() < activateStackingDate || new Date() >= closeStackingDate;
+  const isDateBeforeOpen = new Date() < activateStackingDate;
+  const isStackingDisabled = isDateBeforeOpen || new Date() >= closeStackingDate;
   const isRedeemDisabled =
     new Date() < activateStackingDate ||
     (!isContractTerminated && new Date() >= closeStackingDate && new Date() < releaseRewardsDate) ||
     new Date() > fullStopDate ||
     redeemableReward == 0 ||
     !redeemableReward;
+
+  const getReason = () => {
+    if (isPoolReached) {
+      return " - The pool is full."
+    }
+    if (isStackingDisabled) {
+      return " - Staking disabled."
+    }
+    return ".";
+  }
 
   const validationSchema = yup
     .object({
@@ -251,5 +262,7 @@ export const useLendingDetailsEffects = () => {
     isContractPaused,
     isContractTerminated,
     isPoolReached,
+    isDateBeforeOpen,
+    getReason,
   };
 };
