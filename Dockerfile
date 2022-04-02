@@ -12,26 +12,18 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npm run build:fe
+RUN npm run build
 
-# Production image, copy all the files and run next
-FROM node:16-alpine AS runner
-WORKDIR /app
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-RUN npm install -g http-server
+
+FROM node:16-alpine
 RUN apk update && apk add bash
+WORKDIR /app
 
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package.json ./package.json
-
-USER nextjs
+COPY --from=builder /app/. .
 
 EXPOSE 8080
 
 ENV PORT 8080
 
-WORKDIR /app/dist/apps/ew-crowdfunding/exported
-
-CMD ["http-server", "./"]
+CMD ["npm", "run", "start"]
 
