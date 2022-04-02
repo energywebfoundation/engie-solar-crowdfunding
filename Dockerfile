@@ -12,7 +12,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-RUN npm run build
+RUN npm run build:fe
 
 
 FROM node:16-alpine
@@ -21,9 +21,9 @@ WORKDIR /app
 
 COPY --from=builder /app/. .
 
-EXPOSE 8080
+EXPOSE 4200
 
-ENV PORT 8080
+ENV PORT 4200
 
 CMD ["npm", "run", "start"]
 
