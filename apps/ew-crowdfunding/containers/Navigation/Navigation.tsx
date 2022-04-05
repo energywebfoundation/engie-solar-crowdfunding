@@ -8,30 +8,16 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { formatUTCDate, shortenDid } from '../../utils';
 import Link from 'next/link';
 import { getStakingTimeline } from '../../utils';
-import { useSelector } from 'react-redux';
-import {
-  selectFinalStopDate,
-  selectLockStakesDate,
-  selectReleaseRewardsDate,
-  selectContributionDeadline,
-  selectActivateStackingDate,
-} from '../../redux-store';
 
 export const Navigation = () => {
   const classes = useStyles();
   const { authenticated, did, avatar, logout } = useNavigationEffects();
 
-  // const activateStakingDate = formatUTCDate(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
-  // const closeStackingDate = formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
-  // const lockStakesDate = formatUTCDate(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
-  // const releaseRewardsDate = formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
-  // const finalStopDate = formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
-
-  const activateStakingDate = new Date(useSelector(selectActivateStackingDate));
-  const closeStackingDate = new Date(useSelector(selectContributionDeadline));
-  const lockStakesDate = new Date(useSelector(selectLockStakesDate));
-  const releaseRewardsDate = new Date(useSelector(selectReleaseRewardsDate));
-  const finalStopDate = new Date(useSelector(selectFinalStopDate));
+  const activateStakingDate = formatUTCDate(process.env.NEXT_PUBLIC_ACTIVATE_STAKING_DATE);
+  const closeStackingDate = formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
+  const lockStakesDate = formatUTCDate(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE);
+  const releaseRewardsDate = formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE);
+  const finalStopDate = formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE);
 
   const stakingMessage = getStakingTimeline(
     activateStakingDate,
