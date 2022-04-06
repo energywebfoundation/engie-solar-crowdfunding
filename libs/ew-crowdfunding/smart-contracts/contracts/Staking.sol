@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 contract Staking is ERC20Burnable {
     bool public sweeped;
-    bool private aborted;
-    address private owner;
+    bool public aborted;
+    address public owner;
     uint256 public hardCap;
     uint256 public endDate;
     uint256 public signupEnd;
