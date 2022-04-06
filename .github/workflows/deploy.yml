@@ -128,26 +128,26 @@ jobs:
           context: ./
           push: true
           tags: $ECR_REGISTRY/${{ steps.env_vars.outputs.aws_ecr_repository }}:$BUILD_ID
-          build-args: |
-            NEXT_PUBLIC_UI_BASE_URL=${{ steps.env_vars.outputs.next_public_ui_base_url }}
-            NEXT_PUBLIC_CHAIN_ID=${{ steps.env_vars.outputs.next_public_chain_id }}
-            NEXT_PUBLIC_RPC_URL=${{ steps.env_vars.outputs.next_public_rpc_url }}
-            NEXT_PUBLIC_CACHE_SERVER=${{ steps.env_vars.outputs.next_public_cache_server }}
-            NEXT_PUBLIC_ORG_NAMESPACE=${{ steps.env_vars.outputs.next_public_org_namespace }}
-            NEXT_PUBLIC_NETWORK_NAME=${{ steps.env_vars.outputs.next_public_network_name }}
-            NEXT_PUBLIC_CURRENCY_NAME=${{ steps.env_vars.outputs.next_public_currency_name }}
-            NEXT_PUBLIC_CURRENCY_SYMBOL=${{ steps.env_vars.outputs.next_public_currency_symbol }}
-            NEXT_PUBLIC_PATRON_ROLE=${{ steps.env_vars.outputs.next_public_patron_role }}
-            NEXT_PUBLIC_PATRON_ROLE_VERSION=${{ steps.env_vars.outputs.next_public_patron_role_version }}
-            NEXT_PUBLIC_TOKEN_LIMIT=${{ steps.env_vars.outputs.next_public_token_limit }}
-            NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT=${{ steps.env_vars.outputs.next_public_global_token_limit }}
-            NEXT_PUBLIC_INTEREST_RATE=${{ steps.env_vars.outputs.next_public_interest_rate }}
-            NEXT_PUBLIC_BLOCK_EXPLORER_URL=${{ steps.env_vars.outputs.next_public_block_explorer_url }}
-            NEXT_PUBLIC_ACTIVATE_STAKING_DATE=${{ steps.env_vars.outputs.next_public_activate_staking_date }}
-            NEXT_PUBLIC_CLOSE_STAKING_DATE=${{ steps.env_vars.outputs.next_public_close_staking_date }}
-            NEXT_PUBLIC_LOCK_STAKES_DATE=${{ steps.env_vars.outputs.next_public_lock_stakes_date }}
-            NEXT_PUBLIC_RELEASE_REWARDS_DATE=${{ steps.env_vars.outputs.next_public_release_rewards_date }}
-            NEXT_PUBLIC_FULL_STOP_DATE=${{ steps.env_vars.outputs.next_public_full_stop_date }}
+          # build-args: |
+          #   NEXT_PUBLIC_UI_BASE_URL=${{ steps.env_vars.outputs.next_public_ui_base_url }}
+          #   NEXT_PUBLIC_CHAIN_ID=${{ steps.env_vars.outputs.next_public_chain_id }}
+          #   NEXT_PUBLIC_RPC_URL=${{ steps.env_vars.outputs.next_public_rpc_url }}
+          #   NEXT_PUBLIC_CACHE_SERVER=${{ steps.env_vars.outputs.next_public_cache_server }}
+          #   NEXT_PUBLIC_ORG_NAMESPACE=${{ steps.env_vars.outputs.next_public_org_namespace }}
+          #   NEXT_PUBLIC_NETWORK_NAME=${{ steps.env_vars.outputs.next_public_network_name }}
+          #   NEXT_PUBLIC_CURRENCY_NAME=${{ steps.env_vars.outputs.next_public_currency_name }}
+          #   NEXT_PUBLIC_CURRENCY_SYMBOL=${{ steps.env_vars.outputs.next_public_currency_symbol }}
+          #   NEXT_PUBLIC_PATRON_ROLE=${{ steps.env_vars.outputs.next_public_patron_role }}
+          #   NEXT_PUBLIC_PATRON_ROLE_VERSION=${{ steps.env_vars.outputs.next_public_patron_role_version }}
+          #   NEXT_PUBLIC_TOKEN_LIMIT=${{ steps.env_vars.outputs.next_public_token_limit }}
+          #   NEXT_PUBLIC_GLOBAL_TOKEN_LIMIT=${{ steps.env_vars.outputs.next_public_global_token_limit }}
+          #   NEXT_PUBLIC_INTEREST_RATE=${{ steps.env_vars.outputs.next_public_interest_rate }}
+          #   NEXT_PUBLIC_BLOCK_EXPLORER_URL=${{ steps.env_vars.outputs.next_public_block_explorer_url }}
+          #   NEXT_PUBLIC_ACTIVATE_STAKING_DATE=${{ steps.env_vars.outputs.next_public_activate_staking_date }}
+          #   NEXT_PUBLIC_CLOSE_STAKING_DATE=${{ steps.env_vars.outputs.next_public_close_staking_date }}
+          #   NEXT_PUBLIC_LOCK_STAKES_DATE=${{ steps.env_vars.outputs.next_public_lock_stakes_date }}
+          #   NEXT_PUBLIC_RELEASE_REWARDS_DATE=${{ steps.env_vars.outputs.next_public_release_rewards_date }}
+          #   NEXT_PUBLIC_FULL_STOP_DATE=${{ steps.env_vars.outputs.next_public_full_stop_date }}
 
       - name: Logout of Amazon ECR
         if: always()
