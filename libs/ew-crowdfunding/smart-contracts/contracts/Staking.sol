@@ -193,7 +193,7 @@ contract Staking is ERC20Burnable {
 
     function terminate() external onlyOwner {
         require(aborted == false, "Already terminated");
-        require(block.timestamp <= endDate, "Error: canceling after campaign");
+        require(block.timestamp < endDate, "Error: canceling after campaign");
 		uint256 payout = totalRewards;
         aborted = true;
         deleteParameters();
