@@ -45,18 +45,18 @@ export const useInfoPaneEffects = () => {
           text: `You can already enroll in the campaign by connecting your wallet, verifying your email address for that specific address, and adding an onchain “Patron” role to your wallet. Anyone can enroll until the end of the campaign.`,
         },
         {
-          text: `From ${activateStakingDate} date, stake your EWT and receive Solar Loan Tokens (SLT) as proof of participation. `,
+          text: `From ${activateStakingDate}, stake your EWT and receive Solar Loan Tokens (SLT) as proof of participation. `,
           list: [
-            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with. This address can be found on https://explorer.energyweb.org/  - simply look for the latest transaction associated with your wallet.`,
+            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with. This address can be found on https://explorer.energyweb.org/  - simply look for the latest transaction associated to your wallet.`,
             `You can use (transfer and withdraw) your SLT immediately - note that you will need your SLT if you want to withdraw your EWT.`,
-            `If you change your mind, you can withdraw your EWT until ${closeStackingDate} date without any rewards by depositing the SLT back.`,
+            `If you change your mind, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
           ],
         },
         {
-          text: `After the ${closeStackingDate}, your staked EWT will be locked for 1 year from ${lockStakesDate} date until the ${releaseRewardsDate} date.`,
+          text: `After the ${closeStackingDate}, your staked EWT will be locked for 1 year from ${lockStakesDate} until the ${releaseRewardsDate}.`,
         },
         {
-          text: `On ${releaseRewardsDate} date, you will be able to withdraw your EWT and corresponding rewards.`,
+          text: `On ${releaseRewardsDate}, you will be able to withdraw your EWT and corresponding rewards.`,
           list: [
             'You should be enrolled to withdraw your principal and rewards (see Step 1).',
             'Deposit your SLT to the connected wallet and click “Redeem”. This will burn your SLT and release your EWT.',
