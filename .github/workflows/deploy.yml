@@ -126,7 +126,6 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
           context: ./
-          dockerfile: Dockerfile
           push: true
           tags: $ECR_REGISTRY/${{ steps.env_vars.outputs.aws_ecr_repository }}:$BUILD_ID
           build-args: |
