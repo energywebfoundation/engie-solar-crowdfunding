@@ -38,7 +38,7 @@ securityContext: {}
 
 service:
   type: NodePort
-  port: 4200
+  port: 8080
 
 ingress:
   enabled: false
@@ -70,7 +70,7 @@ ingress:
           service:
             name: esc
             port:
-              number: 4200
+              number: 8080
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:
