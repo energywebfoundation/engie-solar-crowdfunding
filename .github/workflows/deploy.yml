@@ -121,13 +121,10 @@ jobs:
 
       - name: Build and push docker image
         uses: docker/build-push-action@v2
-        env:
-          BUILD_ID: ${{ steps.tag_version.outputs.new_tag }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         with:
           context: ./
           push: true
-          tags: $ECR_REGISTRY/${{ steps.env_vars.outputs.aws_ecr_repository }}:$BUILD_ID
+          tags: ${{ steps.login-ecr.outputs.registry }}/${{ steps.env_vars.outputs.aws_ecr_repository }}:${{ steps.tag_version.outputs.new_tag }}
           build-args: |
             NEXT_PUBLIC_UI_BASE_URL=${{ steps.env_vars.outputs.next_public_ui_base_url }}
             NEXT_PUBLIC_CHAIN_ID=${{ steps.env_vars.outputs.next_public_chain_id }}
