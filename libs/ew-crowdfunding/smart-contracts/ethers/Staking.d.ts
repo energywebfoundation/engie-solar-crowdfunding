@@ -453,8 +453,8 @@ export class Staking extends BaseContract {
     burnFrom(
       account: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[void]>;
 
     claimManagerAddress(overrides?: CallOverrides): Promise<[string]>;
 
@@ -574,9 +574,9 @@ export class Staking extends BaseContract {
     ): Promise<ContractTransaction>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -611,8 +611,8 @@ export class Staking extends BaseContract {
   burnFrom(
     account: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<void>;
 
   claimManagerAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -732,9 +732,9 @@ export class Staking extends BaseContract {
   ): Promise<ContractTransaction>;
 
   transferFrom(
-    sender: string,
-    recipient: string,
-    amount: BigNumberish,
+    _sender: string,
+    _recipient: string,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -872,9 +872,9 @@ export class Staking extends BaseContract {
     ): Promise<boolean>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -1094,7 +1094,7 @@ export class Staking extends BaseContract {
     burnFrom(
       account: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     claimManagerAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1207,9 +1207,9 @@ export class Staking extends BaseContract {
     ): Promise<BigNumber>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1250,7 +1250,7 @@ export class Staking extends BaseContract {
     burnFrom(
       account: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     claimManagerAddress(
@@ -1365,9 +1365,9 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

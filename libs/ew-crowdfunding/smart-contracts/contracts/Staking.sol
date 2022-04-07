@@ -134,6 +134,10 @@ contract Staking is ERC20Burnable {
         redeem(_amount);
     }
 
+    function burnFrom(address account, uint256 amount) public pure override {
+        revert("burnFrom Not Allowed");
+    }
+
     //Overriding ERC20 transfer function
     function transfer(address _recipient, uint256 _amount) public override returns (bool) {
         //we need to keep track of this to avoid negative values on redeem call
@@ -142,6 +146,16 @@ contract Staking is ERC20Burnable {
             stakes[_msgSender()] -= _amount;
         }
         _transfer(_msgSender(), _recipient, _amount);
+        return true;
+    }
+
+    function transferFrom(address _sender, address _recipient, uint256 _amount) public override returns (bool) {
+        //we need to keep track of this to avoid negative values on redeem call
+        ERC20.transferFrom(_sender, _recipient, _amount);
+        stakes[_recipient] += _amount;
+        unchecked {
+            stakes[_sender] -= _amount;
+        }
         return true;
     }
 
