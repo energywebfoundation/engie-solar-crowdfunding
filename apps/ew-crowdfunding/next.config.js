@@ -12,6 +12,17 @@ const nextConfig = {
     reactStrictMode: true,
   },
   swcMinify: false,
+  // Deactivate Server Side Rendering
+  target: "serverless",
+  async rewrites() {
+    return [
+      // Rewrite everything to `pages/index`
+      {
+        source: "/:any*",
+        destination: "/",
+      },
+    ];
+  },
 };
 
 module.exports = withNx(nextConfig);
