@@ -9,6 +9,19 @@ import { CssBaseline } from '@mui/material';
 import { Provider } from 'react-redux';
 import { store } from '../redux-store';
 
+//This component wraps our app to prevent the page content from rendering on the server. 
+function SafeHydrate({ children }) {
+  return (
+    <div suppressHydrationWarning>
+      {/* The code below will render nothing (null) if we are on the server (window === 'undefined')
+      otherwise it will render our wrapped application (children)
+      */}
+      {typeof window === 'undefined' ? null : children}
+    </div>
+  )
+}
+
+
 export default function Crowdfunding({ Component, pageProps }: AppProps) {
   useEffect(() => {
     // Remove the server-side injected CSS.
@@ -19,7 +32,7 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
   }, []);
 
   return (
-    <>
+    <SafeHydrate>
       <Head>
         <meta charSet='utf-8' />
         <meta httpEquiv='X-UA-Compatible' content='IE=edge' />
@@ -37,6 +50,6 @@ export default function Crowdfunding({ Component, pageProps }: AppProps) {
           <DSLAModalsCenter />
         </DSLAThemeProvider>
       </DSLAModalsProvider>
-    </>
+    </SafeHydrate>
   );
 }

@@ -22,6 +22,7 @@ import type { TypedEventFilter, TypedEvent, TypedListener } from "./common";
 
 interface StakingInterface extends ethers.utils.Interface {
   functions: {
+    "aborted()": FunctionFragment;
     "allRedeemedRewards()": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
@@ -44,6 +45,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "init(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "minRequiredStake()": FunctionFragment;
     "name()": FunctionFragment;
+    "owner()": FunctionFragment;
     "patronRole()": FunctionFragment;
     "pause()": FunctionFragment;
     "redeem(uint256)": FunctionFragment;
@@ -65,6 +67,7 @@ interface StakingInterface extends ethers.utils.Interface {
     "unPause()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "aborted", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "allRedeemedRewards",
     values?: undefined
@@ -144,6 +147,7 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "patronRole",
     values?: undefined
@@ -191,6 +195,7 @@ interface StakingInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "unPause", values?: undefined): string;
 
+  decodeFunctionResult(functionFragment: "aborted", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "allRedeemedRewards",
     data: BytesLike
@@ -240,6 +245,7 @@ interface StakingInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "patronRole", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "pause", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "redeem", data: BytesLike): Result;
@@ -421,6 +427,8 @@ export class Staking extends BaseContract {
   interface: StakingInterface;
 
   functions: {
+    aborted(overrides?: CallOverrides): Promise<[boolean]>;
+
     allRedeemedRewards(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     allowance(
@@ -445,8 +453,8 @@ export class Staking extends BaseContract {
     burnFrom(
       account: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[void]>;
 
     claimManagerAddress(overrides?: CallOverrides): Promise<[string]>;
 
@@ -512,6 +520,8 @@ export class Staking extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     patronRole(overrides?: CallOverrides): Promise<[string]>;
 
     pause(
@@ -564,9 +574,9 @@ export class Staking extends BaseContract {
     ): Promise<ContractTransaction>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -574,6 +584,8 @@ export class Staking extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
+
+  aborted(overrides?: CallOverrides): Promise<boolean>;
 
   allRedeemedRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -599,8 +611,8 @@ export class Staking extends BaseContract {
   burnFrom(
     account: string,
     amount: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<void>;
 
   claimManagerAddress(overrides?: CallOverrides): Promise<string>;
 
@@ -666,6 +678,8 @@ export class Staking extends BaseContract {
 
   name(overrides?: CallOverrides): Promise<string>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   patronRole(overrides?: CallOverrides): Promise<string>;
 
   pause(
@@ -718,9 +732,9 @@ export class Staking extends BaseContract {
   ): Promise<ContractTransaction>;
 
   transferFrom(
-    sender: string,
-    recipient: string,
-    amount: BigNumberish,
+    _sender: string,
+    _recipient: string,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -729,6 +743,8 @@ export class Staking extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    aborted(overrides?: CallOverrides): Promise<boolean>;
+
     allRedeemedRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     allowance(
@@ -815,6 +831,8 @@ export class Staking extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<string>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     patronRole(overrides?: CallOverrides): Promise<string>;
 
     pause(overrides?: CallOverrides): Promise<void>;
@@ -854,9 +872,9 @@ export class Staking extends BaseContract {
     ): Promise<boolean>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
 
@@ -1050,6 +1068,8 @@ export class Staking extends BaseContract {
   };
 
   estimateGas: {
+    aborted(overrides?: CallOverrides): Promise<BigNumber>;
+
     allRedeemedRewards(overrides?: CallOverrides): Promise<BigNumber>;
 
     allowance(
@@ -1074,7 +1094,7 @@ export class Staking extends BaseContract {
     burnFrom(
       account: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     claimManagerAddress(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1133,6 +1153,8 @@ export class Staking extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     patronRole(overrides?: CallOverrides): Promise<BigNumber>;
 
     pause(
@@ -1185,9 +1207,9 @@ export class Staking extends BaseContract {
     ): Promise<BigNumber>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1197,6 +1219,8 @@ export class Staking extends BaseContract {
   };
 
   populateTransaction: {
+    aborted(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     allRedeemedRewards(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -1226,7 +1250,7 @@ export class Staking extends BaseContract {
     burnFrom(
       account: string,
       amount: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     claimManagerAddress(
@@ -1287,6 +1311,8 @@ export class Staking extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     patronRole(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pause(
@@ -1339,9 +1365,9 @@ export class Staking extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     transferFrom(
-      sender: string,
-      recipient: string,
-      amount: BigNumberish,
+      _sender: string,
+      _recipient: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

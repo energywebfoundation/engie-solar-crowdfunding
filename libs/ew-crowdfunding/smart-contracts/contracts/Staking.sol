@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 
 contract Staking is ERC20Burnable {
     bool public sweeped;
-    bool private aborted;
-    address private owner;
+    bool public aborted;
+    address public owner;
     uint256 public hardCap;
     uint256 public endDate;
     uint256 public signupEnd;
@@ -134,6 +134,10 @@ contract Staking is ERC20Burnable {
         redeem(_amount);
     }
 
+    function burnFrom(address account, uint256 amount) public pure override {
+        revert("burnFrom Not Allowed");
+    }
+
     //Overriding ERC20 transfer function
     function transfer(address _recipient, uint256 _amount) public override returns (bool) {
         //we need to keep track of this to avoid negative values on redeem call
@@ -142,6 +146,16 @@ contract Staking is ERC20Burnable {
             stakes[_msgSender()] -= _amount;
         }
         _transfer(_msgSender(), _recipient, _amount);
+        return true;
+    }
+
+    function transferFrom(address _sender, address _recipient, uint256 _amount) public override returns (bool) {
+        //we need to keep track of this to avoid negative values on redeem call
+        ERC20.transferFrom(_sender, _recipient, _amount);
+        stakes[_recipient] += _amount;
+        unchecked {
+            stakes[_sender] -= _amount;
+        }
         return true;
     }
 
@@ -193,7 +207,7 @@ contract Staking is ERC20Burnable {
 
     function terminate() external onlyOwner {
         require(aborted == false, "Already terminated");
-        require(block.timestamp <= endDate, "Error: canceling after campaign");
+        require(block.timestamp < endDate, "Error: canceling after campaign");
 		uint256 payout = totalRewards;
         aborted = true;
         deleteParameters();
@@ -231,41 +245,37 @@ contract Staking is ERC20Burnable {
      function stake() external payable notAborted initialized belowLimit notPaused minStaked {
         require(hasRole(msg.sender, patronRole), "No patron role");
 
-        if ((stakes[msg.sender] + msg.value >= contributionLimit)){
+        if ((stakes[msg.sender] + msg.value > contributionLimit)){
 
-            uint256 toMint_limit = contributionLimit - stakes[msg.sender];
-            uint256 overFlow_limit = msg.value - toMint_limit;
+            uint256 overFlow_limit = msg.value + stakes[msg.sender] - contributionLimit;
             //Check if we overflow from hardCap
-            if ((totalStaked + toMint_limit) > hardCap){
-                uint256 overFlow_hardCap = toMint_limit - (hardCap - totalStaked);
-                uint256 finalMint = toMint_limit - overFlow_hardCap;
+            if ((totalStaked + contributionLimit - stakes[msg.sender]) > hardCap){
+                uint256 overFlow_hardCap = contributionLimit + totalStaked - stakes[msg.sender] - hardCap;
                 
-                stakes[msg.sender] += finalMint;
-                _mint(msg.sender, finalMint);
-                emit NewStake(msg.sender, finalMint, block.timestamp);
+                _mint(msg.sender, hardCap - totalStaked);
+                emit NewStake(msg.sender, hardCap - totalStaked, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit + overFlow_hardCap);
-                totalStaked += finalMint;
-                refund(overFlow_limit + overFlow_hardCap);
+                uint256 payout = msg.value + totalStaked - hardCap;
+                stakes[msg.sender] += hardCap - totalStaked;
+                totalStaked += hardCap - totalStaked;
+                refund(payout);
             } else {
-                stakes[msg.sender] += toMint_limit;
-                _mint(msg.sender, toMint_limit);
-                emit NewStake(msg.sender, toMint_limit, block.timestamp);
+                _mint(msg.sender, contributionLimit - stakes[msg.sender]);
+                emit NewStake(msg.sender, contributionLimit - stakes[msg.sender], block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, overFlow_limit);
-                totalStaked += toMint_limit;
+                totalStaked += contributionLimit - stakes[msg.sender];
+                stakes[msg.sender] += contributionLimit - stakes[msg.sender];
                 refund(overFlow_limit);
             }
         } else { 
             if (totalStaked + msg.value > hardCap){
 
-                uint256 overFlow_hardCap = msg.value - (hardCap - totalStaked);
-                uint256 finalMint = msg.value - overFlow_hardCap;
-                
-                stakes[msg.sender] += finalMint;
-                _mint(msg.sender, finalMint);
-                emit NewStake(msg.sender, finalMint, block.timestamp);
-                emit RefundExceeded((msg.sender), msg.value, overFlow_hardCap);
-                totalStaked += finalMint;
-                refund(overFlow_hardCap);
+                stakes[msg.sender] += hardCap - totalStaked;
+                _mint(msg.sender, hardCap - totalStaked);
+                emit NewStake(msg.sender, hardCap - totalStaked, block.timestamp);
+                emit RefundExceeded((msg.sender), msg.value, msg.value - (hardCap - totalStaked));
+                totalStaked += hardCap - totalStaked;
+                refund(msg.value - (hardCap - totalStaked));
             } else {   
                 stakes[msg.sender] += msg.value;
                 emit NewStake(msg.sender, msg.value, block.timestamp);
