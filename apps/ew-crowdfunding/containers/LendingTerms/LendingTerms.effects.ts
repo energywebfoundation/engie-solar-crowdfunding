@@ -16,7 +16,7 @@ export const useLendingTermsEffects = () => {
   const finalStopDate = formatDate(new Date(useSelector(selectFinalStopDate)));
 
   const listItems: string[] = [
-    'Anyone eligible can stake and join the Clean Energy Fund until the maximum pool limit is reached.',
+    'Anyone eligible can stake and join the Crowdfund for Solar Fund until the maximum pool limit is reached.',
     `You can enroll, stake or withdraw your contributions without the rewards any time between ${activateStakingDate} and ${closeStackingDate}`,
     `You may not withdraw EWT contributions for the duration of the pilot between ${lockStakesDate} and ${releaseRewardsDate}`,
     `You can withdraw your principal and rewards between ${releaseRewardsDate} and ${finalStopDate}. After ${finalStopDate}, you won't be able to withdraw your funds and we won't be able to recover them for you.`,
