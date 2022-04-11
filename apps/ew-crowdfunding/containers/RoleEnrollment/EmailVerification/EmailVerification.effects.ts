@@ -9,6 +9,7 @@ import {
   selectProvider,
   selectClaimsService,
   getCloseStackingDate,
+  getFinalStopDate,
   selectFinalStopDate,
   Web3ActionTypes,
 } from '../../../redux-store';
@@ -50,6 +51,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   useEffect(() => {
     if (propertyExists(provider)){
       dispatch(getCloseStackingDate(provider));
+      dispatch(getFinalStopDate(provider));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
