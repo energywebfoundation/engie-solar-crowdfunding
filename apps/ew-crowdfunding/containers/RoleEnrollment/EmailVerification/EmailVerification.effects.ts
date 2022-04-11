@@ -9,7 +9,6 @@ import {
   selectProvider,
   selectClaimsService,
   getCloseStackingDate,
-  selectContributionDeadline,
   selectFinalStopDate,
   Web3ActionTypes,
 } from '../../../redux-store';
