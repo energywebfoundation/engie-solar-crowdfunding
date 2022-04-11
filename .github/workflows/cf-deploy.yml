@@ -64,7 +64,7 @@ jobs:
             echo "::set-output name=next_public_patron_role::eeaapproved.roles.eea.apps.engie.auth.ewc"
             echo "::set-output name=next_public_patron_role_version::1"
             echo "::set-output name=next_public_token_limit::5"
-            echo "::set-output name=next_public_global_token_limit::100"
+            echo "::set-output name=next_public_global_token_limit::10"
             echo "::set-output name=next_public_interest_rate::10%"
             echo "::set-output name=next_public_block_explorer_url::https://explorer.energyweb.org"
             echo "::set-output name=next_public_activate_staking_date::2022-04-11T10:10"
