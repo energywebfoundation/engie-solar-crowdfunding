@@ -10,6 +10,7 @@ import {
   selectClaimsService,
   getCloseStackingDate,
   selectContributionDeadline,
+  selectFinalStopDate,
   Web3ActionTypes,
 } from '../../../redux-store';
 import { propertyExists } from '../../../utils';
@@ -27,9 +28,9 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
 
   const address = useSelector(selectAddress);
   const provider = useSelector(selectProvider);
-  const closeStackingDate = useSelector(selectContributionDeadline);
+  const finalStopDate = useSelector(selectFinalStopDate);
 
-  const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
+  const isEnrollmentDisabled = new Date() >= new Date(finalStopDate);
 
   const validationSchema = yup
     .object({
