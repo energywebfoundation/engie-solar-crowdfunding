@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { propertyExists } from '../../../utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { RoleEnrollmentStatus, selectClaimsService, selectContributionDeadline, selectRole, Web3ActionTypes } from '../../../redux-store';
+import { RoleEnrollmentStatus, selectProvider, selectClaimsService, selectContributionDeadline, selectRole, Web3ActionTypes, getCloseStackingDate } from '../../../redux-store';
 
 export const useNotSyncedEffects = () => {
   const dispatch = useDispatch();
@@ -10,11 +11,20 @@ export const useNotSyncedEffects = () => {
   const closeStackingDate = useSelector(selectContributionDeadline);
 
   const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
+  const provider = useSelector(selectProvider);
+
+
+  useEffect(() => {
+    if (propertyExists(provider)){
+      dispatch(getCloseStackingDate(provider));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onAddRole = async () => {
-    // if(isEnrollmentDisabled) { // TODO: Uncomment this for prod
-    //   return;
-    // }
+    if(isEnrollmentDisabled) {
+      return;
+    }
     if (!role) {
       dispatch({
         type: Web3ActionTypes.UPDATE_ROLE_ENROLLMENT_STATUS,

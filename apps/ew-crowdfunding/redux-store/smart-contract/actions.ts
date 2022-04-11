@@ -6,6 +6,7 @@ import { AppThunk } from '../store';
 import { SmartContractActionTypes } from './types';
 import { Action, ActionCreator } from 'redux';
 import { Staking__factory, deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts';
+import { formatUTCDate, formatUTCTimestamp } from '../../utils';
 
 export const setAccountBalance: ActionCreator<Action> = (accountBalance: string) => ({
   type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
@@ -131,14 +132,12 @@ export const redeemAllSlt =
 export const getAccountBalance =
   (provider: any, currentAddress: string): AppThunk =>
   async (dispatch): Promise<void> => {
-    let formattedAccountBalance = '0';
     try {
       const currentBalance = await provider.getBalance(currentAddress);
       const accountBalance = ethers.utils.formatEther(currentBalance);
-      formattedAccountBalance = `${Number(accountBalance).toPrecision(3)}`;
       dispatch({
         type: SmartContractActionTypes.SET_ACCOUNT_BALANCE,
-        payload: formattedAccountBalance,
+        payload: accountBalance,
       });
     } catch {
       console.log('Error getting account balance');
@@ -237,7 +236,7 @@ export const getActivateStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupStart: number = +(await stakingContract.signupStart()).toString();
-      const activateStackingDate = new Date(signupStart * 1000);
+      const activateStackingDate = formatUTCTimestamp(signupStart);
       dispatch({
         type: SmartContractActionTypes.SET_ACTIVATE_STACKING_DATE,
         payload: activateStackingDate,
@@ -253,7 +252,8 @@ export const getCloseStackingDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const signupEnd: number = +(await stakingContract.signupEnd()).toString();
-      const closeStackingDate = new Date(signupEnd * 1000);
+      const closeStackingDate =
+        signupEnd !== 0 ? formatUTCTimestamp(signupEnd) : formatUTCDate(process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE);
       dispatch({
         type: SmartContractActionTypes.SET_CLOSE_STACKING_DATE,
         payload: closeStackingDate,
@@ -269,7 +269,7 @@ export const getLockStakesDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const startDate: number = +(await stakingContract.startDate()).toString();
-      const lockStakesDate = new Date(startDate * 1000);
+      const lockStakesDate = formatUTCTimestamp(startDate);
       dispatch({
         type: SmartContractActionTypes.SET_LOCK_STAKES_DATE,
         payload: lockStakesDate,
@@ -285,7 +285,7 @@ export const getReleaseRewardsDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const endDate: number = +(await stakingContract.endDate()).toString();
-      const releaseRewardsDate = new Date(endDate * 1000);
+      const releaseRewardsDate = formatUTCTimestamp(endDate);
 
       dispatch({
         type: SmartContractActionTypes.SET_RELEASE_REWARDS_DATE,
@@ -302,7 +302,7 @@ export const getFinalStopDate =
     try {
       const stakingContract = Staking__factory.connect(deployedAddress, provider);
       const fullStopDate: number = +(await stakingContract.fullStopDate()).toString();
-      const finalStopDate = new Date(fullStopDate * 1000);
+      const finalStopDate = formatUTCTimestamp(fullStopDate);
 
       dispatch({
         type: SmartContractActionTypes.SET_FINAL_STOP_DATE,

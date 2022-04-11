@@ -54,19 +54,6 @@ export const Login = () => {
             <Box style={{ width: '100%' }}>Use Metamask</Box>
           </Button>
         )}
-        <Button
-          className={classes.button}
-          disabled={!isConnectedToRightNetwork}
-          variant='outlined'
-          color='primary'
-          onClick={() => {
-            login(ProviderType.WalletConnect);
-            closeModal();
-          }}
-          startIcon={<img width={30} height={30} src='/walletconnect-logo.svg' alt='Wallet connect logo' />}
-        >
-          <Box style={{ width: '100%' }}>Use Wallet Connect</Box>
-        </Button>
         {!isConnectedToRightNetwork && !noMetamaskInstalled && (
           <Box sx={{ display: 'flex', flexDirection: 'column' }} mt={2}>
             <Typography variant='h5' color='textSecondary'>

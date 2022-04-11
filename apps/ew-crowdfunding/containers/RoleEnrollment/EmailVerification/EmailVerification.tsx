@@ -1,10 +1,11 @@
 import { FC } from 'react';
-import { Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, Link, Typography } from '@mui/material';
+import { Box, Button, Checkbox, CircularProgress, Divider, FormControlLabel, Typography } from '@mui/material';
 import { useStyles } from './EmailVerification.styles';
 import { useEmailVerificationEffects } from './EmailVerification.effects';
 import { shortenAddress } from '../../../utils';
 import { FormInputText, WalletCard } from '../../../components';
 import { RoleEnrollmentStatus } from '../../../redux-store';
+import Link from 'next/link';
 
 export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }> = ({ roleEnrolmentStatus }) => {
   const classes = useStyles();
@@ -24,7 +25,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
   return (
     <WalletCard icon='/ShieldWarning.png' colorClass='bg-warning' step='step 2'>
       <Typography align='center' variant='h5' style={{ fontWeight: 500 }}>
-        You must verify your email to stake EWT in The Clean Energy Fund
+        You must verify your email to stake EWT in Crowdfund for Solar.
       </Typography>
 
       {address && (
@@ -43,10 +44,15 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
         <FormControlLabel
           control={<Checkbox checked={acknowledged} onChange={() => setAcknowledge(!acknowledged)} />}
           label={
-            <Typography variant='h5'>
+            <Typography
+              variant='h5'
+              sx={{ width: '100%', display: 'flex', flexDirection: 'row', alignItems: 'center' }}
+            >
               I accept and acknowledge{' '}
-              <Link href='#' variant='h5' target='_blank' color='primary' underline='hover'>
-                this disclaimer
+              <Link href='/privacy-policy'>
+                <a className={classes.link} target='_blank'>
+                  this privacy policy.
+                </a>
               </Link>
             </Typography>
           }
@@ -73,8 +79,7 @@ export const EmailVerification: FC<{ roleEnrolmentStatus: RoleEnrollmentStatus }
               type='submit'
               color='primary'
               style={{ width: '100%' }}
-              // disabled={!!errorMessage || isEnrollmentDisabled} // TODO: Uncomment this for prod
-              disabled={!!errorMessage}
+              disabled={!!errorMessage || isEnrollmentDisabled}
             >
               Submit
             </Button>

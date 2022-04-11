@@ -9,7 +9,7 @@ export const useStyles = makeStyles(() => {
       flexDirection: 'column',
       justifyContent: 'start',
       alignItems: 'start',
-      gap: '20px',
+      gap: '27px',
       borderRadius: '0',
       padding: '40px',
       [theme.breakpoints.down('md')]: {
@@ -36,6 +36,11 @@ export const useStyles = makeStyles(() => {
     },
     bold: {
       fontWeight: 600,
-    }
+    },
+    infoMessage: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'flex-end',
+    },
   };
 });

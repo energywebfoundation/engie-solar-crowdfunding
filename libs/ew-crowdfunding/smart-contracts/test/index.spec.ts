@@ -33,7 +33,8 @@ const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
 const tokenName = "SOLAR TOKEN";
 const nullAddress = '0x0000000000000000000000000000000000000000';
-const serviceProviderRole = utils.namehash("email.roles.verification.apps.energyweb.iam.ewc"); // 0x7309fb6c9050c8da31473134bb210fe29586cbd6fe98004193a8b25d6689e29e (volta)
+// const serviceProviderRole = utils.namehash("email.roles.verification.apps.energyweb.iam.ewc"); // 0x7309fb6c9050c8da31473134bb210fe29586cbd6fe98004193a8b25d6689e29e (volta)
+const serviceProviderRole = utils.namehash("eeaapproved.roles.eea.apps.engie.auth.ewc"); // 0xac3d6e1fcd0ee5dd4a0a7c2405310bb9588579aeef902b5a4d070137d05033c4 (volta)
                                                                                  
 const patronRole = utils.namehash("email.roles.eea.apps.florin.engietestvolta.iam.ewc"); //0xc698f14ed8d60937e445046f6dea1406c03e7e0adce8d7a2a43a5ffaa35f7621
 
@@ -256,6 +257,28 @@ describe("[ Crowdfunding Staking contract ] ", () => {
           )).to.be.revertedWith('Start febore signup period');
           //increment wrongStart to the next day
           wrongStart = Number(DateTime.fromSeconds(wrongStart).plus({day: 1}).toSeconds().toFixed(0));
+        }
+      });
+
+      it("Should fail if fullStopDate is set at any date before endDate",  async () => {
+      
+        let wrongStop = signupStart;
+    
+        //Checking initialization failure on each day until endDate
+        while (wrongStop <= end){
+          await expect(initializeContract(
+            asOwner,
+            start,
+            end,
+            wrongStop,
+            hardCap,
+            contributionLimit,
+            signupStart,
+            signupEnd,
+            minRequiredStake
+          )).to.be.revertedWith('FullStop before endDate');
+          //increment wrongStop to the next day
+          wrongStop = Number(DateTime.fromSeconds(wrongStop).plus({day: 1}).toSeconds().toFixed(0));
         }
       });
       
@@ -713,6 +736,7 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       const beforeSweep = Number(ethers.utils.formatEther((await owner.getBalance()).toString()));
       console.log("Balance Before sweep : ", beforeSweep);
       const remainingReward = (await asOwner.totalRewards()).sub(await asOwner.allRedeemedRewards());
+      const remainingFunds = await asOwner.totalStaked();
       tx = await asOwner.sweep()
       const {blockNumber} = await tx.wait();
       const { timestamp } = await provider.getBlock(blockNumber)
@@ -724,9 +748,9 @@ describe("[ Crowdfunding Staking contract ] ", () => {
       expect(afterSweep).to.be.greaterThan(beforeSweep);
       await expect(tx).to.emit(stakingContract, "Swept").withArgs(remainingReward, timestamp);
       //Checking that we send to the rewardProvider wallet remainingRewards + remainingFunds staked (i.e totalStaked)
-      await expect(tx).changeEtherBalance(owner, (remainingReward.add(await asOwner.totalStaked())));
+      await expect(tx).changeEtherBalance(owner, (remainingReward.add(remainingFunds)));
       //Checking that we remove from the contract remainingRewards + remainingFunds staked (i.e totalStaked)
-      await expect(tx).changeEtherBalance(asOwner, (remainingReward.add(await asOwner.totalStaked()).mul(-1)));
+      await expect(tx).changeEtherBalance(asOwner, (remainingReward.add(remainingFunds).mul(-1)));
       
     })
 

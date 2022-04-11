@@ -24,7 +24,7 @@ export const LendingStats = () => {
         <>
           <ContributionItem
             titleClass={classes.titleClass}
-            title='Clean Energy Fund at a Glance'
+            title='Crowdfund for Solar at a glance'
             value={totalLentAmount}
             type='EWT'
           />

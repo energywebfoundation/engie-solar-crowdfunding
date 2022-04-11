@@ -1,11 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Paper, Button, CircularProgress, Link, Typography, Divider } from '@mui/material';
+import { Box, Paper, Button, CircularProgress, Typography, Divider } from '@mui/material';
 import { FC } from 'react';
 import { ContributionItem, FormInputText, ProgressBar } from '../../components';
 import { RoleEnrollmentStatus } from '../../redux-store';
 import { formatDate } from '../../utils';
 import { useLendingDetailsEffects } from './LendingDetails.effects';
 import { useStyles } from './LendingDetails.styles';
+import Link from 'next/link';
 
 export const LendingDetails: FC = () => {
   const classes = useStyles();
@@ -31,8 +32,11 @@ export const LendingDetails: FC = () => {
     smartContractLoading,
     activateStackingDate,
     isStackingDisabled,
+    isDateBeforeOpen,
     isContractPaused,
     isContractTerminated,
+    isPoolReached,
+    getReason
   } = useLendingDetailsEffects();
 
   return (
@@ -52,6 +56,15 @@ export const LendingDetails: FC = () => {
           )}
         </Box>
         <Box className={classes.formContainer}>
+          {(isStackingDisabled || isPoolReached) && (
+            <Typography mb={2} align='center' variant='h4' color='error'>
+              {
+                isDateBeforeOpen ? 
+                "You can not stake yet - check the timeline."
+                : `You can no longer stake${getReason()}`
+              }
+            </Typography>
+          )}
           <form className={classes.form} autoComplete='off' onSubmit={handleSubmit(onSubmit)}>
             <FormInputText
               name='loan'
@@ -65,40 +78,45 @@ export const LendingDetails: FC = () => {
             />
             <Box mt={2} className={classes.details}>
               <Typography variant='body2'>Expected annual interest rate</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {interestRate}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Activate staking</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2'>Stake between</Typography>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(activateStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
-              <Typography variant='body2'>Stake until</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2'>and</Typography>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(closeStackingDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
               <Typography variant='body2'>Stakes locked from</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(lockStakesDate)}
               </Typography>
             </Box>
             <Box className={classes.details}>
               <Typography variant='body2'>Release rewards after</Typography>
-              <Typography variant='body2' fontWeight={'bold'}>
+              <Typography variant='body2' fontWeight='bold'>
                 {formatDate(releaseRewardsDate)}
               </Typography>
             </Box>
             <Box className={classes.disclaimer}>
-              <Typography variant='body2'>
+              <Typography variant='body2' sx={{ width: '100%', display: 'flex', flexDirection: 'row' }}>
                 By clicking &quot;STAKE&quot;, you acknowledge{' '}
-                <Link href='#' variant='body2' target='_blank' color='primary' underline='hover'>
-                  this disclaimer
+                <Link href='/terms-and-conditions'>
+                  <a className={classes.link} target='_blank'>this disclaimer.</a>
                 </Link>
+              </Typography>
+            </Box>
+            <Box className={classes.infoMessage}>
+              <Typography fontStyle='italic' variant='body2'>
+                All times are displayed in the timezone of your browser.
               </Typography>
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
@@ -119,13 +137,14 @@ export const LendingDetails: FC = () => {
                 <Button
                   variant='contained'
                   type='submit'
-                  color='primary'
+                  color='secondary'
                   disabled={
                     !!errorMessage ||
                     roleEnrolmentStatus !== RoleEnrollmentStatus.ENROLLED_SYNCED ||
                     isStackingDisabled ||
                     isContractPaused ||
-                    isContractTerminated
+                    isContractTerminated ||
+                    isPoolReached
                   }
                   style={{ minWidth: '200px' }}
                 >
@@ -146,7 +165,7 @@ export const LendingDetails: FC = () => {
           />
           <ContributionItem
             className={classes.redeemableReward}
-            title='Redeemable reward'
+            title='Redeemable amount (principle + 10% reward based on available SLT)'
             value={redeemableReward}
             type='EWT'
           />
@@ -174,7 +193,7 @@ export const LendingDetails: FC = () => {
             ) : (
               <Button
                 disabled={isRedeemDisabled || isContractPaused}
-                variant='outlined'
+                variant='contained'
                 color='primary'
                 style={{ minWidth: '200px' }}
                 onClick={onRedeemSlt}

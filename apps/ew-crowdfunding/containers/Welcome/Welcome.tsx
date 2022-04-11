@@ -20,21 +20,24 @@ export const Welcome: FC = () => {
         <Box className={classes.wrapper}>
           <Paper className={classes.paper}>
             <Typography variant='h3' color='common.black' className='gradient-text'>
-              Stake your Energy Web Tokens to provide Energy Access
+              Stake your Energy Web Tokens to provide energy access
             </Typography>
             <Typography variant='h5' color='common.black'>
-              This staking pool is operated by Energy Web on behalf of ENGIE Energy Access (EEA). The Clean Energy Fund
-              is EEA`s first Proof of Concept to test the potential of decentralized finance in bringing new solar
-              installations for energy-poor communities.
+              This staking pool is operated by Energy Web on behalf of ENGIE Energy Access and the Energy Web Community
+              Fund. Crowdfund for Solar is ENGIE`S first proof of concept to test the potential of decentralized finance
+              in bringing new solar installations for energy-deficient communities.
             </Typography>
             <Typography variant='h5' color='common.black'>
-              The Clean Energy Fund is powered by the Energy Web`s open-source technology stack, specifically the
+              Crowdfund for Solar is powered by the Energy Web`s open-source technology stack, specifically the
               Decentralized Identifiers (DID) and the Energy Web Chain (EWC). See the results of a successful
-              smart-contract audit here.
+              smart-contract audit{' '}
+              <Link href='' target='_blank'>
+                here.
+              </Link>
             </Typography>
             <Typography variant='h5' color='common.black'>
-              The Energy Web Community Fund, dedicated entirely to enhancing Energy Web`s open-source technology stack
-              and expanding its real-world use, is supporting this Proof of Concept by covering the repayment risk and
+              The Energy Web Community Fund, dedicated entirely to enhancing Energy Web’s open-source technology stack
+              and expanding its real-world use, is supporting this proof of concept by covering the repayment risk and
               guaranteeing the repayment of original stakes plus rewards.
             </Typography>
             <Link href='https://energy-web-foundation.gitbook.io/energy-web/token/staking' target='_blank'>

@@ -6,10 +6,13 @@ import domains from 'disposable-email-domains';
 import {
   RoleEnrollmentStatus,
   selectAddress,
+  selectProvider,
   selectClaimsService,
+  getCloseStackingDate,
   selectContributionDeadline,
   Web3ActionTypes,
 } from '../../../redux-store';
+import { propertyExists } from '../../../utils';
 import { useDispatch, useSelector } from 'react-redux';
 import { RegistrationTypes } from 'iam-client-lib';
 
@@ -23,6 +26,7 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   const [errorMessage, setErrorMessage] = useState(null);
 
   const address = useSelector(selectAddress);
+  const provider = useSelector(selectProvider);
   const closeStackingDate = useSelector(selectContributionDeadline);
 
   const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
@@ -44,14 +48,20 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
   });
 
   useEffect(() => {
+    if (propertyExists(provider)){
+      dispatch(getCloseStackingDate(provider));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (isSubmitSuccessful) {
       reset();
     }
   }, [isSubmitSuccessful, reset]);
 
   const onSubmit = async (data: { email: string }) => {
-    // if (errorMessage || isEnrollmentDisabled) { // TODO: Uncomment this for prod
-    if (errorMessage) {
+    if (errorMessage || isEnrollmentDisabled) {
       return;
     }
     setIsLoading(true);

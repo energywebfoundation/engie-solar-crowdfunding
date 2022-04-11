@@ -13,7 +13,7 @@ export const InfoContainer: FC = () => {
       <img className={classes.topBubble} src='/Bubbles1.png' alt='Engie bubble' />
       <AppContainer>
         <Typography variant='h3' className='gradient-text'>
-          Problems Addressed by the Clean Energy Fund
+          Problems Addressed by the Crowdfund for Solar
         </Typography>
         <Box className={classes.wrapper}>
           {infoItems?.map((infoItem: InfoCardProps) => {
