@@ -30,7 +30,7 @@ export const useInfoPaneEffects = () => {
           text: 'By joining Crowdfund for Solar with your EWT, you are increasing renewable energy access in the developing world. ENGIE Energy Access will use your EWT to fund the manufacturing of solar home systems (SHS) for people in need of reliable energy access in countries like Rwanda, Uganda, and Zambia.',
         },
         {
-          text: `The recipients (e.g. schools, households, and small businesses) will be able to lease-to-own these SHS, paying in affordable installments via mobile money. At the end of the repayment period, they own the system. These repayments will then be used to cover the staked EWT plus 10% in rewards to everyone who participated in this pilot on ${releaseRewardsDate} date. In this pilot, the Community Fund will cover all the risks in case of default or if the recipients need more time for repayment. So your stakes and rewards are guaranteed.`,
+          text: `The recipients (e.g. schools, households, and small businesses) will be able to lease-to-own these SHS, paying in affordable installments via mobile money. At the end of the repayment period, they own the system. These repayments will then be used to cover the staked EWT plus 10% in rewards to everyone who participated in this pilot on ${releaseRewardsDate}. In this pilot, the Community Fund will cover all the risks in case of default or if the recipients need more time for repayment. So your stakes and rewards are guaranteed.`,
         },
         {
           text: 'The pilot aims at collecting $100,000 worth of EWT, which will be locked for 1 year from the initiation.',
