@@ -8,7 +8,6 @@ import {
   selectAddress,
   selectProvider,
   selectClaimsService,
-  getCloseStackingDate,
   getFinalStopDate,
   selectFinalStopDate,
   Web3ActionTypes,
@@ -50,7 +49,6 @@ export const useEmailVerificationEffects = (roleEnrolmentStatus: RoleEnrollmentS
 
   useEffect(() => {
     if (propertyExists(provider)){
-      dispatch(getCloseStackingDate(provider));
       dispatch(getFinalStopDate(provider));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
