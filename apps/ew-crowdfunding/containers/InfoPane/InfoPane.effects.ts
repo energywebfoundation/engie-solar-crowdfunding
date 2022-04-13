@@ -80,11 +80,11 @@ export const useInfoPaneEffects = () => {
           link: 'https://medium.com/energy-web-insights/engie-energy-access-and-energy-web-announce-defi-crowdfunding-platform-to-help-scale-solar-mini-2142029ad84f',
         },
         {
-          name: 'EW`s launch PR',
+          name: "EW's launch PR",
           link: '',
         },
         {
-          name: 'Engie`s PR',
+          name: "Engie's PR",
           link: '',
         },
         {
@@ -106,7 +106,7 @@ export const useInfoPaneEffects = () => {
       ],
       hyperlinks: [
         {
-          name: 'EEA`s financial report',
+          name: "EEA's financial report",
           link: '',
         },
       ],

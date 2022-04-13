@@ -73,11 +73,11 @@ const TermsAndConditions: NextPage = () => {
         based on the time of day of the request and execution
       </Typography>
       <Typography variant='body2'>
-        The User acknowledges and agrees that by registering the User`s digital wallet address and email address, the
+        The User acknowledges and agrees that by registering the User's digital wallet address and email address, the
         User alone will be responsible (to Energy Web and to others) for all activity that occurs under his digital
-        wallet address and email address. The transmission of User`s digital wallet and email address on the Internet is
-        not fully secure and remains under the User`s sole responsibility. Energy Web cannot ensure the security and
-        accepts no liability for the transmission of the User`s digital wallet address and email address to the Website.
+        wallet address and email address. The transmission of User's digital wallet and email address on the Internet is
+        not fully secure and remains under the User's sole responsibility. Energy Web cannot ensure the security and
+        accepts no liability for the transmission of the User's digital wallet address and email address to the Website.
         Energy Web does not warrant that the Service is free of viruses or other harmful components and that the User is
         unexposed to the risks inherent to the Internet.
       </Typography>
@@ -106,14 +106,14 @@ const TermsAndConditions: NextPage = () => {
         results obtained from the use of this information, and without warranty of any kind, express or implied,
         including, but not limited to warranties of performance, merchantability and fitness for any particular purpose.
         No content is intended to serve as financial, legal, tax or other professional advice. Userd acknowledge and
-        agree that all information and content provided by using the Website is at Users` own risk.
+        agree that all information and content provided by using the Website is at Users' own risk.
       </Typography>
       <Typography variant='h4'>
         3. INTELLECTUAL PROPERTY RIGHTS
       </Typography>
       <Typography variant='body2'>
         Energy Web grants Users a personal, non-exclusive, non-transferable, non-sub-licensable and revocable right to
-        access and use the Website, the right of which is dependent upon Users` compliance with these Terms.
+        access and use the Website, the right of which is dependent upon Users' compliance with these Terms.
       </Typography>
       <Typography variant='body2'>
         The Intellectual Property of the Website and its Services, is the exclusive property of Energy Web and its
@@ -156,11 +156,11 @@ const TermsAndConditions: NextPage = () => {
       <Typography variant='body2'>
         Energy Web cannot be held liable in any way by the User for any type of damage or loss of any nature whatsoever
         suffered by the User as a result of or in connection with the Website and/or the Service. You acknowledge and
-        accept that you cannot hold Energy Web`s subsidiaries, any of Energy Web Community members, and Energy Web
+        accept that you cannot hold Energy Web's subsidiaries, any of Energy Web Community members, and Energy Web
         Validators liable.
       </Typography>
       <Typography variant='body2'>
-        Energy Web`s liability for indirect damages, including but not limited to consequential damages, lost profits,
+        Energy Web's liability for indirect damages, including but not limited to consequential damages, lost profits,
         lost savings, reduced goodwill or business reputation, any loss of data suffered, loss due to business
         interruption, losses as a result of claims from third parties, and damages in connection with engagement of
         third parties by the User, as a result of or in connection with the the Website and/or the Service, is excluded.
@@ -183,10 +183,10 @@ const TermsAndConditions: NextPage = () => {
         address, private keys, email, or any other account details secure and confidential.
       </Typography>
       <Typography variant='body2'>
-        The limitations on Energy Web`s liability defined in this section and throughout the Terms shall apply whether
+        The limitations on Energy Web's liability defined in this section and throughout the Terms shall apply whether
         or not Energy Web has been advised of or should have been aware of the possibility of any such losses arising.
         Some jurisdictions limit or do not allow the disclaimer of warranties or damages so the above disclaimer may not
-        apply to the extent such jurisdiction`s law applies to this agreement.
+        apply to the extent such jurisdiction's law applies to this agreement.
       </Typography>
       <Typography variant='h4'>
         6. FORCE MAJEURE
