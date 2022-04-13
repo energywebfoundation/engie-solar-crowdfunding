@@ -24,11 +24,11 @@ export const Welcome: FC = () => {
             </Typography>
             <Typography variant='h5' color='common.black'>
               This staking pool is operated by Energy Web on behalf of ENGIE Energy Access and the Energy Web Community
-              Fund. Crowdfund for Solar is ENGIE`S first proof of concept to test the potential of decentralized finance
+              Fund. Crowdfund for Solar is ENGIE'S first proof of concept to test the potential of decentralized finance
               in bringing new solar installations for energy-deficient communities.
             </Typography>
             <Typography variant='h5' color='common.black'>
-              Crowdfund for Solar is powered by the Energy Web`s open-source technology stack, specifically the
+              Crowdfund for Solar is powered by the Energy Web's open-source technology stack, specifically the
               Decentralized Identifiers (DID) and the Energy Web Chain (EWC). See the results of a successful
               smart-contract audit{' '}
               <Link href='' target='_blank'>
