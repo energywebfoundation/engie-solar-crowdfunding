@@ -10,7 +10,8 @@ import { selectAuthenticated } from '../../redux-store';
 export const Welcome: FC = () => {
   const classes = useStyles();
   const authenticated = useSelector(selectAuthenticated);
-
+  const energyWebChainLink = "https://energy-web-foundation.gitbook.io/energy-web/technology/the-stack/trust-layer-energy-web-chain";
+  const enrgyWebDIDLink = "https://energy-web-foundation.gitbook.io/energy-web/foundational-concepts/self-sovereign-identity#decentralized-identifiers-dids";
   return (
     <div>
       <Box className={classes.background}>
@@ -29,7 +30,7 @@ export const Welcome: FC = () => {
             </Typography>
             <Typography variant='h5' color='common.black'>
               Crowdfund for Solar is powered by the Energy Web's open-source technology stack, specifically the
-              Decentralized Identifiers (DID) and the Energy Web Chain (EWC). See the results of a successful
+              <Link href={enrgyWebDIDLink} target="_blank"> Decentralized Identifiers</Link> and the public <Link href={energyWebChainLink} target="_blank">Energy Web blockchain</Link>. See the results of a successful
               smart-contract audit{' '}
               <Link href='' target='_blank'>
                 here.
