@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { formatDate, formatUTCDate } from '../../utils';
+import { deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts'
 
 export type Info = {
   name: string;
@@ -47,7 +48,7 @@ export const useInfoPaneEffects = () => {
         {
           text: `From ${activateStakingDate}, stake your EWT and receive Solar Loan Tokens (SLT) as proof of participation. `,
           list: [
-            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with. This address can be found on https://explorer.energyweb.org/  - simply look for the latest transaction associated to your wallet.`,
+            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste ${deployedAddress} as the Token Contract Address. `,
             `You can use (transfer and withdraw) your SLT immediately - note that you will need your SLT if you want to withdraw your EWT.`,
             `If you change your mind, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
           ],
