@@ -30,5 +30,10 @@ export const useStyles = makeStyles(() => {
       padding: 0,
       margin: 0,
     },
+    infoMessage: {
+      width: '100%',
+      display: 'flex',
+      justifyContent: 'center',
+    },
   };
 });
