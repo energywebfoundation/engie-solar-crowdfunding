@@ -56,7 +56,7 @@ export const useInfoPaneEffects = () => {
           list: [
             `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste ${deployedAddress} as the Token Contract Address. `,
             `You can use (transfer and withdraw) your SLT immediately - note that you will need your SLT if you want to withdraw your EWT.`,
-            `If you change your mind, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
+            `If you change your mind about staking, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
           ],
         },
         {
