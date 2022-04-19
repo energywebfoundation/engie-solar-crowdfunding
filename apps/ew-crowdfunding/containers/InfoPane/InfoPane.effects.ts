@@ -6,7 +6,9 @@ export type Info = {
   name: string;
   title: string;
   paragraphs?: {
+    isBold?: boolean;
     text: string;
+    text2?: string;
     list?: string[];
   }[];
   hyperlinks?: {
@@ -68,8 +70,10 @@ export const useInfoPaneEffects = () => {
           text: `You should withdraw your rewards anytime after ${releaseRewardsDate} and before ${finalStopDate}`
         },
         {
-          text: 'Please stay informed about the campaign throughout the entire duration on our social media channels since we will not contact participants via email for privacy preservation.'
-        }
+          isBold: true,
+          text: "Note that for privacy purposes, we will not contact staking participants via direct email.",
+          text2: "You can only receive updates on the campaign through our official Twitter account.",
+        },
       ],
     },
     {

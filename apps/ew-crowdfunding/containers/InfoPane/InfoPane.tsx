@@ -16,10 +16,14 @@ export const InfoPane: FC = () => {
             {selected.title}
           </Typography>
           {selected.paragraphs?.length &&
-            selected.paragraphs.map((paragraph: { text: string; list?: string[] }) => {
+            selected.paragraphs.map((paragraph: { text: string; text2?: string; list?: string[]; isBold?: boolean }) => {
               return (
                 <Box key={paragraph.text} className={classes.paragraphWrapper}>
-                  <Typography variant='h5'>{paragraph.text}</Typography>
+                  <Typography variant='h5'>{paragraph.isBold ?
+                    <>
+                      <strong>{paragraph.text}</strong> {paragraph.text2}
+                    </> 
+                    : paragraph.text}</Typography>
                   {paragraph.list && <ListComponent listItems={paragraph.list} />}
                 </Box>
               );
