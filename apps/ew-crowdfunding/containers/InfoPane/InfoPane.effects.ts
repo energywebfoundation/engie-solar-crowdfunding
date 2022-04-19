@@ -6,9 +6,13 @@ export type Info = {
   name: string;
   title: string;
   paragraphs?: {
-    isBold?: boolean;
+    isBoldish?: boolean;
+    boldText?: string;
     text: string;
-    text2?: string;
+    link?: {
+      label: string;
+      url: string;
+    }
     list?: string[];
   }[];
   hyperlinks?: {
@@ -70,9 +74,13 @@ export const useInfoPaneEffects = () => {
           text: `You should withdraw your rewards anytime after ${releaseRewardsDate} and before ${finalStopDate}`
         },
         {
-          isBold: true,
-          text: "Note that for privacy purposes, we will not contact staking participants via direct email.",
-          text2: "You can only receive updates on the campaign through our official Twitter account.",
+          isBoldish: true,
+          boldText: "Note that for privacy purposes, we will not contact staking participants via direct email.",
+          text: "You can only receive updates on the campaign through our official ",
+          link : {
+            label: "Twitter account.",
+            url: "https://twitter.com/energywebx",
+          }
         },
       ],
     },
