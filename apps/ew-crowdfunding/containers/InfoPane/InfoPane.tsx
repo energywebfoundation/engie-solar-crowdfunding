@@ -33,10 +33,10 @@ export const InfoPane: FC = () => {
                       <strong>{paragraph.boldText}</strong> {paragraph.text} 
                       <Link href={paragraph.link.url} target='_blank'>
                         {paragraph.link.label}
-                  </Link>
+                      </Link>
                     </> 
                     : paragraph.text}</Typography>
-                  {paragraph.list && <ListComponent listItems={paragraph.list} />}
+                  {paragraph.list &&  <ListComponent listItems={paragraph.list} />}
                 </Box>
               );
             })}
