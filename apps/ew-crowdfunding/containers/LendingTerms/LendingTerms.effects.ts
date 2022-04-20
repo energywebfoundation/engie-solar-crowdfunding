@@ -22,7 +22,7 @@ export const useLendingTermsEffects = () => {
     `You can withdraw your principal and rewards between ${releaseRewardsDate} and ${finalStopDate}. After ${finalStopDate}, you won't be able to withdraw your funds and we won't be able to recover them for you.`,
     `EWT contributions are exchanged for Solar Loan Tokens (SLT) at a 1:1 ratio: you will need your SLT on ${releaseRewardsDate} to redeem your contribution and 10% reward. You have to be enrolled to withdraw your funds.`,
     `A small gas fee will be charged for STAKE and Redeem SLT for EWT operations.`,
-    `We do not store or use your email address for purposes other than enrollment - please keep informed about important news about the campaign on our Social Media.`,
+    `Note that for privacy purposes, we will not contact staking participants via direct email. You can only receive updates on the campaign through our official Twitter account.`,
   ];
   return listItems;
 };
