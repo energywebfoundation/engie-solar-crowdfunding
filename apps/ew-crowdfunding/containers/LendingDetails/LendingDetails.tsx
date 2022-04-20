@@ -199,7 +199,7 @@ export const LendingDetails: FC = () => {
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <Typography align='center' marginTop={-3} marginBottom={1}>Redeeming SLTs means burning SLTs and withdrawing EWT back to your wallet.</Typography>
+                <Typography align='center' variant='body2' marginTop={-3} marginBottom={1}>Redeeming SLTs means burning SLTs and withdrawing EWT back to your wallet.</Typography>
                 <Box
                   sx={{
                     display: 'flex',
