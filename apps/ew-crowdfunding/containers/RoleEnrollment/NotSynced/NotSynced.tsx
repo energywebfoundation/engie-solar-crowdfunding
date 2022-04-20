@@ -20,7 +20,7 @@ export const NotSynced: FC = () => {
       </Typography>
       <TextField disabled={true} label='Role' defaultValue='Patron' style={{ width: '100%' }} />
       <Typography fontStyle='italic' align='center' variant='h5'>
-        We respect your privacy: adding this role does not expose your email on-chain or off-chain
+        We respect your privacy: adding this role does not publicly expose your email
       </Typography>
       <Box className={classes.buttonWrapper}>
         {isLoading ? (

@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { formatDate, formatUTCDate } from '../../utils';
+import { deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts'
 
 export type Info = {
   name: string;
   title: string;
   paragraphs?: {
+    isBoldish?: boolean;
+    boldText?: string;
     text: string;
+    link?: {
+      label: string;
+      url: string;
+    }
     list?: string[];
   }[];
   hyperlinks?: {
@@ -47,9 +54,9 @@ export const useInfoPaneEffects = () => {
         {
           text: `From ${activateStakingDate}, stake your EWT and receive Solar Loan Tokens (SLT) as proof of participation. `,
           list: [
-            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with. This address can be found on https://explorer.energyweb.org/  - simply look for the latest transaction associated to your wallet.`,
-            `You can use (transfer and withdraw) your SLT immediately - note that you will need your SLT if you want to withdraw your EWT.`,
-            `If you change your mind, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
+            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with - ${deployedAddress}. This address can be found on https://explorer.energyweb.org/. `,
+            `You can use (transfer and withdraw) your SLT immediately - note that if you want to withdraw your EWT, you will need an equivalent amount of SLT in your wallet at the time of withdrawal.`,
+            `If you change your mind about staking, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
           ],
         },
         {
@@ -67,8 +74,14 @@ export const useInfoPaneEffects = () => {
           text: `You should withdraw your rewards anytime after ${releaseRewardsDate} and before ${finalStopDate}`
         },
         {
-          text: 'Please stay informed about the campaign throughout the entire duration on our social media channels since we will not contact participants via email for privacy preservation.'
-        }
+          isBoldish: true,
+          boldText: "Note that for privacy purposes, we will not contact staking participants via direct email.",
+          text: "You can only receive updates on the campaign through our official ",
+          link : {
+            label: "Twitter account.",
+            url: "https://twitter.com/energywebx",
+          }
+        },
       ],
     },
     {

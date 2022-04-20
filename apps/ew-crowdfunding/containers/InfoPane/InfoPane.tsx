@@ -16,10 +16,26 @@ export const InfoPane: FC = () => {
             {selected.title}
           </Typography>
           {selected.paragraphs?.length &&
-            selected.paragraphs.map((paragraph: { text: string; list?: string[] }) => {
+            selected.paragraphs.map((paragraph: {
+              isBoldish?: boolean;
+              boldText?: string;
+              text: string;
+              link?: {
+                label: string;
+                url: string;
+              };
+              list?: string[];
+            }) => {
               return (
                 <Box key={paragraph.text} className={classes.paragraphWrapper}>
-                  <Typography variant='h5'>{paragraph.text}</Typography>
+                  <Typography variant='h5'>{paragraph.isBoldish ?
+                    <>
+                      <strong>{paragraph.boldText}</strong> {paragraph.text} 
+                      <Link href={paragraph.link.url} target='_blank'>
+                        {paragraph.link.label}
+                  </Link>
+                    </> 
+                    : paragraph.text}</Typography>
                   {paragraph.list && <ListComponent listItems={paragraph.list} />}
                 </Box>
               );
