@@ -54,7 +54,7 @@ export const useInfoPaneEffects = () => {
         {
           text: `From ${activateStakingDate}, stake your EWT and receive Solar Loan Tokens (SLT) as proof of participation. `,
           list: [
-            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address ${deployedAddress} as the Token Contract Address. `,
+            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with. This address can be found on https://explorer.energyweb.org/${deployedAddress}. `,
             `You can use (transfer and withdraw) your SLT immediately - note that if you want to withdraw your EWT, you will need an equivalent amount of SLT in your wallet at the time of withdrawal.`,
             `If you change your mind about staking, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
           ],
