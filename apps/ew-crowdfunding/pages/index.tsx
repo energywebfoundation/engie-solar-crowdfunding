@@ -28,7 +28,7 @@ const Home: NextPage = () => {
         <AppContainer>
           <MediaText
             videoUrl='https://www.youtube.com/watch?v=J9LfencSqaQ&ab_channel=ENGIEEnergyAccess'
-            heading='Why Crowdfund for solar?'
+            heading='Why Crowdfund for Solar?'
             text='This pilot platform is the first proof of concept leveraging decentralized finance (DeFi) to accelerate clean energy for all. These funds will be distributed as micro-loans to residents of low-electrification countries such as Rwanda, Uganda, and Zambia – enabling communities to gain affordable access to solar energy. These installations will increase clean energy access for at least 50 households and small businesses. In addition to creating this impact, investors will be paid back their principal and 10% interest after the 1-year completion of the campaign.'
             gradientText={true}
           />

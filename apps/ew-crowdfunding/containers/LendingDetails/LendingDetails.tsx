@@ -165,7 +165,7 @@ export const LendingDetails: FC = () => {
           />
           <ContributionItem
             className={classes.redeemableReward}
-            title='Redeemable amount (principle + 10% reward based on available SLT)'
+            title='Redeemable amount (principal + 10% reward based on available SLT)'
             value={redeemableReward}
             type='EWT'
           />
