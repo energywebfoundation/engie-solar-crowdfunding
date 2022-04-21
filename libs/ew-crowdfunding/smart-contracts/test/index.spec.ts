@@ -33,7 +33,8 @@ const tokenSymbol = "SLT";
 const defaultRoleVersion = 1;
 const tokenName = "SOLAR TOKEN";
 const nullAddress = '0x0000000000000000000000000000000000000000';
-const serviceProviderRole = utils.namehash("email.roles.verification.apps.energyweb.iam.ewc"); // 0x7309fb6c9050c8da31473134bb210fe29586cbd6fe98004193a8b25d6689e29e (volta)
+// const serviceProviderRole = utils.namehash("email.roles.verification.apps.energyweb.iam.ewc"); // 0x7309fb6c9050c8da31473134bb210fe29586cbd6fe98004193a8b25d6689e29e (volta)
+const serviceProviderRole = utils.namehash("eeaapproved.roles.eea.apps.engie.auth.ewc"); // 0xac3d6e1fcd0ee5dd4a0a7c2405310bb9588579aeef902b5a4d070137d05033c4 (volta)
                                                                                  
 const patronRole = utils.namehash("email.roles.eea.apps.florin.engietestvolta.iam.ewc"); //0xc698f14ed8d60937e445046f6dea1406c03e7e0adce8d7a2a43a5ffaa35f7621
 

@@ -125,7 +125,7 @@ const PrivacyPolicy: NextPage = () => {
               <ul>
                 <li>to personalize and provide the Services;</li>
                 <li>verify the digital wallet address;</li>
-                <li>verify the User`s digital wallet balance;</li>
+                <li>verify the User's digital wallet balance;</li>
                 <li>associate user email with user wallet address;</li>
                 <li>enroll the user in the staking pilot program.</li>
               </ul>
@@ -133,7 +133,7 @@ const PrivacyPolicy: NextPage = () => {
           </td>
           <td style={{ border: '1px solid #dddddd', textAlign: 'left', padding: '8px' }}>
             <Typography variant='body2'>
-              The Website may process these data in order to register the User`s email and wallet address, because they
+              The Website may process these data in order to register the User's email and wallet address, because they
               are necessary to provide its services (i.e. enable User to participate in the staking pilot program)
             </Typography>
             <Typography variant='body2'>

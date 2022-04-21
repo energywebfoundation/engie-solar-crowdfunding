@@ -1,22 +1,31 @@
 import { useEffect, useState } from 'react';
 import { propertyExists } from '../../../utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { RoleEnrollmentStatus, selectProvider, selectClaimsService, selectContributionDeadline, selectRole, Web3ActionTypes, getCloseStackingDate } from '../../../redux-store';
+import {
+  RoleEnrollmentStatus,
+  selectProvider,
+  selectClaimsService,
+  selectRole,
+  Web3ActionTypes,
+  getFinalStopDate,
+  selectFinalStopDate
+} from '../../../redux-store';
 
 export const useNotSyncedEffects = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const role = useSelector(selectRole);
   const claimsService = useSelector(selectClaimsService);
-  const closeStackingDate = useSelector(selectContributionDeadline);
 
-  const isEnrollmentDisabled = new Date() >= new Date(closeStackingDate);
+  const finalStopDate = useSelector(selectFinalStopDate);
+  const isEnrollmentDisabled = new Date() >= new Date(finalStopDate);
   const provider = useSelector(selectProvider);
+
 
 
   useEffect(() => {
     if (propertyExists(provider)){
-      dispatch(getCloseStackingDate(provider));
+      dispatch(getFinalStopDate(provider));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

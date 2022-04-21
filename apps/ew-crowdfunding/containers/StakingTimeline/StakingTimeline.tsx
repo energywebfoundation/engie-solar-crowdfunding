@@ -50,7 +50,7 @@ export const StakingTimeline: FC = () => {
       </Box>
       <Box className={classes.infoMessage}>
         <Typography fontStyle='italic' variant='body2'>
-          All times are displayed in the timezone of your browser.
+          <strong>All times are displayed in the timezone of your browser.</strong>
         </Typography>
       </Box>
     </Paper>

@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { formatDate, formatUTCDate } from '../../utils';
+import { deployedAddress } from '@engie-solar-crowdfunding/ew-crowdfunding/smart-contracts'
 
 export type Info = {
   name: string;
   title: string;
   paragraphs?: {
+    isBoldish?: boolean;
+    boldText?: string;
     text: string;
+    link?: {
+      label: string;
+      url: string;
+    }
     list?: string[];
   }[];
   hyperlinks?: {
@@ -30,7 +37,7 @@ export const useInfoPaneEffects = () => {
           text: 'By joining Crowdfund for Solar with your EWT, you are increasing renewable energy access in the developing world. ENGIE Energy Access will use your EWT to fund the manufacturing of solar home systems (SHS) for people in need of reliable energy access in countries like Rwanda, Uganda, and Zambia.',
         },
         {
-          text: `The recipients (e.g. schools, households, and small businesses) will be able to lease-to-own these SHS, paying in affordable installments via mobile money. At the end of the repayment period, they own the system. These repayments will then be used to cover the staked EWT plus 10% in rewards to everyone who participated in this pilot on ${releaseRewardsDate} date. In this pilot, the Community Fund will cover all the risks in case of default or if the recipients need more time for repayment. So your stakes and rewards are guaranteed.`,
+          text: `The recipients (e.g. schools, households, and small businesses) will be able to lease-to-own these SHS, paying in affordable installments via mobile money. At the end of the repayment period, they own the system. These repayments will then be used to cover the staked EWT plus 10% in rewards to everyone who participated in this pilot on ${releaseRewardsDate}. In this pilot, the Community Fund will cover all the risks in case of default or if the recipients need more time for repayment. So your stakes and rewards are guaranteed.`,
         },
         {
           text: 'The pilot aims at collecting $100,000 worth of EWT, which will be locked for 1 year from the initiation.',
@@ -47,9 +54,9 @@ export const useInfoPaneEffects = () => {
         {
           text: `From ${activateStakingDate}, stake your EWT and receive Solar Loan Tokens (SLT) as proof of participation. `,
           list: [
-            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with. This address can be found on https://explorer.energyweb.org/  - simply look for the latest transaction associated to your wallet.`,
-            `You can use (transfer and withdraw) your SLT immediately - note that you will need your SLT if you want to withdraw your EWT.`,
-            `If you change your mind, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
+            `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with - ${deployedAddress}. This address can be found on https://explorer.energyweb.org/. `,
+            `You can use (transfer and withdraw) your SLT immediately - note that if you want to withdraw your EWT, you will need an equivalent amount of SLT in your wallet at the time of withdrawal.`,
+            `If you change your mind about staking, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`,
           ],
         },
         {
@@ -67,8 +74,14 @@ export const useInfoPaneEffects = () => {
           text: `You should withdraw your rewards anytime after ${releaseRewardsDate} and before ${finalStopDate}`
         },
         {
-          text: 'Please stay informed about the campaign throughout the entire duration on our social media channels since we will not contact participants via email for privacy preservation.'
-        }
+          isBoldish: true,
+          boldText: "Note that for privacy purposes, we will not contact staking participants via direct email.",
+          text: "You can only receive updates on the campaign through our official ",
+          link : {
+            label: "Twitter account.",
+            url: "https://twitter.com/energywebx",
+          }
+        },
       ],
     },
     {
@@ -80,11 +93,11 @@ export const useInfoPaneEffects = () => {
           link: 'https://medium.com/energy-web-insights/engie-energy-access-and-energy-web-announce-defi-crowdfunding-platform-to-help-scale-solar-mini-2142029ad84f',
         },
         {
-          name: 'EW`s launch PR',
+          name: "EW's launch PR",
           link: '',
         },
         {
-          name: 'Engie`s PR',
+          name: "Engie's PR",
           link: '',
         },
         {
@@ -106,7 +119,7 @@ export const useInfoPaneEffects = () => {
       ],
       hyperlinks: [
         {
-          name: 'EEA`s financial report',
+          name: "EEA's financial report",
           link: '',
         },
       ],

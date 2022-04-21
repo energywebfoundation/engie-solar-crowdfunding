@@ -41,8 +41,8 @@ export const Contact: FC = () => {
           </Typography>
           <Typography variant='h5' mb={5} align='center'>
             or ENGIE Energy Access at
-            <a className={classes.link} href='mailto:stefan.zelazny@engie.com.'>
-              stefan.zelazny@engie.com.
+            <a className={classes.link} href='mailto:stefan.zelazny@engie.com'>
+              stefan.zelazny@engie.com
             </a>
           </Typography>
           {stakingMessage && (

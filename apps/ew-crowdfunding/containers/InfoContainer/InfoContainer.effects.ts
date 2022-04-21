@@ -10,7 +10,7 @@ export const useInfoContainerEffects = () => {
     {
       title: '75',
       type: '%',
-      text: 'Sub-Saharan Africa accounts for 75 percent of the world`s population without access to electricity.',
+      text: "Sub-Saharan Africa accounts for 75 percent of the world's population without access to electricity.",
     },
     {
       title: '20',

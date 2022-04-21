@@ -116,7 +116,7 @@ export const LendingDetails: FC = () => {
             </Box>
             <Box className={classes.infoMessage}>
               <Typography fontStyle='italic' variant='body2'>
-                All times are displayed in the timezone of your browser.
+                <strong>All times are displayed in the timezone of your browser.</strong>
               </Typography>
             </Box>
             <Box className={classes.buttonWrapper} mt={2}>
@@ -165,7 +165,7 @@ export const LendingDetails: FC = () => {
           />
           <ContributionItem
             className={classes.redeemableReward}
-            title='Redeemable amount (principle + 10% reward based on available SLT)'
+            title='Redeemable amount (principal + 10% reward based on available SLT)'
             value={redeemableReward}
             type='EWT'
           />
@@ -191,15 +191,35 @@ export const LendingDetails: FC = () => {
                 <Typography className='gradient-text'>This will take a minute, please do not refresh</Typography>
               </Box>
             ) : (
-              <Button
-                disabled={isRedeemDisabled || isContractPaused}
-                variant='contained'
-                color='primary'
-                style={{ minWidth: '200px' }}
-                onClick={onRedeemSlt}
-              >
-                Redeem SLT for EWT
-              </Button>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <Typography align='center' variant='body2' marginTop={-3} marginBottom={1}>Redeeming SLTs means burning SLTs and withdrawing EWT back to your wallet.</Typography>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    width: '100%',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Button
+                    disabled={isRedeemDisabled || isContractPaused}
+                    variant='contained'
+                    color='primary'
+                    style={{ minWidth: '200px', marginBottom: '4%', marginTop: '2%'}}
+                    onClick={onRedeemSlt}
+                  >
+                    Redeem SLT for EWT
+                  </Button>
+                </Box>
+              </Box>
             )}
           </Box>
         </Box>
