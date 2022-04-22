@@ -5,7 +5,7 @@
     "compile": "npx hardhat compile",
     "deploy:volta": "npx hardhat run scripts/deploy.ts --network volta",
     "deploy:ewc": "npx hardhat run scripts/deploy.ts --network ewc",
-    "init:vola": "npx hardhat run scripts/initialize.ts --network volta",
+    "init:volta": "npx hardhat run scripts/initialize.ts --network volta",
     "init:ewc": "npx hardhat run scripts/initialize.ts --network ewc",
     "test:volta": "npx hardhat test --network volta"
   },
