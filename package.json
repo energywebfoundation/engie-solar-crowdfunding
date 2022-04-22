@@ -1,7 +1,7 @@
 {
   "name": "engie-solar-crowdfunding",
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "start": "nx serve",
     "build": "nx build",
