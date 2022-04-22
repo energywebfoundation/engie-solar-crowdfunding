@@ -1,46 +1,58 @@
-# Advanced Sample Hardhat Project
+# Engie Crowdfund for Solar - Staking
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+## Description
+ 
+The Staking module of `Engie Crowdfund for Solar` is a solidity-based project built with advanced [Hardhat](https://hardhat.org/) and Typescript configuration. 
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+The module includes :
+- a main smart-contract [file](https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/master/libs/ew-crowdfunding/smart-contracts/contracts/Staking.sol)
 
-Try running some of the following tasks:
+- an interface to connect to EnergyWeb's [Role Checker](https://github.com/energywebfoundation/on-chain-role-check)
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.ts
-TS_NODE_FILES=true npx ts-node scripts/deploy.ts
-npx eslint '**/*.{js,ts}'
-npx eslint '**/*.{js,ts}' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
+- a script to deploy a new staking contract
+
+- a script to initialize a new deployed staking contract
+
+- unit tests
+
+
+## Installation
+
+### Requirements
+
+Before installing, download and install Node.js. Node.js 14 until node v16.xxx.
+
+Installation is done using the following commands:
+
+``` sh
+$ npm install
 ```
 
-# Etherscan verification
-
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
-
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
-
-```shell
-hardhat run --network ropsten scripts/sample-script.ts
+### Unit Tests
+``` sh
+$ npm run test
 ```
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+### Deploying a new contract
+#### Deploying a new contract on volta
 
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
+To run this script, you need to have valid `.env` file.
+``` sh
+$ npm run deploy-volta
 ```
 
-# Performance optimizations
+## Questions and Support
+For questions and support please use Energy Web's [Discord channel](https://discord.com/channels/706103009205288990/843970822254362664) 
 
-For faster runs of your tests and scripts, consider skipping ts-node's type checking by setting the environment variable `TS_NODE_TRANSPILE_ONLY` to `1` in hardhat's environment. For more details see [the documentation](https://hardhat.org/guides/typescript.html#performance-optimizations).
+Or reach out to our contributing team members
+
+- TeamMember: email kevin.nzeng@energyweb.org
+
+## Connect with Energy Web
+- [Twitter](https://twitter.com/energywebx)
+- [Discord](https://discord.com/channels/706103009205288990/843970822254362664)
+- [Telegram](https://t.me/energyweb)
+
+## License
+
+This project is licensed under the GNU General Public License v3.0 or later - see the [LICENSE](LICENSE) file for details
