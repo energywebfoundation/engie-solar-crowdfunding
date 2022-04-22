@@ -3,8 +3,10 @@
   "scripts": {
     "test": "npx hardhat test",
     "compile": "npx hardhat compile",
-    "deploy": "npx hardhat run scripts/deploy.ts",
-    "init": "npx hardhat run scripts/initialize.ts",
+    "deploy:volta": "npx hardhat run scripts/deploy.ts --network volta",
+    "deploy:ewc": "npx hardhat run scripts/deploy.ts --network ewc",
+    "init:vola": "npx hardhat run scripts/initialize.ts --network volta",
+    "init:ewc": "npx hardhat run scripts/initialize.ts --network ewc",
     "test:volta": "npx hardhat test --network volta"
   },
   "devDependencies": {
