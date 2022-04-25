@@ -41,6 +41,17 @@ const getClaimManagerAddress = (hardhatNetwork : string | undefined) => {
   return claimManagerAddress;
 }
 
+const getPatronRole = (hardhatNetwork : string | undefined) => {
+
+  const patronRole = (
+    hardhatNetwork === 'ewc' ?
+    process.env.PATRON_ROLE_EWC 
+  : process.env.PATRON_ROLE_VOLTA 
+  );
+
+  return patronRole;
+}
+
 const deployContract = async (contractName : string) => {
   const answer = _prompt(`\t${emoji.emojify(":warning:")}\tYou are about to deploy ${contractName} contract to ${process.env.HARDHAT_NETWORK} network. This will consume some EWT. Do you Confirm ? (Y/n) :  `) as string;
 
@@ -49,6 +60,7 @@ const deployContract = async (contractName : string) => {
   
   const Contract = await ethers.getContractFactory(contractName);
 
+  const patronRole = getPatronRole(process.env.HARDHAT_NETWORK);
   const claimManagerAddress = getClaimManagerAddress(process.env.HARDHAT_NETWORK);
   const deployer = new Wallet(process.env.DEPLOYER_PRIV_KEY as string);
   const rewardProvider = process.env.REWARD_PROVIDER || deployer.address;
@@ -58,7 +70,7 @@ const deployContract = async (contractName : string) => {
       claimManagerAddress,
       rewardProvider,
       process.env.SERVICE_ROLE,
-      process.env.PATRON_ROLE,
+      patronRole,
       process.env.TOKEN_NAME,
       process.env.TOKEN_SYMBOL
     );
