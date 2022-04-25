@@ -34,11 +34,34 @@ $ npm run test
 ```
 
 ### Deploying a new contract
+To run those scripts, you need to have valid `.env` file.
+
+1. Copy the [.env.example](https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/master/libs/ew-crowdfunding/smart-contracts/.env.example) file :
+```sh
+cp .env.example .env
+```
+2. Adapt the parameters to fit your needs
+
+
 #### Deploying a new contract on volta
 
-To run this script, you need to have valid `.env` file.
 ``` sh
-$ npm run deploy-volta
+$ npm run deploy:volta
+```
+
+#### Deploying a new contract on EnergyWeb Chain
+
+``` sh
+$ npm run deploy:ewc
+```
+### Initialize a new deployed contract :
+- On Volta
+``` sh
+$ npm run init:volta
+```
+- On EnergyWeb Chain
+``` sh
+$ npm run init:ewc
 ```
 
 ## Questions and Support
