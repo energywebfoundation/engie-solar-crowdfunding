@@ -8,7 +8,7 @@ export const InfoPane: FC = () => {
   const classes = useStyles();
   const { selected, setSelected, infoList } = useInfoPaneEffects();
 
-  const getText = (text : string) => {
+  const getPlaceholderText = (text : string) => {
     switch(text){
       case "EEA's financial report" :
         return "Coming soon: impact report by ENGIE Energy Access at the end of the campaign (Q2 2023)";
@@ -59,7 +59,7 @@ export const InfoPane: FC = () => {
                   {hyperlink.link !== '' && <Link href={hyperlink.link} target='_blank'>
                     {hyperlink.name || hyperlink.link}
                   </Link>}
-                  {hyperlink.link === '' && <Typography variant='body1' fontStyle="italic">{getText(hyperlink.name)}</Typography>}
+                  {hyperlink.link === '' && <Typography variant='body1' fontStyle="italic">{getPlaceholderText(hyperlink.name)}</Typography>}
                 </Box>
               );
             })}
