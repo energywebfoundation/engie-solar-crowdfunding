@@ -142,9 +142,7 @@ contract Staking is ERC20Burnable {
     function transfer(address _recipient, uint256 _amount) public override returns (bool) {
         //we need to keep track of this to avoid negative values on redeem call
         stakes[_recipient] += _amount;
-        unchecked {
-            stakes[_msgSender()] -= _amount;
-        }
+        stakes[_msgSender()] -= _amount;
         _transfer(_msgSender(), _recipient, _amount);
         return true;
     }
@@ -153,9 +151,7 @@ contract Staking is ERC20Burnable {
         //we need to keep track of this to avoid negative values on redeem call
         ERC20.transferFrom(_sender, _recipient, _amount);
         stakes[_recipient] += _amount;
-        unchecked {
-            stakes[_sender] -= _amount;
-        }
+        stakes[_sender] -= _amount;
         return true;
     }
 
