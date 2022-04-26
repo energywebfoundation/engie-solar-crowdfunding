@@ -41,8 +41,8 @@ export const Welcome: FC = () => {
               and expanding its real-world use, is supporting this proof of concept by covering the repayment risk and
               guaranteeing the repayment of original stakes plus rewards.
             </Typography>
-            <Link href='https://energy-web-foundation.gitbook.io/energy-web/token/staking' target='_blank'>
-              Learn How to Stake EWT
+            <Link href="https://www.youtube.com/watch?v=bRmKdNjk_zQ&feature=youtu.beg" target='_blank'>
+              Learn how to stake EWT on Crowdfund for Solar
             </Link>
             <Box className={classes.powerLogo}>
               <Typography mr={2} style={{ fontWeight: 700 }}>

@@ -8,6 +8,18 @@ export const InfoPane: FC = () => {
   const classes = useStyles();
   const { selected, setSelected, infoList } = useInfoPaneEffects();
 
+  const getText = (text : string) => {
+    switch(text){
+      case "EEA's financial report" :
+        return "Coming soon: impact report by ENGIE Energy Access at the end of the campaign (Q2 2023)";
+      case "EW's launch PR" :
+        return "EW's launch PR (link to Update)";
+      case "Engie's PR" :
+        return "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
+      default: return text;
+    }
+  }
+
   return (
     <Box className={classes.wrapper}>
       {selected && (
@@ -44,9 +56,10 @@ export const InfoPane: FC = () => {
             selected.hyperlinks.map((hyperlink: { name: string; link: string }) => {
               return (
                 <Box key={hyperlink.name} className={classes.paragraphWrapper}>
-                  <Link href={hyperlink.link} target='_blank'>
+                  {hyperlink.link !== '' && <Link href={hyperlink.link} target='_blank'>
                     {hyperlink.name || hyperlink.link}
-                  </Link>
+                  </Link>}
+                  {hyperlink.link === '' && <Typography variant='body1' fontStyle="italic">{getText(hyperlink.name)}</Typography>}
                 </Box>
               );
             })}
