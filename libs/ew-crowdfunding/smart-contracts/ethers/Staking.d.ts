@@ -73,10 +73,6 @@ interface StakingInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "allRedeemedRewards",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "allowance",
     values: [string, string]
   ): string;
