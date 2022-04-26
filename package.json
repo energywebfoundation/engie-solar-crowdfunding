@@ -48,7 +48,7 @@
     "disposable-email-domains": "^1.0.59",
     "ethers": "^5.5.3",
     "hardhat": "^2.8.2",
-    "iam-client-lib": "^4.2.0",
+    "iam-client-lib": "^5.1.0-alpha.17",
     "lint-staged": "^12.1.6",
     "luxon": "^2.3.0",
     "next": "12.0.7",
