@@ -142,7 +142,7 @@ NEXT_PUBLIC_FULL_STOP_DATE="2023-09-29T17:00"
 
 6. Make sure you have a valid testing smart-contract.
 
-You can navigate to the smart-contract folder and refer to the corresponding [documentation](https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/master/libs/ew-crowdfunding/smart-contracts/README.md#initialize-a-new-deployed-contract-).
+You can navigate to the smart-contract folder and refer to the corresponding [documentation](https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/master/libs/ew-crowdfunding/smart-contracts/README.md#engie-crowdfund-for-solar---staking).
 
 7. Start the app
 ```sh
