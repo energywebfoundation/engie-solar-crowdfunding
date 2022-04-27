@@ -1,8 +1,8 @@
-# Engie Crowdfund for Solar - Staking
+# ENGIE Crowdfund for Solar - Staking
 
 ## Description
  
-The Staking module of `Engie Crowdfund for Solar` is a solidity-based project built with advanced [Hardhat](https://hardhat.org/) and Typescript configuration. 
+The Staking module of `ENGIE Crowdfund for Solar` is a solidity-based project built with advanced [Hardhat](https://hardhat.org/) and Typescript configuration. 
 
 The module includes :
 - a main smart-contract [file](https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/master/libs/ew-crowdfunding/smart-contracts/contracts/Staking.sol)
