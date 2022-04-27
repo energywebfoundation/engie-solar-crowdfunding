@@ -1,6 +1,6 @@
 
 
-# Engie Crowdfund for Solar
+# ENGIE Energy Access Crowdfund for Solar
 
 ## Architecture
 
