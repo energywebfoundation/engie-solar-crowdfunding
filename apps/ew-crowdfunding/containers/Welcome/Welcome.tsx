@@ -47,10 +47,10 @@ export const Welcome: FC = () => {
               Learn how to stake EWT on Crowdfund for Solar
             </Link>
             <Box className={classes.powerLogo}>
-              <Typography mr={2} style={{ fontWeight: 700 }}>
-                Powered by Lab.EnergyWeb
+              <img src='/EW Lab Logo.png' alt='Lab icon' width={42}/>
+              <Typography style={{ marginLeft: 12 }} mr={2}>
+                <strong>LAB</strong> by Energy Web
               </Typography>
-              <img src='/EW_lab.png' alt='Lab icon' />
             </Box>
           </Paper>
           <img className={classes.imageContainer} src='/Bubbles2.png' alt='Engie Bubbles' />
