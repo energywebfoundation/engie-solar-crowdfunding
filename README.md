@@ -1,12 +1,12 @@
 
 
-# Engie Crowdfund for Solar
+# ENGIE Energy Access Crowdfund for Solar
 
 ## Architecture
 
 **General structure** 
 
-The Engie Crowdfund for Solar project is architectured as a [monorepo](https://monorepo.tools/#what-is-a-monorepo) and was generated using [Nx](https://nx.dev).
+The ENGIE Crowdfund for Solar project is architectured as a [monorepo](https://monorepo.tools/#what-is-a-monorepo) and was generated using [Nx](https://nx.dev).
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="142"></p>
 
@@ -20,7 +20,7 @@ The monorepo contains two main folders:  (an apps folder and a libs folder)
 
 - [libs](https://github.com/energywebfoundation/engie-solar-crowdfunding/tree/master/libs) : in this folder, reusable libraries are implemented and used by the apps. It contains:
 
-  - [smart-contracts](https://github.com/energywebfoundation/engie-solar-crowdfunding/tree/master/libs/ew-crowdfunding/smart-contracts): This folder represents the blockchain component of the `Engie Crowdfund for Solar` project and contains the smart contracts implementing the staking module.
+  - [smart-contracts](https://github.com/energywebfoundation/engie-solar-crowdfunding/tree/master/libs/ew-crowdfunding/smart-contracts): This folder represents the blockchain component of the `ENGIE Crowdfund for Solar` project and contains the smart contracts implementing the staking module.
 
 > Note: In order to be used in your apps, any new library must have its path added in the [tsconfig.base.json](https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/master/tsconfig.base.json) file :
 
