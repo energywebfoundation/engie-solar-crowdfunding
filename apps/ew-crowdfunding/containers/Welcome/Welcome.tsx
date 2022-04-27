@@ -12,6 +12,8 @@ export const Welcome: FC = () => {
   const authenticated = useSelector(selectAuthenticated);
   const energyWebChainLink = "https://energy-web-foundation.gitbook.io/energy-web/technology/the-stack/trust-layer-energy-web-chain";
   const enrgyWebDIDLink = "https://energy-web-foundation.gitbook.io/energy-web/foundational-concepts/self-sovereign-identity#decentralized-identifiers-dids";
+  const btBlockAuditLink = "https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/d174e7ebe6aad06c455cfa8889d3e1f38f21bd79/Public%20Copy%20of%20Energy%20Web%20AG%20-%20Security%20Assessment%20of%20Engie%20Solar%20Crowdfunding%20v2.1%20final.pdf";
+  
   return (
     <div>
       <Box className={classes.background}>
@@ -32,7 +34,7 @@ export const Welcome: FC = () => {
               Crowdfund for Solar is powered by the Energy Web's open-source technology stack, specifically the
               <Link href={enrgyWebDIDLink} target="_blank"> Decentralized Identifiers</Link> and the public <Link href={energyWebChainLink} target="_blank">Energy Web blockchain</Link>. See the results of a successful
               smart-contract audit{' '}
-              <Link href='' target='_blank'>
+              <Link href={btBlockAuditLink} target='_blank'>
                 here.
               </Link>
             </Typography>
