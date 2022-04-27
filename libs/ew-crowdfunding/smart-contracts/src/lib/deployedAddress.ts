@@ -1,1 +1,1 @@
-export const deployedAddress = '0x5153313Af355978C127dC2448aCb9Ba8Ea0094c7';
+export const deployedAddress = '0x2F82F1072761338AaC161f9798D9AF463518E7FC';
