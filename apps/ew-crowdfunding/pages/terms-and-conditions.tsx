@@ -21,7 +21,7 @@ const TermsAndConditions: NextPage = () => {
       </Typography>
       <Typography variant='body2'>
         These are the general terms and conditions (the “Terms”) of the ENGIE Mobisol GmbH Pilot Website
-        https://thecleanenergyfund.com (hereinafter “Website”) operated by Energy Web Foundation (hereinafter “Energy
+        https://crowdfund4solar.com/ (hereinafter “Website”) operated by Energy Web Foundation (hereinafter “Energy
         Web”) acting on behalf of the decentralized Energy Web Community Fund. Your use of the Website and the Service
         (as defined below) thereto implies your acceptance of these Terms.
       </Typography>

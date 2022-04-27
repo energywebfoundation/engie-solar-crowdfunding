@@ -63,7 +63,7 @@ const PrivacyPolicy: NextPage = () => {
         adopted in accordance therewith.
       </Typography>
       <Typography variant='body2'>
-        Website: The website: [https://thecleanenergyfund.com] and all subdomains of this Website, unless they are
+        Website: The website: [https://crowdfund4solar.com/] and all subdomains of this Website, unless they are
         expressly excluded from the scope of this Privacy Policy by their own terms and conditions.
       </Typography>
       <Typography variant='h5'>
