@@ -1,4 +1,4 @@
-# Engie Crowdfund for Solar - Staking
+# ENGIE Crowdfund for Solar - Staking
 
 ## Description
  

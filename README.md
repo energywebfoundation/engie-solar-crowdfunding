@@ -6,7 +6,7 @@
 
 **General structure** 
 
-The Engie Crowdfund for Solar project is architectured as a [monorepo](https://monorepo.tools/#what-is-a-monorepo) and was generated using [Nx](https://nx.dev).
+The ENGIE Crowdfund for Solar project is architectured as a [monorepo](https://monorepo.tools/#what-is-a-monorepo) and was generated using [Nx](https://nx.dev).
 
 <p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="142"></p>
 
