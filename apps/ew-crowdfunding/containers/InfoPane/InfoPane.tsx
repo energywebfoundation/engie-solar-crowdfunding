@@ -13,7 +13,7 @@ export const InfoPane: FC = () => {
       case "EEA's financial report" :
         return "Coming soon: impact report by ENGIE Energy Access at the end of the campaign (Q2 2023)";
       case "EW's launch PR" :
-        return "EW's launch PR (link to Update)";
+        return "EW's launch PR (Coming Soon)";
       case "Engie's PR" :
         return "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
       default: return text;
