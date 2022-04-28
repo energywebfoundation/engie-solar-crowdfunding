@@ -12,7 +12,7 @@ export const InfoPane: FC = () => {
     switch(text){
       case "EEA's financial report" :
         return "Coming soon: impact report by ENGIE Energy Access at the end of the campaign (Q2 2023)";
-      case "EW's launch PR" :
+      case "Energy Web Launch Article" :
         return "EW's launch PR (Coming Soon)";
       case "Engie's PR" :
         return "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
@@ -27,6 +27,11 @@ export const InfoPane: FC = () => {
           <Typography variant='h3' className='gradient-text'>
             {selected.title}
           </Typography>
+            {selected.name === 'Step-by-step Guide' && 
+              <Link href="https://www.youtube.com/watch?v=bRmKdNjk_zQ&feature=youtu.beg" target='_blank'>
+                Learn how to stake EWT on Crowdfund for Solar
+              </Link>
+            }
           {selected.paragraphs?.length &&
             selected.paragraphs.map((paragraph: {
               isBoldish?: boolean;
