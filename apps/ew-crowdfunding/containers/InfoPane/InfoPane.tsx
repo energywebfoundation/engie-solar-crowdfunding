@@ -27,6 +27,11 @@ export const InfoPane: FC = () => {
           <Typography variant='h3' className='gradient-text'>
             {selected.title}
           </Typography>
+            {selected.name === 'Step-by-step Guide' && 
+              <Link href="https://www.youtube.com/watch?v=bRmKdNjk_zQ&feature=youtu.beg" target='_blank'>
+                Learn how to stake EWT on Crowdfund for Solar
+              </Link>
+            }
           {selected.paragraphs?.length &&
             selected.paragraphs.map((paragraph: {
               isBoldish?: boolean;
