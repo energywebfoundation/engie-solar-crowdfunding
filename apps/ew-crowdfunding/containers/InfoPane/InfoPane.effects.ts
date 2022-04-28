@@ -111,7 +111,7 @@ export const useInfoPaneEffects = () => {
       title: 'What happens with the collected funds',
       paragraphs: [
         {
-          text: 'ENGIE Energy Access will deploy €100,000 worth of micro-loans to install solar home systems to those in need in Africa. To maximize the impact, these loans will be provided to recipients in countries like Rwanda, Uganda and Zambia given (1) higher rates of loan repayment there and (2) high potential for impact on electricity rates. ENGIE Energy Access is prioritizing women among the recipients and will aim to provide at least 30% of the loans to women-led households.',
+          text: 'ENGIE Energy Access will deploy $100,000 worth of micro-loans to install solar home systems to those in need in Africa. To maximize the impact, these loans will be provided to recipients in countries like Rwanda, Uganda and Zambia given (1) higher rates of loan repayment there and (2) high potential for impact on electricity rates. ENGIE Energy Access is prioritizing women among the recipients and will aim to provide at least 30% of the loans to women-led households.',
         },
         {
           text: 'Upon the completion of the pilot, ENGIE Energy Access will provide a report on how the staked EWT were used and distributed.',
