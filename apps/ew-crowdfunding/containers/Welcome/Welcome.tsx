@@ -12,7 +12,7 @@ export const Welcome: FC = () => {
   const authenticated = useSelector(selectAuthenticated);
   const energyWebChainLink = "https://energy-web-foundation.gitbook.io/energy-web/technology/the-stack/trust-layer-energy-web-chain";
   const enrgyWebDIDLink = "https://energy-web-foundation.gitbook.io/energy-web/foundational-concepts/self-sovereign-identity#decentralized-identifiers-dids";
-  const btBlockAuditLink = "https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/d174e7ebe6aad06c455cfa8889d3e1f38f21bd79/Public%20Copy%20of%20Energy%20Web%20AG%20-%20Security%20Assessment%20of%20Engie%20Solar%20Crowdfunding%20v2.1%20final.pdf";
+  const btBlockAuditLink = "https://github.com/energywebfoundation/engie-solar-crowdfunding/blob/111b98dd47c171ce1333d1423e9b36174d259e14/Audit%20-%20Energy%20Web%20AG%20-%20Security%20Assessment%20of%20Engie%20Solar%20Crowdfunding%20v2.1%20final.pdf";
   
   return (
     <div>
