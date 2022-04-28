@@ -1,6 +1,7 @@
 
 
 # ENGIE Energy Access Crowdfund for Solar
+<p style="text-align: center;"><img src="./Crowdfund4Solar.png"></p>
 
 ## Architecture
 
