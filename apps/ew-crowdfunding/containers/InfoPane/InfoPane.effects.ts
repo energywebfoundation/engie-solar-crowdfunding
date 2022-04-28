@@ -93,8 +93,8 @@ export const useInfoPaneEffects = () => {
           link: 'https://medium.com/energy-web-insights/engie-energy-access-and-energy-web-announce-defi-crowdfunding-platform-to-help-scale-solar-mini-2142029ad84f',
         },
         {
-          name: "EW's launch PR",
-          link: '',
+          name: "Energy Web Launch Article",
+          link: 'https://medium.com/energy-web-insights/how-energy-web-and-engie-energy-access-leverage-crypto-to-expand-solar-energy-access-in-faec75354e45',
         },
         {
           name: "Engie's PR",
