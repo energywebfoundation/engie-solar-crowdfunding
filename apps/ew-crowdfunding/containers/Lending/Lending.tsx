@@ -14,7 +14,7 @@ export const Lending: FC = () => {
         {isContractPaused && (
           <Paper className={classes.notification}>
             <Typography align='center' variant='h3' style={{ width: '100%' }} color='error'>
-            Staking is paused until we are verifying the transactions.
+            We are currently investigating an issue, staking is paused until further notice! Your Energy Web Tokens are safe! 
             </Typography>
           </Paper>
         )}
