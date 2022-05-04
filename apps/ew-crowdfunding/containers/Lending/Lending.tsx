@@ -14,7 +14,7 @@ export const Lending: FC = () => {
         {isContractPaused && (
           <Paper className={classes.notification}>
             <Typography align='center' variant='h3' style={{ width: '100%' }} color='error'>
-              Staking is paused until further notice due to an emergency event!
+            Staking is Paused! 
             </Typography>
           </Paper>
         )}
