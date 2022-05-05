@@ -13,8 +13,8 @@ export const Lending: FC = () => {
       <Box className={classes.wrapper}>
         {isContractPaused && (
           <Paper className={classes.notification}>
-            <Typography align='center' variant='h3' style={{ width: '100%' }} color='error'>
-            Staking is Paused! 
+            <Typography align='center' variant='h4' style={{ width: '100%' }} color='primary'>
+            For redeeming SLTs for EWT <strong style={{textDecoration: 'underline'}}>before</strong> 17.05.2022, please check Terms below 
             </Typography>
           </Paper>
         )}
