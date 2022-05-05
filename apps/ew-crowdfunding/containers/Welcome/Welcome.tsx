@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable @next/next/no-img-element */
 import { Box, Container, Link, Paper, Typography } from '@mui/material';
 import { FC } from 'react';
