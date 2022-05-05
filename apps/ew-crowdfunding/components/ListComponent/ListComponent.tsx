@@ -36,7 +36,11 @@ export const ListComponent: FC<ListComponentProps> = ({ listItems }) => {
     if (item.includes(toUpdateText)) {
       return(
         <Box>
-          <strong>Update 05 May 2022</strong>: You can withdraw your original EWT <strong>without</strong> rewards until 15:00PM CET on May 17th, 2023 by sending your SLTs to the Crowdfund for Solar wallet: <strong>0xff0E9ddB12F1082833B13E144b60df6cf04aE116</strong>. You will receive corresponding EWTs within 1 working day. For any issues, please contact meerim.ruslanova@energyweb.org.”
+          <strong>Update 05 May 2022</strong>: You can withdraw your original EWT <strong>without</strong> rewards until 15:00PM CET on May 17th, 2023 by sending your SLTs to the Crowdfund for Solar wallet: <strong>0xff0E9ddB12F1082833B13E144b60df6cf04aE116</strong>. You will receive corresponding EWTs within 1 working day. For any issues, please contact <Link href='mailto:meerim.ruslanova@energyweb.org'>
+            <a>
+               meerim.ruslanova@energyweb.org
+            </a>
+          </Link>
         {/* Normal Text : <strong>BOLD TEXT</strong>. LINK <Link href="https://explorer.energyweb.org/" target="_blank"><a>https://SOMELINK.org/</a></Link>. */}
       </Box>
       );
