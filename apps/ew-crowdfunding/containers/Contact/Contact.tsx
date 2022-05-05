@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import { Box, Typography, Button } from '@mui/material';
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { AppContainer } from '../../components';
 import { useStyles } from './Contact.styles';
 import Link from 'next/link';
