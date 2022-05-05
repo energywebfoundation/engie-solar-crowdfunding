@@ -24,6 +24,12 @@ export const Contact: FC = () => {
     finalStopDate,
   );
 
+  const reachedTargetMessage = (
+    <Typography variant='h5' mb={5} align='center'>
+      <strong>Update 05 May 2022</strong>: The crowdfunding target has been already reached thanks to the generous support of the community. Please click on “Fund Now” for more information.
+    </Typography>
+  )
+
   return (
     <Box py={5} className={classes.container}>
       <AppContainer>
@@ -45,11 +51,12 @@ export const Contact: FC = () => {
               stefan.zelazny@engie.com
             </a>
           </Typography>
-          {stakingMessage && (
+          {/* {stakingMessage && (
             <Typography variant='h5' style={{ fontWeight: '600' }} mb={5} align='center'>
               {stakingMessage}
             </Typography>
-          )}
+          )} */}
+            {reachedTargetMessage}
           <Link href='/wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
