@@ -270,8 +270,9 @@ contract Staking is ERC20Burnable {
                 _mint(msg.sender, hardCap - totalStaked);
                 emit NewStake(msg.sender, hardCap - totalStaked, block.timestamp);
                 emit RefundExceeded((msg.sender), msg.value, msg.value - (hardCap - totalStaked));
+                uint256 total = totalStaked;
                 totalStaked += hardCap - totalStaked;
-                refund(msg.value - (hardCap - totalStaked));
+                refund(msg.value - (hardCap - total));
             } else {   
                 stakes[msg.sender] += msg.value;
                 emit NewStake(msg.sender, msg.value, block.timestamp);
