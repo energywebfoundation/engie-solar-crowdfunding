@@ -51,12 +51,12 @@ export const Contact: FC = () => {
               stefan.zelazny@engie.com
             </a>
           </Typography>
-          {/* {stakingMessage && (
+          {stakingMessage && (
             <Typography variant='h5' style={{ fontWeight: '600' }} mb={5} align='center'>
               {stakingMessage}
             </Typography>
-          )} */}
-            {reachedTargetMessage}
+          )}
+            {/* {reachedTargetMessage} */}
           <Link href='/wallet'>
             <a>
               <Button style={{ width: '200px' }} variant='contained'>
