@@ -8,14 +8,18 @@ export const InfoPane: FC = () => {
   const classes = useStyles();
   const { selected, setSelected, infoList } = useInfoPaneEffects();
 
-  const getPlaceholderText = (text : string) => {
+  const PressReleaseText = `The project successfully provided financing to electrify 185 rural customers in Rwanda, Zambia and Uganda, with almost half of them being women.
+  96 customers have now access to our entry-level solar kit, which provides them with lights and a mobile charging device. And 89 customers have even acquired our mid-range solar kit which comes with a TV.
+  Our newly on-boarded customers have a wide array of occupations, ranging from small farm holders, carpenters, boda boda driver or even health worker.`
+
+  const getPlaceholderText = (text: string) => {
     switch(text){
       case "EEA's financial report" :
         return "Coming soon: impact report by ENGIE Energy Access at the end of the campaign (Q2 2023)";
       case "Energy Web Launch Article" :
         return "EW's launch PR (Coming Soon)";
       case "Engie's PR" :
-        return "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
+        return PressReleaseText || "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
       default: return text;
     }
   }
@@ -64,7 +68,7 @@ export const InfoPane: FC = () => {
                   {hyperlink.link !== '' && <Link href={hyperlink.link} target='_blank'>
                     {hyperlink.name || hyperlink.link}
                   </Link>}
-                  {hyperlink.link === '' && <Typography variant='body1' fontStyle="italic">{getPlaceholderText(hyperlink.name)}</Typography>}
+                  {hyperlink.link === '' && <Typography variant='body1' fontStyle="normal">{getPlaceholderText(hyperlink.name)}</Typography>}
                 </Box>
               );
             })}
