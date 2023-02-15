@@ -8,14 +8,14 @@ export const InfoPane: FC = () => {
   const classes = useStyles();
   const { selected, setSelected, infoList } = useInfoPaneEffects();
 
-  const getPlaceholderText = (text : string) => {
+  const getPlaceholderText = (text: string) => {
     switch(text){
       case "EEA's financial report" :
         return "Coming soon: impact report by ENGIE Energy Access at the end of the campaign (Q2 2023)";
       case "Energy Web Launch Article" :
         return "EW's launch PR (Coming Soon)";
       case "Engie's PR" :
-        return "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
+        return  "Coming soon: joint Press Release of Energy Web and ENGIE Energy Access";
       default: return text;
     }
   }

@@ -27,6 +27,10 @@ export const useInfoPaneEffects = () => {
   const lockStakesDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_LOCK_STAKES_DATE));
   const releaseRewardsDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_RELEASE_REWARDS_DATE));
   const finalStopDate = formatDate(formatUTCDate(process.env.NEXT_PUBLIC_FULL_STOP_DATE));
+  const PressReleaseText = `
+  The project successfully provided financing to electrify 185 rural customers in Rwanda, Zambia and Uganda, with almost half of them being women.
+  96 customers have now access to our entry-level solar kit, which provides them with lights and a mobile charging device. And 89 customers have even acquired our mid-range solar kit which comes with a TV.
+  Our newly on-boarded customers have a wide array of occupations, ranging from small farm holders, carpenters, boda boda driver or even health worker.`
 
   const infoList: Info[] = [
     {
@@ -97,14 +101,21 @@ export const useInfoPaneEffects = () => {
           link: 'https://medium.com/energy-web-insights/how-energy-web-and-engie-energy-access-leverage-crypto-to-expand-solar-energy-access-in-faec75354e45',
         },
         {
-          name: "Engie's PR",
-          link: '',
-        },
-        {
           name: 'Twitter Space',
           link: 'https://twitter.com/energywebx/status/1499075924842762247?t=7rf1zfwNAGXqIu79JlBepg&s=19',
         },
       ],
+      paragraphs: [
+        {
+          isBoldish: true,
+          boldText: `Update from February 3rd, 2023 : `,
+          text: PressReleaseText,
+          link: {
+            label: "",
+            url: ""
+          }
+       } 
+      ]
     },
     {
       name: 'Progress Reporting',

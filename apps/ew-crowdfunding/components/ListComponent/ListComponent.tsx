@@ -18,7 +18,7 @@ export const ListComponent: FC<ListComponentProps> = ({ listItems }) => {
   const closeStackingDate = process.env.NEXT_PUBLIC_CLOSE_STAKING_DATE;
 
   const textToFormat = `To see your SLT in your wallet, click “Import tokens” in your MetaMask and paste the address of the smart contract your wallet interacted with - ${deployedAddress}. This address can be found on https://explorer.energyweb.org/. `;
-  // const toUpdateText =  `If you change your mind about staking, you can withdraw your EWT until ${closeStackingDate} without any rewards by depositing the SLT back.`;
+  const updateText = false;
   const toUpdateText =  `If you change your mind about staking, you can withdraw your EWT until`;
 
   const render = (item: string) => {
@@ -48,7 +48,7 @@ export const ListComponent: FC<ListComponentProps> = ({ listItems }) => {
       </Box>
       );
     }
-    if (item.includes(toUpdateText)) {
+    if (updateText && item.includes(toUpdateText)) {
       return(
         <Box>
           <strong>Update 05 May 2022</strong>: You can withdraw your original EWT <strong>without</strong> rewards until 15:00PM CET on May 17th, 2023 by sending your SLTs to the Crowdfund for Solar wallet: <strong>0xff0E9ddB12F1082833B13E144b60df6cf04aE116</strong>. You will receive corresponding EWTs within 1 working day. For any issues, please contact <Link href='mailto:meerim.ruslanova@energyweb.org'>
