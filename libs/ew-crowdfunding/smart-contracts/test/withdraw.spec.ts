@@ -10,6 +10,7 @@ describe("Production Withdrawal Testing", () => {
   const oneEWT = ethers.utils.parseEther("1");
   const expectedTotalStaled = oneEWT.mul(20000);
 
+  // Replace with the staker address you want to test
   const staker = "0xC3571714248588C6E19cDECe2778B75341b2c288";
   const stakingAddress = "0x8df330b8966ebE69Be996653e50252c6D44a527a";
 
