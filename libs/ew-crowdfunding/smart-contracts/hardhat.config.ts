@@ -7,6 +7,7 @@ import "hardhat-gas-reporter";
 import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-etherscan";
+import "@nomicfoundation/hardhat-network-helpers";
 import { HardhatUserConfig, task } from "hardhat/config";
 import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { defaultAccounts } from "@ethereum-waffle/provider";
@@ -78,6 +79,11 @@ const config: HardhatUserConfig = {
       url: 'http://127.0.0.1:8544',
       chainId: 1337,
       accounts: [deployer_privateKey],
+    },
+    hardhat: {
+      forking: {
+        url: "https://archive-rpc.energyweb.org",
+      }
     }
   },
   mocha: {
