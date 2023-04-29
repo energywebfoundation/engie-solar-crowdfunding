@@ -82,7 +82,7 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        url: "https://archive-rpc.energyweb.org",
+        url: process.env.EWC_URL_ARC || "https://rpc.energyweb.org",
       }
     }
   },
